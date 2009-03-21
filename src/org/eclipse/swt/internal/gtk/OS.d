@@ -20,9 +20,16 @@ module org.eclipse.swt.internal.gtk.OS;
 import java.lang.all;
 
 import org.eclipse.swt.internal.Platform;
-import tango.core.Traits;
-import tango.stdc.locale;
-import tango.stdc.posix.stdlib : realpath;
+version(Tango){
+    import tango.core.Traits;
+    import tango.stdc.locale;
+    import tango.stdc.posix.stdlib : realpath;
+    static import tango.stdc.string;
+} else { // Phobos
+    import std.traits;
+    import core.sys.posix.stdlib : realpath;
+    static import std.c.string;
+}
 
 import  org.eclipse.swt.internal.c.gtk,
         org.eclipse.swt.internal.c.gdk,
@@ -37,7 +44,6 @@ import  org.eclipse.swt.internal.c.gtk,
         org.eclipse.swt.internal.c.Xrender,
         org.eclipse.swt.internal.c.glib_object;
 
-static import tango.stdc.string;
 //version=GTK_DYN_LINK;
 
 public alias org.eclipse.swt.internal.c.glib_object.GPollFD GPollFD;
@@ -634,13 +640,23 @@ template NameOfFunc(alias f) {
 }
 
 template ForwardGtkOsCFunc( alias cFunc ) {
-    alias ParameterTupleOf!(cFunc) P;
-    alias ReturnTypeOf!(cFunc) R;
-    mixin("public static R " ~ NameOfFunc!(cFunc) ~ "( P p ){
-        lock.lock();
-        scope(exit) lock.unlock();
-        return cFunc(p);
-    }");
+    version(Tango){
+        alias ParameterTupleOf!(cFunc) P;
+        alias ReturnTypeOf!(cFunc) R;
+        mixin("public static R " ~ NameOfFunc!(cFunc) ~ "( P p ){
+                lock.lock();
+                scope(exit) lock.unlock();
+                return cFunc(p);
+                }");
+    } else { // Phobos
+        alias ParameterTypeTuple!(cFunc) P;
+        alias ReturnType!(cFunc) R;
+        mixin("public static R " ~ NameOfFunc!(cFunc) ~ "( P p ){
+                lock.lock();
+                scope(exit) lock.unlock();
+                return cFunc(p);
+                }");
+    }
 }
 /+
 // alternative template implementation, might be more stable
@@ -1027,7 +1043,7 @@ public class OS : Platform {
     public static const int PANGO_ATTR_FOREGROUND = 9;
     public static const int PANGO_ATTR_BACKGROUND = 10;
     public static const int PANGO_ATTR_UNDERLINE = 11;
-    public static final int PANGO_ATTR_UNDERLINE_COLOR = 18;
+    public static const int PANGO_ATTR_UNDERLINE_COLOR = 18;
     public static const int PANGO_DIRECTION_LTR = 0;
     public static const int PANGO_DIRECTION_RTL = 1;
     public static const int PANGO_SCALE = 1024;
@@ -1093,7 +1109,7 @@ public class OS : Platform {
     public static const char[] move_focus = "move-focus";
     public static const char[] output = "output";
     public static const char[] popup_menu = "popup-menu";
-    public static final char[] populate_popup = "populate-popup";
+    public static const char[] populate_popup = "populate-popup";
     public static const char[] preedit_changed = "preedit-changed";
     public static const char[] realize = "realize";
     public static const char[] row_activated = "row-activated";
@@ -2979,7 +2995,11 @@ public static const int PictOpOver = 3;
     }
 
     static int strlen( char* ptr ){
-        return tango.stdc.string.strlen( ptr );
+        version(Tango){
+            return tango.stdc.string.strlen( ptr );
+        } else { // Phobos
+            return std.c.string.strlen( ptr );
+        }
     }
     //localeconv_decimal_point() localeconv()->decimal_point
 }

@@ -12,7 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.browser.WindowEvent;
 
-import tango.text.convert.Format;
 
 import java.lang.all;
 

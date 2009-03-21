@@ -22,7 +22,6 @@ import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.internal.Converter;
 import org.eclipse.swt.internal.gtk.OS;
 
-import tango.text.convert.Format;
 
 /**
  * Instances of this class manage operating system resources that
@@ -168,7 +167,7 @@ void destroy() {
  *
  * @see #hashCode
  */
-public override int opEquals(Object object) {
+public override equals_t opEquals(Object object) {
     if (object is this) return true;
     if ( auto font = cast(Font)object ){
        return handle is font.handle;

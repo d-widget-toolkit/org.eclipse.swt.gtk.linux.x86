@@ -26,9 +26,11 @@ import java.util.zip.InflaterInputStream;
 
 import org.eclipse.swt.SWT;
 
+version(Tango){
 import Unicode = tango.text.Unicode;
 import tango.sys.Process;
-import tango.text.convert.Format;
+} else { // Phobos
+}
 
 /**
  * This class is a placeholder for utility methods commonly
@@ -225,7 +227,7 @@ public static InflaterInputStream newInflaterInputStream(InputStream stream) {
  * @return true when the character is a letter
  */
 public static bool isLetter(dchar c) {
-    return Unicode.isLetter(c);
+    return Character.isLetter(c);
 }
 
 /**
@@ -235,7 +237,7 @@ public static bool isLetter(dchar c) {
  * @return true when the character is a letter or a digit
  */
 public static bool isLetterOrDigit(dchar c) {
-    return Unicode.isLetterOrDigit(c);
+    return Character.isLetterOrDigit(c);
 }
 
 /**
@@ -245,7 +247,7 @@ public static bool isLetterOrDigit(dchar c) {
  * @return true when the character is a Unicode space character
  */
 public static bool isSpaceChar(dchar c) {
-    return Unicode.isSpace(c);
+    return Character.isSpace(c);
 }
 
 /**
@@ -255,7 +257,7 @@ public static bool isSpaceChar(dchar c) {
  * @return true if the character is whitespace
  */
 public static bool isWhitespace(dchar c) {
-    return Unicode.isWhitespace(c);
+    return Character.isWhitespace(c);
 }
 
 /**
@@ -271,8 +273,12 @@ public static bool isWhitespace(dchar c) {
  *  if the program cannot be executed
  */
 public static void exec(String prog) {
-    auto proc = new Process( prog );
-    proc.execute;
+    version(Tango){
+        auto proc = new Process( prog );
+        proc.execute;
+    } else { // Phobos
+        implMissing( __FILE__, __LINE__ );
+    }
 }
 
 /**
@@ -288,8 +294,12 @@ public static void exec(String prog) {
  *  if the program cannot be executed
  */
 public static void exec(String[] progArray) {
-    auto proc = new Process( progArray );
-    proc.execute;
+    version(Tango){
+        auto proc = new Process( progArray );
+        proc.execute;
+    } else { // Phobos
+        implMissing( __FILE__, __LINE__ );
+    }
 }
 
 const ImportData[] SWTMessagesBundleData = [
@@ -404,15 +414,19 @@ public static void interrupt() {
  * @return true if the two instances of class String are equal
  */
 public static bool equalsIgnoreCase(String s1, String s2) {
-    String s1b = new char[ s1.length ];
-    String s2b = new char[ s1.length ];
-    scope(exit){
-        delete s1b;
-        delete s2b;
+    version(Tango){
+        String s1b = new char[ s1.length ];
+        String s2b = new char[ s1.length ];
+        scope(exit){
+            delete s1b;
+            delete s2b;
+        }
+        String s1c = Unicode.toFold( s1, s1b );
+        String s2c = Unicode.toFold( s2, s2b );
+        return s1c == s2c;
+    } else { // Phobos
+        return std.string.icmp( s1, s2 ) is 0;
     }
-    String s1c = Unicode.toFold( s1, s1b );
-    String s2c = Unicode.toFold( s2, s2b );
-    return s1c == s2c;
 }
 
 }

@@ -13,10 +13,13 @@
 module org.eclipse.swt.internal.Lock;
 
 import java.lang.all;
+import java.lang.Thread;
 
-import tango.core.Thread;
-import tango.core.sync.Mutex;
-import tango.core.sync.Condition;
+version(Tango){
+    import tango.core.sync.Mutex;
+    import tango.core.sync.Condition;
+} else { // Phobos
+}
 
 /**
  * Instance of this represent a recursive monitor.
@@ -24,8 +27,11 @@ import tango.core.sync.Condition;
 public class Lock {
     int count, waitCount;
     Thread owner;
-    Mutex mutex;
-    Condition cond;
+    version(Tango){
+        Mutex mutex;
+        Condition cond;
+    } else { // Phobos
+    }
 
     public this() {
         mutex = new Mutex;
@@ -39,21 +45,25 @@ public class Lock {
  * @return the lock count
  */
 public int lock() {
-    synchronized (mutex) {
-        Thread current = Thread.getThis();
-        if (owner !is current) {
-            waitCount++;
-            while (count > 0) {
-                try {
-                    cond.wait();
-                } catch (SyncException e) {
-                    /* Wait forever, just like synchronized blocks */
+    version(Tango){
+        synchronized (mutex) {
+            Thread current = Thread.currentThread();
+            if (owner !is current) {
+                waitCount++;
+                while (count > 0) {
+                    try {
+                        cond.wait();
+                    } catch (SyncException e) {
+                        /* Wait forever, just like synchronized blocks */
+                    }
                 }
+                --waitCount;
+                owner = current;
             }
-            --waitCount;
-            owner = current;
+            return ++count;
         }
-        return ++count;
+    } else { // Phobos
+        implMissing( __FILE__, __LINE__ );
     }
 }
 
@@ -62,14 +72,18 @@ public int lock() {
  * the monitor owner, do nothing.
  */
 public void unlock() {
-    synchronized (mutex) {
-        Thread current = Thread.getThis();
-        if (owner is current) {
-            if (--count is 0) {
-                owner = null;
-                if (waitCount > 0) cond.notifyAll();
+    version(Tango){
+        synchronized (mutex) {
+            Thread current = Thread.getThis();
+            if (owner is current) {
+                if (--count is 0) {
+                    owner = null;
+                    if (waitCount > 0) cond.notifyAll();
+                }
             }
         }
+    } else { // Phobos
+        implMissing( __FILE__, __LINE__ );
     }
 }
 }

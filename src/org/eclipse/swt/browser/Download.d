@@ -13,7 +13,6 @@
 module org.eclipse.swt.browser.Download;
 
 import Util = tango.text.Util;
-import tango.text.convert.Format;
 import java.lang.all;
 
 import org.eclipse.swt.SWT;

@@ -21,7 +21,6 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.internal.image.PngFileReadState;
 import org.eclipse.swt.internal.image.PngIhdrChunk;
 import org.eclipse.swt.internal.image.PngChunk;
-import tango.text.convert.Format;
 
 class PngIhdrChunk : PngChunk {
     static const int IHDR_DATA_LENGTH = 13;

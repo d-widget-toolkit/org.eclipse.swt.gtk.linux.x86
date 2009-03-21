@@ -33,9 +33,12 @@ import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.graphics.TextStyle;
 import java.lang.all;
 
-import tango.text.convert.Format;
-import tango.stdc.string;
-import tango.text.convert.Utf;
+version(Tango){
+    import tango.stdc.string : memmove;
+    import tango.text.convert.Utf;
+} else { // Phobos
+    import std.c.string : memmove;
+}
 
 /**
  * <code>TextLayout</code> is a graphic object that represents

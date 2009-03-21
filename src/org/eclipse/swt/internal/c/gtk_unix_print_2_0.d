@@ -9,7 +9,10 @@ import java.lang.all;
 version=DYNLINK;
 
 version(DYNLINK){
-    import tango.sys.SharedLib : SharedLib;
+    version(Tango){
+        import tango.sys.SharedLib : SharedLib;
+    } else { // Phobos
+    }
     struct Symbol{
         String name;
         void** symbol;
@@ -18,25 +21,29 @@ version(DYNLINK){
 
 void loadLib(){
     version(DYNLINK){
-        String libname = "libgtk-x11-2.0.so";
+        version(Tango){
+            String libname = "libgtk-x11-2.0.so";
 
-        SharedLib lib = SharedLib.load( libname );
-        if( lib is null ){
-            lib = SharedLib.load( libname ~ ".0" );
-        }
-
-        if ( lib !is null ) {
-            foreach( inout s; symbols ){
-                try{
-                    *s.symbol = lib.getSymbol( s.name.ptr );
-                }
-                catch(Exception e){}
-                if( *s.symbol is null ){
-                    getDwtLogger().trace( __FILE__, __LINE__,  "{}: Symbol '{}' not found", libname, s.name );
-                }
+            SharedLib lib = SharedLib.load( libname );
+            if( lib is null ){
+                lib = SharedLib.load( libname ~ ".0" );
             }
-        } else {
-            getDwtLogger().trace( __FILE__, __LINE__,  "Could not load the library {}", libname );
+
+            if ( lib !is null ) {
+                foreach( inout s; symbols ){
+                    try{
+                        *s.symbol = lib.getSymbol( s.name.ptr );
+                    }
+                    catch(Exception e){}
+                    if( *s.symbol is null ){
+                        getDwtLogger().trace( __FILE__, __LINE__,  "{}: Symbol '{}' not found", libname, s.name );
+                    }
+                }
+            } else {
+                getDwtLogger().trace( __FILE__, __LINE__,  "Could not load the library {}", libname );
+            }
+        } else { // Phobos
+            implMissing( __FILE__, __LINE__ );
         }
     }
 }

@@ -19,7 +19,6 @@ public import org.eclipse.swt.internal.SerializableCompatibility;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
-import tango.text.convert.Format;
 
 /**
  * Instances of this class represent rectangular areas in an
@@ -157,7 +156,7 @@ public bool contains (Point pt) {
  *
  * @see #hashCode()
  */
-public override int opEquals (Object object) {
+public override equals_t opEquals (Object object) {
     if (object is this) return true;
     if( auto r = cast(Rectangle) object ){
         return (r.x is this.x) && (r.y is this.y) && (r.width is this.width) && (r.height is this.height);

@@ -20,7 +20,6 @@ import org.eclipse.swt.internal.cairo.Cairo;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.graphics.Device;
 
-import tango.text.convert.Format;
 
 /**
  * Instances of this class represent transformation matrices for

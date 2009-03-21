@@ -17,16 +17,20 @@ version=DYNLINK;
 version(DYNLINK){
 
 
-extern (C) int gtk_init_check(int *, char * * *);
-extern (C) char * gtk_set_locale();
-extern (C) extern uint gtk_interface_age;
-extern (C) extern uint gtk_binary_age;
-extern (C) extern uint gtk_micro_version;
-extern (C) extern uint gtk_minor_version;
-extern (C) extern uint gtk_major_version;
+    extern (C) int gtk_init_check(int *, char * * *);
+    extern (C) char * gtk_set_locale();
+    extern (C) extern uint gtk_interface_age;
+    extern (C) extern uint gtk_binary_age;
+    extern (C) extern uint gtk_micro_version;
+    extern (C) extern uint gtk_minor_version;
+    extern (C) extern uint gtk_major_version;
 
 
-    import tango.sys.SharedLib : SharedLib;
+    version(Tango){
+        import tango.sys.SharedLib : SharedLib;
+    } else { // Phobos
+    }
+
     struct Symbol{
         String name;
         void** symbol;
@@ -35,30 +39,34 @@ extern (C) extern uint gtk_major_version;
 
 void loadLib(){
     version(DYNLINK){
-        String libname = "libgtk-x11-2.0.so";
+        version(Tango){
+            String libname = "libgtk-x11-2.0.so";
 
-        SharedLib lib = SharedLib.load( libname );
-        if( lib is null ){
-            lib = SharedLib.load( libname ~ ".0" );
-        }
-        int loaded;
-        if ( lib !is null ) {
-            foreach( s; symbols ){
-                try{
-                    *s.symbol = lib.getSymbol( s.name.ptr );
-                }
-                catch(Exception e){}
-                if( *s.symbol is null ){
-                    //getDwtLogger().trace( __FILE__, __LINE__,  "{}: Symbol '{}' not found", libname, s.name );
-                }
-                else{
-                    loaded++;
-                }
+            SharedLib lib = SharedLib.load( libname );
+            if( lib is null ){
+                lib = SharedLib.load( libname ~ ".0" );
             }
-        } else {
-            getDwtLogger().trace( __FILE__, __LINE__,  "Could not load the library {}", libname );
+            int loaded;
+            if ( lib !is null ) {
+                foreach( s; symbols ){
+                    try{
+                        *s.symbol = lib.getSymbol( s.name.ptr );
+                    }
+                    catch(Exception e){}
+                    if( *s.symbol is null ){
+                        //getDwtLogger().trace( __FILE__, __LINE__,  "{}: Symbol '{}' not found", libname, s.name );
+                    }
+                    else{
+                        loaded++;
+                    }
+                }
+            } else {
+                getDwtLogger().trace( __FILE__, __LINE__,  "Could not load the library {}", libname );
+            }
+            assert( gtk_check_version !is null );
+        } else { // Phobos
+            implMissing( __FILE__, __LINE__ );
         }
-        assert( gtk_check_version !is null );
     }
 }
 

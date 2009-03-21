@@ -32,7 +32,11 @@ import  org.eclipse.swt.internal.c.cairo_pdf;
 import  org.eclipse.swt.internal.c.Xlib;
 import  org.eclipse.swt.internal.Platform;
 
-import tango.core.Traits;
+version(Tango){
+    import tango.core.Traits;
+} else { // Phobos
+    import std.traits;
+}
 
 public alias org.eclipse.swt.internal.c.cairo.cairo_t cairo_t;
 public alias org.eclipse.swt.internal.c.cairo.cairo_pattern_t cairo_pattern_t;
@@ -74,13 +78,23 @@ template NameOfFunc(alias f) {
 }
 
 template ForwardGtkCairoCFunc( alias cFunc ) {
-    alias ParameterTupleOf!(cFunc) P;
-    alias ReturnTypeOf!(cFunc) R;
-    mixin("public static R " ~ NameOfFunc!(cFunc) ~ "( P p ){
-        lock.lock();
-        scope(exit) lock.unlock();
-        return cFunc(p);
-    }");
+    version(Tango){
+        alias ParameterTupleOf!(cFunc) P;
+        alias ReturnTypeOf!(cFunc) R;
+        mixin("public static R " ~ NameOfFunc!(cFunc) ~ "( P p ){
+                lock.lock();
+                scope(exit) lock.unlock();
+                return cFunc(p);
+                }");
+    } else { // Phobos
+        alias ParameterTypeTuple!(cFunc) P;
+        alias ReturnType!(cFunc) R;
+        mixin("public static R " ~ NameOfFunc!(cFunc) ~ "( P p ){
+                lock.lock();
+                scope(exit) lock.unlock();
+                return cFunc(p);
+                }");
+    }
 }
 
 public class Cairo : Platform {

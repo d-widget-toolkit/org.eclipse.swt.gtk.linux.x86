@@ -43,8 +43,11 @@ import org.eclipse.swt.internal.Converter;
 import org.eclipse.swt.internal.Compatibility;
 import java.lang.all;
 
-import tango.text.convert.Format;
-import tango.stdc.string;
+version(Tango){
+    import tango.stdc.string;
+} else {
+    import std.c.string;
+}
 
 
 /**
@@ -1711,7 +1714,7 @@ public void drawText (String str, int x, int y, int flags) {
  *
  * @see #hashCode
  */
-public override int opEquals(Object object) {
+public override equals_t opEquals(Object object) {
     if (object is this) return true;
     if ( auto gc = cast(GC)object){
        return handle is gc.handle;

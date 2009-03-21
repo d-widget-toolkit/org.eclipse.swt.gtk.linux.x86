@@ -23,7 +23,6 @@ import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.internal.cairo.Cairo;
 
-import tango.text.convert.Format;
 
 /**
  * Instances of this class represent patterns to use while drawing. Patterns

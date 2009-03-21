@@ -15,7 +15,6 @@ module org.eclipse.swt.browser.Mozilla;
 import java.lang.all;
 
 import tango.text.locale.Core;
-import tango.text.convert.Format;
 import tango.io.Console;
 import tango.sys.Environment;
 import tango.stdc.string;

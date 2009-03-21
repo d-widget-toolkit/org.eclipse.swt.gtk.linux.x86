@@ -106,7 +106,7 @@ class AccessibleObject {
         }
         if (event.result is null) return parentResult;
         if (keybindingPtr !is null ) OS.g_free (keybindingPtr.ptr);
-        String name = event.result.dup ~ \0;
+        String name = event.result.dup ~ '\0';
         char* p = cast(char*) OS.g_malloc (name.length);
         keybindingPtr =  p ? p[ 0 .. name.length ] : null;
         return keybindingPtr.ptr;
@@ -139,7 +139,7 @@ class AccessibleObject {
         if (event.result is null) return parentResult;
         if (actionNamePtr !is null) OS.g_free (actionNamePtr.ptr);
 
-        String name = event.result.dup ~ \0;
+        String name = event.result.dup ~ '\0';
         auto p = cast(char*)OS.g_malloc (name.length);
         actionNamePtr =  p ? p[ 0 .. name.length ] : null;
         return actionNamePtr.ptr;
@@ -364,7 +364,7 @@ class AccessibleObject {
         if (event.result is null) return parentResult;
         if (descriptionPtr !is null) OS.g_free (descriptionPtr.ptr);
 
-        String name = event.result.dup ~ \0;
+        String name = event.result.dup ~ '\0';
         char* p = cast(char*)OS.g_malloc (name.length);
         descriptionPtr =  p ? p[ 0 .. name.length ] : null;
         return descriptionPtr.ptr;  }
@@ -391,7 +391,7 @@ class AccessibleObject {
         }
         if (event.result is null) return parentResult;
         if (namePtr !is null) OS.g_free (namePtr.ptr);
-        String name = event.result.dup ~ \0;
+        String name = event.result.dup ~ '\0';
         char* p = cast(char*)OS.g_malloc (name.length);
         namePtr =  p ? p[ 0 .. name.length ] : null;
         return namePtr.ptr;

@@ -21,7 +21,6 @@ import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.graphics.Device;
 
-import tango.text.convert.Format;
 
 
 /**
@@ -141,7 +140,7 @@ void destroy() {
  *
  * @see #hashCode
  */
-public override int opEquals(Object object) {
+public override equals_t opEquals(Object object) {
     if (object is this) return true;
     if ( auto color = cast(Color)object ){
         GdkColor* gdkColor = color.handle;

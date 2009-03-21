@@ -14,7 +14,11 @@ module org.eclipse.swt.internal.Library;
 
 import java.lang.all;
 
-import tango.util.Convert;
+version(Tango){
+    import tango.util.Convert;
+} else { // Phobos
+    import std.conv;
+}
 
 // do it here, so it can be evaluated at compile time
 // this saves a static ctor.

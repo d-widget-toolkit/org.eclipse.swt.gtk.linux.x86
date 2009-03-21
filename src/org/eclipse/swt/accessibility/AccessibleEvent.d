@@ -16,7 +16,6 @@ import java.lang.all;
 
 
 import org.eclipse.swt.internal.SWTEventObject;
-import tango.text.convert.Format;
 
 /**
  * Instances of this class are sent as a result of

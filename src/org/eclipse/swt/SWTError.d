@@ -16,7 +16,6 @@ import java.lang.all;
 
 import org.eclipse.swt.SWT;
 
-import tango.core.Exception;
 
 /**
  * This error is thrown whenever an unrecoverable error

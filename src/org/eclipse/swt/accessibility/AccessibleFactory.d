@@ -95,7 +95,7 @@ class AccessibleFactory {
 
     private this (int /*long*/ widgetType) {
         widgetTypeName = OS.g_type_name (widgetType);
-        String factoryName = FACTORY_TYPENAME ~ fromStringz( widgetTypeName ) ~ \0;
+        String factoryName = FACTORY_TYPENAME ~ fromStringz( widgetTypeName ) ~ '\0';
         if (OS.g_type_from_name (factoryName.ptr) is 0) {
             /* register the factory */
             auto registry = ATK.atk_get_default_registry ();

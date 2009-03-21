@@ -21,7 +21,11 @@ import org.eclipse.swt.SWTException;
 
 import java.lang.all;
 
-import tango.core.Exception;
+version(Tango){
+    import tango.core.Exception;
+} else { // Phobos
+}
+
 version( build ){
 pragma(link, "gtk-x11-2.0" );
 pragma(link, "gdk-x11-2.0" );

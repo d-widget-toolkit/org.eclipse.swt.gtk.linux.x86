@@ -41,7 +41,7 @@ package this() {
  *
  * @see #hashCode
  */
-public override int opEquals (Object object) {
+public override equals_t opEquals (Object object) {
     if (object is this) return true;
     if( auto metrics = cast(FontMetrics)object ){
         return ascent is metrics.ascent && descent is metrics.descent &&

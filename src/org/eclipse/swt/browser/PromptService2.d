@@ -13,7 +13,6 @@
 module org.eclipse.swt.browser.PromptService2;
 
 import tango.stdc.stdlib;
-import tango.text.convert.Format;
 
 import java.lang.all;
 

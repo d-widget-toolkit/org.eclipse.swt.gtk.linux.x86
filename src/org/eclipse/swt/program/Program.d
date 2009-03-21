@@ -26,7 +26,6 @@ import java.lang.all;
 import tango.sys.SharedLib;
 import tango.core.Exception;
 import tango.core.Array;
-import tango.text.convert.Format;
 import tango.io.device.File;
 import tango.io.stream.Lines;
 
@@ -678,7 +677,7 @@ static Program gnome_getProgram(Display display, String mimeType) {
         program.command = buffer;
         program.gnomeExpectUri = application.expects_uris is GNOME.GNOME_VFS_MIME_APPLICATION_ARGUMENT_TYPE_URIS;
 
-        buffer = fromStringz( application.id) ~ \0;
+        buffer = fromStringz( application.id) ~ '\0';
         ValueWrapperInt gnomeIconTheme = cast(ValueWrapperInt)display.getData(ICON_THEME_DATA);
         char* icon_name = GNOME.gnome_icon_lookup( cast(GtkIconTheme*) gnomeIconTheme.value, null, null, buffer.ptr, null, mimeTypeBuffer,
                 GNOME.GNOME_ICON_LOOKUP_FLAGS_NONE, null);
@@ -896,7 +895,7 @@ static bool launch (Display display, String fileName) {
  *
  * @see #hashCode()
  */
-public override int opEquals(Object other) {
+public override equals_t opEquals(Object other) {
     if (this is other) return true;
     if (!(cast(Program)other)) return false;
     Program program = cast(Program)other;

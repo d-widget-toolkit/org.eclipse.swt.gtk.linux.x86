@@ -31,7 +31,6 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TypedListener;
 
-import tango.text.convert.Format;
 import tango.util.Convert;
 import java.lang.all;
 

@@ -24,7 +24,6 @@ import org.eclipse.swt.graphics.PaletteData;
 
 import org.eclipse.swt.internal.gtk.OS;
 
-import tango.text.convert.Format;
 import tango.stdc.string;
 
 /**
@@ -470,7 +469,7 @@ void destroy() {
  *
  * @see #hashCode
  */
-public override int opEquals(Object object) {
+public override equals_t opEquals(Object object) {
     if (object is this) return true;
     if ( auto cursor = cast(Cursor)object ){
         return device is cursor.device && handle is cursor.handle;

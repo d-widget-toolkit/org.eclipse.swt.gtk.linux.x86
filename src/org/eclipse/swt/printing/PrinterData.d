@@ -17,7 +17,6 @@ import java.lang.all;
 
 import org.eclipse.swt.graphics.DeviceData;
 
-import tango.text.convert.Format;
 
 
 /**

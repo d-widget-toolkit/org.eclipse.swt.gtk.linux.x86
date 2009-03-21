@@ -31,7 +31,6 @@ import org.eclipse.swt.graphics.Resource;
 import java.io.InputStream;
 import java.lang.all;
 
-import tango.text.convert.Format;
 import tango.stdc.string;
 
 /**
@@ -784,7 +783,7 @@ void destroy() {
  *
  * @see #hashCode
  */
-public override int opEquals (Object object) {
+public override equals_t opEquals (Object object) {
     if (object is this) return true;
     if ( auto image = cast(Image)object ){
         return device is image.device && pixmap is image.pixmap;

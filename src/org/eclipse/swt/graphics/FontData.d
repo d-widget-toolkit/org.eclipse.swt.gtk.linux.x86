@@ -12,13 +12,15 @@
  *******************************************************************************/
 module org.eclipse.swt.graphics.FontData;
 
+import java.lang.all;
 
 import org.eclipse.swt.SWT;
 
-import tango.text.convert.Format;
-import tango.text.Util : locate;
-import tango.util.Convert;
-import java.lang.all;
+version(Tango){
+    import tango.util.Convert;
+} else { // Phobos
+    import std.conv;
+}
 
 /**
  * Instances of this class describe operating system fonts.
@@ -128,8 +130,8 @@ public this () {
 public this(String str) {
     if (str is null) SWT.error(SWT.ERROR_NULL_ARGUMENT);
     int start = 0;
-    int end = locate( str, '|' );
-    if (end is str.length ) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
+    int end = indexOf( str, '|' );
+    if (end is -1 ) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
     String version1 = str[ start .. end ];
     try {
         if (to!(int)(version1) !is 1) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
@@ -138,13 +140,13 @@ public this(String str) {
     }
 
     start = end + 1;
-    end = locate( str, '|', start );
-    if (end is str.length ) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
+    end = indexOf( str, '|', start );
+    if (end is -1 ) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
     String name = str[start .. end ];
 
     start = end + 1;
-    end = locate( str, '|', start );
-    if (end is str.length ) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
+    end = indexOf( str, '|', start );
+    if (end is -1 ) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
     float height = 0;
     try {
         height = to!(float)(str[start .. end]);
@@ -153,8 +155,8 @@ public this(String str) {
     }
 
     start = end + 1;
-    end = locate( str, '|', start );
-    if (end is str.length ) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
+    end = indexOf( str, '|', start );
+    if (end is -1 ) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
     int style = 0;
     try {
         style = to!(int)( str[start .. end ]);
@@ -163,16 +165,16 @@ public this(String str) {
     }
 
     start = end + 1;
-    end = locate( str, '|', start );
+    end = indexOf( str, '|', start );
     setName(name);
     setHeight(height);
     setStyle(style);
-    if (end is str.length) return;
+    if (end is -1) return;
     String platform = str[ start .. end ];
 
     start = end + 1;
-    end = locate( str, '|', start );
-    if (end is str.length) return;
+    end = indexOf( str, '|', start );
+    if (end is -1) return;
     String version2 = str[ start .. end ];
 
     if (platform.equals("GTK") && version2.equals("1")) {
@@ -216,7 +218,7 @@ public this(String name, int height, int style) {
  *
  * @see #hashCode
  */
-public override int opEquals (Object object) {
+public override equals_t opEquals (Object object) {
     if (object is this) return true;
     if( auto data = cast(FontData)object ){
         return name.equals(data.name) && height is data.height && style is data.style;
@@ -370,12 +372,12 @@ getDwtLogger().trace( __FILE__, __LINE__,  "setLocal {}", locale );
         int length = locale.length;
         int firstSep, secondSep;
 
-        firstSep = locate( locale, sep );
-        if (firstSep is locale.length) {
+        firstSep = indexOf( locale, sep );
+        if (firstSep is -1 ) {
             firstSep = secondSep = length;
         } else {
-            secondSep = locate( locale, sep, firstSep + 1);
-            if (secondSep is locale.length) secondSep = length;
+            secondSep = indexOf( locale, sep, firstSep + 1);
+            if (secondSep is -1 ) secondSep = length;
         }
         if (firstSep > 0) lang = locale[0 .. firstSep];
         if (secondSep > firstSep + 1) country = locale[firstSep + 1 .. secondSep ];

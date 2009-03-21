@@ -16,7 +16,10 @@ import java.lang.all;
 
 import org.eclipse.swt.SWT;
 
-import tango.core.Exception;
+version(Tango){
+    import tango.core.Exception;
+} else { // Phobos
+}
 
 /**
  * This runtime exception is thrown whenever a recoverable error

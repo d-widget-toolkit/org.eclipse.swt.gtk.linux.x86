@@ -14,7 +14,10 @@ module org.eclipse.swt.graphics.DeviceData;
 
 import java.lang.all;
 
-import tango.core.Exception;
+version(Tango){
+    //import tango.core.Exception;
+} else { // Phobos
+}
 
 public class DeviceData {
     /*

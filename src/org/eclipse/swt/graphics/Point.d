@@ -17,7 +17,6 @@ import java.lang.all;
 
 public import org.eclipse.swt.internal.SerializableCompatibility;
 
-import tango.text.convert.Format;
 
 /**
  * Instances of this class represent places on the (x, y)
@@ -79,7 +78,7 @@ public this (int x, int y) {
  *
  * @see #hashCode()
  */
-public override int opEquals (Object object) {
+public override equals_t opEquals (Object object) {
     if (object is this) return true;
     if ( auto p = cast(Point)object ){
         return (p.x is this.x) && (p.y is this.y);

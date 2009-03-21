@@ -23,8 +23,11 @@ import org.eclipse.swt.graphics.GCData;
 import org.eclipse.swt.graphics.PathData;
 import java.lang.all;
 
-import tango.stdc.string;
-import tango.text.convert.Format;
+version(Tango){
+    import tango.stdc.string;
+} else {
+    import std.c.string;
+}
 
 /**
  * Instances of this class represent paths through the two-dimensional

@@ -12,7 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.browser.LocationEvent;
 
-import tango.text.convert.Format;
 
 import org.eclipse.swt.events.TypedEvent;
 import org.eclipse.swt.widgets.Widget;

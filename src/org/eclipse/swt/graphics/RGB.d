@@ -17,7 +17,6 @@ import java.lang.all;
 public import org.eclipse.swt.internal.SerializableCompatibility;
 
 import org.eclipse.swt.SWT;
-import tango.text.convert.Format;
 
 /**
  * Instances of this class are descriptions of colors in
@@ -198,7 +197,7 @@ public float[] getHSB() {
  *
  * @see #hashCode()
  */
-public override int opEquals(Object object) {
+public override equals_t opEquals(Object object) {
     if (object is this) return true;
     if( auto rgb = cast(RGB) object ){
         return (rgb.red is this.red) && (rgb.green is this.green) && (rgb.blue is this.blue);

@@ -22,7 +22,6 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.internal.gtk.OS;
 
-import tango.text.convert.Format;
 
 /**
  * Instances of this class represent areas of an x-y coordinate
@@ -246,7 +245,7 @@ void destroy() {
  *
  * @see #hashCode
  */
-public override int opEquals(Object object) {
+public override equals_t opEquals(Object object) {
     if (this is object) return true;
     if ( auto region = cast(Region)object ){
         return handle is region.handle;

@@ -49,7 +49,6 @@ import org.eclipse.swt.widgets.Widget;
 
 static import tango.text.convert.Utf;
 static import tango.text.Unicode;
-static import tango.text.convert.Format;
 import java.lang.all;
 
 /**
