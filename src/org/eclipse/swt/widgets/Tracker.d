@@ -30,7 +30,6 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.swt.widgets.Event;
 
-import tango.core.Exception;
 import java.lang.Thread;
 
 /**

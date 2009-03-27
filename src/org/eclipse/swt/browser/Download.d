@@ -12,7 +12,10 @@
  *******************************************************************************/
 module org.eclipse.swt.browser.Download;
 
+version(Tango){
 import Util = tango.text.Util;
+} else { // Phobos
+}
 import java.lang.all;
 
 import org.eclipse.swt.SWT;

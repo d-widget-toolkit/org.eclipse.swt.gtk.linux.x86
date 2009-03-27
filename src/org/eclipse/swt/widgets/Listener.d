@@ -16,8 +16,11 @@ import java.lang.all;
 
 import org.eclipse.swt.widgets.Event;
 
+version(Tango){
 import tango.core.Traits;
 import tango.core.Tuple;
+} else { // Phobos
+}
 
 /**
  * Implementers of <code>Listener</code> provide a simple

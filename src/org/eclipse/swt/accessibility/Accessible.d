@@ -25,9 +25,12 @@ import org.eclipse.swt.SWT;
 //import org.eclipse.swt.events.*;
 import org.eclipse.swt.internal.gtk.OS;
 import org.eclipse.swt.widgets.Control;
-import tango.core.Array;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.DisposeEvent;
+version(Tango){
+import tango.core.Array;
+} else { // Phobos
+}
 
 /**
  * Instances of this class provide a bridge between application

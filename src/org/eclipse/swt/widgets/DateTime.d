@@ -31,6 +31,7 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TypedListener;
 
+version(Tango){
 import tango.util.Convert;
 import java.lang.all;
 
@@ -40,6 +41,8 @@ static import tango.time.Time;
 static import tango.time.WallClock;
 static import tango.time.chrono.Gregorian;
 static import tango.time.chrono.Calendar;
+} else { // Phobos
+}
 
 
 private class Calendar{

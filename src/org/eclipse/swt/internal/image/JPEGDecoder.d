@@ -22,8 +22,10 @@ import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
 import java.lang.all;
 
-import tango.core.Exception;
+version(Tango){
 import tango.util.Convert;
+} else { // Phobos
+}
 
 public class JPEGDecoder {
 

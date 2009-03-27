@@ -32,8 +32,10 @@ import org.eclipse.swt.internal.image.OS2BMPFileFormat;
 import org.eclipse.swt.internal.image.JPEGFileFormat;
 import org.eclipse.swt.internal.image.PNGFileFormat;
 
-import tango.core.Exception;
+version(Tango){
 import tango.core.Tuple;
+} else { // Phobos
+}
 
 /**
  * Abstract factory class for loading/unloading images from files or streams

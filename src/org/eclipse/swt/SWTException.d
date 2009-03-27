@@ -17,7 +17,6 @@ import java.lang.all;
 import org.eclipse.swt.SWT;
 
 version(Tango){
-    import tango.core.Exception;
 } else { // Phobos
 }
 

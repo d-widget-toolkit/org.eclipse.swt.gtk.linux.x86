@@ -48,8 +48,11 @@ import org.eclipse.swt.custom.CTabFolderLayout;
 import org.eclipse.swt.custom.CTabFolderEvent;
 
 import java.lang.all;
+version(Tango){
 import tango.util.Convert;
 static import tango.text.convert.Utf;
+} else { // Phobos
+}
 
 /**
  *

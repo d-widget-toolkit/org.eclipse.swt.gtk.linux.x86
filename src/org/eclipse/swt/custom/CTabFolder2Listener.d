@@ -17,8 +17,11 @@ import java.lang.all;
 import org.eclipse.swt.internal.SWTEventListener;
 import org.eclipse.swt.custom.CTabFolderEvent;
 
+version(Tango){
 import tango.core.Traits;
 import tango.core.Tuple;
+} else { // Phobos
+}
 
 /**
  * Classes which implement this interface provide methods

@@ -15,9 +15,11 @@ module org.eclipse.swt.widgets.RunnableLock;
 import java.lang.all;
 
 import java.lang.Thread;
-import tango.core.Exception;
+version(Tango){
 import tango.core.sync.Condition;
 import tango.core.sync.Mutex;
+} else { // Phobos
+}
 
 /**
  * Instances of this class are used to ensure that an

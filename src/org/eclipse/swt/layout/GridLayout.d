@@ -22,8 +22,11 @@ import org.eclipse.swt.widgets.Layout;
 import org.eclipse.swt.widgets.Scrollable;
 
 
-import tango.util.Convert;
 import java.lang.all;
+version(Tango){
+import tango.util.Convert;
+} else { // Phobos
+}
 
 
 /**

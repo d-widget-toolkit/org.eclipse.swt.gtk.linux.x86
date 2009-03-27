@@ -25,8 +25,11 @@ import org.eclipse.swt.widgets.EventTable;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TypedListener;
 
-import tango.stdc.string;
 import java.lang.Thread;
+version(Tango){
+import tango.stdc.string;
+} else { // Phobos
+}
 
 
 /**

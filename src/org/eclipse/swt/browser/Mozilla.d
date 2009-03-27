@@ -14,10 +14,14 @@ module org.eclipse.swt.browser.Mozilla;
 
 import java.lang.all;
 
+
+version(Tango){
 import tango.text.locale.Core;
 import tango.io.Console;
 import tango.sys.Environment;
 import tango.stdc.string;
+} else { // Phobos
+}
 
 import org.eclipse.swt.internal.c.gtk;
 

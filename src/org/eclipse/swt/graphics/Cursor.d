@@ -24,7 +24,11 @@ import org.eclipse.swt.graphics.PaletteData;
 
 import org.eclipse.swt.internal.gtk.OS;
 
-import tango.stdc.string;
+version(Tango){
+    import tango.stdc.string;
+} else {
+    import std.c.string;
+}
 
 /**
  * Instances of this class manage operating system resources that

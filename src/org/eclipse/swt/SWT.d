@@ -22,7 +22,6 @@ import org.eclipse.swt.SWTException;
 import java.lang.all;
 
 version(Tango){
-    import tango.core.Exception;
 } else { // Phobos
 }
 

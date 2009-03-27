@@ -12,7 +12,10 @@
  *******************************************************************************/
 module org.eclipse.swt.browser.PromptService2;
 
+version(Tango){
 import tango.stdc.stdlib;
+} else { // Phobos
+}
 
 import java.lang.all;
 

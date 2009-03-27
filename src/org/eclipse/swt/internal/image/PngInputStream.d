@@ -19,7 +19,6 @@ import org.eclipse.swt.internal.image.PngIdatChunk;
 import org.eclipse.swt.internal.image.PngChunkReader;
 import org.eclipse.swt.internal.image.PngChunk;
 
-import tango.core.Exception;
 
 public class PngInputStream : InputStream {
 

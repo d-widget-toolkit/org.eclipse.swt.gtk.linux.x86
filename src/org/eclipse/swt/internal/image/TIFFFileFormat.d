@@ -21,7 +21,6 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.internal.image.FileFormat;
 
-import tango.core.Exception;
 
 /**
  * Baseline TIFF decoder revision 6.0

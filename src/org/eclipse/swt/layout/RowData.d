@@ -16,8 +16,11 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Control;
 
-import tango.util.Convert;
 import java.lang.all;
+version(Tango){
+import tango.util.Convert;
+} else { // Phobos
+}
 
 /**
  * Each control controlled by a <code>RowLayout</code> can have its initial

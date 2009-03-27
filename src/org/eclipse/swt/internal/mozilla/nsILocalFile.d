@@ -10,7 +10,10 @@ import org.eclipse.swt.internal.mozilla.nsID;
 import org.eclipse.swt.internal.mozilla.nsIFile;
 import org.eclipse.swt.internal.mozilla.nsStringAPI;
 
+version(Tango){
 import tango.stdc.stdio : FILE;
+} else { // Phobos
+}
 
 const char[] NS_ILOCALFILE_IID_STR = "aa610f20-a889-11d3-8c81-000064657374";
 

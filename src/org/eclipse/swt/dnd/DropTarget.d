@@ -39,7 +39,10 @@ import org.eclipse.swt.dnd.TreeDropTargetEffect;
 import java.lang.all;
 
 import java.lang.Thread;
+version(Tango){
 static import tango.stdc.string;
+} else { // Phobos
+}
 
 /**
  *

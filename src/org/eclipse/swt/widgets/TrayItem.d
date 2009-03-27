@@ -28,7 +28,10 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.graphics.Region;
 import org.eclipse.swt.internal.gtk.OS;
 
+version(Tango){
 import tango.util.Convert;
+} else { // Phobos
+}
 
 /**
  * Instances of this class represent icons that can be placed on the

@@ -23,7 +23,10 @@ import org.eclipse.swt.custom.StyledTextListener;
 import org.eclipse.swt.custom.StyledText;
 import java.lang.all;
 
+version(Tango){
 static import tango.io.model.IFile;
+} else { // Phobos
+}
 
 
 class DefaultContent : StyledTextContent {

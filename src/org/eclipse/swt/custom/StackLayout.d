@@ -23,8 +23,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
 
+version(Tango){
 import tango.util.Convert;
 static import tango.text.Util;
+} else { // Phobos
+}
 
 /**
  * This Layout stacks all the controls one on top of the other and resizes all controls

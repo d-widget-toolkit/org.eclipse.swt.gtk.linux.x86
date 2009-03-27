@@ -18,8 +18,11 @@ import java.lang.all;
 public import org.eclipse.swt.internal.SWTEventListener;
 public import org.eclipse.swt.events.SelectionEvent;
 
+version(Tango){
 import tango.core.Traits;
 import tango.core.Tuple;
+} else { // Phobos
+}
 
 /**
  * Classes which implement this interface provide methods

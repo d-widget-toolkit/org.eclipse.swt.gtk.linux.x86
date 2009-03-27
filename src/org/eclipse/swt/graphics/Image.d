@@ -31,7 +31,10 @@ import org.eclipse.swt.graphics.Resource;
 import java.io.InputStream;
 import java.lang.all;
 
+version(Tango){
 import tango.stdc.string;
+} else { // Phobos
+}
 
 /**
  * Instances of this class are graphics which have been prepared
@@ -1172,6 +1175,7 @@ public void setBackground(Color color) {
 /**
  * Returns a string containing a concise, human-readable
  * description of the receiver.
+    import tango.core.Exception;
  *
  * @return a string representation of the receiver
  */

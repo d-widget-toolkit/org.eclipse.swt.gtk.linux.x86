@@ -25,7 +25,10 @@ import org.eclipse.swt.accessibility.ACC;
 import org.eclipse.swt.accessibility.AccessibleFactory;
 import org.eclipse.swt.widgets.Display;
 import java.lang.all;
+version(Tango){
 import tango.text.Util;
+} else { // Phobos
+}
 
 class AccessibleObject {
     AtkObject* handle;

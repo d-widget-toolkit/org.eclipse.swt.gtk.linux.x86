@@ -23,7 +23,10 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.ScrollBar;
 import org.eclipse.swt.widgets.Widget;
 
+version(Tango){
 import tango.stdc.string;
+} else { // Phobos
+}
 
 /**
  * This class is the abstract superclass of all classes which

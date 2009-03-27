@@ -23,11 +23,13 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import java.lang.all;
 
+version(Tango){
 import tango.sys.SharedLib;
-import tango.core.Exception;
 import tango.core.Array;
 import tango.io.device.File;
 import tango.io.stream.Lines;
+} else { // Phobos
+}
 
 version( build ){
     pragma(link, "gnomeui-2" );

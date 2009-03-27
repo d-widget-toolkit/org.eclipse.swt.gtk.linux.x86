@@ -42,7 +42,10 @@ import org.eclipse.swt.widgets.Monitor;
 import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.swt.widgets.Widget;
 
+version(Tango){
 import Unicode = tango.text.Unicode;
+} else { // Phobos
+}
 
 /**
  * Instances of this class represent the "windows"

@@ -22,8 +22,11 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Display;
 import java.lang.all;
 
+version(Tango){
 static import tango.io.model.IFile;
 static import tango.text.Util;
+} else { // Phobos
+}
 
 /**
  * Instances of this class allow the user to navigate

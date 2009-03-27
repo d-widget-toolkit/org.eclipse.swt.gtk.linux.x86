@@ -15,8 +15,11 @@ module org.eclipse.swt.opengl.GLData;
 
 import java.lang.all;
 
+version(Tango){
 import tango.text.Util;
 import tango.util.Convert;
+} else { // Phobos
+}
 
 /**
  * The GLData class is a device-independent description

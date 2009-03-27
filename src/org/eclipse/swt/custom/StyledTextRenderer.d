@@ -40,9 +40,12 @@ import org.eclipse.swt.custom.StyledTextEvent;
 
 import java.lang.all;
 
+version(Tango){
 static import tango.text.Util;
 static import tango.text.convert.Utf;
 import tango.util.Convert;
+} else { // Phobos
+}
 
 /**
  * A StyledTextRenderer renders the content of a StyledText widget.

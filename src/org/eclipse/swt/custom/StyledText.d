@@ -82,10 +82,13 @@ import org.eclipse.swt.custom.StyledTextDropTargetEffect;
 import org.eclipse.swt.custom.StyledTextListener;
 import org.eclipse.swt.custom.ST;
 
+version(Tango){
 static import tango.text.Util;
 static import tango.io.model.IFile;
 static import tango.text.convert.Utf;
 import tango.util.Convert;
+} else { // Phobos
+}
 import java.lang.all;
 
 

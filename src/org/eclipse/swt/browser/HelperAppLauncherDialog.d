@@ -14,7 +14,10 @@ module org.eclipse.swt.browser.HelperAppLauncherDialog;
 
 import java.lang.all;
 
+version(Tango){
 import Utf = tango.text.convert.Utf;
+} else { // Phobos
+}
 
 import org.eclipse.swt.SWT;
 

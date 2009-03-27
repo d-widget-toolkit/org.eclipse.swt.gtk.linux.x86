@@ -41,7 +41,10 @@ import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.swt.widgets.Event;
 import java.lang.all;
 
+version(Tango){
 import tango.text.Unicode;
+} else { // Phobos
+}
 
 
 /**

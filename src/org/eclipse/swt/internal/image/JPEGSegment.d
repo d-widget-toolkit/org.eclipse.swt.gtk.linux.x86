@@ -16,7 +16,6 @@ import java.lang.all;
 
 import org.eclipse.swt.internal.image.LEDataOutputStream;
 
-import tango.core.Exception;
 
 class JPEGSegment {
     public byte[] reference;

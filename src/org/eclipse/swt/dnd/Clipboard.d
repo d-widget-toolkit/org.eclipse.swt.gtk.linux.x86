@@ -28,7 +28,10 @@ import org.eclipse.swt.dnd.ClipboardProxy;
 import java.lang.all;
 
 import java.lang.Thread;
+version(Tango){
 static import tango.stdc.string;
+} else { // Phobos
+}
 
 /**
  * The <code>Clipboard</code> provides a mechanism for transferring data from one

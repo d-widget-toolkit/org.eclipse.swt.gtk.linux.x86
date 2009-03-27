@@ -26,7 +26,6 @@ import org.eclipse.swt.internal.Compatibility;
 import org.eclipse.swt.internal.gtk.OS;
 import java.lang.all;
 
-import tango.core.Exception;
 
 /**
  * This class is the abstract superclass of all device objects,

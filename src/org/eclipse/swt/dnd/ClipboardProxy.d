@@ -26,7 +26,10 @@ import org.eclipse.swt.dnd.Clipboard;
 import org.eclipse.swt.dnd.DND;
 import org.eclipse.swt.dnd.TransferData;
 
+version(Tango){
 static import tango.stdc.string;
+} else { // Phobos
+}
 
 
 class ClipboardProxy {

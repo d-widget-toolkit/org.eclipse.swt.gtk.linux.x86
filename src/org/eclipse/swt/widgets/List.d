@@ -25,7 +25,10 @@ import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.swt.widgets.Display;
 import java.lang.all;
 
+version(Tango){
 import tango.text.convert.Integer;
+} else { // Phobos
+}
 
 /**
  * Instances of this class represent a selectable user interface

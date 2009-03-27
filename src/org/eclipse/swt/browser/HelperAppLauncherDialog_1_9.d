@@ -12,7 +12,10 @@
  *******************************************************************************/
 module org.eclipse.swt.browser.HelperAppLauncherDialog_1_9;
 
+version(Tango){
 import tango.text.convert.Utf;
+} else { // Phobos
+}
 import java.lang.all;
 
 import org.eclipse.swt.SWT;

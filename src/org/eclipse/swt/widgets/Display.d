@@ -43,10 +43,13 @@ import org.eclipse.swt.widgets.Synchronizer;
 import org.eclipse.swt.widgets.Tray;
 import org.eclipse.swt.widgets.Widget;
 
-import tango.stdc.string;
 import java.lang.all;
 
 import java.lang.Thread;
+version(Tango){
+import tango.stdc.string;
+} else { // Phobos
+}
 
 /**
  * Instances of this class are responsible for managing the

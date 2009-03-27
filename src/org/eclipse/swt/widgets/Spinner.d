@@ -26,8 +26,11 @@ import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.events.ModifyListener;
 import org.eclipse.swt.events.VerifyListener;
 
-import tango.util.Convert;
 import java.lang.all;
+version(Tango){
+import tango.util.Convert;
+} else { // Phobos
+}
 
 /**
  * Instances of this class are selectable user interface

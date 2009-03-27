@@ -19,7 +19,10 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GlyphMetrics;
 
+version(Tango){
 import tango.util.Convert;
+} else { // Phobos
+}
 /**
  * <code>TextStyle</code> defines a set of styles that can be applied
  * to a range of text.

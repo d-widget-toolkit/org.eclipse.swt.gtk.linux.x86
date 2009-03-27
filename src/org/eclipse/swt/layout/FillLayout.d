@@ -21,8 +21,11 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Scrollable;
 import org.eclipse.swt.layout.FillData;
 
-import tango.util.Convert;
 import java.lang.all;
+version(Tango){
+import tango.util.Convert;
+} else { // Phobos
+}
 
 /**
  * <code>FillLayout</code> is the simplest layout class. It lays out

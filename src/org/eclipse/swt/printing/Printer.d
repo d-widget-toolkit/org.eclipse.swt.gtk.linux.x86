@@ -28,7 +28,10 @@ import org.eclipse.swt.internal.gtk.OS;
 import org.eclipse.swt.printing.PrinterData;
 import java.lang.all;
 
+version(Tango){
 import tango.util.Convert;
+} else { // Phobos
+}
 
 
 /**

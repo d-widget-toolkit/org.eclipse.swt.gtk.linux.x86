@@ -27,7 +27,10 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Scrollable;
 import org.eclipse.swt.widgets.Composite;
 
+version(Tango){
 static import tango.stdc.string;
+} else { // Phobos
+}
 
 /**
  * Instances of this class are selectable user interface

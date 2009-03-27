@@ -19,7 +19,10 @@ import org.eclipse.swt.dnd.TransferData;
 import org.eclipse.swt.dnd.DND;
 
 import java.lang.all;
+version(Tango){
 static import tango.text.Util;
+} else { // Phobos
+}
 
 /**
  * The class <code>RTFTransfer</code> provides a platform specific mechanism

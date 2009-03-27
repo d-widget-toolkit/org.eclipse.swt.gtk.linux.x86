@@ -26,7 +26,10 @@ import org.eclipse.swt.printing.Printer;
 import org.eclipse.swt.printing.PrinterData;
 import java.lang.all;
 
+version(Tango){
 import tango.util.Convert;
+} else { // Phobos
+}
 
 /**
  * Instances of this class allow the user to select

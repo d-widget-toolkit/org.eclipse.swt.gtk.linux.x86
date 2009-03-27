@@ -24,7 +24,10 @@ import org.eclipse.swt.internal.gtk.OS;
 import org.eclipse.swt.internal.c.atk;
 import org.eclipse.swt.internal.c.gtk;
 
+version(Tango){
 import tango.core.Traits;
+} else { // Phobos
+}
 
 alias org.eclipse.swt.internal.c.atk.AtkObjectFactory AtkObjectFactory;
 alias org.eclipse.swt.internal.c.atk.AtkObjectClass AtkObjectClass;

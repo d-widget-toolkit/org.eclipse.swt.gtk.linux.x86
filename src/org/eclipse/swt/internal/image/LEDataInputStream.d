@@ -16,7 +16,6 @@ import java.lang.all;
 
 
 import java.io.InputStream;
-import tango.core.Exception;
 
 final class LEDataInputStream : InputStream{
 

@@ -40,7 +40,10 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.TypedListener;
 import java.lang.all;
 
+version(Tango){
 import tango.util.Convert;
+} else { // Phobos
+}
 
 /**
  * Instances of this class implement a selectable user interface

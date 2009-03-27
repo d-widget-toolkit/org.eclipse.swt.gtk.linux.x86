@@ -15,7 +15,6 @@ module org.eclipse.swt.graphics.DeviceData;
 import java.lang.all;
 
 version(Tango){
-    //import tango.core.Exception;
 } else { // Phobos
 }
 

@@ -23,8 +23,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.internal.Compatibility;
 import org.eclipse.swt.internal.image.FileFormat;
 
-import tango.core.Exception;
+version(Tango){
 import tango.core.Array;
+} else { // Phobos
+}
 
 
 /**

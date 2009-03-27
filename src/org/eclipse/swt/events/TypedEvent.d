@@ -18,8 +18,11 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swt.internal.SWTEventObject;
 
-import tango.text.Util : split;
 import java.lang.all;
+version(Tango){
+import tango.text.Util : split;
+} else { // Phobos
+}
 
 /**
  * This is the super class for all typed event classes provided

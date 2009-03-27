@@ -14,8 +14,11 @@ module org.eclipse.swt.custom.SashFormData;
 
 import java.lang.all;
 
+version(Tango){
 static import tango.text.Util;
 import tango.util.Convert;
+} else { // Phobos
+}
 
 class SashFormData {
 

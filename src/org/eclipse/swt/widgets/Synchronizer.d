@@ -20,7 +20,10 @@ import java.lang.all;
 import org.eclipse.swt.SWT;
 import java.lang.Thread;
 import org.eclipse.swt.graphics.Device;
+version(Tango){
 import tango.core.Exception;
+} else { // Phobos
+}
 
 /**
  * Instances of this class provide synchronization support

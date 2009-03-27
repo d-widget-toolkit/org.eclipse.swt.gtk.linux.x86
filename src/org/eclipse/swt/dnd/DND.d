@@ -19,7 +19,10 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
 import org.eclipse.swt.SWTException;
 
+version(Tango){
 import tango.util.Convert;
+} else { // Phobos
+}
 
 /**
  *

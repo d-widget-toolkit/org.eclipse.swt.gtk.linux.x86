@@ -47,9 +47,12 @@ import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.swt.widgets.Widget;
 
+import java.lang.all;
+version(Tango){
 static import tango.text.convert.Utf;
 static import tango.text.Unicode;
-import java.lang.all;
+} else { // Phobos
+}
 
 /**
  * The CCombo class represents a selectable user interface object

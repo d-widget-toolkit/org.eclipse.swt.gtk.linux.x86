@@ -19,7 +19,10 @@ import java.lang.all;
 import org.eclipse.swt.events.TypedEvent;
 import org.eclipse.swt.widgets.Widget;
 
+version(Tango){
 import tango.util.Convert;
+} else { // Phobos
+}
 
 /**
  * This event is sent when an event is generated in the CTabFolder.

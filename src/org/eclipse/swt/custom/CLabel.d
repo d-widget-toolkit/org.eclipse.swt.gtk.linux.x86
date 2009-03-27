@@ -40,8 +40,11 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 import java.lang.all;
 
+version(Tango){
 static import tango.text.Unicode;
 static import tango.text.convert.Utf;
+} else { // Phobos
+}
 
 /**
  * A Label which supports aligned text and/or an image and different border styles.

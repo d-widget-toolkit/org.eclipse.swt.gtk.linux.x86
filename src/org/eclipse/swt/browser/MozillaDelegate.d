@@ -14,7 +14,10 @@ module org.eclipse.swt.browser.MozillaDelegate;
 
 import java.lang.all;
 
+version(Tango){
 import tango.io.Console;
+} else { // Phobos
+}
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.internal.Converter;
