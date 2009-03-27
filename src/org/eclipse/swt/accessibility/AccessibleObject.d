@@ -30,7 +30,7 @@ import java.util.Vector;
 import java.util.Hashtable;
 import java.util.Enumeration;
 version(Tango){
-import tango.text.Util;
+    //import tango.text.Util;
 } else { // Phobos
 }
 

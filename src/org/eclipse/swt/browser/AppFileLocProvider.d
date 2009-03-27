@@ -14,7 +14,6 @@ module org.eclipse.swt.browser.AppFileLocProvider;
 
 version(Tango){
 import tango.sys.Environment;
-import tango.text.Util;
 } else { // Phobos
 }
 

@@ -600,7 +600,8 @@ ImageData gnome_getImageData() {
  +/
 static String[][ String ] gnome24_getMimeInfo() {
     version(Tango){
-        scope it = new Lines!(char)(tango.io.device.File.get("/usr/share/mime/globs"));
+        scope file = new tango.io.device.File.File("/usr/share/mime/globs");
+        scope it = new tango.io.stream.Lines.Lines!(char)( file );
     } else { // Phobos
         scope it = std.string.splitlines( cast(String)std.file.read("/usr/share/mime/globs"));
     }
@@ -783,7 +784,7 @@ static String[] getExtensions(Display display) {
         String[] mimeExts = mimeInfo[mimeType];
         for (int index = 0; index < mimeExts.length; index++){
             version(Tango){
-                bool contains = extensions.contains(mimeExts[index]);
+                bool contains = cast(bool)tango.core.Array.contains(extensions, mimeExts[index]);
             } else { // Phobos
                 bool contains = std.algorithm.find(extensions, mimeExts[index]) != std.iterator.end(extensions);
             }
