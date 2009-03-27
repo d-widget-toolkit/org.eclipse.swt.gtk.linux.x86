@@ -22,13 +22,17 @@ import org.eclipse.swt.widgets.Display;
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Listener;
 import java.lang.all;
+import java.nonstandard.SharedLib;
 
 version(Tango){
-import tango.sys.SharedLib;
-import tango.core.Array;
-import tango.io.device.File;
-import tango.io.stream.Lines;
+    static import tango.core.Array;
+    static import tango.io.device.File;
+    static import tango.io.stream.Lines;
 } else { // Phobos
+    static import std.string;
+    static import std.file;
+    static import std.algorithm;
+    static import std.iterator;
 }
 
 version( build ){
@@ -169,6 +173,19 @@ struct GNOME {
         GList* function() gnome_vfs_get_registered_mime_types;
         char* function(char*) gnome_vfs_mime_type_from_name;
     }
+    Symbol symbols[] = [
+        { "gnome_vfs_mime_get_default_application", cast(void**)&gnome_vfs_mime_get_default_application },
+        { "gnome_vfs_make_uri_from_input_with_dirs", cast(void**)&gnome_vfs_make_uri_from_input_with_dirs },
+        { "gnome_vfs_mime_application_launch", cast(void**)&gnome_vfs_mime_application_launch },
+        { "gnome_vfs_mime_application_free", cast(void**)&gnome_vfs_mime_application_free },
+        { "gnome_vfs_url_show", cast(void**)&gnome_vfs_url_show },
+        { "gnome_vfs_make_uri_from_input", cast(void**)&gnome_vfs_make_uri_from_input },
+        { "gnome_vfs_get_registered_mime_types", cast(void**)&gnome_vfs_get_registered_mime_types },
+        { "gnome_vfs_mime_get_extensions_list", cast(void**)&gnome_vfs_mime_get_extensions_list },
+        { "gnome_vfs_mime_extensions_list_free", cast(void**)&gnome_vfs_mime_extensions_list_free },
+        { "gnome_vfs_mime_registered_mime_type_list_free", cast(void**)&gnome_vfs_mime_registered_mime_type_list_free },
+        { "gnome_vfs_mime_type_from_name", cast(void**)&gnome_vfs_mime_type_from_name }
+    ];
 }
 
 /**
@@ -263,24 +280,11 @@ static int getDesktop(Display display) {
             });
             /* Check for libgnomevfs-2 version 2.4 */
             String buffer = "libgnomevfs-2.so.0";
-            auto libgnomevfs = SharedLib.load(buffer );
-            if (libgnomevfs !is null) {
-                buffer = "gnome_vfs_url_show";
-                void* gnome_vfs_url_show = libgnomevfs.getSymbol( buffer.ptr );
-                if (gnome_vfs_url_show !is null) {
+            SharedLib.tryUseSymbol( "gnome_vfs_url_show", buffer, (void*){
                     desktop = DESKTOP_GNOME_24;
-                }
-                *cast(void**)&GNOME.gnome_vfs_mime_get_default_application = libgnomevfs.getSymbol( "gnome_vfs_mime_get_default_application" );
-                *cast(void**)&GNOME.gnome_vfs_make_uri_from_input_with_dirs = libgnomevfs.getSymbol( "gnome_vfs_make_uri_from_input_with_dirs" );
-                *cast(void**)&GNOME.gnome_vfs_mime_application_launch = libgnomevfs.getSymbol( "gnome_vfs_mime_application_launch" );
-                *cast(void**)&GNOME.gnome_vfs_mime_application_free = libgnomevfs.getSymbol( "gnome_vfs_mime_application_free" );
-                *cast(void**)&GNOME.gnome_vfs_url_show = libgnomevfs.getSymbol( "gnome_vfs_url_show" );
-                *cast(void**)&GNOME.gnome_vfs_make_uri_from_input = libgnomevfs.getSymbol( "gnome_vfs_make_uri_from_input" );
-                *cast(void**)&GNOME.gnome_vfs_get_registered_mime_types = libgnomevfs.getSymbol( "gnome_vfs_get_registered_mime_types" );
-                *cast(void**)&GNOME.gnome_vfs_mime_get_extensions_list = libgnomevfs.getSymbol( "gnome_vfs_mime_get_extensions_list" );
-                *cast(void**)&GNOME.gnome_vfs_mime_extensions_list_free = libgnomevfs.getSymbol( "gnome_vfs_mime_extensions_list_free" );
-                *cast(void**)&GNOME.gnome_vfs_mime_registered_mime_type_list_free = libgnomevfs.getSymbol( "gnome_vfs_mime_registered_mime_type_list_free" );
-                *cast(void**)&GNOME.gnome_vfs_mime_type_from_name = libgnomevfs.getSymbol( "gnome_vfs_mime_type_from_name" );
+                    });
+            if( desktop is DESKTOP_GNOME_24 ){
+                SharedLib.loadLibSymbols( GNOME.symbols, buffer );
             }
         }
     }
@@ -543,7 +547,7 @@ bool gnome_execute(String fileName) {
         char* fileNameBuffer = toStringz(fileName);
         char* uri = GNOME.gnome_vfs_make_uri_from_input(fileNameBuffer);
         if (uri !is null) {
-            fileName = fromStringz( uri ).dup;
+            fileName = fromStringz( uri )._idup();
             OS.g_free(uri);
         }
     }
@@ -595,8 +599,11 @@ ImageData gnome_getImageData() {
  + This is a temporary workaround until SWT will get the real implementation.
  +/
 static String[][ String ] gnome24_getMimeInfo() {
-    scope file = new tango.io.device.File.File ("/usr/share/mime/globs");
-    scope it = new Lines!(char)(file);
+    version(Tango){
+        scope it = new Lines!(char)(tango.io.device.File.get("/usr/share/mime/globs"));
+    } else { // Phobos
+        scope it = std.string.splitlines( cast(String)std.file.read("/usr/share/mime/globs"));
+    }
     // process file one line at a time
     String[][ String ] mimeInfo;
     foreach (line; it ){
@@ -607,8 +614,8 @@ static String[][ String ] gnome24_getMimeInfo() {
         if( line.length < colon+3 || line[colon+1 .. colon+3 ] != "*." ){
             continue;
         }
-        String mimeType = line[0..colon].dup;
-        String ext      = line[colon+3 .. $].dup;
+        String mimeType = line[0..colon]._idup();
+        String ext      = line[colon+3 .. $]._idup();
         if( auto exts = mimeType in mimeInfo ){
             mimeInfo[ mimeType ] = *exts ~ ext;
         }
@@ -631,8 +638,8 @@ static String[][ String ] gnome_getMimeInfo() {
     GList* mimeList = GNOME.gnome_vfs_get_registered_mime_types();
     GList* mimeElement = mimeList;
     while (mimeElement !is null) {
-        char* mimePtr = cast(char*) OS.g_list_data(mimeElement);
-        String mimeTypeBuffer = fromStringz(mimePtr).dup;
+        auto mimePtr = cast(char*) OS.g_list_data(mimeElement);
+        String mimeTypeBuffer = fromStringz(mimePtr)._idup();
         String mimeType = mimeTypeBuffer;//new String(Converter.mbcsToWcs(null, mimeTypeBuffer));
         GList* extensionList = GNOME.gnome_vfs_mime_get_extensions_list(mimePtr);
         if (extensionList !is null) {
@@ -640,7 +647,7 @@ static String[][ String ] gnome_getMimeInfo() {
             GList* extensionElement = extensionList;
             while (extensionElement !is null) {
                 char* extensionPtr = cast(char*) OS.g_list_data(extensionElement);
-                String extensionBuffer = fromStringz(extensionPtr).dup;
+                String extensionBuffer = fromStringz(extensionPtr)._idup();
                 String extension = extensionBuffer;
                 extension = '.' ~ extension;
                 extensions ~= extension;
@@ -661,7 +668,7 @@ static String gnome_getMimeType(String extension) {
     char* extensionBuffer = toStringz(fileName);
     char* typeName = GNOME.gnome_vfs_mime_type_from_name(extensionBuffer);
     if (typeName !is null) {
-        mimeType = fromStringz(typeName).dup;
+        mimeType = fromStringz(typeName)._idup();
     }
     return mimeType;
 }
@@ -675,18 +682,18 @@ static Program gnome_getProgram(Display display, String mimeType) {
         program.display = display;
         program.name = mimeType;
         GnomeVFSMimeApplication* application = ptr;
-        String buffer = fromStringz(application.command).dup;
+        String buffer = fromStringz(application.command)._idup();
         program.command = buffer;
         program.gnomeExpectUri = application.expects_uris is GNOME.GNOME_VFS_MIME_APPLICATION_ARGUMENT_TYPE_URIS;
 
-        buffer = fromStringz( application.id) ~ '\0';
+        buffer = (fromStringz( application.id) ~ '\0')._idup();
         ValueWrapperInt gnomeIconTheme = cast(ValueWrapperInt)display.getData(ICON_THEME_DATA);
-        char* icon_name = GNOME.gnome_icon_lookup( cast(GtkIconTheme*) gnomeIconTheme.value, null, null, buffer.ptr, null, mimeTypeBuffer,
+        char* icon_name = GNOME.gnome_icon_lookup( cast(GtkIconTheme*) gnomeIconTheme.value, null, null, cast(char*)buffer.ptr, null, mimeTypeBuffer,
                 GNOME.GNOME_ICON_LOOKUP_FLAGS_NONE, null);
         char* path = null;
         if (icon_name !is null) path = GNOME.gnome_icon_theme_lookup_icon(cast(GtkIconTheme*)gnomeIconTheme.value, icon_name, PREFERRED_ICON_SIZE, null, null);
         if (path !is null) {
-            program.iconPath = fromStringz( path).dup;
+            program.iconPath = fromStringz( path)._idup();
             OS.g_free(path);
         }
         if (icon_name !is null) OS.g_free(icon_name);
@@ -775,7 +782,12 @@ static String[] getExtensions(Display display) {
         String mimeType = keys[ keyIdx ];
         String[] mimeExts = mimeInfo[mimeType];
         for (int index = 0; index < mimeExts.length; index++){
-            if (!extensions.contains(mimeExts[index])) {
+            version(Tango){
+                bool contains = extensions.contains(mimeExts[index]);
+            } else { // Phobos
+                bool contains = std.algorithm.find(extensions, mimeExts[index]) != std.iterator.end(extension);
+            }
+            if (!contains) {
                 extensions ~= mimeExts[index];
             }
         }

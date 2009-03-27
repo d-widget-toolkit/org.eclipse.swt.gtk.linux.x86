@@ -1341,7 +1341,7 @@ extern (C) uint function(void *, uint, uint, XColor *, XColor *, uint, uint)XCre
 extern (C) uint function(void *, uint, Visual *, int)XCreateColormap;
 extern (C) uint function(void *, uint)XCopyColormapAndFree;
 extern (C) int function(void *, char * *, int, int, uint *)XInternAtoms;
-extern (C) uint function(void *, char *, int)XInternAtom;
+extern (C) uint function(void *, in char *, int)XInternAtom;
 extern (C) _BCD_func__894 function(void *, _BCD_func__894)XSetAfterFunction;
 extern (C) _BCD_func__894 function(void *, int)XSynchronize;
 extern (C) char * function(uint)XKeysymToString;
@@ -2169,7 +2169,7 @@ extern (C) uint XCreatePixmapCursor(void *, uint, uint, XColor *, XColor *, uint
 extern (C) uint XCreateColormap(void *, uint, Visual *, int);
 extern (C) uint XCopyColormapAndFree(void *, uint);
 extern (C) int XInternAtoms(void *, char * *, int, int, uint *);
-extern (C) uint XInternAtom(void *, char *, int);
+extern (C) uint XInternAtom(void *, in char *, int);
 extern (C) _BCD_func__894 XSetAfterFunction(void *, _BCD_func__894);
 extern (C) _BCD_func__894 XSynchronize(void *, int);
 extern (C) char * XKeysymToString(uint);
