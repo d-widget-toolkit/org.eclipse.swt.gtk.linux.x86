@@ -18,7 +18,7 @@ import org.eclipse.swt.internal.Compatibility;
 import java.lang.all;
 
 import org.eclipse.swt.SWT;
-import tango.core.Thread;
+import java.lang.Thread;
 import org.eclipse.swt.graphics.Device;
 import tango.core.Exception;
 
@@ -172,7 +172,7 @@ public void syncExec (Runnable runnable) {
             /*
              * Only remember the syncThread for syncExec.
              */
-            lock.thread = Thread.getThis();
+            lock.thread = Thread.currentThread();
             addLast (lock);
         }
     }

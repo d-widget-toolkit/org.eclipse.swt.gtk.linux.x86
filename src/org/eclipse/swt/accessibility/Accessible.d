@@ -20,7 +20,7 @@ import org.eclipse.swt.accessibility.AccessibleControlListener;
 import org.eclipse.swt.accessibility.AccessibleControlListener;
 import org.eclipse.swt.accessibility.AccessibleFactory;
 import org.eclipse.swt.accessibility.AccessibleObject;
-import tango.core.Thread;
+import java.lang.Thread;
 import org.eclipse.swt.SWT;
 //import org.eclipse.swt.events.*;
 import org.eclipse.swt.internal.gtk.OS;
@@ -206,7 +206,7 @@ public class Accessible {
 
     /* isValidThread was copied from Widget, and rewritten to work in this package */
     bool isValidThread () {
-        return control.getDisplay ().getThread () is Thread.getThis ();
+        return control.getDisplay ().getThread () is Thread.currentThread ();
     }
 
     void release () {

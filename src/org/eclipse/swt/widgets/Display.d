@@ -46,7 +46,7 @@ import org.eclipse.swt.widgets.Widget;
 import tango.stdc.string;
 import java.lang.all;
 
-import tango.core.Thread;
+import java.lang.Thread;
 
 /**
  * Instances of this class are responsible for managing the
@@ -763,7 +763,7 @@ void cellDataProc(
 
 protected override void checkDevice () {
     if (thread is null) error (SWT.ERROR_WIDGET_DISPOSED);
-    if (thread !is Thread.getThis ()) error (SWT.ERROR_THREAD_INVALID_ACCESS);
+    if (thread !is Thread.currentThread ()) error (SWT.ERROR_THREAD_INVALID_ACCESS);
     if (isDisposed ()) error (SWT.ERROR_DEVICE_DISPOSED);
 }
 
@@ -907,7 +907,7 @@ public void close () {
  */
 protected override void create (DeviceData data) {
     checkSubclass ();
-    checkDisplay(thread = Thread.getThis (), false);
+    checkDisplay(thread = Thread.currentThread (), false);
     createDisplay (data);
     register (this);
     if (Default is null) Default = this;
@@ -1422,7 +1422,7 @@ public override Rectangle getBounds () {
  * @return the current display
  */
 public static Display getCurrent () {
-    return findDisplay (Thread.getThis ());
+    return findDisplay (Thread.currentThread ());
 }
 
 int getCaretBlinkTime () {
@@ -2616,7 +2616,7 @@ public override GdkGC* internal_new_GC (GCData data) {
 }
 
 bool isValidThread () {
-    return thread is Thread.getThis ();
+    return thread is Thread.currentThread ();
 }
 
 /**
@@ -4153,7 +4153,7 @@ public void update () {
 public void wake () {
     synchronized (Device.classinfo) {
         if (isDisposed ()) error (SWT.ERROR_DEVICE_DISPOSED);
-        if (thread is Thread.getThis ()) return;
+        if (thread is Thread.currentThread ()) return;
         wakeThread ();
     }
 }

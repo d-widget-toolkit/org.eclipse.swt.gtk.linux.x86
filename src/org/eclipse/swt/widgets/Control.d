@@ -56,7 +56,7 @@ import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swt.accessibility.Accessible;
 
-import tango.core.Thread;
+import java.lang.Thread;
 
 
 /**
@@ -2037,7 +2037,7 @@ bool dragDetect (int x, int y, bool filter, bool* consume) {
             if (eventPtr !is null) {
                 break;
             } else {
-                try {Thread.sleep(0.050);} catch (Exception ex) {}
+                try {Thread.sleep(50);} catch (Exception ex) {}
             }
         }
         switch (cast(int)OS.GDK_EVENT_TYPE (eventPtr)) {

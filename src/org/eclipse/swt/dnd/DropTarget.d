@@ -38,7 +38,7 @@ import org.eclipse.swt.dnd.TableDropTargetEffect;
 import org.eclipse.swt.dnd.TreeDropTargetEffect;
 import java.lang.all;
 
-import tango.core.Thread;
+import java.lang.Thread;
 static import tango.stdc.string;
 
 /**
@@ -320,7 +320,7 @@ private static extern(C) int Drag_Motion (
 }
 
 static DropTarget FindDropTarget(GtkWidget* handle) {
-    Display display = Display.findDisplay(Thread.getThis());
+    Display display = Display.findDisplay(Thread.currentThread());
     if (display is null || display.isDisposed()) return null;
     Widget widget = display.findWidget(handle);
     if (widget is null) return null;

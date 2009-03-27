@@ -14,7 +14,7 @@ module org.eclipse.swt.browser.Browser;
 
 import java.lang.all;
 
-import tango.core.Thread;
+import java.lang.Thread;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
@@ -129,7 +129,7 @@ static Composite checkParent (Composite parent) {
     if (parent !is null && !parent.isDisposed ()) {
         Display display = parent.getDisplay ();
         if (display !is null) {
-            if (display.getThread () is Thread.getThis ()) {
+            if (display.getThread () is Thread.currentThread ()) {
                 display.setData (NO_INPUT_METHOD, stringcast("true")); //$NON-NLS-1$
             }
         }

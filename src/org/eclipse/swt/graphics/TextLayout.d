@@ -210,7 +210,7 @@ void computeRuns () {
             i += incr;
         }
     }
-    int slen = strlen(ptr);
+    int slen = OS.strlen(ptr);
     Font defaultFont = font !is null ? font : device.systemFont;
     for (int i = 0; i < styles.length - 1; i++) {
         StyleItem styleItem = styles[i];
@@ -523,7 +523,7 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
             auto ptr = OS.pango_layout_get_text(layout);
             int byteSelStart = selectionStart;//(OS.g_utf8_offset_to_pointer(ptr, selectionStart) - ptr);
             int byteSelEnd = selectionEnd + 1;//(OS.g_utf8_offset_to_pointer(ptr, selectionEnd + 1) - ptr);
-            int slen = strlen(ptr);
+            int slen = OS.strlen(ptr);
             byteSelStart = Math.min(byteSelStart, slen);
             byteSelEnd = Math.min(byteSelEnd, slen);
             if (cairo !is null && OS.GTK_VERSION >= OS.buildVERSION(2, 8, 0)) {
@@ -957,7 +957,7 @@ public Rectangle getBounds(int start, int end) {
     }
     int byteStart = start;//(OS.g_utf8_offset_to_pointer (ptr, start) - ptr);
     int byteEnd = end + incr;//(OS.g_utf8_offset_to_pointer (ptr, end + 1) - ptr);
-    int slen = strlen(ptr);
+    int slen = OS.strlen(ptr);
     byteStart = Math.min(byteStart, slen);
     byteEnd = Math.min(byteEnd, slen);
     int[] ranges = [byteStart, byteEnd];
@@ -1095,7 +1095,7 @@ public int getLevel(int offset) {
     PangoLayoutRun* run = new PangoLayoutRun();
     auto ptr = OS.pango_layout_get_text(layout);
     auto byteOffset = offset;//OS.g_utf8_offset_to_pointer(ptr, offset) - ptr;
-    int slen = strlen(ptr);
+    int slen = OS.strlen(ptr);
     byteOffset = Math.min(byteOffset, slen);
     do {
         auto runPtr = OS.pango_layout_iter_get_run(iter);
@@ -1188,7 +1188,7 @@ public int getLineIndex(int offset) {
     int line = 0;
     auto ptr = OS.pango_layout_get_text(layout);
     auto byteOffset = offset;//OS.g_utf8_offset_to_pointer(ptr,offset) - ptr;
-    int slen = strlen(ptr);
+    int slen = OS.strlen(ptr);
     byteOffset = Math.min(byteOffset, slen);
     auto iter = OS.pango_layout_get_iter(layout);
     if (iter is null) SWT.error(SWT.ERROR_NO_HANDLES);

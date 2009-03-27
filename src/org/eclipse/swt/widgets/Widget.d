@@ -26,7 +26,7 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TypedListener;
 
 import tango.stdc.string;
-import tango.core.Thread;
+import java.lang.Thread;
 
 
 /**
@@ -468,7 +468,7 @@ protected void checkSubclass () {
 public void checkWidget () {
     Display display = this.display;
     if (display is null) error (SWT.ERROR_WIDGET_DISPOSED);
-    if (display.thread !is Thread.getThis ()) error (SWT.ERROR_THREAD_INVALID_ACCESS);
+    if (display.thread !is Thread.currentThread ()) error (SWT.ERROR_THREAD_INVALID_ACCESS);
     if ((state & DISPOSED) !is 0) error (SWT.ERROR_WIDGET_DISPOSED);
 }
 

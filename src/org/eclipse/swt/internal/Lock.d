@@ -74,7 +74,7 @@ public int lock() {
 public void unlock() {
     version(Tango){
         synchronized (mutex) {
-            Thread current = Thread.getThis();
+            Thread current = Thread.currentThread();
             if (owner is current) {
                 if (--count is 0) {
                     owner = null;

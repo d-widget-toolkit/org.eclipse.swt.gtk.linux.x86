@@ -38,7 +38,7 @@ import org.eclipse.swt.dnd.DNDEvent;
 import org.eclipse.swt.dnd.TransferData;
 import java.lang.all;
 
-import tango.core.Thread;
+import java.lang.Thread;
 
 /**
  *
@@ -266,7 +266,7 @@ private static extern(C) void DragGetData(
 }
 
 static DragSource FindDragSource(GtkWidget* handle) {
-    Display display = Display.findDisplay(Thread.getThis());
+    Display display = Display.findDisplay(Thread.currentThread());
     if (display is null || display.isDisposed()) return null;
     Widget widget = display.findWidget(handle);
     if (widget is null) return null;

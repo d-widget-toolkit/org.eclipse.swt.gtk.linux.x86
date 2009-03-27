@@ -31,7 +31,7 @@ import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.swt.widgets.Event;
 
 import tango.core.Exception;
-import tango.core.Thread;
+import java.lang.Thread;
 
 /**
  *  Instances of this class implement rubber banding rectangles that are
@@ -730,7 +730,7 @@ public bool open () {
             if (eventPtr !is null) {
                 break;
             } else {
-                try { Thread.sleep(0.050); } catch (Exception ex) {}
+                try { Thread.sleep(50); } catch (Exception ex) {}
             }
         }
         gdkEvent = eventPtr;
