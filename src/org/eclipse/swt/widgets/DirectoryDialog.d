@@ -219,7 +219,7 @@ String openChooserDialog () {
             auto utf8Ptr = OS.g_filename_to_utf8 (path, -1, null, &items_written, null);
             OS.g_free (path);
             if (utf8Ptr !is null) {
-                answer = utf8Ptr[ 0 .. items_written ].dup;
+                answer = utf8Ptr[ 0 .. items_written ]._idup();
                 filterPath = answer;
                 OS.g_free (utf8Ptr);
             }
@@ -293,13 +293,13 @@ String openClassicDialog () {
         uint items_written;
         char* utf8Ptr = OS.g_filename_to_utf8 (fileNamePtr, -1, null, &items_written, null);
         if (utf8Ptr !is null) {
-            String osAnswer = utf8Ptr[ 0 .. items_written ];
+            String osAnswer = utf8Ptr[ 0 .. items_written ]._idup();
             if (osAnswer.length !is 0) {
                 /* remove trailing separator, unless root directory */
                 if ( osAnswer != SEPARATOR && osAnswer[ $-1 .. $ ] == SEPARATOR ) {
                     osAnswer = osAnswer[ 0 .. $ - 1 ];
                 }
-                answer = filterPath = osAnswer.dup;
+                answer = filterPath = osAnswer._idup();
             }
             OS.g_free (utf8Ptr);
         }
@@ -322,7 +322,7 @@ String openClassicDialog () {
  * @param string the filter path
  */
 public void setFilterPath (String string) {
-    filterPath = string.dup;
+    filterPath = string._idup();
 }
 /**
  * Sets the dialog's message, which is a description of
@@ -335,6 +335,6 @@ public void setFilterPath (String string) {
 public void setMessage (String string) {
     // SWT extension: allow null for zero length string
     //if (string is null) error (SWT.ERROR_NULL_ARGUMENT);
-    message = string.dup;
+    message = string._idup();
 }
 }

@@ -22,7 +22,7 @@ import org.eclipse.swt.internal.Lock;
 
 public class Platform {
     public static const String PLATFORM = "gtk"; //$NON-NLS-1$
-    public static const Lock lock;
+    public static Lock lock;
     static this() {
         lock = new Lock();
     }

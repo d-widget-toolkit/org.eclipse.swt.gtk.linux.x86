@@ -86,6 +86,7 @@ version(Tango){
     static import tango.io.model.IFile;
     import tango.util.Convert;
 } else { // Phobos
+    import std.conv;
     static import std.string;
 }
 import java.lang.all;
@@ -658,7 +659,7 @@ public class StyledText : Canvas {
             StringBuffer buffer = new StringBuffer(segment.substring (0, pageIndex));
             buffer.append (page);
             buffer.append (segment.substring(pageIndex + pageTagLength));
-            segment = buffer.toString().dup;
+            segment = buffer.toString()._idup();
         }
         if (segment.length > 0) {
             layout.setText(segment);
@@ -4003,8 +4004,8 @@ int getOffsetAtPoint(int x, int y, int lineIndex) {
             String line = content.getLine(lineIndex);
             int level;
             int offset = offsetInLine;
-            while (offset > 0 && tango.text.Unicode.isDigit(line[offset])) offset--;
-            if (offset is 0 && tango.text.Unicode.isDigit(line[offset])) {
+            while (offset > 0 && Character.isDigit(line.dcharAt(offset))) offset--;
+            if (offset is 0 && Character.isDigit(line.dcharAt(offset))) {
                 level = isMirrored() ? 1 : 0;
             } else {
                 level = layout.getLevel(offset) & 0x1;
@@ -4809,8 +4810,8 @@ int getCaretDirection() {
     if (lineLength is 0) return isMirrored() ? SWT.RIGHT : SWT.LEFT;
     if (caretAlignment is PREVIOUS_OFFSET_TRAILING && offset > 0) offset--;
     if (offset is lineLength && offset > 0) offset--;
-    while (offset > 0 && tango.text.Unicode.isDigit(line[offset])) offset--;
-    if (offset is 0 && tango.text.Unicode.isDigit(line[offset])) {
+    while (offset > 0 && Character.isDigit(line.dcharAt(offset))) offset--;
+    if (offset is 0 && Character.isDigit(line.dcharAt(offset))) {
         return isMirrored() ? SWT.RIGHT : SWT.LEFT;
     }
     TextLayout layout = renderer.getTextLayout(caretLine);
@@ -5328,8 +5329,7 @@ void handleMouseDown(Event event) {
 
     //paste clipboard selection
     if (event.button is 2) {
-        auto o = cast(ArrayWrapperString)getClipboardContent(DND.SELECTION_CLIPBOARD);
-        String text = o.array;
+        String text = stringcast(getClipboardContent(DND.SELECTION_CLIPBOARD));
         if (text !is null && text.length > 0) {
             // position cursor
             doMouseLocationChange(event.x, event.y, false);
@@ -5666,7 +5666,7 @@ void initializeAccessible() {
                 if (text !is null) {
                     dchar mnemonic = _findMnemonic (text);
                     if (mnemonic !is '\0') {
-                        shortcut = "Alt+"~String_valueOf( [mnemonic] ); //$NON-NLS-1$
+                        shortcut = Format("Alt+{}", mnemonic ); //$NON-NLS-1$
                     }
                 }
             }
@@ -6040,10 +6040,7 @@ void paintObject(GC gc, int x, int y, int ascent, int descent, StyleRange style,
  */
 public void paste(){
     checkWidget();
-    String text = null;
-    if( auto o = cast(ArrayWrapperString) getClipboardContent(DND.CLIPBOARD)){
-        text = o.array;
-    }
+    String text = stringcast( getClipboardContent(DND.CLIPBOARD));
     if (text !is null && text.length > 0) {
         Event event = new Event();
         event.start = selection.x;

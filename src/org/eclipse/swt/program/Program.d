@@ -785,7 +785,7 @@ static String[] getExtensions(Display display) {
             version(Tango){
                 bool contains = extensions.contains(mimeExts[index]);
             } else { // Phobos
-                bool contains = std.algorithm.find(extensions, mimeExts[index]) != std.iterator.end(extension);
+                bool contains = std.algorithm.find(extensions, mimeExts[index]) != std.iterator.end(extensions);
             }
             if (!contains) {
                 extensions ~= mimeExts[index];

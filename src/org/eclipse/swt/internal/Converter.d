@@ -39,8 +39,8 @@ extern(C) {
  */
 public final class Converter {
     public static const char  [] NullByteArray = "\0";
-    public static const char  [] EmptyByteArray = "";
-    public static const wchar [] EmptyCharArray = "";
+    public static const char  [] EmptyByteArray;
+    public static const wchar [] EmptyCharArray;
 
 /**
  * Returns the default code page for the platform where the
@@ -56,7 +56,7 @@ public static wchar [] mbcsToWcs (String codePage, char [] buffer) {
     int items_written;
     wchar* ptr = g_utf8_to_utf16 (toStringz(buffer), buffer.length, null, &items_written, null);
     if (!ptr){
-        return EmptyCharArray;
+        return cast(wchar[])EmptyCharArray;
     }
     wchar[] chars = ptr[ 0 .. items_written].dup;
     g_free (ptr);
@@ -80,7 +80,7 @@ public static char [] wcsToMbcs (String codePage, wchar [] buffer, bool terminat
     */
     char* ptr = g_utf16_to_utf8 (toString16z(buffer), buffer.length, & items_read, & items_written, null);
     if (!ptr) {
-        return terminate ? NullByteArray : EmptyByteArray;
+        return terminate ?cast(char[]) NullByteArray : cast(char[])EmptyByteArray;
     }
     char [] bytes = new char [items_written + (terminate ? 1 : 0)];
     bytes[ 0 .. items_written ] = ptr[ 0 .. items_written ];

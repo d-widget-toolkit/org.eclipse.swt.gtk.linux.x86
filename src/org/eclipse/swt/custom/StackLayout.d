@@ -24,9 +24,9 @@ import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Layout;
 
 version(Tango){
-import tango.util.Convert;
-static import tango.text.Util;
+    import tango.util.Convert;
 } else { // Phobos
+    import std.conv;
 }
 
 /**
@@ -139,8 +139,8 @@ protected override void layout(Composite composite, bool flushCache) {
 
 String getName () {
     String string = this.classinfo.name;
-    int index = tango.text.Util.locatePrior( string ,'.');
-    if (index is string.length ) return string;
+    int index = string.lastIndexOf('.');
+    if (index is -1 ) return string;
     return string[ index + 1 .. $ ];
 }
 
@@ -155,7 +155,7 @@ public override String toString () {
     if (marginWidth !is 0) string ~= "marginWidth="~to!(String)(marginWidth)~" ";
     if (marginHeight !is 0) string ~= "marginHeight="~to!(String)(marginHeight)~" ";
     if (topControl !is null) string ~= "topControl="~to!(String)(topControl)~" ";
-    string = tango.text.Util.trim(string);
+    string = string.trim();
     string ~= "}";
     return string;
 }

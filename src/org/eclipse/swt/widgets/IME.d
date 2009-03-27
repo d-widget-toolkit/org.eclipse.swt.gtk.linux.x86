@@ -263,7 +263,7 @@ override int /*long*/ gtk_commit (GtkIMContext* imcontext, char* textPtr) {
     if (textPtr !is null && inComposition) {
         int length = OS.strlen (textPtr);
         if (length !is 0) {
-            char [] chars = fromStringz(textPtr).dup;
+            String chars = fromStringz(textPtr)._idup();
             Event event = new Event();
             event.detail = SWT.COMPOSITION_CHANGED;
             event.start = startOffset;
@@ -292,10 +292,10 @@ override int /*long*/ gtk_preedit_changed (GtkIMContext* imcontext) {
     int cursorPos;
     OS.gtk_im_context_get_preedit_string (imHandle_, &preeditString, &pangoAttrs, &cursorPos);
     caretOffset = cursorPos ;
-    char [] chars = null;
+    String chars = null;
     if (preeditString !is null) {
         int length = OS.strlen (preeditString);
-        chars = fromStringz(preeditString).dup;
+        chars = fromStringz(preeditString)._idup();
         if (pangoAttrs !is null) {
             int count = 0;
             auto iterator = OS.pango_attr_list_get_iterator (pangoAttrs );

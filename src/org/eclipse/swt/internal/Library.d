@@ -14,12 +14,6 @@ module org.eclipse.swt.internal.Library;
 
 import java.lang.all;
 
-version(Tango){
-    import tango.util.Convert;
-} else { // Phobos
-    import std.conv;
-}
-
 // do it here, so it can be evaluated at compile time
 // this saves a static ctor.
 private int buildSWT_VERSION (int major, int minor) {
@@ -69,18 +63,18 @@ static int parseVersion(String aVersion) {
     }
     while (index < length && isDigit(aVersion[index])) index++;
     try {
-        if (start < length) major = to!(int)( aVersion[start .. index] );
-    } catch (ConversionException e) {}
+        if (start < length) major = Integer.parseInt( aVersion[start .. index] );
+    } catch (NumberFormatException e) {}
     start = ++index;
     while (index < length && isDigit(aVersion[index])) index++;
     try {
-        if (start < length) minor = to!(int)(aVersion[start .. index]);
-    } catch (ConversionException e) {}
+        if (start < length) minor = Integer.parseInt(aVersion[start .. index]);
+    } catch (NumberFormatException e) {}
     start = ++index;
     while (index < length && isDigit(aVersion[index])) index++;
     try {
-        if (start < length) micro = to!(int)(aVersion[start .. index]);
-    } catch (ConversionException e) {}
+        if (start < length) micro = Integer.parseInt(aVersion[start .. index]);
+    } catch (NumberFormatException e) {}
     return buildJAVA_VERSION(major, minor, micro);
 }
 

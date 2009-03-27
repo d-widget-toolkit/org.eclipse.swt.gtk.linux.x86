@@ -49,9 +49,10 @@ import org.eclipse.swt.custom.CTabFolderEvent;
 
 import java.lang.all;
 version(Tango){
-import tango.util.Convert;
-static import tango.text.convert.Utf;
+    import tango.util.Convert;
+    static import tango.text.convert.Utf;
 } else { // Phobos
+    import std.conv;
 }
 
 /**
@@ -1686,7 +1687,7 @@ void initAccessible() {
                 if (text !is null) {
                     dchar mnemonic = _findMnemonic(text);
                     if (mnemonic !is '\0') {
-                        shortcut = "Alt+"~tango.text.convert.Utf.toString([mnemonic]); //$NON-NLS-1$
+                        shortcut = Format("Alt+{}", mnemonic); //$NON-NLS-1$
                     }
                 }
             }

@@ -123,9 +123,9 @@ String computeResultChooserDialog () {
             char* utf8Ptr = OS.g_filename_to_utf8 (name, -1, null, &items_written, null);
             OS.g_free (name);
             if (utf8Ptr !is null) {
-                fullPath = utf8Ptr[ 0 .. items_written ].dup;
+                fullPath = utf8Ptr[ 0 .. items_written ]._idup();
                 int start = fullPath.lastIndexOf( SEPARATOR);
-                fileNames [writePos++] = fullPath[ start + 1 .. $ ].dup;
+                fileNames [writePos++] = fullPath[ start + 1 .. $ ]._idup();
                 OS.g_free (utf8Ptr);
             }
             current = OS.g_slist_next (current);
@@ -143,7 +143,7 @@ String computeResultChooserDialog () {
             auto utf8Ptr = OS.g_filename_to_utf8 (path, -1, null, &items_written, null);
             OS.g_free (path);
             if (utf8Ptr !is null) {
-                fullPath = utf8Ptr[ 0 .. items_written ].dup;
+                fullPath = utf8Ptr[ 0 .. items_written ]._idup();
                 fileNames = new String [1];
                 int start = fullPath.lastIndexOf( SEPARATOR);
                 fileNames[0] = fullPath[ start + 1 .. $ ];
@@ -156,7 +156,7 @@ String computeResultChooserDialog () {
     if (filter !is null) {
         auto filterNamePtr = OS.gtk_file_filter_get_name (filter);
         if (filterNamePtr !is null) {
-            String filterName = fromStringz(filterNamePtr).dup;
+            String filterName = fromStringz(filterNamePtr)._idup();
             //OS.g_free (filterNamePtr); //GTK owns this pointer - do not free
             for (int i = 0; i < filterExtensions.length; i++) {
                 if (filterNames.length > 0) {
@@ -185,7 +185,7 @@ String computeResultClassicDialog () {
     GtkFileSelection* selection = cast(GtkFileSelection*)handle;
     auto entry = selection.selection_entry;
     auto entryText = OS.gtk_entry_get_text (entry);
-    String txt = fromStringz( entryText );
+    String txt = fromStringz( entryText )._idup();
     if (txt.length is 0) {
         auto fileList = selection.file_list;
         auto listSelection = OS.gtk_tree_view_get_selection (fileList);
@@ -215,7 +215,7 @@ String computeResultClassicDialog () {
     auto fileNamePtr = OS.gtk_file_selection_get_filename (handle);
     uint items_written;
     auto utf8Ptr = OS.g_filename_to_utf8 (fileNamePtr, -1, null, &items_written, null);
-    String osAnswer = utf8Ptr[ 0 .. items_written ].dup;
+    String osAnswer = utf8Ptr[ 0 .. items_written ]._idup();
     OS.g_free (utf8Ptr);
 
     if (osAnswer.length is 0) return null;
@@ -239,9 +239,9 @@ String computeResultClassicDialog () {
         fileNames = new String[](length_);
         for (int i = 0; i < length_; i++) {
             utf8Ptr = OS.g_filename_to_utf8 (namesPtr [i], -1, null, &items_written, null);
-            String name = utf8Ptr[ 0 .. items_written ].dup;
+            String name = utf8Ptr[ 0 .. items_written ]._idup();
             int start = name.lastIndexOf( SEPARATOR);
-            fileNames [i] = name[ start + 1 .. $ ].dup;
+            fileNames [i] = name[ start + 1 .. $ ]._idup();
             OS.g_free (utf8Ptr);
         }
         OS.g_strfreev (namesPtr);

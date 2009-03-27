@@ -95,7 +95,7 @@ class AccessibleFactory {
 
     private this (int /*long*/ widgetType) {
         widgetTypeName = OS.g_type_name (widgetType);
-        String factoryName = FACTORY_TYPENAME ~ fromStringz( widgetTypeName ) ~ '\0';
+        String factoryName = (FACTORY_TYPENAME ~ fromStringz( widgetTypeName ) ~ '\0')._idup();
         if (OS.g_type_from_name (factoryName.ptr) is 0) {
             /* register the factory */
             auto registry = ATK.atk_get_default_registry ();
@@ -137,7 +137,7 @@ class AccessibleFactory {
                 if (accessible.accessibleObject !is null) {
                     return accessible.accessibleObject.handle;
                 }
-                String buffer = fromStringz( widgetTypeName ).dup;
+                String buffer = fromStringz( widgetTypeName )._idup();
                 auto type = getType (buffer, accessible, objectParentType, ACC.CHILDID_SELF);
                 AccessibleObject object = new AccessibleObject (type, cast(GtkWidget*)widget, accessible, objectParentType, false);
                 accessible.accessibleObject = object;
@@ -193,7 +193,7 @@ class AccessibleFactory {
         } else {
             action = hypertext = selection = text = true;
         }
-        String swtTypeName = SWT_TYPE_PREFIX.dup;
+        String swtTypeName = SWT_TYPE_PREFIX._idup();
         swtTypeName ~= widgetTypeName;
         if (action) swtTypeName ~= "Action"; //$NON-NLS-1$
         if (hypertext) swtTypeName ~= "Hypertext"; //$NON-NLS-1$

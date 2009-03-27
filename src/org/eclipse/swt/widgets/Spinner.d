@@ -28,8 +28,9 @@ import org.eclipse.swt.events.VerifyListener;
 
 import java.lang.all;
 version(Tango){
-import tango.util.Convert;
+    import tango.util.Convert;
 } else { // Phobos
+    import std.conv;
 }
 
 /**
@@ -231,9 +232,9 @@ public override Point computeSize (int wHint, int hHint, bool changed) {
         }
         string = buffer;
     }
-    char [] buffer1 = string;
+    auto buffer1 = string;
     auto ptr = OS.pango_layout_get_text (layout);
-    String buffer2 = fromStringz( ptr ).dup;
+    String buffer2 = fromStringz( ptr )._idup();
     OS.pango_layout_set_text (layout, buffer1.ptr, buffer1.length);
     OS.pango_layout_get_size (layout, w.ptr, h.ptr);
     OS.pango_layout_set_text (layout, buffer2.ptr, buffer2.length);
@@ -501,7 +502,7 @@ public int getSelection () {
 public String getText () {
     checkWidget ();
     auto str = OS.gtk_entry_get_text (handle);
-    return fromStringz(str).dup;
+    return fromStringz(str)._idup();
 }
 
 /**
@@ -544,7 +545,7 @@ public int getDigits () {
 
 String getDecimalSeparator () {
     auto ptr = OS.localeconv_decimal_point ();
-    return fromStringz( ptr ).dup;
+    return fromStringz( ptr )._idup();
 }
 
 override int /*long*/ gtk_activate (GtkWidget* widget) {
@@ -554,7 +555,7 @@ override int /*long*/ gtk_activate (GtkWidget* widget) {
 
 override int /*long*/ gtk_changed (GtkWidget* widget) {
     auto str = OS.gtk_entry_get_text (cast(GtkEntry*)handle);
-    int length = tango.stdc.string.strlen (str);
+    int length = OS.strlen (str);
     if (length > 0) {
         char* endptr;
         double value = OS.g_strtod (str, &endptr);
@@ -660,7 +661,7 @@ override int /*long*/ gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* eve
 override int /*long*/ gtk_insert_text (GtkEditable* widget, char* new_text, int new_text_length, int position) {
 //  if (!hooks (SWT.Verify) && !filters (SWT.Verify)) return 0;
     if (new_text is null || new_text_length is 0) return 0;
-    String oldText = new_text[ 0 .. new_text_length ].dup;
+    String oldText = new_text[ 0 .. new_text_length ]._idup();
     int pos;
     pos = position;
     if (pos is -1) {
@@ -1106,7 +1107,7 @@ override bool translateTraversal (GdkEventKey* keyEvent) {
                 char* preeditString;
                 OS.gtk_im_context_get_preedit_string (imContext, &preeditString, null, null);
                 if (preeditString !is null) {
-                    int length = tango.stdc.string.strlen (preeditString);
+                    int length = OS.strlen (preeditString);
                     OS.g_free (preeditString);
                     if (length !is 0) return false;
                 }

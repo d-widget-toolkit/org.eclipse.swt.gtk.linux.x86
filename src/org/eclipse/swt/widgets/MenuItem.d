@@ -243,7 +243,7 @@ protected override void checkSubclass () {
 
 override void createHandle (int index) {
     state |= HANDLE;
-    char [] buffer = "\0";
+    String buffer = "\0";
     int bits = SWT.CHECK | SWT.RADIO | SWT.PUSH | SWT.SEPARATOR;
     switch (style & bits) {
         case SWT.SEPARATOR:

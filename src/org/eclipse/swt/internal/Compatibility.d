@@ -377,7 +377,7 @@ public static String getMessage(String key, Object[] args) {
     }
     if (msgs !is null) {
         try {
-            char[] frmt = msgs.getString(key);
+            String frmt = msgs.getString(key);
             switch( args.length ){
             case 0: answer = Format(frmt); break;
             case 1: answer = Format(frmt, args[0]); break;

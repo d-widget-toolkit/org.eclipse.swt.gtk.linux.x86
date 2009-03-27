@@ -21,7 +21,7 @@ import org.eclipse.swt.SWT;
 import java.lang.Thread;
 import org.eclipse.swt.graphics.Device;
 version(Tango){
-import tango.core.Exception;
+    import tango.core.Exception;
 } else { // Phobos
 }
 
@@ -185,12 +185,16 @@ public void syncExec (Runnable runnable) {
     }
     synchronized (lock) {
         bool interrupted = false;
-        while (!lock.done ()) {
-            try {
-                lock.wait ();
-            } catch (SyncException e) {
-                interrupted = true;
+        version(Tango){
+            while (!lock.done ()) {
+                try {
+                    lock.wait ();
+                } catch (SyncException e) {
+                    interrupted = true;
+                }
             }
+        } else { // Phobos
+            implMissing( __FILE__, __LINE__);
         }
         if (interrupted) {
             Compatibility.interrupt();

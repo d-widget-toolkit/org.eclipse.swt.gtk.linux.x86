@@ -39,8 +39,8 @@ final class GIFFileFormat : FileFormat {
     static const int GIF_EXTENSION_BLOCK_ID = 0x21;
     static const int GIF_IMAGE_BLOCK_ID = 0x2C;
     static const int GIF_TRAILER_ID = 0x3B;
-    static const byte[] GIF89a = cast(byte[])"GIF89a";
-    static const byte[] NETSCAPE2_0 = cast(byte[])"NETSCAPE2.0";
+    static /+const+/ byte[] GIF89a = cast(byte[])"GIF89a";
+    static /+const+/ byte[] NETSCAPE2_0 = cast(byte[])"NETSCAPE2.0";
 
     /**
      * Answer a palette containing numGrays

@@ -581,19 +581,14 @@ void dropDown (bool drop) {
  * an '&' character in the given string. If there are no '&'
  * characters in the given string, return '\0'.
  */
-dchar _findMnemonic (String string) {
-    if (string is null) return '\0';
+dchar _findMnemonic (String str) {
+    if (str is null) return '\0';
     int index = 0;
-    int length = string.length;
+    int length = str.length;
     do {
-        while (index < length && string[index] !is '&') index++;
+        while (index < length && str[index] !is '&') index++;
         if (++index >= length) return '\0';
-        if (string[index] !is '&') {
-            dchar[1] d; uint ate;
-            auto d2 = tango.text.convert.Utf.toString32( string[ index .. Math.min( index +4, string.length )], d, &ate );
-            auto d3 = tango.text.Unicode.toLower( d2, d2 );
-            return d3[0];
-        }
+        if (str[index] !is '&') return Character.toLowerCase (str.dcharAt (index));
         index++;
     } while (index < length);
     return '\0';
@@ -924,7 +919,7 @@ void initAccessible() {
                 if (text !is null) {
                     dchar mnemonic = _findMnemonic (text);
                     if (mnemonic !is '\0') {
-                        shortcut = tango.text.convert.Format.Format( "Alt+{}", mnemonic ); //$NON-NLS-1$
+                        shortcut = Format( "Alt+{}", mnemonic ); //$NON-NLS-1$
                     }
                 }
             }

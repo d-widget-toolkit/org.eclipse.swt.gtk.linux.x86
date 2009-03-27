@@ -27,8 +27,9 @@ import org.eclipse.swt.printing.PrinterData;
 import java.lang.all;
 
 version(Tango){
-import tango.util.Convert;
+    import tango.util.Convert;
 } else { // Phobos
+    import std.conv;
 }
 
 /**
@@ -397,7 +398,7 @@ public PrinterData open() {
                 printToFile = ( data.name.equals("Print to File")); //$NON-NLS-1$
                 if (printToFile) {
                     auto address = OS.gtk_print_settings_get(settings, OS.GTK_PRINT_SETTINGS_OUTPUT_URI.ptr);
-                    data.fileName = fromStringz( address).dup;
+                    data.fileName = fromStringz( address)._idup();
                 }
 
                 data.scope_ = scope_;
@@ -444,7 +445,7 @@ private static extern(C) void GtkPrintSettingsFunc (char* key, char* value, void
 }
 
 void GtkPrintSettingsMeth (char* key, char* value) {
-    store( fromStringz(key).dup, fromStringz(value).dup );
+    store( fromStringz(key)._idup(), fromStringz(value)._idup() );
 }
 
 void store(String key, int value) {
@@ -460,10 +461,10 @@ void store(String key, bool value) {
 }
 
 void storeBytes(String key, char* value) {
-    store(key, fromStringz(value).dup );
+    store(key, fromStringz(value)._idup() );
 }
 
-void store(char [] key, String value) {
+void store(String key, String value) {
     int length = key.length + 1 + value.length + 1;
     if (index + length + 1 > settingsData.length) {
         char [] newData = new char[settingsData.length + Math.max(length + 1, 1024)];

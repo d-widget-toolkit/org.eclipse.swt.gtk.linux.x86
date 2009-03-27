@@ -223,12 +223,7 @@ dchar _findMnemonic (String string) {
     do {
         while (index < length && string[index] !is '&') index++;
         if (++index >= length) return '\0';
-        if (string[index] !is '&') {
-            dchar[1] tmp; uint ate;
-            dchar[] tmp2 = tango.text.convert.Utf.toString32( string[index .. Math.min( index + 4, string.length ) ], tmp, &ate );
-            assert( tmp2.length == 1 );
-            return tango.text.Unicode.toLower( tmp2 )[0];
-        }
+        if (string[index] !is '&') return Character.toLowerCase (string.dcharAt (index));
         index++;
     } while (index < length);
     return '\0';
@@ -317,7 +312,7 @@ private void initAccessible() {
             if (mnemonic !is '\0') {
                 dchar[1] d;
                 d[0] = mnemonic;
-                e.result = "Alt+" ~ tango.text.convert.Utf.toString(d); //$NON-NLS-1$
+                e.result = Format("Alt+{}", d); //$NON-NLS-1$
             }
         }
     });
@@ -359,9 +354,7 @@ void onDispose(DisposeEvent event) {
 void onMnemonic(TraverseEvent event) {
     dchar mnemonic = _findMnemonic(text);
     if (mnemonic is '\0') return;
-    dchar[1] d; uint ate;
-    auto r = tango.text.convert.Utf.toString32( [event.character][], d, &ate );
-    if (tango.text.Unicode.toLower(r)[0] !is mnemonic) return;
+    if (Character.toLowerCase(event.character) !is mnemonic) return;
     Composite control = this.getParent();
     while (control !is null) {
         Control [] children = control.getChildren();
@@ -808,7 +801,7 @@ protected String shortenText(GC gc, String t, int width) {
     layout.setText(t);
     mid = validateOffset(layout, mid);
     while (min < mid && mid < max) {
-        String s1 = t[0 .. mid].dup;
+        String s1 = t.substring(0, mid);
         String s2 = t.substring(validateOffset(layout, l-mid), l);
         int l1 = gc.textExtent(s1, DRAW_FLAGS).x;
         int l2 = gc.textExtent(s2, DRAW_FLAGS).x;
@@ -835,8 +828,8 @@ private String[] splitString(String text) {
     String[] lines = new String[1];
     int start = 0, pos;
     do {
-        pos = tango.text.Util.locate( text, '\n', start);
-        if (pos is text.length ) {
+        pos = text.indexOf( '\n', start);
+        if (pos is -1 ) {
             lines[lines.length - 1] = text[start .. $ ];
         } else {
             bool crlf = (pos > 0) && (text[ pos - 1 ] is '\r');

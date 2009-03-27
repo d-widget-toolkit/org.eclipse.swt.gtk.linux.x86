@@ -20,17 +20,15 @@ import org.eclipse.swt.accessibility.AccessibleControlListener;
 import org.eclipse.swt.accessibility.AccessibleControlListener;
 import org.eclipse.swt.accessibility.AccessibleFactory;
 import org.eclipse.swt.accessibility.AccessibleObject;
-import java.lang.Thread;
 import org.eclipse.swt.SWT;
 //import org.eclipse.swt.events.*;
 import org.eclipse.swt.internal.gtk.OS;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.events.DisposeEvent;
-version(Tango){
-import tango.core.Array;
-} else { // Phobos
-}
+
+import java.lang.Thread;
+import java.util.Vector;
 
 /**
  * Instances of this class provide a bridge between application
@@ -56,13 +54,16 @@ import tango.core.Array;
  * @since 2.0
  */
 public class Accessible {
-    AccessibleListener[] accessibleListeners;
-    AccessibleControlListener[] controlListeners;
-    AccessibleTextListener[] textListeners;
+    Vector accessibleListeners;
+    Vector controlListeners;
+    Vector textListeners;
     AccessibleObject accessibleObject;
     Control control;
 
     this (Control control) {
+        accessibleListeners = new Vector();
+        controlListeners = new Vector();
+        textListeners = new Vector();
         this.control = control;
         AccessibleFactory.registerAccessible (this);
         control.addDisposeListener (new class () DisposeListener {
@@ -96,7 +97,7 @@ public class Accessible {
     public void addAccessibleListener (AccessibleListener listener) {
         checkWidget ();
         if (listener is null) SWT.error (SWT.ERROR_NULL_ARGUMENT);
-        accessibleListeners ~= listener;
+        accessibleListeners.addElement(cast(Object)listener);
     }
 
     /**
@@ -123,7 +124,7 @@ public class Accessible {
     public void addAccessibleControlListener (AccessibleControlListener listener) {
         checkWidget ();
         if (listener is null) SWT.error (SWT.ERROR_NULL_ARGUMENT);
-        controlListeners ~= listener;
+        controlListeners.addElement(cast(Object)listener);
     }
 
     /**
@@ -152,7 +153,7 @@ public class Accessible {
     public void addAccessibleTextListener (AccessibleTextListener listener) {
         checkWidget ();
         if (listener is null) SWT.error (SWT.ERROR_NULL_ARGUMENT);
-        textListeners ~= listener;
+        textListeners.addElement(cast(Object)listener);
     }
 
     /**
@@ -172,8 +173,10 @@ public class Accessible {
     }
 
     AccessibleListener[] getAccessibleListeners () {
-        if (accessibleListeners.length is 0 ) return null;
-        return accessibleListeners.dup;
+        if (accessibleListeners is null ) return null;
+        AccessibleListener[] result = new AccessibleListener [accessibleListeners.size ()];
+        accessibleListeners.copyInto ( cast(void*[])result);
+        return result;
     }
 
     GtkWidget* getControlHandle () {
@@ -181,13 +184,17 @@ public class Accessible {
     }
 
     AccessibleControlListener[] getControlListeners () {
-        if (controlListeners.length is 0) return null;
-        return controlListeners.dup;
+        if (controlListeners is null) return null;
+        AccessibleControlListener[] result = new AccessibleControlListener [controlListeners.size ()];
+        controlListeners.copyInto ( cast(void*[])result);
+        return result;
     }
 
     AccessibleTextListener[] getTextListeners () {
-        if (textListeners.length is 0) return null;
-        return textListeners.dup;
+        if (textListeners is null) return null;
+        AccessibleTextListener[] result = new AccessibleTextListener [textListeners.size ()];
+        textListeners.copyInto ( cast(void*[])result);
+        return result;
     }
 
     /**
@@ -244,7 +251,7 @@ public class Accessible {
     public void removeAccessibleControlListener (AccessibleControlListener listener) {
         checkWidget ();
         if (listener is null) SWT.error (SWT.ERROR_NULL_ARGUMENT);
-        controlListeners.length = remove( controlListeners, listener, delegate bool(AccessibleControlListener a1, AccessibleControlListener a2 ){ return a1 is a2; });
+        controlListeners.removeElement( cast(Object)listener );
     }
 
     /**
@@ -269,7 +276,7 @@ public class Accessible {
     public void removeAccessibleListener (AccessibleListener listener) {
         checkWidget ();
         if (listener is null) SWT.error (SWT.ERROR_NULL_ARGUMENT);
-        accessibleListeners.length = remove( accessibleListeners, listener, delegate bool( AccessibleListener a1, AccessibleListener a2 ){ return a1 is a2; });
+        accessibleListeners.removeElement( cast(Object)listener);
     }
 
     /**
@@ -296,7 +303,7 @@ public class Accessible {
     public void removeAccessibleTextListener (AccessibleTextListener listener) {
         checkWidget ();
         if (listener is null) SWT.error (SWT.ERROR_NULL_ARGUMENT);
-        textListeners.length = remove( textListeners, listener, delegate bool(AccessibleTextListener a1, AccessibleTextListener a2 ){ return a1 is a2; });
+        textListeners.removeElement( cast(Object)listener );
     }
 
     /**

@@ -573,7 +573,7 @@ String parse (String string) {
                         state++;
                         break;
                     default:
-                        if (tango.text.Unicode.isWhitespace(c)) break;
+                        if (Character.isWhitespace(c)) break;
                         else state = 13;
                 }
                 break;
@@ -596,7 +596,7 @@ String parse (String string) {
                     parseMnemonics (buffer, linkStart, endtagStart, result);
                     offsets [linkIndex] = new Point (offset, result.length () - 1);
                     if (ids [linkIndex] is null) {
-                        ids [linkIndex] = buffer[ linkStart .. endtagStart ].dup;
+                        ids [linkIndex] = buffer[ linkStart .. endtagStart ]._idup();
                     }
                     linkIndex++;
                     start = tagStart = linkStart = endtagStart = refStart = index + 1;
@@ -627,12 +627,12 @@ String parse (String string) {
                 break;
             case 12:
                 if (c is '"') {
-                    ids[linkIndex] = buffer[ refStart .. index ].dup;
+                    ids[linkIndex] = buffer[ refStart .. index ]._idup();
                     state = 2;
                 }
                 break;
             case 13:
-                if (tango.text.Unicode.isWhitespace (c)) {
+                if (Character.isWhitespace (c)) {
                     state = 0;
                 } else if (c is '='){
                     state++;

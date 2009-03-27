@@ -34,15 +34,16 @@ import org.eclipse.swt.widgets.TypedListener;
 import java.lang.all;
 
 version(Tango){
-import tango.util.Convert;
+    import tango.util.Convert;
 
-static import tango.text.Util;
-//static import tango.text.locale.Core;
-static import tango.time.Time;
-static import tango.time.WallClock;
-static import tango.time.chrono.Gregorian;
-static import tango.time.chrono.Calendar;
+    static import tango.text.Util;
+    //static import tango.text.locale.Core;
+    static import tango.time.Time;
+    static import tango.time.WallClock;
+    static import tango.time.chrono.Gregorian;
+    static import tango.time.chrono.Calendar;
 } else { // Phobos
+    import std.conv;
 }
 
 
@@ -85,15 +86,19 @@ private class Calendar{
     }
 
     public this(){
-        tango.time.Time.Time time = tango.time.WallClock.WallClock.now();
-        tango.time.Time.TimeSpan span = time.time.span;
-        this.second = span.seconds % 60;
-        this.minute = span.minutes % 60;
-        this.hour   = span.hours;
-        auto greg = tango.time.chrono.Gregorian.Gregorian.generic;
-        this.dayofmonth = greg.getDayOfMonth( time );
-        this.month      = greg.getMonth( time );
-        this.year       = greg.getYear( time );
+        version(Tango){
+            tango.time.Time.Time time = tango.time.WallClock.WallClock.now();
+            tango.time.Time.TimeSpan span = time.time.span;
+            this.second = span.seconds % 60;
+            this.minute = span.minutes % 60;
+            this.hour   = span.hours;
+            auto greg = tango.time.chrono.Gregorian.Gregorian.generic;
+            this.dayofmonth = greg.getDayOfMonth( time );
+            this.month      = greg.getMonth( time );
+            this.year       = greg.getYear( time );
+        } else { // Phobos
+            implMissing( __FILE__, __LINE__ );
+        }
     }
     int getActualMaximum(int field){
         switch( field ){
@@ -916,8 +921,8 @@ void onVerify(Event event) {
     }
     if (characterCount > 0) {
         try {
-            to!(int)(newText);
-        } catch (ConversionException ex) {
+            Integer.parseInt(newText);
+        } catch (NumberFormatException ex) {
             return;
         }
         String value = text.getText(start, end - 1);
@@ -1347,8 +1352,8 @@ public void setYear (int year) {
 int unformattedIntValue(int fieldName, String newText, bool adjust, int max) {
     int newValue;
     try {
-        newValue = to!(int)(newText);
-    } catch (ConversionException ex) {
+        newValue = Integer.parseInt(newText);
+    } catch (NumberFormatException ex) {
         return -1;
     }
     if (fieldName is Calendar.MONTH && adjust) {

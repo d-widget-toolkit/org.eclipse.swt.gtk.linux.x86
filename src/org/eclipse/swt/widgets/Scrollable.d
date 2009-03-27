@@ -256,7 +256,7 @@ override int /*long*/ gtk_scroll_event (GtkWidget* widget, GdkEventScroll* event
     if ((state & CANVAS) !is 0) {
         ScrollBar scrollBar;
         GdkEventScroll* gdkEvent = new GdkEventScroll ();
-        memmove (gdkEvent, eventPtr, GdkEventScroll.sizeof);
+        OS.memmove (gdkEvent, eventPtr, GdkEventScroll.sizeof);
         if (gdkEvent.direction is OS.GDK_SCROLL_UP || gdkEvent.direction is OS.GDK_SCROLL_DOWN) {
             scrollBar = verticalBar;
         } else {

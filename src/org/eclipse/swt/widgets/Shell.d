@@ -558,7 +558,7 @@ void bringToTop (bool force) {
         * to come forward in versions > 2.10.0.  The fix is to use the last
         * user event time.
         */
-        if ( Unicode.toLower( display.windowManager ) ==/*eq*/ "metacity") {
+        if ( display.windowManager.toLowerCase() ==/*eq*/ "metacity") {
             OS.gdk_window_focus (window, display.lastUserEventTime);
         } else {
             OS.gdk_window_focus (window, OS.GDK_CURRENT_TIME);
@@ -1662,7 +1662,7 @@ public override void setText (String string) {
     */
     int length_ = string.length;
     char [] chars = new char [Math.max (6, length_) + 1];
-    chars = string[ 0 .. length_];
+    chars[ 0 .. length_ ] = string[ 0 .. length_];
     for (int i=length_; i<chars.length; i++)  chars [i] = ' ';
     OS.gtk_window_set_title (cast(GtkWindow*)shellHandle, toStringz( chars ) );
 }

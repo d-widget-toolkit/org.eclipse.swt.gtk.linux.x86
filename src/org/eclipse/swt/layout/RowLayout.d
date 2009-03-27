@@ -21,8 +21,9 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.layout.RowData;
 import java.lang.all;
 version(Tango){
-import tango.util.Convert;
+    import tango.util.Convert;
 } else { // Phobos
+    import std.conv;
 }
 
 

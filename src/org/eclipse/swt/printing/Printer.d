@@ -29,8 +29,9 @@ import org.eclipse.swt.printing.PrinterData;
 import java.lang.all;
 
 version(Tango){
-import tango.util.Convert;
+    import tango.util.Convert;
 } else { // Phobos
+    import std.conv;
 }
 
 
@@ -181,10 +182,10 @@ int GtkPrinterFunc_FindNamedPrinter (GtkPrinter* printer, void* user_data) {
 static PrinterData printerDataFromGtkPrinter(GtkPrinter*  printer) {
     auto backend = OS.gtk_printer_get_backend(printer);
     auto address = OS.G_OBJECT_TYPE_NAME(backend);
-    String backendType = fromStringz( address ).dup;
+    String backendType = fromStringz( address )._idup();
 
     address = OS.gtk_printer_get_name (printer);
-    String name = fromStringz( address ).dup;
+    String name = fromStringz( address )._idup();
 
     return new PrinterData (backendType, name);
 }
@@ -193,7 +194,7 @@ static PrinterData printerDataFromGtkPrinter(GtkPrinter*  printer) {
 * Restore printer settings and page_setup data from data.
 */
 static void restore(char[] data, GtkPrintSettings* settings, GtkPageSetup* page_setup) {
-    settingsData = data;
+    settingsData = data._idup();
     start = end = 0;
     while (end < settingsData.length && settingsData[end] !is 0) {
         start = end;
@@ -219,9 +220,9 @@ static void restore(char[] data, GtkPrintSettings* settings, GtkPageSetup* page_
     OS.gtk_page_setup_set_bottom_margin(page_setup, restoreDouble("bottom_margin"), OS.GTK_UNIT_MM); //$NON-NLS-1$
     OS.gtk_page_setup_set_left_margin(page_setup, restoreDouble("left_margin"), OS.GTK_UNIT_MM); //$NON-NLS-1$
     OS.gtk_page_setup_set_right_margin(page_setup, restoreDouble("right_margin"), OS.GTK_UNIT_MM); //$NON-NLS-1$
-    char [] name = restoreBytes("paper_size_name", true); //$NON-NLS-1$
-    char [] display_name = restoreBytes("paper_size_display_name", true); //$NON-NLS-1$
-    char [] ppd_name = restoreBytes("paper_size_ppd_name", true); //$NON-NLS-1$
+    String name = restoreBytes("paper_size_name", true); //$NON-NLS-1$
+    String display_name = restoreBytes("paper_size_display_name", true); //$NON-NLS-1$
+    String ppd_name = restoreBytes("paper_size_ppd_name", true); //$NON-NLS-1$
     double width = restoreDouble("paper_size_width"); //$NON-NLS-1$
     double height = restoreDouble("paper_size_height"); //$NON-NLS-1$
     bool custom = restoreBoolean("paper_size_is_custom"); //$NON-NLS-1$
@@ -309,18 +310,18 @@ public this(PrinterData data) {
 }
 
 static int restoreInt(String key) {
-    char [] value = restoreBytes(key, false);
-    return to!(int)( value );
+    String value = restoreBytes(key, false);
+    return Integer.parseInt( value );
 }
 
 static double restoreDouble(String key) {
-    char [] value = restoreBytes(key, false);
-    return to!(double)( value );
+    String value = restoreBytes(key, false);
+    return Double.parseDouble( value );
 }
 
 static bool restoreBoolean(String key) {
-    char [] value = restoreBytes(key, false);
-    return to!(bool)( value );
+    String value = restoreBytes(key, false);
+    return Boolean.getBoolean( value );
 }
 
 static String restoreBytes(String key, bool nullTerminate) {
@@ -342,7 +343,7 @@ static String restoreBytes(String key, bool nullTerminate) {
 
     if (DEBUG) getDwtLogger().info( __FILE__, __LINE__,  "{}: {}", keyBuffer, valueBuffer );
 
-    return valueBuffer;
+    return cast(String)valueBuffer;
 }
 
 /**

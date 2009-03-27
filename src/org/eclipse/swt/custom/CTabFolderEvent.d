@@ -20,8 +20,9 @@ import org.eclipse.swt.events.TypedEvent;
 import org.eclipse.swt.widgets.Widget;
 
 version(Tango){
-import tango.util.Convert;
+    import tango.util.Convert;
 } else { // Phobos
+    import std.conv;
 }
 
 /**

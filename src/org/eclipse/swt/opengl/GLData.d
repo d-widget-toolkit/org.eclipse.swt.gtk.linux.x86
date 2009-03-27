@@ -16,9 +16,10 @@ module org.eclipse.swt.opengl.GLData;
 import java.lang.all;
 
 version(Tango){
-import tango.text.Util;
-import tango.util.Convert;
+    import tango.text.Util;
+    import tango.util.Convert;
 } else { // Phobos
+    import std.conv;
 }
 
 /**

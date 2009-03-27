@@ -15,9 +15,10 @@ module org.eclipse.swt.custom.SashFormData;
 import java.lang.all;
 
 version(Tango){
-static import tango.text.Util;
-import tango.util.Convert;
+    static import tango.text.Util;
+    import tango.util.Convert;
 } else { // Phobos
+    import std.conv;
 }
 
 class SashFormData {
@@ -25,10 +26,10 @@ class SashFormData {
     long weight;
 
 String getName () {
-    String string = this.classinfo.name;
-    int index = tango.text.Util.locatePrior( string ,'.' );
-    if (index is string.length ) return string;
-    return string[ index + 1 .. $ ];
+    String str = this.classinfo.name;
+    int index = str.lastIndexOf( '.' );
+    if (index is -1 ) return str;
+    return str[ index + 1 .. $ ];
 }
 
 /**

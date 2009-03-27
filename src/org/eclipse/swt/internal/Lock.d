@@ -34,8 +34,12 @@ public class Lock {
     }
 
     public this() {
-        mutex = new Mutex;
-        cond = new Condition(mutex);
+        version(Tango){
+            mutex = new Mutex;
+            cond = new Condition(mutex);
+        } else { // Phobos
+            implMissing( __FILE__, __LINE__ );
+        }
     }
 /**
  * Locks the monitor and returns the lock count. If
@@ -64,6 +68,7 @@ public int lock() {
         }
     } else { // Phobos
         implMissing( __FILE__, __LINE__ );
+        return 0;
     }
 }
 

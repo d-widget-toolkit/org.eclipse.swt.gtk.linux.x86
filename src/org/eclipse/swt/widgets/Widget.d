@@ -599,8 +599,8 @@ public Object getData (String key) {
     if ((state & KEYED_DATA) !is 0) {
         Object[] table = (cast(ArrayWrapperObject) data).array;
         for (int i=1; i<table.length; i+=2) {
-            String tablekey = (cast(ArrayWrapperString) table[i]).array;
-            if (key ==/*eq*/ tablekey ) return table [i+1];
+            String tablekey = stringcast(table[i]);
+            if (key.equals( tablekey) ) return table [i+1];
         }
     }
     return null;
@@ -968,7 +968,7 @@ char [] fixMnemonic (String str) {
 
 char [] fixMnemonic (String str, bool replace) {
     int len = str.length;
-    String text = str[0 .. len].dup;
+    auto text = str[0 .. len].dup;
     int i = 0, j = 0;
     char [] result = new char [len * 2];
     while (i < len) {
@@ -1455,7 +1455,7 @@ public void setData (String key, Object value) {
     if ((state & KEYED_DATA) !is 0) {
         table = (cast(ArrayWrapperObject) data).array;
         while (index < table.length) {
-            String tablekey = (cast(ArrayWrapperString)table[index]).array;
+            String tablekey = stringcast(table[index]);
             if (key.equals (tablekey) ) break;
             index += 2;
         }

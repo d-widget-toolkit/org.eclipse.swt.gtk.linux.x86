@@ -967,7 +967,7 @@ public String getText () {
         address = OS.gtk_text_buffer_get_text (bufferHandle, &start, &end, true);
     }
     if (address is null) return "";
-    String res = fromStringz( address ).dup;
+    String res = fromStringz( address )._idup();
     if ((style & SWT.MULTI) !is 0) OS.g_free (address);
     return res;
 }
@@ -1007,7 +1007,7 @@ public String getText (int start, int end) {
         address = OS.gtk_text_buffer_get_text (bufferHandle, &startIter, &endIter, true);
     }
     if (address is null) error (SWT.ERROR_CANNOT_GET_TEXT);
-    String res = fromStringz( address ).dup;
+    String res = fromStringz( address )._idup();
     OS.g_free (address);
     return res;
 }
@@ -1283,7 +1283,7 @@ override int /*long*/ gtk_grab_focus (GtkWidget* widget) {
 override int /*long*/ gtk_insert_text (GtkEditable* widget, char* new_text, int new_text_length, int position) {
     if (!hooks (SWT.Verify) && !filters (SWT.Verify)) return 0;
     if (new_text is null || new_text_length is 0) return 0;
-    String oldText = (cast(char*)new_text)[ 0 .. new_text_length ].dup;
+    String oldText = (cast(char*)new_text)[ 0 .. new_text_length ]._idup();
     int pos;
     pos = *cast(int*)position;
     if (pos is -1) {
@@ -1351,7 +1351,7 @@ override int /*long*/ gtk_text_buffer_insert_text (GtkTextBuffer *widget, GtkTex
         end = fixEnd;
         fixStart = fixEnd = -1;
     }
-    String oldText = text[ 0 .. len ];
+    String oldText = cast(String)text[ 0 .. len ];
     String newText = verifyText (oldText, start, end);
     if (newText is null) {
         OS.g_signal_stop_emission_by_name (bufferHandle, OS.insert_text.ptr);
@@ -2005,7 +2005,7 @@ override bool translateTraversal (GdkEventKey* keyEvent) {
                 char* preeditString;
                 OS.gtk_im_context_get_preedit_string (imContext, &preeditString, null, null);
                 if (preeditString !is null) {
-                    int length = tango.stdc.string.strlen (preeditString);
+                    int length = OS.strlen (preeditString);
                     OS.g_free (preeditString);
                     if (length !is 0) return false;
                 }

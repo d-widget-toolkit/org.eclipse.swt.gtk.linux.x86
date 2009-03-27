@@ -820,11 +820,11 @@ int checkIfEventProcMeth (void* display, XEvent* xEvent) {
             flushRect.height = exposeEvent.height;
             OS.gdk_window_invalidate_rect (window, flushRect, true);
             exposeEvent.type = -1;
-            memmove (xEvent, exposeEvent, XExposeEvent.sizeof);
+            OS.memmove (xEvent, exposeEvent, XExposeEvent.sizeof);
             break;
         }
         case OS.VisibilityNotify: {
-            memmove (visibilityEvent, xEvent, XVisibilityEvent.sizeof);
+            OS.memmove (visibilityEvent, xEvent, XVisibilityEvent.sizeof);
             GtkWidget* handle;
             OS.gdk_window_get_user_data (window, cast(void**) & handle);
             Widget widget = handle !is null ? getWidget (handle) : null;
@@ -930,8 +930,8 @@ void createDisplay (DeviceData data) {
     }
     OS.gtk_set_locale();
     int cnt = 2;
-    char*[] args = [ "name".ptr, "--sync".ptr, null ];
-    char** a = args.ptr;
+    CCharPtr[] args = [ "name".ptr, "--sync".ptr, null ];
+    CCharPtr* a = args.ptr;
     if (!OS.gtk_init_check (&cnt, &a )) {
     }
     assert( cnt is 1 );
@@ -1025,7 +1025,7 @@ Image createImage (String name) {
     bool hasAlpha = cast(bool)OS.gdk_pixbuf_get_has_alpha (pixbuf);
     char* pixels = OS.gdk_pixbuf_get_pixels (pixbuf);
     byte [] data = new byte [stride * height];
-    memmove (data.ptr, pixels, data.length);
+    OS.memmove (data.ptr, pixels, data.length);
     OS.g_object_unref (pixbuf);
     ImageData imageData = null;
     if (hasAlpha) {
@@ -1069,15 +1069,15 @@ static GdkPixbuf* createPixbuf(Image image) {
         byte[] maskLine = new byte[maskStride];
         for (int y=0; y<h; y++) {
             auto offset = pixels + (y * stride);
-            memmove(line.ptr, offset, stride);
+            OS.memmove(line.ptr, offset, stride);
             auto maskOffset = maskPixels + (y * maskStride);
-            memmove(maskLine.ptr, maskOffset, maskStride);
+            OS.memmove(maskLine.ptr, maskOffset, maskStride);
             for (int x=0; x<w; x++) {
                 if (maskLine[x * 3] is 0) {
                     line[x * 4 + 3] = 0;
                 }
             }
-            memmove(offset, line.ptr, stride);
+            OS.memmove(offset, line.ptr, stride);
         }
         OS.g_object_unref(maskPixbuf);
     } else {
@@ -1093,11 +1093,11 @@ static GdkPixbuf* createPixbuf(Image image) {
             byte [] line = new byte [stride];
             for (int y = 0; y < h; y++) {
                 auto offset = pixels + (y * stride);
-                memmove (line.ptr, offset, stride);
+                OS.memmove (line.ptr, offset, stride);
                 for (int x = 0; x < w; x++) {
                     line [x*4+3] = alpha [y*w+x];
                 }
-                memmove (offset, line.ptr, stride);
+                OS.memmove (offset, line.ptr, stride);
             }
         }
     }
@@ -2555,7 +2555,7 @@ void initializeWindowManager () {
         auto screen = OS.gdk_screen_get_default ();
         if (screen !is null) {
             auto ptr2 = OS.gdk_x11_screen_get_window_manager_name (screen);
-            windowManager = fromStringz( ptr2 );
+            windowManager = fromStringz( ptr2 )._idup();
         }
     }
 }
@@ -3737,7 +3737,7 @@ void showIMWindow (Control control) {
     PangoAttrList* pangoAttrs;
     auto imHandle = control.imHandle ();
     OS.gtk_im_context_get_preedit_string (imHandle, &preeditString, &pangoAttrs, null);
-    if (preeditString !is null && strlen (preeditString) > 0) {
+    if (preeditString !is null && OS.strlen (preeditString) > 0) {
         Control widget = control.findBackgroundControl ();
         if (widget is null) widget = control;
         OS.gtk_widget_modify_bg (cast(GtkWidget*)preeditWindow, OS.GTK_STATE_NORMAL, widget.getBackgroundColor ());

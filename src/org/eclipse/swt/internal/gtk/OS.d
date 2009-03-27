@@ -28,6 +28,7 @@ version(Tango){
 } else { // Phobos
     import std.traits;
     import core.sys.posix.stdlib : realpath;
+    import std.c.locale;
     static import std.c.string;
 }
 
@@ -64,34 +65,35 @@ public alias org.eclipse.swt.internal.c.glib_object.GSignalEmissionHook GSignalE
 public alias org.eclipse.swt.internal.c.glib_object.GSignalInvocationHint GSignalInvocationHint;
 public alias org.eclipse.swt.internal.c.glib_object.GValue GValue;
 
+public alias org.eclipse.swt.internal.c.gdk.GdkBitmap GdkBitmap;
 public alias org.eclipse.swt.internal.c.gdk.GdkColor GdkColor;
-public alias org.eclipse.swt.internal.c.gdk.GdkRegion GdkRegion;
-public alias org.eclipse.swt.internal.c.gdk.GdkDrawable GdkDrawable;
-public alias org.eclipse.swt.internal.c.gdk.GdkGC GdkGC;
-public alias org.eclipse.swt.internal.c.gdk.GdkPixbuf GdkPixbuf;
 public alias org.eclipse.swt.internal.c.gdk.GdkCursor GdkCursor;
+public alias org.eclipse.swt.internal.c.gdk.GdkDisplay GdkDisplay;
+public alias org.eclipse.swt.internal.c.gdk.GdkDragContext GdkDragContext;
+public alias org.eclipse.swt.internal.c.gdk.GdkDrawable GdkDrawable;
 public alias org.eclipse.swt.internal.c.gdk.GdkEvent GdkEvent;
-public alias org.eclipse.swt.internal.c.gdk.GdkEventKey GdkEventKey;
-public alias org.eclipse.swt.internal.c.gdk.GdkWindow GdkWindow;
+public alias org.eclipse.swt.internal.c.gdk.GdkEventAny GdkEventAny;
 public alias org.eclipse.swt.internal.c.gdk.GdkEventButton GdkEventButton;
-public alias org.eclipse.swt.internal.c.gdk.GdkRectangle GdkRectangle;
-public alias org.eclipse.swt.internal.c.gdk.GdkEventExpose GdkEventExpose;
 public alias org.eclipse.swt.internal.c.gdk.GdkEventCrossing GdkEventCrossing;
+public alias org.eclipse.swt.internal.c.gdk.GdkEventExpose GdkEventExpose;
+public alias org.eclipse.swt.internal.c.gdk.GdkEventFocus GdkEventFocus;
+public alias org.eclipse.swt.internal.c.gdk.GdkEventKey GdkEventKey;
 public alias org.eclipse.swt.internal.c.gdk.GdkEventMotion GdkEventMotion;
 public alias org.eclipse.swt.internal.c.gdk.GdkEventScroll GdkEventScroll;
 public alias org.eclipse.swt.internal.c.gdk.GdkEventVisibility GdkEventVisibility;
-public alias org.eclipse.swt.internal.c.gdk.GdkXEvent GdkXEvent;
-public alias org.eclipse.swt.internal.c.gdk.GdkPoint GdkPoint;
-public alias org.eclipse.swt.internal.c.gdk.GdkPixmap GdkPixmap;
-public alias org.eclipse.swt.internal.c.gdk.GdkBitmap GdkBitmap;
-public alias org.eclipse.swt.internal.c.gdk.GdkGCValues GdkGCValues;
-public alias org.eclipse.swt.internal.c.gdk.GdkDisplay GdkDisplay;
-public alias org.eclipse.swt.internal.c.gdk.GdkImage GdkImage;
-public alias org.eclipse.swt.internal.c.gdk.GdkEventAny GdkEventAny;
-public alias org.eclipse.swt.internal.c.gdk.GdkEventFocus GdkEventFocus;
-public alias org.eclipse.swt.internal.c.gdk.GdkWindowAttr GdkWindowAttr;
 public alias org.eclipse.swt.internal.c.gdk.GdkEventWindowState GdkEventWindowState;
-public alias org.eclipse.swt.internal.c.gdk.GdkDragContext GdkDragContext;
+public alias org.eclipse.swt.internal.c.gdk.GdkGC GdkGC;
+public alias org.eclipse.swt.internal.c.gdk.GdkGCValues GdkGCValues;
+public alias org.eclipse.swt.internal.c.gdk.GdkGeometry GdkGeometry;
+public alias org.eclipse.swt.internal.c.gdk.GdkImage GdkImage;
+public alias org.eclipse.swt.internal.c.gdk.GdkPixbuf GdkPixbuf;
+public alias org.eclipse.swt.internal.c.gdk.GdkPixmap GdkPixmap;
+public alias org.eclipse.swt.internal.c.gdk.GdkPoint GdkPoint;
+public alias org.eclipse.swt.internal.c.gdk.GdkRectangle GdkRectangle;
+public alias org.eclipse.swt.internal.c.gdk.GdkRegion GdkRegion;
+public alias org.eclipse.swt.internal.c.gdk.GdkWindow GdkWindow;
+public alias org.eclipse.swt.internal.c.gdk.GdkWindowAttr GdkWindowAttr;
+public alias org.eclipse.swt.internal.c.gdk.GdkXEvent GdkXEvent;
 
 public alias org.eclipse.swt.internal.c.pango.PangoAttrColor PangoAttrColor;
 public alias org.eclipse.swt.internal.c.pango.PangoAttribute PangoAttribute;
@@ -535,40 +537,40 @@ public alias org.eclipse.swt.internal.c.Xrender.XTransform XTransform;
 
 
 // function with variadic argument list
-private void gtk_widget_style_get1( GtkWidget* widget, char* firstPropertyName, int* res ){
+private void gtk_widget_style_get1( GtkWidget* widget, in char* firstPropertyName, int* res ){
     gtk_widget_style_get( widget, firstPropertyName, res, null );
 }
 // function with variadic argument list
-private void g_object_get1( void* obj, char* firstPropertyName, int* res ){
+private void g_object_get1( void* obj, in char* firstPropertyName, int* res ){
     g_object_get( obj, firstPropertyName, res, null );
 }
 
-private void g_object_set1( void* obj, char* firstPropertyName, int value ){
+private void g_object_set1( void* obj, in char* firstPropertyName, int value ){
     g_object_set( obj, firstPropertyName, value, null );
 }
 
-private void g_object_set1_float( void* obj, char* firstPropertyName, float value ){
+private void g_object_set1_float( void* obj, in char* firstPropertyName, float value ){
     g_object_set( obj, firstPropertyName, value, null );
 }
 
-private void g_signal_emit_by_name0( void* instance, char* detailed_signal ){
+private void g_signal_emit_by_name0( void* instance, in char* detailed_signal ){
     g_signal_emit_by_name( instance, detailed_signal );
 }
 
-private void g_signal_emit_by_name1( void* instance, char* detailed_signal, int value ){
+private void g_signal_emit_by_name1( void* instance, in char* detailed_signal, int value ){
     g_signal_emit_by_name( instance, detailed_signal, value );
 }
 
-private void g_signal_emit_by_name2( void* instance, char* detailed_signal, int value1, int value2 ){
+private void g_signal_emit_by_name2( void* instance, in char* detailed_signal, int value1, int value2 ){
     g_signal_emit_by_name( instance, detailed_signal, value1, value2 );
 }
 
-private void g_signal_emit_by_name3( void* instance, char* detailed_signal, int value1, int value2, int value3 ){
+private void g_signal_emit_by_name3( void* instance, in char* detailed_signal, int value1, int value2, int value3 ){
     g_signal_emit_by_name( instance, detailed_signal, value1, value2, value3 );
 }
 
 private void gdk_pixbuf_save_to_buffer0(GdkPixbuf *pixbuf, char **buffer, uint *buffer_size,
-   char *type, GError **error ){
+   in char *type, GError **error ){
     gdk_pixbuf_save_to_buffer( pixbuf, buffer, buffer_size, type, error );
 }
 
@@ -583,10 +585,10 @@ private void gtk_tree_model_get1(void* store , void* iter, int column, void** va
 private void gtk_tree_store_set1(void* tree_store, GtkTreeIter *iter, int column, void* value ){
     gtk_tree_store_set( tree_store, iter, column, value, -1 );
 }
-private void gtk_cell_layout_set_attributes1( void *cell_layout, void* cell, void* key, void* value ){
+private void gtk_cell_layout_set_attributes1( void *cell_layout, void* cell, in void* key, void* value ){
     gtk_cell_layout_set_attributes( cast(GtkCellLayout *)cell_layout, cast(GtkCellRenderer*)cell, key, value, null );
 }
-GtkWidget * gtk_file_chooser_dialog_new2(char * title, aGtkWindow * parent, int action, char * btn0_text, int btn0_id, char * btn1_text, int btn1_id ){
+GtkWidget * gtk_file_chooser_dialog_new2(in char * title, aGtkWindow * parent, int action, in char * btn0_text, int btn0_id, in char * btn1_text, int btn1_id ){
     return gtk_file_chooser_dialog_new( title, parent, action, btn0_text, btn0_id, btn1_text, btn1_id, null );
 }
 // for linux always true, the other possibility would be GDK_WINDOWING_WIN32
@@ -599,7 +601,7 @@ private uint GDK_PIXMAP_XID(GdkDrawable* win){
 }
 
 // macro
-int g_signal_connect( void* instance, char* sig, GCallback handle, void* ptr ){
+int g_signal_connect( void* instance, in char* sig, GCallback handle, void* ptr ){
     return g_signal_connect_data( instance, sig, handle, ptr, cast(GClosureNotify) 0, cast(GConnectFlags)0 );
 }
 // macro
@@ -617,7 +619,7 @@ private char* localeconv_decimal_point(){
 
 // fontconfig.h
 struct FcConfig{};
-private extern(C) int FcConfigAppFontAddFile (FcConfig *config, char  *file);
+private extern(C) int FcConfigAppFontAddFile (FcConfig *config, in char  *file);
 
 
 template NameOfFunc(alias f) {
@@ -2452,14 +2454,14 @@ public static const int PictOpOver = 3;
         Utility methods -- conversions of gtk macros
 
     **************************************************************************/
-    static gulong g_signal_connect( gpointer arg0, gchar* arg1, GCallback arg2, gpointer arg3 )
+    static gulong g_signal_connect( gpointer arg0, in gchar* arg1, GCallback arg2, gpointer arg3 )
     {
         lock.lock();
         scope(exit) lock.unlock();
         return g_signal_connect_data (arg0, arg1, arg2, arg3, null , cast(GConnectFlags) 0) ;
     }
 
-    static gulong g_signal_connect_after( gpointer arg0, gchar* arg1, GCallback arg2, gpointer arg3 )
+    static gulong g_signal_connect_after( gpointer arg0, in gchar* arg1, GCallback arg2, gpointer arg3 )
     {
         lock.lock();
         scope(exit) lock.unlock();
@@ -2586,14 +2588,14 @@ public static const int PictOpOver = 3;
     {
         lock.lock();
         scope(exit) lock.unlock();
-        return "gtk-cancel";
+        return cast(char*)"gtk-cancel".ptr;
     }
 
     static char* GTK_STOCK_OK()
     {
         lock.lock();
         scope(exit) lock.unlock();
-        return "gtk-ok";
+        return cast(char*)"gtk-ok".ptr;
     }
 
     static GType GTK_TYPE_CELL_RENDERER_TEXT()
@@ -3002,6 +3004,13 @@ public static const int PictOpOver = 3;
         }
     }
     //localeconv_decimal_point() localeconv()->decimal_point
+    static void* memmove( void* trg, in void* src, int len ){
+        version(Tango){
+            return tango.stdc.string.memmove( trg, src, len );
+        } else { // Phobos
+            return std.c.string.memmove( trg, src, len );
+        }
+    }
 }
 
 

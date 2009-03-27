@@ -29,8 +29,9 @@ import org.eclipse.swt.graphics.Region;
 import org.eclipse.swt.internal.gtk.OS;
 
 version(Tango){
-import tango.util.Convert;
+    import tango.util.Convert;
 } else { // Phobos
+    import std.conv;
 }
 
 /**

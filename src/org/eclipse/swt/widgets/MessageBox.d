@@ -226,7 +226,7 @@ private static int checkStyle (int style) {
 
 char[] fixPercent (String string) {
     int i = 0, j = 0;
-    char [] result = new String( string.length * 2 );
+    char [] result = new char[ string.length * 2 ];
     while (i < string.length) {
         switch (string [i]) {
             case '%':

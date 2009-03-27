@@ -290,7 +290,7 @@ String _getText (int index) {
     int modelIndex = parent.columnCount is 0 ? Tree.FIRST_COLUMN : parent.columns [index].modelIndex;
     OS.gtk_tree_model_get1 (parent.modelHandle, handle, modelIndex + Tree.CELL_TEXT, &ptr);
     if (ptr is null) return ""; //$NON-NLS-1$
-    char[] buffer = fromStringz( cast(char*)ptr).dup;
+    String buffer = fromStringz( cast(char*)ptr)._idup();
     OS.g_free (ptr);
     return buffer;
 }

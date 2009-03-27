@@ -218,8 +218,7 @@ public override String toString() {
             buffer.append("normal");
     }
     String str = super.toString();
-    int index = tango.text.Util.locate( str, '{');
-    if( index is str.length ) index = -1;
+    int index = str.indexOf( '{');
     str = str[ index + 1 .. $ ];
     if (str.length > 1) buffer.append(", ");
     buffer.append(str);

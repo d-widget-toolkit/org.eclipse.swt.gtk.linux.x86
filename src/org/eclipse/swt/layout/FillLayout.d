@@ -23,8 +23,9 @@ import org.eclipse.swt.layout.FillData;
 
 import java.lang.all;
 version(Tango){
-import tango.util.Convert;
+    import tango.util.Convert;
 } else { // Phobos
+    import std.conv;
 }
 
 /**

@@ -19,10 +19,6 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swt.internal.SWTEventObject;
 
 import java.lang.all;
-version(Tango){
-import tango.text.Util : split;
-} else { // Phobos
-}
 
 /**
  * This is the super class for all typed event classes provided
@@ -92,8 +88,10 @@ public this(Event e) {
  * @return the name of the event
  */
 String getName () {
-    String str = this.classinfo.name;
-    return split( str, "." )[$-1];
+    String string = this.classinfo.name;
+    int index = string.lastIndexOf ('.');
+    if (index is -1) return string;
+    return string.substring (index + 1, string.length ());
 }
 
 /**

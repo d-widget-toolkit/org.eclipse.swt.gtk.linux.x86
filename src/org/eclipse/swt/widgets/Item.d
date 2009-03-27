@@ -183,7 +183,7 @@ public void setText (String string) {
     checkWidget ();
     // SWT extension: allow null for zero length string
     //if (string is null) error (SWT.ERROR_NULL_ARGUMENT);
-    text = string.dup;
+    text = string._idup();
 }
 
 }

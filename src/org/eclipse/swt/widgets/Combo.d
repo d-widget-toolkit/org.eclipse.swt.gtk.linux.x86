@@ -1045,7 +1045,7 @@ public String getText () {
     if (entryHandle !is null) {
         auto str = OS.gtk_entry_get_text (entryHandle);
         if (str is null) return "";
-        return fromStringz(str).dup;
+        return fromStringz(str)._idup();
     } else {
         int index = OS.gtk_combo_box_get_active (handle);
         return index !is -1 ? getItem (index) : "";
@@ -1167,7 +1167,7 @@ override int gtk_changed (GtkWidget* widget) {
     } else {
         if (!ignoreSelect) {
             auto ptr = OS.gtk_entry_get_text (entryHandle);
-            String text = fromStringz(ptr).dup;
+            String text = fromStringz(ptr)._idup();
             for (int i = 0; i < items.length; i++) {
                 if (items [i] ==/*eq*/ text) {
                     postEvent (SWT.Selection);
@@ -1324,7 +1324,7 @@ override int gtk_insert_text (GtkEditable* widget, char* new_text, int new_text_
     }
     if (!hooks (SWT.Verify) && !filters (SWT.Verify)) return 0;
     if (new_text is null || new_text_length is 0) return 0;
-    String oldText = new_text[0..new_text_length];
+    String oldText = new_text[0..new_text_length]._idup();
     int pos;
     pos = position;
     if (pos is -1) {

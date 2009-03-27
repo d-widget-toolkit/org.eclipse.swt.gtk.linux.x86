@@ -95,9 +95,9 @@ struct nsAString
 		return buffer[0 .. len].dup;
     }
     
-    static char[] toString( nsAString* str )
+    static String toString( nsAString* str )
     {
-        return Utf.toString( nsAString.toString16( str ) );
+        return String_valueOf( nsAString.toString16( str ) );
     }
 
   private:

@@ -26,7 +26,6 @@ import org.eclipse.swt.widgets.Display;
 import java.lang.all;
 
 version(Tango){
-import tango.text.convert.Integer;
 } else { // Phobos
 }
 
@@ -455,7 +454,7 @@ public String getItem (int index) {
     OS.gtk_tree_model_iter_nth_child (cast(GtkTreeStore*)modelHandle, &iter, null, index);
     OS.gtk_tree_model_get1 (cast(GtkTreeStore*)modelHandle, &iter, 0, cast(void**)&ptr );
     if (ptr is null) return null;
-    String res = fromStringz( ptr ).dup;
+    String res = fromStringz( ptr )._idup();
     OS.g_free (ptr);
     return res;
 }
@@ -530,7 +529,7 @@ public String [] getItems () {
         OS.gtk_tree_model_iter_nth_child (cast(GtkTreeStore*)modelHandle, &iter, null, index);
         OS.gtk_tree_model_get1 (cast(GtkTreeStore*)modelHandle, &iter, 0, cast(void**)&ptr);
         if (ptr !is null) {
-            String res = fromStringz( ptr ).dup;
+            String res = fromStringz( ptr )._idup();
             OS.g_free (ptr);
             result [index] = res;
         }
@@ -884,7 +883,7 @@ public int indexOf (String string, int start) {
 public bool isSelected (int index) {
     checkWidget();
     auto selection = OS.gtk_tree_view_get_selection (cast(GtkTreeView*)handle);
-    char* buffer = toStringz(tango.text.convert.Integer.toString(index));
+    char* buffer = toStringz(Integer.toString(index));
     auto path = OS.gtk_tree_path_new_from_string (buffer);
     bool answer = cast(bool)OS.gtk_tree_selection_path_is_selected (selection, path);
     OS.gtk_tree_path_free (path);

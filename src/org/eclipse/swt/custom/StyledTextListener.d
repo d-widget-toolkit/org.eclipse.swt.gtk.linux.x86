@@ -53,69 +53,69 @@ this(SWTEventListener listener) {
  */
 public override void handleEvent(Event e) {
 
-//    switch (e.type) {
-//        case StyledText.ExtendedModify:
-//            ExtendedModifyEvent extendedModifyEvent = new ExtendedModifyEvent(cast(StyledTextEvent) e);
-//            (cast(ExtendedModifyListener) eventListener).modifyText(extendedModifyEvent);
-//            break;
-//        case StyledText.LineGetBackground:
-//            LineBackgroundEvent lineBgEvent = new LineBackgroundEvent(cast(StyledTextEvent) e);
-//            (cast(LineBackgroundListener) eventListener).lineGetBackground(lineBgEvent);
-//            (cast(StyledTextEvent) e).lineBackground = lineBgEvent.lineBackground;
-//            break;
-//        case StyledText.LineGetSegments:
-//            BidiSegmentEvent segmentEvent = new BidiSegmentEvent(cast(StyledTextEvent) e);
-//            (cast(BidiSegmentListener) eventListener).lineGetSegments(segmentEvent);
-//            (cast(StyledTextEvent) e).segments = segmentEvent.segments;
-//            break;
-//        case StyledText.LineGetStyle:
-//            LineStyleEvent lineStyleEvent = new LineStyleEvent(cast(StyledTextEvent) e);
-//            (cast(LineStyleListener) eventListener).lineGetStyle(lineStyleEvent);
-//            (cast(StyledTextEvent) e).ranges = lineStyleEvent.ranges;
-//            (cast(StyledTextEvent) e).styles = lineStyleEvent.styles;
-//            (cast(StyledTextEvent) e).alignment = lineStyleEvent.alignment;
-//            (cast(StyledTextEvent) e).indent = lineStyleEvent.indent;
-//            (cast(StyledTextEvent) e).justify = lineStyleEvent.justify;
-//            (cast(StyledTextEvent) e).bullet = lineStyleEvent.bullet;
-//            (cast(StyledTextEvent) e).bulletIndex = lineStyleEvent.bulletIndex;
-//            break;
-//        case StyledText.PaintObject:
-//            PaintObjectEvent paintObjectEvent = new PaintObjectEvent(cast(StyledTextEvent) e);
-//            (cast(PaintObjectListener) eventListener).paintObject(paintObjectEvent);
-//            break;
-//        case StyledText.VerifyKey:
-//            VerifyEvent verifyEvent = new VerifyEvent(e);
-//            (cast(VerifyKeyListener) eventListener).verifyKey(verifyEvent);
-//            e.doit = verifyEvent.doit;
-//            break;
-//        case StyledText.TextChanged: {
-//            TextChangedEvent textChangedEvent = new TextChangedEvent(cast(StyledTextContent) e.data);
-//            (cast(TextChangeListener) eventListener).textChanged(textChangedEvent);
-//            break;
-//        }
-//        case StyledText.TextChanging:
-//            TextChangingEvent textChangingEvent = new TextChangingEvent(cast(StyledTextContent) e.data, cast(StyledTextEvent) e);
-//            (cast(TextChangeListener) eventListener).textChanging(textChangingEvent);
-//            break;
-//        case StyledText.TextSet: {
-//            TextChangedEvent textChangedEvent = new TextChangedEvent(cast(StyledTextContent) e.data);
-//            (cast(TextChangeListener) eventListener).textSet(textChangedEvent);
-//            break;
-//        }
-//        case StyledText.WordNext: {
-//            MovementEvent wordBoundaryEvent = new MovementEvent(cast(StyledTextEvent) e);
-//            (cast(MovementListener) eventListener).getNextOffset(wordBoundaryEvent);
-//            (cast(StyledTextEvent) e).end = wordBoundaryEvent.newOffset;
-//            break;
-//        }
-//        case StyledText.WordPrevious: {
-//            MovementEvent wordBoundaryEvent = new MovementEvent(cast(StyledTextEvent) e);
-//            (cast(MovementListener) eventListener).getPreviousOffset(wordBoundaryEvent);
-//            (cast(StyledTextEvent) e).end = wordBoundaryEvent.newOffset;
-//            break;
-//        }
-//        default:
-//    }
+    switch (e.type) {
+        case StyledText.ExtendedModify:
+            ExtendedModifyEvent extendedModifyEvent = new ExtendedModifyEvent(cast(StyledTextEvent) e);
+            (cast(ExtendedModifyListener) eventListener).modifyText(extendedModifyEvent);
+            break;
+        case StyledText.LineGetBackground:
+            LineBackgroundEvent lineBgEvent = new LineBackgroundEvent(cast(StyledTextEvent) e);
+            (cast(LineBackgroundListener) eventListener).lineGetBackground(lineBgEvent);
+            (cast(StyledTextEvent) e).lineBackground = lineBgEvent.lineBackground;
+            break;
+        case StyledText.LineGetSegments:
+            BidiSegmentEvent segmentEvent = new BidiSegmentEvent(cast(StyledTextEvent) e);
+            (cast(BidiSegmentListener) eventListener).lineGetSegments(segmentEvent);
+            (cast(StyledTextEvent) e).segments = segmentEvent.segments;
+            break;
+        case StyledText.LineGetStyle:
+            LineStyleEvent lineStyleEvent = new LineStyleEvent(cast(StyledTextEvent) e);
+            (cast(LineStyleListener) eventListener).lineGetStyle(lineStyleEvent);
+            (cast(StyledTextEvent) e).ranges = lineStyleEvent.ranges;
+            (cast(StyledTextEvent) e).styles = lineStyleEvent.styles;
+            (cast(StyledTextEvent) e).alignment = lineStyleEvent.alignment;
+            (cast(StyledTextEvent) e).indent = lineStyleEvent.indent;
+            (cast(StyledTextEvent) e).justify = lineStyleEvent.justify;
+            (cast(StyledTextEvent) e).bullet = lineStyleEvent.bullet;
+            (cast(StyledTextEvent) e).bulletIndex = lineStyleEvent.bulletIndex;
+            break;
+        case StyledText.PaintObject:
+            PaintObjectEvent paintObjectEvent = new PaintObjectEvent(cast(StyledTextEvent) e);
+            (cast(PaintObjectListener) eventListener).paintObject(paintObjectEvent);
+            break;
+        case StyledText.VerifyKey:
+            VerifyEvent verifyEvent = new VerifyEvent(e);
+            (cast(VerifyKeyListener) eventListener).verifyKey(verifyEvent);
+            e.doit = verifyEvent.doit;
+            break;
+        case StyledText.TextChanged: {
+            TextChangedEvent textChangedEvent = new TextChangedEvent(cast(StyledTextContent) e.data);
+            (cast(TextChangeListener) eventListener).textChanged(textChangedEvent);
+            break;
+        }
+        case StyledText.TextChanging:
+            TextChangingEvent textChangingEvent = new TextChangingEvent(cast(StyledTextContent) e.data, cast(StyledTextEvent) e);
+            (cast(TextChangeListener) eventListener).textChanging(textChangingEvent);
+            break;
+        case StyledText.TextSet: {
+            TextChangedEvent textChangedEvent = new TextChangedEvent(cast(StyledTextContent) e.data);
+            (cast(TextChangeListener) eventListener).textSet(textChangedEvent);
+            break;
+        }
+        case StyledText.WordNext: {
+            MovementEvent wordBoundaryEvent = new MovementEvent(cast(StyledTextEvent) e);
+            (cast(MovementListener) eventListener).getNextOffset(wordBoundaryEvent);
+            (cast(StyledTextEvent) e).end = wordBoundaryEvent.newOffset;
+            break;
+        }
+        case StyledText.WordPrevious: {
+            MovementEvent wordBoundaryEvent = new MovementEvent(cast(StyledTextEvent) e);
+            (cast(MovementListener) eventListener).getPreviousOffset(wordBoundaryEvent);
+            (cast(StyledTextEvent) e).end = wordBoundaryEvent.newOffset;
+            break;
+        }
+        default:
+    }
 }
 }
 

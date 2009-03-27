@@ -14,6 +14,7 @@ module org.eclipse.swt.accessibility.AccessibleObject;
 
 import org.eclipse.swt.internal.accessibility.gtk.ATK;
 import org.eclipse.swt.internal.gtk.OS;
+import org.eclipse.swt.internal.LONG;
 import org.eclipse.swt.accessibility.Accessible;
 import org.eclipse.swt.accessibility.AccessibleListener;
 import org.eclipse.swt.accessibility.AccessibleControlListener;
@@ -25,6 +26,9 @@ import org.eclipse.swt.accessibility.ACC;
 import org.eclipse.swt.accessibility.AccessibleFactory;
 import org.eclipse.swt.widgets.Display;
 import java.lang.all;
+import java.util.Vector;
+import java.util.Hashtable;
+import java.util.Enumeration;
 version(Tango){
 import tango.text.Util;
 } else { // Phobos
@@ -36,7 +40,7 @@ class AccessibleObject {
     int index = -1, id = ACC.CHILDID_SELF;
     Accessible accessible;
     AccessibleObject parent;
-    AccessibleObject[AtkObject*] children;
+    Hashtable children;
     /*
     * a lightweight object does not correspond to a concrete gtk widget, but
     * to a logical child of a widget (eg.- a CTabItem, which is simply drawn)
@@ -68,6 +72,7 @@ class AccessibleObject {
     }
 
     this (int /*long*/ type, GtkWidget* widget, Accessible accessible, int /*long*/ parentType, bool isLightweight) {
+        children = new Hashtable(9);
         handle = cast(AtkObject*)ATK.g_object_new (type, null);
         this.parentType = parentType;
         ATK.atk_object_initialize (handle, widget);
@@ -78,7 +83,7 @@ class AccessibleObject {
     }
 
     void addChild (AccessibleObject child) {
-        children[child.handle] = child;
+        children.put(new LONG(cast(long)child.handle), child);
         child.setParent (this);
     }
 
@@ -101,18 +106,18 @@ class AccessibleObject {
         AccessibleEvent event = new AccessibleEvent (object);
         event.childID = object.id;
         if (parentResult !is null) {
-            String res = fromStringz( parentResult );
-            event.result = res.dup;
+            String res = fromStringz( parentResult )._idup();
+            event.result = res;
         }
         for (int i = 0; i < listeners.length; i++) {
             listeners [i].getKeyboardShortcut (event);
         }
         if (event.result is null) return parentResult;
         if (keybindingPtr !is null ) OS.g_free (keybindingPtr.ptr);
-        String name = event.result.dup ~ '\0';
+        String name = event.result._idup() ~ '\0';
         char* p = cast(char*) OS.g_malloc (name.length);
-        keybindingPtr =  p ? p[ 0 .. name.length ] : null;
-        return keybindingPtr.ptr;
+        keybindingPtr =  p ? cast(String)p[ 0 .. name.length ] : null;
+        return cast(char*)keybindingPtr.ptr;
     }
 
     package static extern(C) char* atkAction_get_name (void* obj, int index) {
@@ -133,8 +138,8 @@ class AccessibleObject {
         AccessibleControlEvent event = new AccessibleControlEvent (object);
         event.childID = object.id;
         if (parentResult !is null) {
-            String res = fromStringz( parentResult );
-            event.result = res.dup;
+            auto res = fromStringz( parentResult );
+            event.result = res._idup();
         }
         for (int i = 0; i < listeners.length; i++) {
             listeners [i].getDefaultAction (event);
@@ -142,10 +147,10 @@ class AccessibleObject {
         if (event.result is null) return parentResult;
         if (actionNamePtr !is null) OS.g_free (actionNamePtr.ptr);
 
-        String name = event.result.dup ~ '\0';
+        String name = event.result._idup() ~ '\0';
         auto p = cast(char*)OS.g_malloc (name.length);
-        actionNamePtr =  p ? p[ 0 .. name.length ] : null;
-        return actionNamePtr.ptr;
+        actionNamePtr =  p ? cast(String)p[ 0 .. name.length ] : null;
+        return cast(char*)actionNamePtr.ptr;
     }
 
     package static extern(C) void atkComponent_get_extents (void* obj, int* x, int* y, int* width, int* height, int coord_type) {
@@ -359,7 +364,7 @@ class AccessibleObject {
         AccessibleEvent event = new AccessibleEvent (object);
         event.childID = object.id;
         if (parentResult !is null) {
-            event.result = fromStringz( parentResult ).dup;
+            event.result = fromStringz( parentResult )._idup();
         }
         for (int i = 0; i < listeners.length; i++) {
             listeners [i].getDescription (event);
@@ -367,10 +372,11 @@ class AccessibleObject {
         if (event.result is null) return parentResult;
         if (descriptionPtr !is null) OS.g_free (descriptionPtr.ptr);
 
-        String name = event.result.dup ~ '\0';
+        String name = event.result._idup() ~ '\0';
         char* p = cast(char*)OS.g_malloc (name.length);
-        descriptionPtr =  p ? p[ 0 .. name.length ] : null;
-        return descriptionPtr.ptr;  }
+        descriptionPtr =  p ? cast(String)p[ 0 .. name.length ] : null;
+        return cast(char*)descriptionPtr.ptr;
+    }
 
     package static extern(C) char* atkObject_get_name (AtkObject* atkObject) {
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkObject_get_name: {}", atkObject);
@@ -387,17 +393,17 @@ class AccessibleObject {
         AccessibleEvent event = new AccessibleEvent (object);
         event.childID = object.id;
         if (parentResult !is null) {
-            event.result = fromStringz( parentResult ).dup;
+            event.result = fromStringz( parentResult )._idup();
         }
         for (int i = 0; i < listeners.length; i++) {
             listeners [i].getName (event);
         }
         if (event.result is null) return parentResult;
         if (namePtr !is null) OS.g_free (namePtr.ptr);
-        String name = event.result.dup ~ '\0';
+        String name = event.result._idup() ~ '\0';
         char* p = cast(char*)OS.g_malloc (name.length);
-        namePtr =  p ? p[ 0 .. name.length ] : null;
-        return namePtr.ptr;
+        namePtr =  p ? cast(String)p[ 0 .. name.length ] : null;
+        return cast(char*)namePtr.ptr;
     }
 
     package static extern(C) int atkObject_get_n_children (AtkObject* atkObject) {
@@ -862,8 +868,7 @@ class AccessibleObject {
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_LINE_START: {
-                    int lineStart1 = locate( text, '\n' );
-                    if( lineStart1 is text.length ) lineStart1 = -1;
+                    int lineStart1 = text.indexOf( '\n' );
                     if (lineStart1 is -1) {
                         startBounds = endBounds = length;
                         break;
@@ -874,8 +879,7 @@ class AccessibleObject {
                         break;
                     }
                     startBounds = lineStart1;
-                    int lineStart2 = locate( text, '\n' );
-                    if( lineStart2 is text.length ) lineStart2 = -1;
+                    int lineStart2 = text.indexOf( '\n' );
                     if (lineStart2 is -1) {
                         endBounds = length;
                         break;
@@ -1168,19 +1172,23 @@ class AccessibleObject {
     }
 
     AccessibleObject getChildByHandle (AtkObject* handle) {
-        return children[handle];
+        return cast(AccessibleObject) children.get( new LONG(handle) );
     }
 
     AccessibleObject getChildByID (int childId) {
         if (childId is ACC.CHILDID_SELF) return this;
-        foreach( object; children ){
+        Enumeration elements = children.elements ();
+        while (elements.hasMoreElements ()) {
+            AccessibleObject object = cast(AccessibleObject) elements.nextElement ();
             if (object.id is childId) return object;
         }
         return null;
     }
 
     AccessibleObject getChildByIndex (int childIndex) {
-        foreach( object; children ){
+        Enumeration elements = children.elements ();
+        while (elements.hasMoreElements ()) {
+            AccessibleObject object = cast(AccessibleObject) elements.nextElement ();
             if (object.index is childIndex) return object;
         }
         return null;
@@ -1204,7 +1212,7 @@ class AccessibleObject {
             if (characterCount > 0 && textIface.get_text !is null) {
                 parentResult = textIface.get_text( handle, 0, characterCount);
                 if (parentResult !is null) {
-                    parentText = fromStringz( parentResult ).dup;
+                    parentText = fromStringz( parentResult )._idup();
                 }
             }
         }
@@ -1240,8 +1248,8 @@ class AccessibleObject {
         int result = string.length;
         for (int i = 0; i < searchChars.length; i++) {
             char current = searchChars[i];
-            int index = locate( string, current, startIndex );
-            if (index !is string.length ) result = Math.min (result, index);
+            int index = string.indexOf( current, startIndex );
+            if (index !is -1 ) result = Math.min (result, index);
         }
         return result;
     }
@@ -1251,7 +1259,7 @@ class AccessibleObject {
         int index = startIndex;
         while (index < length) {
             char current = string[index];
-            if ( !contains( searchChars, current)) break;
+            if ( searchChars.indexOf( current) is -1) break;
             index++;
         }
         return index;
@@ -1263,8 +1271,8 @@ class AccessibleObject {
         string = string[0 .. startIndex];
         for (int i = 0; i < searchChars.length ; i++) {
             char current = searchChars[i];
-            int index = locatePrior( string, current);
-            if (index !is string.length ) result = Math.max (result, index);
+            int index = string.lastIndexOf( current);
+            if (index !is -1 ) result = Math.max (result, index);
         }
         return result;
     }
@@ -1274,7 +1282,7 @@ class AccessibleObject {
         int index = startIndex - 1;
         while (index >= 0) {
             char current = string[index];
-            if ( !contains(searchChars, current)) break;
+            if ( searchChars.indexOf( current) is -1 ) break;
             index--;
         }
         return index;
@@ -1283,14 +1291,16 @@ class AccessibleObject {
     void release () {
         if (DEBUG) getDwtLogger().info( __FILE__, __LINE__, "AccessibleObject.release: {}", handle);
         accessible = null;
-        foreach( child; children ){
+        Enumeration elements = children.elements ();
+        while (elements.hasMoreElements ()) {
+            AccessibleObject child = cast(AccessibleObject) elements.nextElement ();
             if (child.isLightweight) OS.g_object_unref (child.handle);
         }
         if (parent !is null) parent.removeChild (this, false);
     }
 
     void removeChild (AccessibleObject child, bool unref) {
-        children.remove (child.handle);
+        children.remove (new LONG (child.handle));
         if (unref && child.isLightweight) OS.g_object_unref (child.handle);
     }
 
@@ -1336,51 +1346,96 @@ class AccessibleObject {
             listeners [i].getChildren (event);
         }
         if (event.children !is null && event.children.length > 0) {
-            AtkObject*[] idsToKeep = new AtkObject*[]( children.length );
-            idsToKeep.length = 0;
-            if ( null !is (cast(Integer)event.children[0] )) {
+            Vector idsToKeep = new Vector (children.size ());
+            if ( null !is cast(Integer)event.children [0]) {
                 /*  an array of child id's (Integers) was answered */
-                auto parentType = AccessibleFactory.getDefaultParentType ();
+                int /*long*/ parentType = AccessibleFactory.getDefaultParentType ();
                 for (int i = 0; i < event.children.length; i++) {
                     AccessibleObject object = getChildByIndex (i);
                     if (object is null) {
-                        auto childType = AccessibleFactory.getChildType (accessible, i);
+                        int /*long*/ childType = AccessibleFactory.getChildType (accessible, i);
                         object = new AccessibleObject (childType, null, accessible, parentType, true);
                         AccessibleObjects[object.handle] = object;
                         addChild (object);
                         object.index = i;
                     }
-                    if( auto intChild = cast(Integer)event.children[i] ){
-                        object.id = intChild.intValue ();
-                    }
-                    else {
+                    try {
+                        object.id = (cast(Integer)event.children[i]).intValue ();
+                    } catch (ClassCastException e) {
                         /* a non-ID value was given so don't set the ID */
                     }
-                    idsToKeep ~= object.handle;
+                    idsToKeep.addElement (new LONG (object.handle));
                 }
             } else {
                 /* an array of Accessible children was answered */
                 int childIndex = 0;
                 for (int i = 0; i < event.children.length; i++) {
                     AccessibleObject object = null;
-                    if( auto accChild = cast(Accessible)event.children[i] ){
-                        object = accChild.accessibleObject;
-                    } else {
-                        /* a non-Accessible value was given so nothing to do here */
+                    try {
+                        object = (cast(Accessible)event.children [i]).accessibleObject;
+                    } catch (ClassCastException e) {
+                        /* a non-Accessible value was given so nothing to do here */ 
                     }
                     if (object !is null) {
                         object.index = childIndex++;
-                        idsToKeep ~= object.handle;
+                        idsToKeep.addElement (new LONG (object.handle));
                     }
                 }
             }
             /* remove old children that were not provided as children anymore */
-            foreach( id; children.keys ){
-                if ( !tango.core.Array.contains( idsToKeep, id )) {
-                    AccessibleObject object = cast(AccessibleObject) children[id];
+            Enumeration ids = children.keys ();
+            while (ids.hasMoreElements ()) {
+                LONG id = cast(LONG)ids.nextElement ();
+                if (!idsToKeep.contains (id)) {
+                    AccessibleObject object = cast(AccessibleObject) children.get (id);
                     removeChild (object, true);
                 }
             }
+//            AtkObject*[] idsToKeep = new AtkObject*[]( children.length );
+//            idsToKeep.length = 0;
+//            if ( null !is (cast(Integer)event.children[0] )) {
+//                /*  an array of child id's (Integers) was answered */
+//                auto parentType = AccessibleFactory.getDefaultParentType ();
+//                for (int i = 0; i < event.children.length; i++) {
+//                    AccessibleObject object = getChildByIndex (i);
+//                    if (object is null) {
+//                        auto childType = AccessibleFactory.getChildType (accessible, i);
+//                        object = new AccessibleObject (childType, null, accessible, parentType, true);
+//                        AccessibleObjects[object.handle] = object;
+//                        addChild (object);
+//                        object.index = i;
+//                    }
+//                    if( auto intChild = cast(Integer)event.children[i] ){
+//                        object.id = intChild.intValue ();
+//                    }
+//                    else {
+//                        /* a non-ID value was given so don't set the ID */
+//                    }
+//                    idsToKeep ~= object.handle;
+//                }
+//            } else {
+//                /* an array of Accessible children was answered */
+//                int childIndex = 0;
+//                for (int i = 0; i < event.children.length; i++) {
+//                    AccessibleObject object = null;
+//                    if( auto accChild = cast(Accessible)event.children[i] ){
+//                        object = accChild.accessibleObject;
+//                    } else {
+//                        /* a non-Accessible value was given so nothing to do here */
+//                    }
+//                    if (object !is null) {
+//                        object.index = childIndex++;
+//                        idsToKeep ~= object.handle;
+//                    }
+//                }
+//            }
+//            /* remove old children that were not provided as children anymore */
+//            foreach( id; children.keys ){
+//                if ( !tango.core.Array.contains( idsToKeep, id )) {
+//                    AccessibleObject object = cast(AccessibleObject) children[id];
+//                    removeChild (object, true);
+//                }
+//            }
         }
     }
 }
