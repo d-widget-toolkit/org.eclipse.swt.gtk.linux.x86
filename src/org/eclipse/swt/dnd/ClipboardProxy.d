@@ -171,7 +171,7 @@ bool setData(Clipboard owner, Object[] data, Transfer[] dataTypes, int clipboard
         pTargetsList = cast(GtkTargetEntry*)OS.g_malloc(GtkTargetEntry.sizeof * entries.length);
         int offset = 0;
         for (int i = 0; i < entries.length; i++) {
-            tango.stdc.string.memmove(pTargetsList + i, entries[i], GtkTargetEntry.sizeof);
+            OS.memmove(pTargetsList + i, entries[i], GtkTargetEntry.sizeof);
             offset += GtkTargetEntry.sizeof;
         }
         if ((clipboards & DND.CLIPBOARD) !is 0) {

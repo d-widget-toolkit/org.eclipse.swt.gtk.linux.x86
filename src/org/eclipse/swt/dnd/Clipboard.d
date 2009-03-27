@@ -569,7 +569,7 @@ public String[] getAvailableTypeNames() {
         if (pName is null) {
             continue;
         }
-        String buffer = fromStringz( pName ).dup;
+        String buffer = fromStringz( pName )._idup();
         OS.g_free (pName);
         result[count++] = "GTKCLIPBOARD "~buffer;
     }
@@ -578,7 +578,7 @@ public String[] getAvailableTypeNames() {
         if (pName is null) {
             continue;
         }
-        String buffer = fromStringz( pName ).dup;
+        String buffer = fromStringz( pName )._idup();
         OS.g_free (pName);
         result[count++] = "GTKPRIMARYCLIPBOARD "~buffer;
     }
@@ -598,7 +598,7 @@ private  void*[] getAvailablePrimaryTypes() {
             GtkSelectionData* gtkSelectionData = selection_data;
             if (gtkSelectionData.length !is 0) {
                 types = cast(void*[])new int[gtkSelectionData.length * 8 / gtkSelectionData.format];
-                tango.stdc.string.memmove( cast(void*)types.ptr, gtkSelectionData.data, gtkSelectionData.length );
+                OS.memmove( cast(void*)types.ptr, gtkSelectionData.data, gtkSelectionData.length );
             }
         } finally {
             OS.gtk_selection_data_free(selection_data);
@@ -614,7 +614,7 @@ private void*[] getAvailableClipboardTypes () {
             GtkSelectionData* gtkSelectionData = selection_data;
             if (gtkSelectionData.length !is 0) {
                 types = cast(void*[])new int[gtkSelectionData.length * 8 / gtkSelectionData.format];
-                tango.stdc.string.memmove( cast(void*)types, gtkSelectionData.data, gtkSelectionData.length);
+                OS.memmove( cast(void*)types, gtkSelectionData.data, gtkSelectionData.length);
             }
         } finally {
             OS.gtk_selection_data_free(selection_data);

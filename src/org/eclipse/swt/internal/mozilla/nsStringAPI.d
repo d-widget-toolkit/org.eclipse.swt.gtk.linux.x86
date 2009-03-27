@@ -22,13 +22,15 @@ enum
 }
 
 nsresult    NS_StringContainerInit ( nsStringContainer *aContainer );
-nsresult    NS_StringContainerInit2( nsStringContainer *aContainer, PRUnichar *aData, PRUint32                                      aDataLength, PRUint32 aFlags );
+nsresult    NS_StringContainerInit2( nsStringContainer *aContainer, in PRUnichar *aData, PRUint32
+        aDataLength, PRUint32 aFlags );
 void        NS_StringContainerFinish(nsStringContainer *aContainer);
 PRUint32    NS_StringGetData(nsAString *aStr, PRUnichar **aData, PRBool *aTerminated);
 PRUint32    NS_StringGetMutableData(nsAString *aStr, PRUint32 aDataLength, PRUnichar **aData);
 PRUnichar * NS_StringCloneData(nsAString *aStr);
-nsresult    NS_StringSetData(nsAString *aStr, PRUnichar *aData, PRUint32 aDataLength);
-nsresult    NS_StringSetDataRange( nsAString *aStr, PRUint32 aCutOffset, PRUint32 aCutLength,                                     PRUnichar *aData, PRUint32 aDataLength );
+nsresult    NS_StringSetData(nsAString *aStr, in PRUnichar *aData, PRUint32 aDataLength);
+nsresult    NS_StringSetDataRange( nsAString *aStr, PRUint32 aCutOffset, PRUint32 aCutLength,
+        in PRUnichar *aData, PRUint32 aDataLength );
 nsresult    NS_StringCopy(nsAString *aDestStr, nsAString *aSrcStr);
 
 /******************************************************************************
@@ -43,14 +45,14 @@ enum
 }
 
 nsresult    NS_CStringContainerInit( nsCStringContainer *aContainer );
-nsresult    NS_CStringContainerInit2( nsCStringContainer *aContainer, char *aData, PRUint32                                          aDataLength, PRUint32 aFlags );
+nsresult    NS_CStringContainerInit2( nsCStringContainer *aContainer, in char *aData, PRUint32                                          aDataLength, PRUint32 aFlags );
 void        NS_CStringContainerFinish( nsCStringContainer *aContainer );
 PRUint32    NS_CStringGetData( nsACString *aStr, char **aData, PRBool *aTerminated );
 PRUint32    NS_CStringGetMutableData( nsACString *aStr, PRUint32 aDataLength, char **aData );
 char *      NS_CStringCloneData( nsACString *aStr);
-nsresult    NS_CStringSetData( nsACString *aStr, char *aData, PRUint32 aDataLength );
+nsresult    NS_CStringSetData( nsACString *aStr, in char *aData, PRUint32 aDataLength );
 nsresult    NS_CStringSetDataRange( nsACString *aStr, PRUint32 aCutOffset, 
-                                    PRUint32 aCutLength, char *aData, PRUint32 aDataLength );
+                                    PRUint32 aCutLength, in char *aData, PRUint32 aDataLength );
 nsresult    NS_CStringCopy( nsACString *aDestStr, nsACString *aSrcStr );
 
 /******************************************************************************
@@ -80,7 +82,7 @@ alias nsACString nsACString_external;
 struct nsAString
 {
 
-    static nsAString opCall(wchar[] s)
+    static nsAString opCall(String16 s)
     {
         nsAString result;
         NS_StringSetData(&result, cast(PRUnichar*)s, uint.max);

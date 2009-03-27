@@ -50,6 +50,7 @@ import  org.eclipse.swt.internal.c.gtk,
 public alias org.eclipse.swt.internal.c.glib_object.GPollFD GPollFD;
 public alias org.eclipse.swt.internal.c.glib_object.GClosure GClosure;
 public alias org.eclipse.swt.internal.c.glib_object.GList GList;
+public alias org.eclipse.swt.internal.c.glib_object.gpointer gpointer;
 public alias org.eclipse.swt.internal.c.glib_object.GObject GObject;
 public alias org.eclipse.swt.internal.c.glib_object.GTypeInfo GTypeInfo;
 public alias org.eclipse.swt.internal.c.glib_object.GCallback GCallback;

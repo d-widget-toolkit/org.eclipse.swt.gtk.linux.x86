@@ -612,7 +612,7 @@ public void setTransfer(Transfer[] transferAgents){
 
     void* pTargets = OS.g_malloc(targets.length * GtkTargetEntry.sizeof);
     for (int i = 0; i < targets.length; i++) {
-        tango.stdc.string.memmove(pTargets + i*GtkTargetEntry.sizeof, targets[i], GtkTargetEntry.sizeof);
+        OS.memmove(pTargets + i*GtkTargetEntry.sizeof, targets[i], GtkTargetEntry.sizeof);
     }
     targetList = OS.gtk_target_list_new(pTargets, targets.length);
 
@@ -642,15 +642,15 @@ static GdkDrawable* createPixbuf(Image image) {
         byte[] maskLine = new byte[maskStride];
         for (int y=0; y<h; y++) {
             auto offset = pixels + (y * stride);
-            tango.stdc.string.memmove(line.ptr, offset, stride);
+            OS.memmove(line.ptr, offset, stride);
             auto maskOffset = maskPixels + (y * maskStride);
-            tango.stdc.string.memmove(maskLine.ptr, maskOffset, maskStride);
+            OS.memmove(maskLine.ptr, maskOffset, maskStride);
             for (int x=0; x<w; x++) {
                 if (maskLine[x * 3] is 0) {
                     line[x * 4 + 3] = 0;
                 }
             }
-            tango.stdc.string.memmove(offset, line.ptr, stride);
+            OS.memmove(offset, line.ptr, stride);
         }
         OS.g_object_unref(maskPixbuf);
     } else {
@@ -666,11 +666,11 @@ static GdkDrawable* createPixbuf(Image image) {
             byte [] line = new byte [stride];
             for (int y = 0; y < h ; y++) {
                 auto offset = pixels + (y * stride);
-                tango.stdc.string.memmove (line.ptr, offset, stride);
+                OS.memmove (line.ptr, offset, stride);
                 for (int x = 0; x < w ; x++) {
                     line [x*4+3] = alpha [y*w +x];
                 }
-                tango.stdc.string.memmove (offset, line.ptr, stride);
+                OS.memmove (offset, line.ptr, stride);
             }
         }
     }

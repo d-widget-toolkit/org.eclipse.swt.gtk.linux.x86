@@ -18,7 +18,7 @@ interface nsIServiceManager : nsISupports {
 
 extern(System):
   nsresult GetService(nsCID * aClass, nsIID * aIID, void * *result);
-  nsresult GetServiceByContractID(char *aContractID, nsIID * aIID, void * *result);
+  nsresult GetServiceByContractID( in char *aContractID, cnsIID * aIID, void * *result);
   nsresult IsServiceInstantiated(nsCID * aClass, nsIID * aIID, PRBool *_retval);
   nsresult IsServiceInstantiatedByContractID(char *aContractID, nsIID * aIID, PRBool *_retval);
 

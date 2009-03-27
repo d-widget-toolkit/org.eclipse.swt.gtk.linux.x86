@@ -68,7 +68,7 @@ nsrefcnt AddRef () {
 }
 
 extern(System)
-nsresult QueryInterface (nsID* riid, void** ppvObject) {
+nsresult QueryInterface (cnsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
  
     if (*riid == nsISupports.IID) {

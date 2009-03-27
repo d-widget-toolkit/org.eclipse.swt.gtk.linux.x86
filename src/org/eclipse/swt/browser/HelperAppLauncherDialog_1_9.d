@@ -52,7 +52,7 @@ nsrefcnt AddRef () {
 }
 
 extern(System)
-nsresult QueryInterface (nsID* riid, void** ppvObject) {
+nsresult QueryInterface (cnsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
 
     if (*riid is nsISupports.IID) {
@@ -95,12 +95,12 @@ nsresult PromptForSaveToFile (nsIHelperAppLauncher_1_9 aLauncher, nsISupports aW
     //int length = XPCOM.strlen_PRUnichar (aDefaultFileName);
     //char[] dest = new char[length];
     //XPCOM.memmove (dest, aDefaultFileName, length * 2);
-    String defaultFile = Utf.toString(fromString16z(aDefaultFileName));
+    String defaultFile = String_valueOf(fromString16z(aDefaultFileName));
 
     //length = XPCOM.strlen_PRUnichar (aSuggestedFileExtension);
     //dest = new char[length];
     //XPCOM.memmove (dest, aSuggestedFileExtension, length * 2);
-    String suggestedFileExtension = Utf.toString(fromString16z(aSuggestedFileExtension));
+    String suggestedFileExtension = String_valueOf(fromString16z(aSuggestedFileExtension));
 
     Shell shell = new Shell ();
     FileDialog fileDialog = new FileDialog (shell, SWT.SAVE);
@@ -116,7 +116,7 @@ nsresult PromptForSaveToFile (nsIHelperAppLauncher_1_9 aLauncher, nsISupports aW
         if (rc !is XPCOM.NS_OK) Mozilla.error (rc,__FILE__,__LINE__);
         return XPCOM.NS_ERROR_FAILURE;
     }
-    scope auto path = new nsEmbedString (name.toString16());
+    scope auto path = new nsEmbedString (name.toWCharArray());
     
     nsILocalFile localFile;
     int rc = XPCOM.NS_NewLocalFile (cast(nsAString*)path, 1, &localFile);

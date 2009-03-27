@@ -30,7 +30,7 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swt.browser.Browser;
 import org.eclipse.swt.browser.Mozilla;
 
-import org.eclipse.swt.internal.c.glib_object;
+//import org.eclipse.swt.internal.c.glib_object;
 
 class MozillaDelegate {
     Browser browser;

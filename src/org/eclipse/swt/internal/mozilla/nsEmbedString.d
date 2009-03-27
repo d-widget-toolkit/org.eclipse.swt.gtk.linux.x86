@@ -8,10 +8,10 @@ import XPCOM = org.eclipse.swt.internal.mozilla.XPCOM;
 
 scope class nsEmbedString
 {    
-    this(wchar[] s)
+    this(String16 s)
     {
         nsresult result;
-        result = NS_StringContainerInit2(&str, s.ptr, s.length, 0);
+        result = NS_StringContainerInit2(&str, cast(wchar*)s.ptr, s.length, 0);
         if (XPCOM.NS_FAILED(result)) 
             throw new Exception("Init string container fail");
     }
@@ -29,12 +29,12 @@ scope class nsEmbedString
         return cast(nsAString*)&str;
     }
 
-    wchar[] toString16()
+    String16 toString16()
     {
         wchar* buffer = null;
         PRBool terminated;
         uint len = NS_StringGetData(cast(nsAString*)&str, &buffer, &terminated);
-        return buffer[0 .. len].dup;
+        return buffer[0 .. len]._idup();
     }
     
     override String toString()
@@ -52,7 +52,7 @@ private:
 
 scope class nsEmbedCString
 {
-    this(char[] s)
+    this(String s)
     {
         nsresult result;
         result = NS_CStringContainerInit2(&str, s.ptr, s.length, 0);

@@ -17,7 +17,6 @@ import java.lang.all;
 
 version(Tango){
 import tango.text.locale.Core;
-import tango.io.Console;
 import tango.sys.Environment;
 import tango.stdc.string;
 } else { // Phobos
@@ -157,10 +156,10 @@ class Mozilla : WebBrowser,
     static bool Initialized, IsPre_1_8, PerformedVersionCheck, XPCOMWasGlued, XPCOMInitWasGlued;
 
     /* XULRunner detect constants */
-    static const String GRERANGE_LOWER = "1.8.1.2"; //$NON-NLS-1$
-    static const String GRERANGE_LOWER_FALLBACK = "1.8"; //$NON-NLS-1$
+    static String GRERANGE_LOWER = "1.8.1.2"; //$NON-NLS-1$
+    static String GRERANGE_LOWER_FALLBACK = "1.8"; //$NON-NLS-1$
     static const bool LowerRangeInclusive = true;
-    static const String GRERANGE_UPPER = "1.9.*"; //$NON-NLS-1$
+    static String GRERANGE_UPPER = "1.9.*"; //$NON-NLS-1$
     static const bool UpperRangeInclusive = true;
 
     static const int MAX_PORT = 65535;
@@ -315,7 +314,7 @@ public void create (Composite parent, int style) {
                     rc = XPCOMInit.XPCOMGlueStartup (mozillaPath.ptr);
                     if (rc !is XPCOM.NS_OK) {
                         mozillaPath = mozillaPath.substring (0, mozillaPath.lastIndexOf (SEPARATOR_OS));
-                        if (Device.DEBUG) Cerr ("cannot use detected XULRunner: ") (mozillaPath).newline; //$NON-NLS-1$
+                        if (Device.DEBUG) getDwtLogger().error (__FILE__, __LINE__, "cannot use detected XULRunner: {}", mozillaPath); //$NON-NLS-1$
                         
                         /* attempt to XPCOMGlueStartup the GRE pointed at by MOZILLA_FIVE_HOME */
                         auto ptr = Environment.get(XPCOM.MOZILLA_FIVE_HOME);
@@ -337,7 +336,7 @@ public void create (Composite parent, int style) {
                                 if (rc !is XPCOM.NS_OK) {
                                     IsXULRunner = false;
                                     mozillaPath = mozillaPath.substring (0, mozillaPath.lastIndexOf (SEPARATOR_OS));
-                                    if (Device.DEBUG) Cerr ("failed to start as XULRunner: " )(mozillaPath).newline; //$NON-NLS-1$
+                                    if (Device.DEBUG) getDwtLogger().error( __FILE__, __LINE__, "failed to start as XULRunner: {}", mozillaPath); //$NON-NLS-1$
                                 }
                             }
                         } 
@@ -350,7 +349,7 @@ public void create (Composite parent, int style) {
         }
 
         if (IsXULRunner) {
-            if (Device.DEBUG) Cerr ("XULRunner path: ") (mozillaPath).newline; //$NON-NLS-1$
+            if (Device.DEBUG) getDwtLogger().error( __FILE__, __LINE__, "XULRunner path: {}", mozillaPath); //$NON-NLS-1$
 
             XPCOMWasGlued = true;
 
@@ -376,7 +375,7 @@ public void create (Composite parent, int style) {
                 browser.dispose ();
                 SWT.error (SWT.ERROR_NO_HANDLES, null, " [Unknown Mozilla path (MOZILLA_FIVE_HOME not set)]"); //$NON-NLS-1$
             }
-            if (Device.DEBUG) Cerr ("Mozilla path: ") (mozillaPath).newline; //$NON-NLS-1$
+            if (Device.DEBUG) getDwtLogger().error( __FILE__, __LINE__, "Mozilla path: {}", mozillaPath); //$NON-NLS-1$
 
             /*
             * Note.  Embedding a Mozilla GTK1.2 causes a crash.  The workaround
@@ -1445,7 +1444,7 @@ static void error (int code ) {
 }
 
 extern(D)
-static String error (int code, char[] file, int line) {
+static String error (int code, CString file, int line) {
     getDwtLogger().info( __FILE__, __LINE__,  "File: {}  Line: {}", file, line);
     throw new SWTError ("XPCOM error " ~ Integer.toString(code)); //$NON-NLS-1$
 }
@@ -1886,7 +1885,7 @@ void unhookDOMListeners (nsIDOMEventTarget target) {
 /* nsISupports */
 
 extern(System)
-nsresult QueryInterface (nsID* riid, void** ppvObject) {
+nsresult QueryInterface (cnsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
 
     if (*riid == nsISupports.IID) {

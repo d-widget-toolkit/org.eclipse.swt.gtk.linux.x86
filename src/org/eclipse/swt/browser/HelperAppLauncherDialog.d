@@ -58,7 +58,7 @@ nsrefcnt AddRef () {
 }
 
 extern(System)
-nsresult QueryInterface (nsID* riid, void** ppvObject) {
+nsresult QueryInterface (cnsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
     
     if (*riid == nsISupports.IID) {
@@ -168,12 +168,12 @@ nsresult PromptForSaveToFile (nsIHelperAppLauncher aLauncher, nsISupports aWindo
 +/
     //int span = XPCOM.strlen_PRUnichar (aDefaultFile);
     // XPCOM.memmove (dest, aDefaultFile, length * 2);
-    String defaultFile = Utf.toString(fromString16z(aDefaultFile));
+    String defaultFile = String_valueOf(fromString16z(aDefaultFile));
 
     //span = XPCOM.strlen_PRUnichar (aSuggestedFileExtension);
     //dest = new char[length];
     //XPCOM.memmove (dest, aSuggestedFileExtension, length * 2);
-    String suggestedFileExtension =  Utf.toString(fromString16z(aSuggestedFileExtension));
+    String suggestedFileExtension =  String_valueOf(fromString16z(aSuggestedFileExtension));
 
     Shell shell = new Shell ();
     FileDialog fileDialog = new FileDialog (shell, SWT.SAVE);

@@ -765,7 +765,7 @@ public void setTransfer(Transfer[] transferAgents){
 
     auto pTargets = OS.g_malloc(targets.length * GtkTargetEntry.sizeof);
     for (int i = 0; i < targets.length; i++) {
-        tango.stdc.string.memmove(pTargets + i*GtkTargetEntry.sizeof, targets[i], GtkTargetEntry.sizeof);
+        OS.memmove(pTargets + i*GtkTargetEntry.sizeof, targets[i], GtkTargetEntry.sizeof);
     }
 
     int actions = opToOsOp(getStyle());

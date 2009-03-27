@@ -72,7 +72,7 @@ public void javaToNative (Object object, TransferData transferData){
     if (!checkURL(object) || !isSupportedType(transferData)) {
         DND.error(DND.ERROR_INVALID_DATA);
     }
-    wchar[] string = (cast(ArrayWrapperString)object).array.toWCharArray();
+    String16 string = stringcast(object).toWCharArray();
     int byteCount = (string.length+1)*2;
     wchar* pValue = cast(wchar*)OS.g_malloc(byteCount);
     if (pValue is null) return;
@@ -106,7 +106,7 @@ public Object nativeToJava(TransferData transferData){
             break;
         }
     }
-    String string = tango.text.convert.Utf.toString((cast(wchar*)transferData.pValue)[ 0 .. size ]);
+    String string = String_valueOf((cast(wchar*)transferData.pValue)[ 0 .. size ]);
     return new ArrayWrapperString( string );
 }
 
