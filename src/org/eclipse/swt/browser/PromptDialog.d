@@ -41,7 +41,7 @@ class PromptDialog : Dialog {
     
     void alertCheck(String title, String text, String check, ref int checkValue) {
         Shell parent = getParent();
-        /* final */ Shell shell = new Shell(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+        /* const */ Shell shell = new Shell(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
         if (title !is null) shell.setText(title);
         GridLayout gridLayout = new GridLayout();
         shell.setLayout(gridLayout);
@@ -56,7 +56,7 @@ class PromptDialog : Dialog {
         data.grabExcessHorizontalSpace = true;
         label.setLayoutData (data);
 
-        final Button checkButton = check !is null ? new Button(shell, SWT.CHECK) : null;
+        Button checkButton = check !is null ? new Button(shell, SWT.CHECK) : null;
         if (checkButton !is null) {
             checkButton.setText(check);
             checkButton.setSelection(checkValue !is 0);
@@ -87,7 +87,7 @@ class PromptDialog : Dialog {
 
     void confirmEx(String title, String text, String check, String button0, String button1, String button2, int defaultIndex, ref int checkValue, ref int result) {
         Shell parent = getParent();
-        /* final */ Shell shell = new Shell(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
+        /* const */ Shell shell = new Shell(parent, SWT.DIALOG_TRIM | SWT.APPLICATION_MODAL);
         shell.setText(title);
         GridLayout gridLayout = new GridLayout();
         shell.setLayout(gridLayout);
@@ -102,7 +102,7 @@ class PromptDialog : Dialog {
         data.grabExcessHorizontalSpace = true;
         label.setLayoutData (data);
 
-        final Button[] buttons = new Button[4];
+        Button[] buttons = new Button[4];
         Listener listener = new class() Listener {
             public void handleEvent(Event event) {
                 if (buttons[0] !is null) checkValue = buttons[0].getSelection() ? 1 : 0;
@@ -182,7 +182,7 @@ class PromptDialog : Dialog {
         data.grabExcessHorizontalSpace = true;
         label.setLayoutData (data);
                 
-        final Text valueText = new Text(shell, SWT.BORDER);
+        Text valueText = new Text(shell, SWT.BORDER);
         if (value !is null) valueText.setText(value);
         data = new GridData();
         width = valueText.computeSize(SWT.DEFAULT, SWT.DEFAULT).x;
@@ -191,7 +191,7 @@ class PromptDialog : Dialog {
         data.grabExcessHorizontalSpace = true;
         valueText.setLayoutData(data);
 
-        final Button[] buttons = new Button[3];
+        Button[] buttons = new Button[3];
         Listener listener = new class() Listener {
             public void handleEvent(Event event) {
                 if (buttons[0] !is null) checkValue = buttons[0].getSelection() ? 1 : 0;
@@ -252,7 +252,7 @@ class PromptDialog : Dialog {
         Label userLabel = new Label(shell, SWT.NONE);
         //userLabel.setText(SWT.getMessage("SWT_Username")); //$NON-NLS-1$
         userLabel.setText("Username:");
-        final Text userText = new Text(shell, SWT.BORDER);
+        Text userText = new Text(shell, SWT.BORDER);
         if (user !is null) userText.setText(user);
         data = new GridData();
         data.horizontalAlignment = GridData.FILL;
@@ -262,14 +262,14 @@ class PromptDialog : Dialog {
         Label passwordLabel = new Label(shell, SWT.NONE);
         //passwordLabel.setText(SWT.getMessage("SWT_Password")); //$NON-NLS-1$
         passwordLabel.setText("Password:");
-        final Text passwordText = new Text(shell, SWT.PASSWORD | SWT.BORDER);
+        Text passwordText = new Text(shell, SWT.PASSWORD | SWT.BORDER);
         if (pass !is null) passwordText.setText(pass);
         data = new GridData();
         data.horizontalAlignment = GridData.FILL;
         data.grabExcessHorizontalSpace = true;
         passwordText.setLayoutData(data);
 
-        final Button[] buttons = new Button[3];
+        Button[] buttons = new Button[3];
         Listener listener = new class() Listener {
             public void handleEvent(Event event) {
                 if (buttons[0] !is null) checkValue = buttons[0].getSelection() ? 1 : 0;

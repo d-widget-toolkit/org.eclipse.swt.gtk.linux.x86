@@ -65,8 +65,8 @@ public class Tracker : Widget {
     int cursorOrientation = SWT.NONE;
     int oldX, oldY;
 
-    final static int STEPSIZE_SMALL = 1;
-    final static int STEPSIZE_LARGE = 9;
+    const static int STEPSIZE_SMALL = 1;
+    const static int STEPSIZE_LARGE = 9;
 
 /**
  * Constructs a new instance of this class given its parent

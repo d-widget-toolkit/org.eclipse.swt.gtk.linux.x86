@@ -62,7 +62,7 @@ public class SWTError : PlatformException {
         return this.next;
     }
 
-    //static final long serialVersionUID = 3833467327105808433L;
+    //static const long serialVersionUID = 3833467327105808433L;
 
 /**
  * Constructs a new instance of this class with its

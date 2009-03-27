@@ -16,7 +16,7 @@ import java.lang.all;
 
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
-import org.eclipse.swt.internal.c.gtk;
+//import org.eclipse.swt.internal.c.gtk;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.internal.gtk.OS;

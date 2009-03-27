@@ -38,7 +38,7 @@ import org.eclipse.swt.graphics.Transform;
 import org.eclipse.swt.graphics.LineAttributes;
 
 import org.eclipse.swt.internal.gtk.OS;
-//import org.eclipse.swt.internal.cairo.Cairo;
+import org.eclipse.swt.internal.cairo.Cairo : Cairo;
 import org.eclipse.swt.internal.Converter;
 import org.eclipse.swt.internal.Compatibility;
 import java.lang.all;

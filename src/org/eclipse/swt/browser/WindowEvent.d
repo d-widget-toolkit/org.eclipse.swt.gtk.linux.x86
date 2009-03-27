@@ -188,7 +188,7 @@ public class WindowEvent : TypedEvent {
      */
     public bool toolBar;
     
-    static final long serialVersionUID = 3617851997387174969L;
+    static const long serialVersionUID = 3617851997387174969L;
     
 this(Widget w) {
     super(w);

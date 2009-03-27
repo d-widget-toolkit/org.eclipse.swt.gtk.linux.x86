@@ -54,7 +54,7 @@ class Download_1_8 : nsIProgressDialog_1_8 {
     Label status;
     Button cancel;
 
-    //static final bool is32 = C.PTR_SIZEOF is 4; //determine if 32 or 64 bit platform?
+    //static const bool is32 = C.PTR_SIZEOF is 4; //determine if 32 or 64 bit platform?
 
 this () {
 }

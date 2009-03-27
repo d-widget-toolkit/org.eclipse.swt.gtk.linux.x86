@@ -50,7 +50,7 @@ public class TreeItem : Item {
     Font font;
     Font[] cellFont;
     bool cached, grayed;
-    static final int EXPANDER_EXTRA_PADDING = 4;
+    static const int EXPANDER_EXTRA_PADDING = 4;
 
 /**
  * Constructs a new instance of this class given its parent

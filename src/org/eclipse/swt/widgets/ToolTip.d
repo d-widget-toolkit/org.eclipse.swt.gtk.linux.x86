@@ -62,12 +62,12 @@ public class ToolTip : Widget {
     bool spikeAbove, autohide;
     CallbackData timerProcCallbackData;
 
-    static final int BORDER = 5;
-    static final int PADDING = 5;
-    static final int INSET = 4;
-    static final int TIP_HEIGHT = 20;
-    static final int IMAGE_SIZE = 16;
-    static final int DELAY = 8000;
+    static const int BORDER = 5;
+    static const int PADDING = 5;
+    static const int INSET = 4;
+    static const int TIP_HEIGHT = 20;
+    static const int IMAGE_SIZE = 16;
+    static const int DELAY = 8000;
 
 /**
  * Constructs a new instance of this class given its parent

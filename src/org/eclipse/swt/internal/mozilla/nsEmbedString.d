@@ -2,11 +2,6 @@ module org.eclipse.swt.internal.mozilla.nsEmbedString;
 
 import java.lang.all;
 
-version(Tango){
-import Utf = tango.text.convert.Utf;
-} else { // Phobos
-}
-
 import org.eclipse.swt.internal.mozilla.Common;
 import org.eclipse.swt.internal.mozilla.nsStringAPI;
 import XPCOM = org.eclipse.swt.internal.mozilla.XPCOM;
@@ -42,9 +37,9 @@ scope class nsEmbedString
         return buffer[0 .. len].dup;
     }
     
-    char[] toString()
+    override String toString()
     {
-        return Utf.toString(this.toString16());
+        return String_valueOf(this.toString16());
     }
     ~this()
     {
@@ -78,12 +73,12 @@ scope class nsEmbedCString
         return cast(nsACString*)&str;
     }
 
-    char[] toString()
+    String toString()
     {
         char* buffer = null;
         PRBool terminated;
         uint len = NS_CStringGetData(cast(nsACString*)&str, &buffer, &terminated);
-        return buffer[0 .. len].dup;
+        return buffer[0 .. len]._idup();
     }
 
     ~this()

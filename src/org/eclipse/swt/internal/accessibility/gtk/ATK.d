@@ -25,8 +25,11 @@ import org.eclipse.swt.internal.c.atk;
 import org.eclipse.swt.internal.c.gtk;
 
 version(Tango){
-import tango.core.Traits;
+    import tango.core.Traits;
+    import tango.core.Tuple;
 } else { // Phobos
+    import std.traits;
+    import std.typetuple;
 }
 
 alias org.eclipse.swt.internal.c.atk.AtkObjectFactory AtkObjectFactory;
@@ -77,13 +80,23 @@ template NameOfFunc(alias f) {
 }
 
 template ForwardGtkAtkCFunc( alias cFunc ) {
-    alias ParameterTupleOf!(cFunc) P;
-    alias ReturnTypeOf!(cFunc) R;
-    mixin("public static R " ~ NameOfFunc!(cFunc) ~ "( P p ){
-        lock.lock();
-        scope(exit) lock.unlock();
-        return cFunc(p);
-    }");
+    version(Tango){
+        alias ParameterTupleOf!(cFunc) P;
+        alias ReturnTypeOf!(cFunc) R;
+        mixin("public static R " ~ NameOfFunc!(cFunc) ~ "( P p ){
+            lock.lock();
+            scope(exit) lock.unlock();
+            return cFunc(p);
+        }");
+    } else { // Phobos
+        alias ParameterTypeTuple!(cFunc) P;
+        alias ReturnType!(cFunc) R;
+        mixin("public static R " ~ NameOfFunc!(cFunc) ~ "( P p ){
+            lock.lock();
+            scope(exit) lock.unlock();
+            return cFunc(p);
+        }");
+    }
 }
 /+
 // alternative template implementation, might be more stable

@@ -58,8 +58,8 @@ public class Sash : Control {
     int startX, startY, lastX, lastY;
     GtkWidget* defaultCursor;
 
-    private final static int INCREMENT = 1;
-    private final static int PAGE_INCREMENT = 9;
+    private const static int INCREMENT = 1;
+    private const static int PAGE_INCREMENT = 9;
 
 /**
  * Constructs a new instance of this class given its parent

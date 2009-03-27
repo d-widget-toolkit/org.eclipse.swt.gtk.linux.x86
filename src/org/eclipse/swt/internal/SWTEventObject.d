@@ -30,7 +30,7 @@ import java.util.EventObject;
  */
 public class SWTEventObject : EventObject {
 
-    //static final long serialVersionUID = 3258125873411470903L;
+    //static const long serialVersionUID = 3258125873411470903L;
 
 /**
  * Constructs a new instance of this class.

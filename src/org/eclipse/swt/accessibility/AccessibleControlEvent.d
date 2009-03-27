@@ -44,7 +44,7 @@ public class AccessibleControlEvent : SWTEventObject {
     public String result;           // OUT
     public Object children[];       // [OUT]
 
-    //static final long serialVersionUID = 3257281444169529141L;
+    //static const long serialVersionUID = 3257281444169529141L;
 
 /**
  * Constructs a new instance of this class.

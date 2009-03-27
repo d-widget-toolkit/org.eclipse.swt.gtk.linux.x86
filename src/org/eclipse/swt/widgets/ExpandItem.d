@@ -62,9 +62,9 @@ public class ExpandItem : Item {
     bool expanded;
     int x, y, width, height;
     int imageHeight, imageWidth;
-    static final int TEXT_INSET = 6;
-    static final int BORDER = 1;
-    static final int CHEVRON_SIZE = 24;
+    static const int TEXT_INSET = 6;
+    static const int BORDER = 1;
+    static const int CHEVRON_SIZE = 24;
 
 /**
  * Constructs a new instance of this class given its parent

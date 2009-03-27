@@ -64,8 +64,8 @@ public class Spinner : Composite {
     alias Composite.setCursor setCursor;
     alias Composite.translateTraversal translateTraversal;
 
-    static final int INNER_BORDER = 2;
-    static final int MIN_ARROW_WIDTH = 6;
+    static const int INNER_BORDER = 2;
+    static const int MIN_ARROW_WIDTH = 6;
     int lastEventTime = 0;
     GdkEventKey* gdkEventKey;
     int fixStart = -1, fixEnd = -1;

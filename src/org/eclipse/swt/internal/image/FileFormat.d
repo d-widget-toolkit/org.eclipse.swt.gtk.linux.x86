@@ -33,8 +33,10 @@ import org.eclipse.swt.internal.image.JPEGFileFormat;
 import org.eclipse.swt.internal.image.PNGFileFormat;
 
 version(Tango){
-import tango.core.Tuple;
+    import tango.core.Tuple;
 } else { // Phobos
+    import std.typetuple;
+    alias TypeTuple Tuple;
 }
 
 /**

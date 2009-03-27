@@ -23,8 +23,7 @@ import org.eclipse.swt.widgets.Display;
 import java.lang.all;
 
 version(Tango){
-static import tango.io.model.IFile;
-static import tango.text.Util;
+    static import tango.io.model.IFile;
 } else { // Phobos
 }
 
@@ -58,8 +57,12 @@ public class FileDialog : Dialog {
     int filterIndex = -1;
     bool overwrite = false;
     GtkWidget* handle;
-    static final char SEPARATOR = tango.io.model.IFile.FileConst.PathSeparatorChar;
-    static final char EXTENSION_SEPARATOR = ';';
+    version(Tango){
+        static const char SEPARATOR = tango.io.model.IFile.FileConst.PathSeparatorChar;
+    } else { // Phobos
+        static const char SEPARATOR = std.path.sep;
+    }
+    static const char EXTENSION_SEPARATOR = ';';
 
 /**
  * Constructs a new instance of this class given only its parent.
@@ -121,8 +124,7 @@ String computeResultChooserDialog () {
             OS.g_free (name);
             if (utf8Ptr !is null) {
                 fullPath = utf8Ptr[ 0 .. items_written ].dup;
-                int start = tango.text.Util.locatePrior( fullPath, SEPARATOR);
-                if( start is fullPath.length ) start = -1;
+                int start = fullPath.lastIndexOf( SEPARATOR);
                 fileNames [writePos++] = fullPath[ start + 1 .. $ ].dup;
                 OS.g_free (utf8Ptr);
             }
@@ -143,8 +145,7 @@ String computeResultChooserDialog () {
             if (utf8Ptr !is null) {
                 fullPath = utf8Ptr[ 0 .. items_written ].dup;
                 fileNames = new String [1];
-                int start = tango.text.Util.locatePrior( fullPath, SEPARATOR);
-                if( start == fullPath.length ) start = -1;
+                int start = fullPath.lastIndexOf( SEPARATOR);
                 fileNames[0] = fullPath[ start + 1 .. $ ];
                 OS.g_free (utf8Ptr);
             }
@@ -173,8 +174,7 @@ String computeResultChooserDialog () {
         }
     }
     if (fullPath !is null) {
-        int separatorIndex = tango.text.Util.locatePrior( fullPath, SEPARATOR);
-        if( separatorIndex is fullPath.length ) separatorIndex = -1;
+        int separatorIndex = fullPath.lastIndexOf( SEPARATOR);
         fileName = fullPath[separatorIndex + 1 .. $ ];
         filterPath = fullPath[0 .. separatorIndex ];
     }
@@ -219,8 +219,7 @@ String computeResultClassicDialog () {
     OS.g_free (utf8Ptr);
 
     if (osAnswer.length is 0) return null;
-    int separatorIndex = tango.text.Util.locatePrior( osAnswer, SEPARATOR);
-    if (separatorIndex is osAnswer.length ) separatorIndex = -1;
+    int separatorIndex = osAnswer.lastIndexOf( SEPARATOR);
     if (separatorIndex+1 is osAnswer.length ) return null;
 
     String answer = fullPath = osAnswer;
@@ -241,8 +240,7 @@ String computeResultClassicDialog () {
         for (int i = 0; i < length_; i++) {
             utf8Ptr = OS.g_filename_to_utf8 (namesPtr [i], -1, null, &items_written, null);
             String name = utf8Ptr[ 0 .. items_written ].dup;
-            int start = tango.text.Util.locatePrior( name, SEPARATOR);
-            if( start == name.length ) start = -1;
+            int start = name.lastIndexOf( SEPARATOR);
             fileNames [i] = name[ start + 1 .. $ ].dup;
             OS.g_free (utf8Ptr);
         }
@@ -529,13 +527,13 @@ void presetChooserDialog () {
                 OS.gtk_file_filter_set_name (filter, name);
             }
             int start = 0;
-            int index = tango.text.Util.locate( filterExtensions [i], EXTENSION_SEPARATOR );
-            while (index !is filterExtensions [i].length ) {
+            int index = filterExtensions [i].indexOf( EXTENSION_SEPARATOR );
+            while (index !is -1 ) {
                 String current = filterExtensions [i][ start .. index ];
                 char* filterString = toStringz(current);
                 OS.gtk_file_filter_add_pattern (filter, filterString);
                 start = index + 1;
-                index = tango.text.Util.locate( filterExtensions [i], EXTENSION_SEPARATOR, start);
+                index = filterExtensions [i].indexOf( EXTENSION_SEPARATOR, start);
             }
             String current = filterExtensions [i][ start .. $ ];
             char* filterString = toStringz(current);

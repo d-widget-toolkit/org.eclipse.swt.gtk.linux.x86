@@ -29,7 +29,7 @@ public class TitleEvent : TypedEvent {
     /** the title of the current document */
     public String title;
     
-    static final long serialVersionUID = 4121132532906340919L;
+    static const long serialVersionUID = 4121132532906340919L;
 
 this(Widget w) {
     super(w);

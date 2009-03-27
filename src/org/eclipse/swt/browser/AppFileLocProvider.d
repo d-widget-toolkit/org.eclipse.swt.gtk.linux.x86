@@ -43,14 +43,14 @@ class AppFileLocProvider : nsIDirectoryServiceProvider2 {
     bool isXULRunner;
     
     static       String SEPARATOR_OS;
-    static final String CHROME_DIR = "chrome"; //$NON-NLS-1$
-    static final String COMPONENTS_DIR = "components"; //$NON-NLS-1$
-    static final String HISTORY_FILE = "history.dat"; //$NON-NLS-1$
-    static final String LOCALSTORE_FILE = "localstore.rdf"; //$NON-NLS-1$
-    static final String MIMETYPES_FILE = "mimeTypes.rdf"; //$NON-NLS-1$
-    static final String PLUGINS_DIR = "plugins"; //$NON-NLS-1$
+    static const String CHROME_DIR = "chrome"; //$NON-NLS-1$
+    static const String COMPONENTS_DIR = "components"; //$NON-NLS-1$
+    static const String HISTORY_FILE = "history.dat"; //$NON-NLS-1$
+    static const String LOCALSTORE_FILE = "localstore.rdf"; //$NON-NLS-1$
+    static const String MIMETYPES_FILE = "mimeTypes.rdf"; //$NON-NLS-1$
+    static const String PLUGINS_DIR = "plugins"; //$NON-NLS-1$
     static       String USER_PLUGINS_DIR;
-    static final String PREFERENCES_FILE = "prefs.js"; //$NON-NLS-1$
+    static const String PREFERENCES_FILE = "prefs.js"; //$NON-NLS-1$
 
 static this () {
     SEPARATOR_OS = System.getProperty ("file.separator");

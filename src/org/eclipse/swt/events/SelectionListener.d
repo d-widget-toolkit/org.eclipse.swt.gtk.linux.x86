@@ -19,9 +19,11 @@ public import org.eclipse.swt.internal.SWTEventListener;
 public import org.eclipse.swt.events.SelectionEvent;
 
 version(Tango){
-import tango.core.Traits;
-import tango.core.Tuple;
+    import tango.core.Traits;
+    import tango.core.Tuple;
 } else { // Phobos
+    import std.traits;
+    import std.typetuple;
 }
 
 /**
@@ -80,9 +82,15 @@ public void widgetDefaultSelected(SelectionEvent e);
 /// SWT extension
 private class _DgSelectionListenerT(Dg,T...) : SelectionListener {
 
-    alias ParameterTupleOf!(Dg) DgArgs;
-    static assert( is(DgArgs == Tuple!(SelectionEvent,T)),
-                "Delegate args not correct: "~DgArgs.stringof~" vs. (Event,"~T.stringof~")" );
+    version(Tango){
+        alias ParameterTupleOf!(Dg) DgArgs;
+        static assert( is(DgArgs == Tuple!(SelectionEvent,T)),
+                    "Delegate args not correct: "~DgArgs.stringof~" vs. (Event,"~T.stringof~")" );
+    } else { // Phobos
+        alias ParameterTypeTuple!(Dg) DgArgs;
+        static assert( is(DgArgs == TypeTuple!(SelectionEvent,T)),
+                    "Delegate args not correct: "~DgArgs.stringof~" vs. (Event,"~T.stringof~")" );
+    }
 
     Dg dg;
     T  t;

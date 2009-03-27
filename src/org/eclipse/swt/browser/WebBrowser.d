@@ -40,7 +40,7 @@ abstract class WebBrowser {
     static Runnable NativeClearSessions;
 
     /* Key Mappings */
-    static final int [][] KeyTable = [
+    static const int [][] KeyTable = [
         /* Keyboard and Mouse Masks */
         [18,    SWT.ALT],
         [16,    SWT.SHIFT],

@@ -11,35 +11,12 @@ public import org.eclipse.swt.internal.c.Xutil;
 version=DYNLINK;
 
 version(DYNLINK){
-    import tango.sys.SharedLib : SharedLib;
-    struct Symbol{
-        String name;
-        void** symbol;
-    }
+    import java.nonstandard.SharedLib;
 }
 
 void loadLib(){
     version(DYNLINK){
-        String libname = "libGL.so";
-
-        SharedLib lib = SharedLib.load( libname );
-        if( lib is null ){
-            lib = SharedLib.load( libname ~ ".0" );
-        }
-
-        if ( lib !is null ) {
-            foreach( inout s; symbols ){
-                try{
-                    *s.symbol = lib.getSymbol( s.name.ptr );
-                }
-                catch(Exception e){}
-                if( *s.symbol is null ){
-                    getDwtLogger().trace( __FILE__, __LINE__,  "{}: Symbol '{}' not found", libname, s.name );
-                }
-            }
-        } else {
-            getDwtLogger().trace( __FILE__, __LINE__,  "Could not load the library {}", libname );
-        }
+        SharedLib.loadLibSymbols( symbols, "libGL.so" );
     }
 }
 

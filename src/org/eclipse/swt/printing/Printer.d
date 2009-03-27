@@ -23,7 +23,7 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.swt.graphics.GCData;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;
-import org.eclipse.swt.internal.cairo.Cairo;
+import org.eclipse.swt.internal.cairo.Cairo : Cairo;
 import org.eclipse.swt.internal.gtk.OS;
 import org.eclipse.swt.printing.PrinterData;
 import java.lang.all;

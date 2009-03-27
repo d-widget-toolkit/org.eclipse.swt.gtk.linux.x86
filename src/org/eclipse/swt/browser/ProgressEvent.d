@@ -32,7 +32,7 @@ public class ProgressEvent : TypedEvent {
     /** total value */
     public int total;
     
-    static final long serialVersionUID = 3977018427045393972L;
+    static const long serialVersionUID = 3977018427045393972L;
 
 this(Widget w) {
     super(w);

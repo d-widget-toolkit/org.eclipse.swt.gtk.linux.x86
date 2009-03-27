@@ -179,73 +179,79 @@ public abstract class Widget {
     static const int MONTH_CHANGED = 62;
     static const int LAST_SIGNAL = 63;
 
-    template UD_Getter( String name ){
-        const String UD_Getter = "void* ud"~name~"(){ return getDisplay().getWindowProcUserData( "~name~"); }\n";
-    }
+    //version(D_Version2){
+        static String UD_Getter(String name){
+            return "void* ud"~name~"(){ return getDisplay().getWindowProcUserData( "~name~"); }\n";
+        }
+    //} else { // D1
+    //template UD_Getter( String name ){
+    //    const String UD_Getter = "void* ud"~name~"(){ return getDisplay().getWindowProcUserData( "~name~"); }\n";
+    //}
+    //}
 
-    mixin ( UD_Getter!( "ACTIVATE" ));
-    mixin ( UD_Getter!( "BUTTON_PRESS_EVENT" ));
-    mixin ( UD_Getter!( "BUTTON_PRESS_EVENT_INVERSE" ));
-    mixin ( UD_Getter!( "BUTTON_RELEASE_EVENT" ));
-    mixin ( UD_Getter!( "BUTTON_RELEASE_EVENT_INVERSE" ));
-    mixin ( UD_Getter!( "CHANGED" ));
-    mixin ( UD_Getter!( "CHANGE_VALUE" ));
-    mixin ( UD_Getter!( "CLICKED" ));
-    mixin ( UD_Getter!( "COMMIT" ));
-    mixin ( UD_Getter!( "CONFIGURE_EVENT" ));
-    mixin ( UD_Getter!( "DELETE_EVENT" ));
-    mixin ( UD_Getter!( "DELETE_RANGE" ));
-    mixin ( UD_Getter!( "DELETE_TEXT" ));
-    mixin ( UD_Getter!( "ENTER_NOTIFY_EVENT" ));
-    mixin ( UD_Getter!( "EVENT" ));
-    mixin ( UD_Getter!( "EVENT_AFTER" ));
-    mixin ( UD_Getter!( "EXPAND_COLLAPSE_CURSOR_ROW" ));
-    mixin ( UD_Getter!( "EXPOSE_EVENT" ));
-    mixin ( UD_Getter!( "EXPOSE_EVENT_INVERSE" ));
-    mixin ( UD_Getter!( "FOCUS" ));
-    mixin ( UD_Getter!( "FOCUS_IN_EVENT" ));
-    mixin ( UD_Getter!( "FOCUS_OUT_EVENT" ));
-    mixin ( UD_Getter!( "GRAB_FOCUS" ));
-    mixin ( UD_Getter!( "HIDE" ));
-    mixin ( UD_Getter!( "INPUT" ));
-    mixin ( UD_Getter!( "INSERT_TEXT" ));
-    mixin ( UD_Getter!( "KEY_PRESS_EVENT" ));
-    mixin ( UD_Getter!( "KEY_RELEASE_EVENT" ));
-    mixin ( UD_Getter!( "LEAVE_NOTIFY_EVENT" ));
-    mixin ( UD_Getter!( "MAP" ));
-    mixin ( UD_Getter!( "MAP_EVENT" ));
-    mixin ( UD_Getter!( "MNEMONIC_ACTIVATE" ));
-    mixin ( UD_Getter!( "MOTION_NOTIFY_EVENT" ));
-    mixin ( UD_Getter!( "MOTION_NOTIFY_EVENT_INVERSE" ));
-    mixin ( UD_Getter!( "MOVE_FOCUS" ));
-    mixin ( UD_Getter!( "OUTPUT" ));
-    mixin ( UD_Getter!( "POPULATE_POPUP" ));
-    mixin ( UD_Getter!( "POPUP_MENU" ));
-    mixin ( UD_Getter!( "PREEDIT_CHANGED" ));
-    mixin ( UD_Getter!( "REALIZE" ));
-    mixin ( UD_Getter!( "ROW_ACTIVATED" ));
-    mixin ( UD_Getter!( "SCROLL_CHILD" ));
-    mixin ( UD_Getter!( "SCROLL_EVENT" ));
-    mixin ( UD_Getter!( "SELECT" ));
-    mixin ( UD_Getter!( "SHOW" ));
-    mixin ( UD_Getter!( "SHOW_HELP" ));
-    mixin ( UD_Getter!( "SIZE_ALLOCATE" ));
-    mixin ( UD_Getter!( "STYLE_SET" ));
-    mixin ( UD_Getter!( "SWITCH_PAGE" ));
-    mixin ( UD_Getter!( "TEST_COLLAPSE_ROW" ));
-    mixin ( UD_Getter!( "TEST_EXPAND_ROW" ));
-    mixin ( UD_Getter!( "TEXT_BUFFER_INSERT_TEXT" ));
-    mixin ( UD_Getter!( "TOGGLED" ));
-    mixin ( UD_Getter!( "UNMAP" ));
-    mixin ( UD_Getter!( "UNMAP_EVENT" ));
-    mixin ( UD_Getter!( "UNREALIZE" ));
-    mixin ( UD_Getter!( "VALUE_CHANGED" ));
-    mixin ( UD_Getter!( "VISIBILITY_NOTIFY_EVENT" ));
-    mixin ( UD_Getter!( "WINDOW_STATE_EVENT" ));
-    mixin ( UD_Getter!( "ACTIVATE_INVERSE" ));
-    mixin ( UD_Getter!( "DAY_SELECTED" ));
-    mixin ( UD_Getter!( "MONTH_CHANGED" ));
-    mixin ( UD_Getter!( "LAST_SIGNAL" ));
+    mixin ( UD_Getter( "ACTIVATE" ));
+    mixin ( UD_Getter( "BUTTON_PRESS_EVENT" ));
+    mixin ( UD_Getter( "BUTTON_PRESS_EVENT_INVERSE" ));
+    mixin ( UD_Getter( "BUTTON_RELEASE_EVENT" ));
+    mixin ( UD_Getter( "BUTTON_RELEASE_EVENT_INVERSE" ));
+    mixin ( UD_Getter( "CHANGED" ));
+    mixin ( UD_Getter( "CHANGE_VALUE" ));
+    mixin ( UD_Getter( "CLICKED" ));
+    mixin ( UD_Getter( "COMMIT" ));
+    mixin ( UD_Getter( "CONFIGURE_EVENT" ));
+    mixin ( UD_Getter( "DELETE_EVENT" ));
+    mixin ( UD_Getter( "DELETE_RANGE" ));
+    mixin ( UD_Getter( "DELETE_TEXT" ));
+    mixin ( UD_Getter( "ENTER_NOTIFY_EVENT" ));
+    mixin ( UD_Getter( "EVENT" ));
+    mixin ( UD_Getter( "EVENT_AFTER" ));
+    mixin ( UD_Getter( "EXPAND_COLLAPSE_CURSOR_ROW" ));
+    mixin ( UD_Getter( "EXPOSE_EVENT" ));
+    mixin ( UD_Getter( "EXPOSE_EVENT_INVERSE" ));
+    mixin ( UD_Getter( "FOCUS" ));
+    mixin ( UD_Getter( "FOCUS_IN_EVENT" ));
+    mixin ( UD_Getter( "FOCUS_OUT_EVENT" ));
+    mixin ( UD_Getter( "GRAB_FOCUS" ));
+    mixin ( UD_Getter( "HIDE" ));
+    mixin ( UD_Getter( "INPUT" ));
+    mixin ( UD_Getter( "INSERT_TEXT" ));
+    mixin ( UD_Getter( "KEY_PRESS_EVENT" ));
+    mixin ( UD_Getter( "KEY_RELEASE_EVENT" ));
+    mixin ( UD_Getter( "LEAVE_NOTIFY_EVENT" ));
+    mixin ( UD_Getter( "MAP" ));
+    mixin ( UD_Getter( "MAP_EVENT" ));
+    mixin ( UD_Getter( "MNEMONIC_ACTIVATE" ));
+    mixin ( UD_Getter( "MOTION_NOTIFY_EVENT" ));
+    mixin ( UD_Getter( "MOTION_NOTIFY_EVENT_INVERSE" ));
+    mixin ( UD_Getter( "MOVE_FOCUS" ));
+    mixin ( UD_Getter( "OUTPUT" ));
+    mixin ( UD_Getter( "POPULATE_POPUP" ));
+    mixin ( UD_Getter( "POPUP_MENU" ));
+    mixin ( UD_Getter( "PREEDIT_CHANGED" ));
+    mixin ( UD_Getter( "REALIZE" ));
+    mixin ( UD_Getter( "ROW_ACTIVATED" ));
+    mixin ( UD_Getter( "SCROLL_CHILD" ));
+    mixin ( UD_Getter( "SCROLL_EVENT" ));
+    mixin ( UD_Getter( "SELECT" ));
+    mixin ( UD_Getter( "SHOW" ));
+    mixin ( UD_Getter( "SHOW_HELP" ));
+    mixin ( UD_Getter( "SIZE_ALLOCATE" ));
+    mixin ( UD_Getter( "STYLE_SET" ));
+    mixin ( UD_Getter( "SWITCH_PAGE" ));
+    mixin ( UD_Getter( "TEST_COLLAPSE_ROW" ));
+    mixin ( UD_Getter( "TEST_EXPAND_ROW" ));
+    mixin ( UD_Getter( "TEXT_BUFFER_INSERT_TEXT" ));
+    mixin ( UD_Getter( "TOGGLED" ));
+    mixin ( UD_Getter( "UNMAP" ));
+    mixin ( UD_Getter( "UNMAP_EVENT" ));
+    mixin ( UD_Getter( "UNREALIZE" ));
+    mixin ( UD_Getter( "VALUE_CHANGED" ));
+    mixin ( UD_Getter( "VISIBILITY_NOTIFY_EVENT" ));
+    mixin ( UD_Getter( "WINDOW_STATE_EVENT" ));
+    mixin ( UD_Getter( "ACTIVATE_INVERSE" ));
+    mixin ( UD_Getter( "DAY_SELECTED" ));
+    mixin ( UD_Getter( "MONTH_CHANGED" ));
+    mixin ( UD_Getter( "LAST_SIGNAL" ));
 
 /**
  * Prevents uninitialized instances from being created outside the package.

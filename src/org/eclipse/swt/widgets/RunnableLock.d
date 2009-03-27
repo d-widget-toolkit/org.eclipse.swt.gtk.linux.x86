@@ -16,9 +16,10 @@ import java.lang.all;
 
 import java.lang.Thread;
 version(Tango){
-import tango.core.sync.Condition;
-import tango.core.sync.Mutex;
+    import tango.core.sync.Condition;
+    import tango.core.sync.Mutex;
 } else { // Phobos
+    alias Object Mutex; // FIXME, real mutex is needed
 }
 
 /**
@@ -33,11 +34,18 @@ class RunnableLock : Mutex {
     Thread thread;
     Exception throwable;
 
-    Condition cond;
+    version(Tango){
+        Condition cond;
+    } else { // Phobos
+    }
 
 this (Runnable runnable) {
     this.runnable = runnable;
-    this.cond = new Condition(this);
+    version(Tango){
+        this.cond = new Condition(this);
+    } else { // Phobos
+        implMissing(__FILE__, __LINE__);
+    }
 }
 
 bool done () {
@@ -50,10 +58,18 @@ void run () {
 }
 
 void notifyAll(){
-    cond.notifyAll();
+    version(Tango){
+        cond.notifyAll();
+    } else { // Phobos
+        implMissing(__FILE__, __LINE__);
+    }
 }
 void wait(){
-    cond.wait();
+    version(Tango){
+        cond.wait();
+    } else { // Phobos
+        implMissing(__FILE__, __LINE__);
+    }
 }
 
 }

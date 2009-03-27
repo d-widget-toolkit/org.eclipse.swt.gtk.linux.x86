@@ -27,7 +27,7 @@ import org.eclipse.swt.events.TypedEvent;
 
 public final class ArmEvent : TypedEvent {
 
-    //static final long serialVersionUID = 3258126964249212217L;
+    //static const long serialVersionUID = 3258126964249212217L;
 
 /**
  * Constructs a new instance of this class based on the

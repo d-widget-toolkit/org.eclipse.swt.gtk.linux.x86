@@ -13,7 +13,7 @@
 module org.eclipse.swt.graphics.Image;
 
 import org.eclipse.swt.internal.Converter;
-import org.eclipse.swt.internal.cairo.Cairo;
+import org.eclipse.swt.internal.cairo.Cairo : Cairo;
 import org.eclipse.swt.internal.gtk.OS;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;

@@ -31,9 +31,10 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.swt.widgets.TypedListener;
 
+import java.lang.all;
+
 version(Tango){
 import tango.util.Convert;
-import java.lang.all;
 
 static import tango.text.Util;
 //static import tango.text.locale.Core;
@@ -986,8 +987,8 @@ void selectField(int index) {
     if (index !is currentField) {
         commitCurrentField();
     }
-    final int start = fieldIndices[index].x;
-    final int end = fieldIndices[index].y;
+    int start = fieldIndices[index].x;
+    int end = fieldIndices[index].y;
     Point pt = text.getSelection();
     if (index is currentField && start is pt.x && end is pt.y) return;
     currentField = index;

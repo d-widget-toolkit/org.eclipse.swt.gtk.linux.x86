@@ -60,7 +60,7 @@ public class List : Scrollable {
 
     GtkWidget* modelHandle;
 
-    static final int TEXT_COLUMN = 0;
+    static const int TEXT_COLUMN = 0;
     CallbackData treeSelectionProcCallbackData;
 
 /**

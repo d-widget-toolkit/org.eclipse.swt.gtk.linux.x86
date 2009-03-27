@@ -57,8 +57,8 @@ public class Browser : Composite {
     WebBrowser webBrowser;
     int userStyle;
 
-    static final String PACKAGE_PREFIX = "org.eclipse.swt.browser."; //$NON-NLS-1$
-    static final String NO_INPUT_METHOD = "org.eclipse.swt.internal.gtk.noInputMethod"; //$NON-NLS-1$
+    static const String PACKAGE_PREFIX = "org.eclipse.swt.browser."; //$NON-NLS-1$
+    static const String NO_INPUT_METHOD = "org.eclipse.swt.internal.gtk.noInputMethod"; //$NON-NLS-1$
 
 /**
  * Constructs a new instance of this class given its parent

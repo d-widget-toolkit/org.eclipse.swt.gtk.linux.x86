@@ -49,7 +49,7 @@ public class Caret : Widget {
     Image image;
     Font font;
 
-    static final int DEFAULT_WIDTH = 1;
+    static const int DEFAULT_WIDTH = 1;
 
 /**
  * Constructs a new instance of this class given its parent

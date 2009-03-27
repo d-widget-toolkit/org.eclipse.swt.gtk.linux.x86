@@ -43,7 +43,7 @@ public class LocationEvent : TypedEvent {
      */
     public bool doit;
 
-    static final long serialVersionUID = 3906644198244299574L;
+    static const long serialVersionUID = 3906644198244299574L;
     
 this(Widget w) {
     super(w);

@@ -24,9 +24,9 @@ import org.eclipse.swt.widgets.Shell;
 import org.eclipse.swt.widgets.Display;
 
 version(Tango){
-static import tango.io.model.IFile;
-static import tango.text.Util;
+    static import tango.io.model.IFile;
 } else { // Phobos
+    static import std.path;
 }
 
 /**
@@ -49,7 +49,11 @@ static import tango.text.Util;
  */
 public class DirectoryDialog : Dialog {
     String message = "", filterPath = "";
-    static const String SEPARATOR = tango.io.model.IFile.FileConst.PathSeparatorString;
+    version(Tango){
+        static const String SEPARATOR = tango.io.model.IFile.FileConst.PathSeparatorString;
+    } else { // Phobos
+        static const String SEPARATOR = std.path.sep;
+    }
 
 /**
  * Constructs a new instance of this class given only its parent.

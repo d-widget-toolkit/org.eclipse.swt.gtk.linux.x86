@@ -48,7 +48,7 @@ public final class MenuDetectEvent : TypedEvent {
      */
     public bool doit;
 
-    //private static final long serialVersionUID = -3061660596590828941L;
+    //private static const long serialVersionUID = -3061660596590828941L;
 
 /**
  * Constructs a new instance of this class based on the

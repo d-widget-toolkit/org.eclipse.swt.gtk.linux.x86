@@ -49,7 +49,7 @@ public class AccessibleEvent : SWTEventObject {
      */
     public String result;
 
-    //static final long serialVersionUID = 3257567304224026934L;
+    //static const long serialVersionUID = 3257567304224026934L;
 
 /**
  * Constructs a new instance of this class.

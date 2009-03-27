@@ -83,11 +83,10 @@ import org.eclipse.swt.custom.StyledTextListener;
 import org.eclipse.swt.custom.ST;
 
 version(Tango){
-static import tango.text.Util;
-static import tango.io.model.IFile;
-static import tango.text.convert.Utf;
-import tango.util.Convert;
+    static import tango.io.model.IFile;
+    import tango.util.Convert;
 } else { // Phobos
+    static import std.string;
 }
 import java.lang.all;
 
@@ -152,7 +151,11 @@ public class StyledText : Canvas {
     alias Canvas.computeSize computeSize;
 
     static const char TAB = '\t';
-    static const String PlatformLineDelimiter = tango.io.model.IFile.FileConst.NewlineString;
+    version(Tango){
+        static const String PlatformLineDelimiter = tango.io.model.IFile.FileConst.NewlineString;
+    } else { // Phobos
+        static const String PlatformLineDelimiter = std.string.newline;
+    }
     static const int BIDI_CARET_WIDTH = 3;
     static const int DEFAULT_WIDTH  = 64;
     static const int DEFAULT_HEIGHT = 64;
@@ -2163,7 +2166,7 @@ void doAutoScroll(int direction, int distance) {
     }
 
     Runnable timer = null;
-    final Display disp = getDisplay();
+    Display disp = getDisplay();
     // Set a timer that will simulate the user pressing and holding
     // down a cursor key (i.e., arrowUp, arrowDown).
     if (direction is SWT.UP) {
@@ -5642,7 +5645,7 @@ void handleVerticalScroll(Event event) {
  * Add accessibility support for the widget.
  */
 void initializeAccessible() {
-    final Accessible accessible = getAccessible();
+    Accessible accessible = getAccessible();
     accessible.addAccessibleListener(new class() AccessibleAdapter {
         public void getName (AccessibleEvent e) {
             String name = null;
@@ -5663,7 +5666,7 @@ void initializeAccessible() {
                 if (text !is null) {
                     dchar mnemonic = _findMnemonic (text);
                     if (mnemonic !is '\0') {
-                        shortcut = "Alt+"~tango.text.convert.Utf.toString( [mnemonic] ); //$NON-NLS-1$
+                        shortcut = "Alt+"~String_valueOf( [mnemonic] ); //$NON-NLS-1$
                     }
                 }
             }

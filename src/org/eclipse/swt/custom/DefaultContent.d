@@ -24,13 +24,17 @@ import org.eclipse.swt.custom.StyledText;
 import java.lang.all;
 
 version(Tango){
-static import tango.io.model.IFile;
+    static import tango.io.model.IFile;
 } else { // Phobos
 }
 
 
 class DefaultContent : StyledTextContent {
-    private final static String LineDelimiter = tango.io.model.IFile.FileConst.NewlineString;
+    version(Tango){
+        private const static String LineDelimiter = tango.io.model.IFile.FileConst.NewlineString;
+    } else { // Phobos
+        private const static String LineDelimiter = std.string.newline;
+    }
 
     StyledTextListener[] textListeners; // stores text listeners for event sending
     char[] textStore; // stores the actual text

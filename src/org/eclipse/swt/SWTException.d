@@ -57,7 +57,7 @@ public class SWTException : Exception {
     }
 
 
-    //static final long serialVersionUID = 3257282552304842547L;
+    //static const long serialVersionUID = 3257282552304842547L;
 
 /**
  * Constructs a new instance of this class with its

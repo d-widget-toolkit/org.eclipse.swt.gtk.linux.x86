@@ -17,9 +17,11 @@ import java.lang.all;
 import org.eclipse.swt.widgets.Event;
 
 version(Tango){
-import tango.core.Traits;
-import tango.core.Tuple;
+    import tango.core.Traits;
+    import tango.core.Tuple;
 } else { // Phobos
+    import std.traits;
+    import std.typetuple;
 }
 
 /**
@@ -66,9 +68,22 @@ void handleEvent (Event event);
 /// Helper class for the dgListener template function
 private class _DgListenerT(Dg,T...) : Listener {
 
-    alias ParameterTupleOf!(Dg) DgArgs;
-    static assert( is(DgArgs == Tuple!(Event,T)),
-                "Delegate args not correct: delegate args: ("~DgArgs.stringof~") vs. passed args: ("~Tuple!(Event,T).stringof~")" );
+    version(Tango){
+        alias ParameterTupleOf!(Dg) DgArgs;
+        static assert( is(DgArgs == Tuple!(Event,T)),
+            "Delegate args not correct: delegate args: ("~
+            DgArgs.stringof~
+            ") vs. passed args: ("~
+            Tuple!(Event,T).stringof~")" );
+    } else { // Phobos
+        alias ParameterTypeTuple!(Dg) DgArgs;
+        static assert( is(DgArgs == TypeTuple!(Event,T)),
+            "Delegate args not correct: delegate args: ("~
+            DgArgs.stringof~
+            ") vs. passed args: ("~
+            TypeTuple!(Event,T).stringof~")" );
+    }
+
 
     Dg dg;
     T  t;
