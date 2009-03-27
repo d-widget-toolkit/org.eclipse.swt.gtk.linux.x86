@@ -81,7 +81,7 @@ public override void javaToNative (Object object, TransferData transferData){
     if (!checkRTF(object) || !isSupportedType(transferData)) {
         DND.error(DND.ERROR_INVALID_DATA);
     }
-    String string = (cast(ArrayWrapperString)object).array;
+    String string = stringcast(object);
     char* pValue = cast(char*)OS.g_malloc(string.length + 1);
     if (pValue is null) return;
     pValue[ 0 .. string.length ] = string;
@@ -107,7 +107,8 @@ public override Object nativeToJava(TransferData transferData){
     int size = transferData.format * transferData.length / 8;
     if (size is 0) return null;
     char [] chars = transferData.pValue[ 0 .. size];
-    return new ArrayWrapperString( chars[ 0 .. tango.text.Util.locate( chars, '\0' ) ].dup );
+    int end = chars.indexOf( '\0' );
+    return new ArrayWrapperString( (end is -1)? chars.dup : chars[ 0 .. end ].dup );
 }
 
 protected override int[] getTypeIds() {

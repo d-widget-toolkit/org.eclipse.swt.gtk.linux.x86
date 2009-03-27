@@ -77,7 +77,7 @@ override public void javaToNative (Object object, TransferData transferData) {
     if (!checkText(object) || !isSupportedType(transferData)) {
         DND.error(DND.ERROR_INVALID_DATA);
     }
-    String string = (cast(ArrayWrapperString)object).array;
+    String string = stringcast(object);
     char* utf8 = toStringz(string);
     if  (transferData.type is cast(void*) COMPOUND_TEXT_ID) {
         void* encoding;
@@ -108,7 +108,7 @@ override public void javaToNative (Object object, TransferData transferData) {
         if (string_target is  null) return;
         transferData.type = cast(void*)STRING_ID;
         transferData.format = 8;
-        transferData.length = tango.stdc.string.strlen(string_target);
+        transferData.length = OS.strlen(string_target);
         transferData.pValue = string_target;
         transferData.result = 1;
     }
@@ -128,7 +128,7 @@ override public Object nativeToJava(TransferData transferData){
     char** list;
     int count = OS.gdk_text_property_to_utf8_list(transferData.type, transferData.format, transferData.pValue, transferData.length, &list);
     if (count is 0) return null;
-    String utf8 = fromStringz( list[0] ).dup;
+    String utf8 = fromStringz( list[0] )._idup();
     OS.g_strfreev(list);
     return new ArrayWrapperString( utf8 );
 }

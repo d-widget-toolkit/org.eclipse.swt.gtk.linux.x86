@@ -79,7 +79,7 @@ public override void javaToNative(Object object, TransferData transferData) {
         DND.error(DND.ERROR_INVALID_DATA);
     }
     String[] files = (cast(ArrayWrapperString2)object).array;
-    String buffer;
+    char[] buffer;
     for (int i = 0; i < files.length; i++) {
         String string = files[i];
         if (string.ptr is null) continue;
@@ -90,10 +90,10 @@ public override void javaToNative(Object object, TransferData transferData) {
         auto uriPtr = OS.g_filename_to_uri(localePtr, null, &error);
         OS.g_free(localePtr);
         if (error !is null || uriPtr is null) continue;
-        String temp = fromStringz( uriPtr ).dup;
+        String temp = fromStringz( uriPtr )._idup();
         OS.g_free(uriPtr);
         int newLength = (i > 0) ? buffer.length+separator.length+temp.length :  temp.length;
-        String newBuffer = new char[newLength];
+        auto newBuffer = new char[newLength];
         int offset = 0;
         if (i > 0) {
             System.arraycopy(buffer, 0, newBuffer, 0, buffer.length);
@@ -126,7 +126,7 @@ public override void javaToNative(Object object, TransferData transferData) {
  */
 public override Object nativeToJava(TransferData transferData) {
     if ( !isSupportedType(transferData) ||  transferData.pValue is null ||  transferData.length <= 0 ) return null;
-    String temp = transferData.pValue[ 0 .. transferData.length ];
+    auto temp = transferData.pValue[ 0 .. transferData.length ];
     char*[] files;
     int offset = 0;
     for (int i = 0; i < temp.length - 1; i++) {
@@ -155,7 +155,7 @@ public override Object nativeToJava(TransferData transferData) {
         auto utf8Ptr = OS.g_filename_to_utf8(localePtr, -1, null, null, &error);
         OS.g_free(localePtr);
         if (error !is null || utf8Ptr is null) continue;
-        String buffer = fromStringz( utf8Ptr ).dup;
+        String buffer = fromStringz( utf8Ptr )._idup();
         OS.g_free(utf8Ptr);
         String name = buffer;
         String[] newFileNames = new String[]( fileNames.length + 1 );

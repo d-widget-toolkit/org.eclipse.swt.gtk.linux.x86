@@ -77,7 +77,7 @@ public override void javaToNative (Object object, TransferData transferData){
     if (!checkHTML(object) || !isSupportedType(transferData)) {
         DND.error(DND.ERROR_INVALID_DATA);
     }
-    String string = (cast(ArrayWrapperString)object).array;
+    String string = stringcast(object);
     char* pValue = cast(char*)OS.g_malloc(string.length);
     if (pValue is null) return;
     pValue[0 .. string.length ] = string;
@@ -102,8 +102,9 @@ public override Object nativeToJava(TransferData transferData){
     /* Ensure byteCount is a multiple of 2 bytes */
     int size = (transferData.format * transferData.length / 8) / 2 * 2;
     if (size <= 0) return null;
-    String chars = transferData.pValue[ 0 .. size ].dup;
-    return new ArrayWrapperString( chars[ 0 .. tango.text.Util.locate( chars, '\0' ) ] );
+    String chars = transferData.pValue[ 0 .. size ]._idup();
+    int end = string.indexOf('\0');
+    return new ArrayWrapperString( (end is -1 )? chars : chars[ 0 .. end ] );
 }
 protected override int[] getTypeIds() {
     return [TEXT_HTML_ID, TEXT_HTML2_ID];
