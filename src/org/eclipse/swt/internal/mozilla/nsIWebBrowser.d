@@ -23,8 +23,8 @@ interface nsIWebBrowser : nsISupports {
   static const nsIID IID = NS_IWEBBROWSER_IID;
 
 extern(System):
-  nsresult AddWebBrowserListener(nsIWeakReference aListener, nsIID * aIID);
-  nsresult RemoveWebBrowserListener(nsIWeakReference aListener, nsIID * aIID);
+  nsresult AddWebBrowserListener(nsIWeakReference aListener, in nsIID * aIID);
+  nsresult RemoveWebBrowserListener(nsIWeakReference aListener, in nsIID * aIID);
   nsresult GetContainerWindow(nsIWebBrowserChrome  *aContainerWindow);
   nsresult SetContainerWindow(nsIWebBrowserChrome  aContainerWindow);
   nsresult GetParentURIContentListener(nsIURIContentListener  *aParentURIContentListener);

@@ -18,9 +18,9 @@ interface nsIComponentManager : nsISupports {
   static const nsIID IID = NS_ICOMPONENTMANAGER_IID;
 
 extern(System):
-  nsresult GetClassObject(nsCID * aClass, nsIID * aIID, void * *result);
-  nsresult GetClassObjectByContractID(char *aContractID, nsIID * aIID, void * *result);
-  nsresult CreateInstance(nsCID * aClass, nsISupports aDelegate, nsIID * aIID, void * *result);
-  nsresult CreateInstanceByContractID(char *aContractID, nsISupports aDelegate, nsIID * aIID, void * *result);
+  nsresult GetClassObject(in nsCID * aClass, nsIID * aIID, void * *result);
+  nsresult GetClassObjectByContractID(in char *aContractID, nsIID * aIID, void * *result);
+  nsresult CreateInstance(in nsCID * aClass, nsISupports aDelegate, in nsIID * aIID, void * *result);
+  nsresult CreateInstanceByContractID(in char *aContractID, nsISupports aDelegate, in nsIID * aIID, void * *result);
 }
 

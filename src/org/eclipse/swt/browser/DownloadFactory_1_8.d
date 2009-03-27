@@ -39,7 +39,7 @@ nsrefcnt AddRef () {
 }
 
 extern(System)
-nsresult QueryInterface (nsIID* riid, void** ppvObject) {
+nsresult QueryInterface (in nsIID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
     //nsID guid = new nsID ();
     //XPCOM.memmove (guid, riid, nsID.sizeof);

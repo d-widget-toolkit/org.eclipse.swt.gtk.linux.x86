@@ -19,11 +19,11 @@ interface nsICategoryManager : nsISupports {
   static const nsIID IID = NS_ICATEGORYMANAGER_IID;
 
 extern(System):
-  nsresult GetCategoryEntry(char *aCategory, char *aEntry, char **_retval);
-  nsresult AddCategoryEntry(char *aCategory, char *aEntry, char *aValue, PRBool aPersist, PRBool aReplace, char **_retval);
-  nsresult DeleteCategoryEntry(char *aCategory, char *aEntry, PRBool aPersist);
-  nsresult DeleteCategory(char *aCategory);
-  nsresult EnumerateCategory(char *aCategory, nsISimpleEnumerator *_retval);
+  nsresult GetCategoryEntry(in char *aCategory, in char *aEntry, char **_retval);
+  nsresult AddCategoryEntry(in char *aCategory, in char *aEntry, in char *aValue, PRBool aPersist, PRBool aReplace, char **_retval);
+  nsresult DeleteCategoryEntry(in char *aCategory, in char *aEntry, PRBool aPersist);
+  nsresult DeleteCategory(in char *aCategory);
+  nsresult EnumerateCategory(in char *aCategory, nsISimpleEnumerator *_retval);
   nsresult EnumerateCategories(nsISimpleEnumerator *_retval);
 }
 

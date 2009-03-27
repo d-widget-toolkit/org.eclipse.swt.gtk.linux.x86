@@ -140,13 +140,13 @@ public this(Device device, FontData[] fds) {
  *    <li>ERROR_NO_HANDLES - if a font could not be created from the given arguments</li>
  * </ul>
  */
-public this(Device device, String name, int height, int style) {
+public this(Device device, in String name, int height, int style) {
     super(device);
     init_(name, height, style, null);
     init_();
 }
 
-/*public*/ this(Device device, String name, float height, int style) {
+/*public*/ this(Device device, in String name, float height, int style) {
     super(device);
     init_(name, height, style, null);
     init_();
@@ -192,7 +192,7 @@ public FontData[] getFontData() {
     if (isDisposed()) SWT.error(SWT.ERROR_GRAPHIC_DISPOSED);
 
     auto family = OS.pango_font_description_get_family(handle);
-    String name = fromStringz( family );
+    String name = fromStringz( family )._idup();
     float height = cast(float)OS.pango_font_description_get_size(handle) / OS.PANGO_SCALE;
     int pangoStyle = OS.pango_font_description_get_style(handle);
     int pangoWeight = OS.pango_font_description_get_weight(handle);
@@ -201,7 +201,7 @@ public FontData[] getFontData() {
     if (pangoStyle is OS.PANGO_STYLE_OBLIQUE) style |= SWT.ROMAN;
     if (pangoWeight >= OS.PANGO_WEIGHT_BOLD) style |= SWT.BOLD;
     auto fontString = OS.pango_font_description_to_string (handle);
-    auto buffer = fromStringz( fontString ).dup;
+    auto buffer = fromStringz( fontString )._idup();
     FontData data = new FontData( buffer , height, style);
     OS.g_free (fontString);
     data.str = buffer;
@@ -243,7 +243,7 @@ public override hash_t toHash() {
     return cast(hash_t)/*64*/handle;
 }
 
-void init_(String name, float height, int style, char[] fontString) {
+void init_( in String name, float height, int style, in String fontString) {
     if (name is null) SWT.error(SWT.ERROR_NULL_ARGUMENT);
     if (height < 0) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
     if (fontString !is null) {

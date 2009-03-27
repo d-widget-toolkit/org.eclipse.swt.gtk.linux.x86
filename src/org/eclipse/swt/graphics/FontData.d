@@ -134,8 +134,8 @@ public this(String str) {
     if (end is -1 ) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
     String version1 = str[ start .. end ];
     try {
-        if (to!(int)(version1) !is 1) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
-    } catch (ConversionException e) {
+        if (Integer.parseInt(version1) !is 1) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
+    } catch (NumberFormatException e) {
         SWT.error(SWT.ERROR_INVALID_ARGUMENT);
     }
 
@@ -149,8 +149,8 @@ public this(String str) {
     if (end is -1 ) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
     float height = 0;
     try {
-        height = to!(float)(str[start .. end]);
-    } catch (ConversionException e) {
+        height = Float.parseFloat(str[start .. end]);
+    } catch (NumberFormatException e) {
         SWT.error(SWT.ERROR_INVALID_ARGUMENT);
     }
 
@@ -159,8 +159,8 @@ public this(String str) {
     if (end is -1 ) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
     int style = 0;
     try {
-        style = to!(int)( str[start .. end ]);
-    } catch (ConversionException e) {
+        style = Integer.parseInt( str[start .. end ]);
+    } catch (NumberFormatException e) {
         SWT.error(SWT.ERROR_INVALID_ARGUMENT);
     }
 

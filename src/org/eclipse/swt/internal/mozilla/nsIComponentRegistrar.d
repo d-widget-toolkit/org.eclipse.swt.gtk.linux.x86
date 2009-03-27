@@ -22,15 +22,15 @@ interface nsIComponentRegistrar : nsISupports {
 extern(System):
   nsresult AutoRegister(nsIFile aSpec);
   nsresult AutoUnregister(nsIFile aSpec);
-  nsresult RegisterFactory(nsCID * aClass, char *aClassName, char *aContractID, nsIFactory aFactory);
-  nsresult UnregisterFactory(nsCID * aClass, nsIFactory aFactory);
-  nsresult RegisterFactoryLocation(nsCID * aClass, char *aClassName, char *aContractID, nsIFile aFile, char *aLoaderStr, char *aType);
-  nsresult UnregisterFactoryLocation(nsCID * aClass, nsIFile aFile);
-  nsresult IsCIDRegistered(nsCID * aClass, PRBool *_retval);
-  nsresult IsContractIDRegistered(char *aContractID, PRBool *_retval);
+  nsresult RegisterFactory(in nsCID * aClass, in char *aClassName, in char *aContractID, nsIFactory aFactory);
+  nsresult UnregisterFactory(in nsCID * aClass, nsIFactory aFactory);
+  nsresult RegisterFactoryLocation(in nsCID * aClass, in char *aClassName, in char *aContractID, nsIFile aFile, in char *aLoaderStr, in char *aType);
+  nsresult UnregisterFactoryLocation(in nsCID * aClass, nsIFile aFile);
+  nsresult IsCIDRegistered(in nsCID * aClass, PRBool *_retval);
+  nsresult IsContractIDRegistered(in char *aContractID, PRBool *_retval);
   nsresult EnumerateCIDs(nsISimpleEnumerator *_retval);
   nsresult EnumerateContractIDs(nsISimpleEnumerator *_retval);
   nsresult CIDToContractID(nsCID * aClass, char **_retval);
-  nsresult ContractIDToCID(char *aContractID, nsCID * *_retval);
+  nsresult ContractIDToCID(in char *aContractID, nsCID * *_retval);
 }
 

@@ -103,7 +103,7 @@ public override Object nativeToJava(TransferData transferData){
     int size = (transferData.format * transferData.length / 8) / 2 * 2;
     if (size <= 0) return null;
     String chars = transferData.pValue[ 0 .. size ]._idup();
-    int end = string.indexOf('\0');
+    int end = chars.indexOf('\0');
     return new ArrayWrapperString( (end is -1 )? chars : chars[ 0 .. end ] );
 }
 protected override int[] getTypeIds() {

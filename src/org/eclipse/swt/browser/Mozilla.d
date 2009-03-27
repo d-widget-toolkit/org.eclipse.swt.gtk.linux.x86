@@ -22,7 +22,7 @@ import tango.stdc.string;
 } else { // Phobos
 }
 
-import org.eclipse.swt.internal.c.gtk;
+//import org.eclipse.swt.internal.c.gtk;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTError;
@@ -51,6 +51,7 @@ import org.eclipse.swt.browser.TitleEvent;
 import org.eclipse.swt.internal.Compatibility;
 import org.eclipse.swt.internal.LONG;
 import org.eclipse.swt.internal.Library;
+import org.eclipse.swt.internal.gtk.OS;
 
 import XPCOM = org.eclipse.swt.internal.mozilla.XPCOM;
 import XPCOMInit = org.eclipse.swt.internal.mozilla.XPCOMInit;
@@ -298,7 +299,7 @@ public void create (Composite parent, int style) {
 
             if (rc is XPCOM.NS_OK) {
                 /* indicates that a XULRunner was found */
-                mozillaPath = greBuffer;
+                mozillaPath = cast(String)greBuffer;
                 IsXULRunner = mozillaPath.length > 0;
 
                 /*
@@ -317,7 +318,12 @@ public void create (Composite parent, int style) {
                         if (Device.DEBUG) getDwtLogger().error (__FILE__, __LINE__, "cannot use detected XULRunner: {}", mozillaPath); //$NON-NLS-1$
                         
                         /* attempt to XPCOMGlueStartup the GRE pointed at by MOZILLA_FIVE_HOME */
-                        auto ptr = Environment.get(XPCOM.MOZILLA_FIVE_HOME);
+                        version(Tango){
+                            auto ptr = Environment.get(XPCOM.MOZILLA_FIVE_HOME);
+                        } else { // Phobos
+                            implMissing(__FILE__, __LINE__);
+                            String ptr;
+                        }
 
                         if (ptr is null) {
                             IsXULRunner = false;
@@ -368,7 +374,12 @@ public void create (Composite parent, int style) {
             }
 
             /* attempt to use the GRE pointed at by MOZILLA_FIVE_HOME */
-            auto mozFiveHome = Environment.get(XPCOM.MOZILLA_FIVE_HOME);
+            version(Tango){
+                auto mozFiveHome = Environment.get(XPCOM.MOZILLA_FIVE_HOME);
+            } else { // Phobos
+                implMissing(__FILE__, __LINE__);
+                String mozFiveHome;
+            }
             if (mozFiveHome !is null) {
                 mozillaPath = mozFiveHome;
             } else {
@@ -629,7 +640,7 @@ public void create (Composite parent, int style) {
                 error (XPCOM.NS_NOINTERFACE, __FILE__, __LINE__);
             }
             int span = XPCOM.strlen_PRUnichar (tmpChars);
-            prefLocales = Utf.toString(tmpChars[0 .. span]) ~ TOKENIZER_LOCALE;
+            prefLocales = String_valueOf(tmpChars[0 .. span]) ~ TOKENIZER_LOCALE;
         }
 
         /*
@@ -637,16 +648,22 @@ public void create (Composite parent, int style) {
          * user's current locale and language to the original value 
          */
 
-        String language = Culture.current.twoLetterLanguageName ();
-        String country = Region.current.twoLetterRegionName ();
-        String stringBuffer = language.dup;
+        version(Tango){
+            String language = Culture.current.twoLetterLanguageName ();
+            String country = Region.current.twoLetterRegionName ();
+        } else { // Phobos
+            implMissing(__FILE__, __LINE__);
+            String language = "en";
+            String country = "us";
+        }
+        String stringBuffer = language._idup();
 
         stringBuffer ~= SEPARATOR_LOCALE;
         stringBuffer ~= country.toLowerCase ();
         stringBuffer ~= TOKENIZER_LOCALE;
         stringBuffer ~= language;
         stringBuffer ~= TOKENIZER_LOCALE;
-        String newLocales = stringBuffer.dup;
+        String newLocales = stringBuffer._idup();
 
         int start, end = -1;
         do {
@@ -666,7 +683,7 @@ public void create (Composite parent, int style) {
                 }
             }
         } while (end !is -1);
-        newLocales[] = stringBuffer[];
+        (cast(char[])newLocales)[] = stringBuffer[];
         if (!newLocales.equals (prefLocales)) {
             /* write the new locale value */
             newLocales = newLocales.substring (0, newLocales.length () - TOKENIZER_LOCALE.length ()); /* remove trailing tokenizer */
@@ -716,7 +733,7 @@ public void create (Composite parent, int style) {
                 error (XPCOM.NS_NOINTERFACE, __FILE__, __LINE__);
             }
             int span = XPCOM.strlen_PRUnichar (tmpChar);
-            prefCharset = Utf.toString(tmpChar[0 .. span]);
+            prefCharset = String_valueOf(tmpChar[0 .. span]);
         }
 
         String newCharset = System.getProperty ("file.encoding");   // $NON-NLS-1$
@@ -1327,12 +1344,12 @@ public String getText () {
         //int length = XPCOM.strlen_PRUnichar (string);
         //chars = new char[length];
         //XPCOM.memmove (chars, result[0], length * 2);
-        chars = Utf.toString(fromString16z(string));
+        chars = String_valueOf(fromString16z(string));
     }
 
     componentManager.Release ();
     document.Release ();
-    return chars.dup;
+    return chars._idup();
 }
 
 extern(D)
@@ -1885,7 +1902,7 @@ void unhookDOMListeners (nsIDOMEventTarget target) {
 /* nsISupports */
 
 extern(System)
-nsresult QueryInterface (cnsID* riid, void** ppvObject) {
+nsresult QueryInterface (in nsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
 
     if (*riid == nsISupports.IID) {
@@ -1970,7 +1987,7 @@ nsresult QueryReferent (nsID* riid, void** ppvObject) {
 /* nsIInterfaceRequestor */
 
 extern(System)
-nsresult GetInterface ( nsID* riid, void** ppvObject) {
+nsresult GetInterface ( in nsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
     //nsID guid = new nsID ();
     //XPCOM.memmove (guid, riid, nsID.sizeof);
@@ -2230,7 +2247,7 @@ nsresult OnStatusChange (nsIWebProgress aWebProgress, nsIRequest aRequest, nsres
     //int length = XPCOM.strlen_PRUnichar (aMessage);
     //char[] dest = new char[length];
     //XPCOM.memmove (dest, aMessage, length * 2);
-    event.text = Utf.toString(fromString16z(aMessage));
+    event.text = String_valueOf(fromString16z(aMessage));
     for (int i = 0; i < statusTextListeners.length; i++) {
         statusTextListeners[i].changed (event);
     }
@@ -2254,7 +2271,7 @@ nsresult SetStatus (PRUint32 statusType, PRUnichar* status) {
     //char[] dest = new char[length];
     //XPCOM.memmove (dest, status, length * 2);
     //String string = new String (dest);
-    event.text = Utf.toString(fromString16z(status));
+    event.text = String_valueOf(fromString16z(status));
     for (int i = 0; i < statusTextListeners.length; i++) {
         statusTextListeners[i].changed (event);
     }
@@ -2492,7 +2509,7 @@ nsresult SetTitle (PRUnichar* aTitle) {
     if (length > 0) {
         //char[] dest = new char[length];
         //XPCOM.memmove (dest, aTitle, length * 2);
-        event.title = Utf.toString(fromString16z(aTitle));
+        event.title = String_valueOf(fromString16z(aTitle));
     } else {
         event.title = getUrl ();
     }
@@ -2642,11 +2659,11 @@ nsresult DoContent (char* aContentType, PRBool aIsContentPreferred, nsIRequest a
 extern(System)
 nsresult IsPreferred (char* aContentType, char** aDesiredContentType, PRBool* retval) {
     bool preferred = false;
-    auto size = strlen (aContentType);
+    auto size = OS.strlen (aContentType);
     if (size > 0) {
         //byte[] typeBytes = new byte[size + 1];
         //XPCOM.memmove (typeBytes, aContentType, size);
-        String contentType = fromStringz(aContentType);
+        String contentType = fromStringz(aContentType)._idup();
 
         /* do not attempt to handle known problematic content types */
         if (!contentType.equals (XPCOM.CONTENT_MAYBETEXT) && !contentType.equals (XPCOM.CONTENT_MULTIPART)) {
@@ -2684,7 +2701,7 @@ nsresult IsPreferred (char* aContentType, char** aDesiredContentType, PRBool* re
 
                 //nsICategoryManager categoryManager = new nsICategoryManager (result[0]);
                 //result[0] = 0;
-                char* categoryBytes = "Gecko-Content-Viewers"; //$NON-NLS-1$
+                CCharPtr categoryBytes = "Gecko-Content-Viewers"; //$NON-NLS-1$
                 char* result;
                 rc = categoryManager.GetCategoryEntry (categoryBytes, aContentType, &result);
                 categoryManager.Release ();
@@ -2736,7 +2753,7 @@ nsresult OnShowTooltip (PRInt32 aXCoords, PRInt32 aYCoords, PRUnichar* aTipText)
     //int length = XPCOM.strlen_PRUnichar (aTipText);
     //char[] dest = new char[length];
     //XPCOM.memmove (dest, aTipText, length * 2);
-    String text = Utf.toString(fromString16z(aTipText));
+    String text = String_valueOf(fromString16z(aTipText));
     if (tip !is null && !tip.isDisposed ()) tip.dispose ();
     Display display = browser.getDisplay ();
     Shell parent = browser.getShell ();

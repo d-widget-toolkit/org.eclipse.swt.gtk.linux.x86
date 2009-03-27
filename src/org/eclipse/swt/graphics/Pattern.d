@@ -21,7 +21,8 @@ import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Image;
-import org.eclipse.swt.internal.cairo.Cairo;
+import org.eclipse.swt.internal.cairo.Cairo : Cairo;
+import org.eclipse.swt.internal.gtk.OS;
 
 
 /**

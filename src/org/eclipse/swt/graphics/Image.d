@@ -314,7 +314,7 @@ public this(Device device, Image srcImage, int flag) {
                 byte oneBlue = cast(byte)oneRGB.blue;
                 byte[] line = new byte[stride];
                 for (int y=0; y<height; y++) {
-                    memmove(line.ptr, pixels + (y * stride), stride);
+                    OS.memmove(line.ptr, pixels + (y * stride), stride);
                     for (int x=0; x<width; x++) {
                         int offset = x*3;
                         int red = line[offset] & 0xFF;
@@ -331,14 +331,14 @@ public this(Device device, Image srcImage, int flag) {
                             line[offset+2] = oneBlue;
                         }
                     }
-                    memmove(pixels + (y * stride), line.ptr, stride);
+                    OS.memmove(pixels + (y * stride), line.ptr, stride);
                 }
                 break;
             }
             case SWT.IMAGE_GRAY: {
                 byte[] line = new byte[stride];
                 for (int y=0; y<height; y++) {
-                memmove(line.ptr, pixels + (y * stride), stride);
+                OS.memmove(line.ptr, pixels + (y * stride), stride);
                     for (int x=0; x<width; x++) {
                         int offset = x*3;
                         int red = line[offset] & 0xFF;
@@ -347,7 +347,7 @@ public this(Device device, Image srcImage, int flag) {
                         byte intensity = cast(byte)((red+red+green+green+green+green+green+blue) >> 3);
                         line[offset] = line[offset+1] = line[offset+2] = intensity;
                     }
-                    memmove(pixels + (y * stride), line.ptr, stride);
+                    OS.memmove(pixels + (y * stride), line.ptr, stride);
                 }
                 break;
             }
@@ -569,12 +569,12 @@ public this(Device device, String filename) {
                 byte[] line = new byte[stride];
                 alphaData = new byte[width * height];
                 for (int y = 0; y < height; y++) {
-                    memmove(line.ptr, pixels + (y * stride), stride);
+                    OS.memmove(line.ptr, pixels + (y * stride), stride);
                     for (int x = 0; x < width; x++) {
                         alphaData[y*width+x] = line[x*4 + 3];
                         line[x*4 + 3] = cast(byte) 0xFF;
                     }
-                    memmove(pixels + (y * stride), line.ptr, stride);
+                    OS.memmove(pixels + (y * stride), line.ptr, stride);
                 }
                 createAlphaMask(width, height);
             }
@@ -607,12 +607,12 @@ void createAlphaMask (int width, int height) {
             GdkImage* gdkImage = new GdkImage();
             *gdkImage = *imagePtr;
             if (gdkImage.bpl is width) {
-                memmove(gdkImage.mem, alphaData.ptr, alphaData.length);
+                OS.memmove(gdkImage.mem, alphaData.ptr, alphaData.length);
             } else {
                 byte[] line = new byte[gdkImage.bpl];
                 for (int y = 0; y < height; y++) {
                     System.arraycopy(alphaData, width * y, line, 0, width);
-                    memmove(gdkImage.mem + (gdkImage.bpl * y), line.ptr, gdkImage.bpl);
+                    OS.memmove(gdkImage.mem + (gdkImage.bpl * y), line.ptr, gdkImage.bpl);
                 }
             }
             OS.gdk_draw_image(mask, gc, imagePtr, 0, 0, 0, 0, width, height);
@@ -669,8 +669,8 @@ void createSurface() {
             byte[] maskLine = new byte[maskStride];
             auto offset = pixels, maskOffset = maskPixels;
             for (int y=0; y<height; y++) {
-                memmove(line.ptr, offset, stride);
-                memmove(maskLine.ptr, maskOffset, maskStride);
+                OS.memmove(line.ptr, offset, stride);
+                OS.memmove(maskLine.ptr, maskOffset, maskStride);
                 for (int x=0, offset1=0; x<width; x++, offset1 += 4) {
                     if (maskLine[x * 3] is 0) {
                         line[offset1 + 0] = line[offset1 + 1] = line[offset1 + 2] = line[offset1 + 3] = 0;
@@ -679,7 +679,7 @@ void createSurface() {
                     line[offset1] = line[offset1 + 2];
                     line[offset1 + 2] = temp;
                 }
-                memmove(offset, line.ptr, stride);
+                OS.memmove(offset, line.ptr, stride);
                 offset += stride;
                 maskOffset += maskStride;
             }
@@ -687,7 +687,7 @@ void createSurface() {
         } else if (alpha !is -1) {
             auto offset = pixels;
             for (int y=0; y<height; y++) {
-                memmove(line.ptr, offset, stride);
+                OS.memmove(line.ptr, offset, stride);
                 for (int x=0, offset1=0; x<width; x++, offset1 += 4) {
                     line[offset1+3] = cast(byte)alpha;
                     /* pre-multiplied alpha */
@@ -701,13 +701,13 @@ void createSurface() {
                     line[offset1 + 1] = cast(byte)g;
                     line[offset1 + 2] = cast(byte)r;
                 }
-                memmove(offset, line.ptr, stride);
+                OS.memmove(offset, line.ptr, stride);
                 offset += stride;
             }
         } else if (alphaData !is null) {
             auto offset = pixels;
             for (int y = 0; y < h; y++) {
-                memmove (line.ptr, offset, stride);
+                OS.memmove (line.ptr, offset, stride);
                 for (int x=0, offset1=0; x<width; x++, offset1 += 4) {
                     int alpha = alphaData [y*w+x] & 0xFF;
                     line[offset1+3] = cast(byte)alpha;
@@ -722,25 +722,25 @@ void createSurface() {
                     line[offset1 + 1] = cast(byte)g;
                     line[offset1 + 2] = cast(byte)r;
                 }
-                memmove (offset, line.ptr, stride);
+                OS.memmove (offset, line.ptr, stride);
                 offset += stride;
             }
         } else {
             auto offset = pixels;
             for (int y = 0; y < h; y++) {
-                memmove (line.ptr, offset, stride);
+                OS.memmove (line.ptr, offset, stride);
                 for (int x=0, offset1=0; x<width; x++, offset1 += 4) {
                     line[offset1+3] = cast(byte)0xFF;
                     byte temp = line[offset1];
                     line[offset1] = line[offset1 + 2];
                     line[offset1 + 2] = temp;
                 }
-                memmove (offset, line.ptr, stride);
+                OS.memmove (offset, line.ptr, stride);
                 offset += stride;
             }
         }
         surfaceData = cast(cairo_surface_t*) OS.g_malloc(stride * height);
-        memmove(surfaceData, pixels, stride * height);
+        OS.memmove(surfaceData, pixels, stride * height);
         surface = Cairo.cairo_image_surface_create_for_data(cast(char*)surfaceData, Cairo.CAIRO_FORMAT_ARGB32, width, height, stride);
         OS.g_object_unref(pixbuf);
     } else {
@@ -868,7 +868,7 @@ public ImageData getImageData() {
     int stride = OS.gdk_pixbuf_get_rowstride(pixbuf);
     auto pixels = OS.gdk_pixbuf_get_pixels(pixbuf);
     byte[] srcData = new byte[stride * height];
-    memmove(srcData.ptr, pixels, srcData.length);
+    OS.memmove(srcData.ptr, pixels, srcData.length);
     OS.g_object_unref(pixbuf);
 
     PaletteData palette = new PaletteData(0xFF0000, 0xFF00, 0xFF);
@@ -881,9 +881,9 @@ public ImageData getImageData() {
         auto gdkImagePtr = OS.gdk_drawable_get_image(mask, 0, 0, width, height);
         if (gdkImagePtr is null) SWT.error(SWT.ERROR_NO_HANDLES);
         GdkImage* gdkImage = new GdkImage();
-        memmove(gdkImage, gdkImagePtr, GdkImage.sizeof );
+        OS.memmove(gdkImage, gdkImagePtr, GdkImage.sizeof );
         byte[] maskData = new byte[gdkImage.bpl * gdkImage.height];
-        memmove(maskData.ptr, gdkImage.mem, maskData.length);
+        OS.memmove(maskData.ptr, gdkImage.mem, maskData.length);
         OS.g_object_unref(gdkImagePtr);
         int maskPad;
         for (maskPad = 1; maskPad < 128; maskPad++) {
@@ -1016,7 +1016,7 @@ void init_(ImageData image) {
                 false, false);
         }
     }
-    memmove(data, buffer.ptr, stride * height);
+    OS.memmove(data, buffer.ptr, stride * height);
     auto pixmap = cast(GdkDrawable*) OS.gdk_pixmap_new (cast(GdkDrawable*) OS.GDK_ROOT_PARENT(), width, height, -1);
     if (pixmap is null) SWT.error(SWT.ERROR_NO_HANDLES);
     auto gdkGC = OS.gdk_gc_new(pixmap);

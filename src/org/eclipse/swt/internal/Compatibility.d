@@ -117,7 +117,7 @@ public static int ceil(int p, int q) {
  * @param child the file's name
  * @return true if the file exists
  */
-public static bool fileExists(String parent, String child) {
+public static bool fileExists(CString parent, CString child) {
     return (new File (parent, child)).exists();
 }
 
@@ -192,8 +192,8 @@ public static OutputStream newDeflaterOutputStream(OutputStream stream) {
  * @return a stream on the file if it could be opened.
  * @exception IOException
  */
-public static InputStream newFileInputStream(String filename) {
-    return new FileInputStream(filename);
+public static InputStream newFileInputStream(CString filename) {
+    return new FileInputStream(filename._idup());
 }
 
 /**
@@ -203,8 +203,8 @@ public static InputStream newFileInputStream(String filename) {
  * @return a stream on the file if it could be opened.
  * @exception IOException
  */
-public static OutputStream newFileOutputStream(String filename) {
-    return new FileOutputStream(filename);
+public static OutputStream newFileOutputStream(CString filename) {
+    return new FileOutputStream(filename._idup());
 }
 
 /**
@@ -272,7 +272,7 @@ public static bool isWhitespace(dchar c) {
  * @exception ProcessException
  *  if the program cannot be executed
  */
-public static void exec(String prog) {
+public static void exec(CString prog) {
     version(Tango){
         auto proc = new Process( prog );
         proc.execute;
@@ -293,7 +293,7 @@ public static void exec(String prog) {
  * @exception ProcessException
  *  if the program cannot be executed
  */
-public static void exec(String[] progArray) {
+public static void exec(CString[] progArray) {
     version(Tango){
         auto proc = new Process( progArray );
         proc.execute;
@@ -341,8 +341,8 @@ private static ResourceBundle msgs = null;
  *
  * @see SWT#getMessage(String)
  */
-public static String getMessage(String key) {
-    String answer = key;
+public static String getMessage(CString key) {
+    String answer = key._idup();
 
     if (key is null) {
         SWT.error (SWT.ERROR_NULL_ARGUMENT);
@@ -351,7 +351,7 @@ public static String getMessage(String key) {
         try {
             msgs = ResourceBundle.getBundle(SWTMessagesBundleData); //$NON-NLS-1$
         } catch (MissingResourceException ex) {
-            answer = key ~ " (no resource bundle)"; //$NON-NLS-1$
+            answer = cast(String)(key ~ " (no resource bundle)"); //$NON-NLS-1$
         }
     }
     if (msgs !is null) {
@@ -362,8 +362,8 @@ public static String getMessage(String key) {
     return answer;
 }
 
-public static String getMessage(String key, Object[] args) {
-    String answer = key;
+public static String getMessage(CString key, Object[] args) {
+    String answer = key._idup();
 
     if (key is null || args is null) {
         SWT.error (SWT.ERROR_NULL_ARGUMENT);
@@ -372,7 +372,7 @@ public static String getMessage(String key, Object[] args) {
         try {
             msgs = ResourceBundle.getBundle(SWTMessagesBundleData); //$NON-NLS-1$
         } catch (MissingResourceException ex) {
-            answer = key ~ " (no resource bundle)"; //$NON-NLS-1$
+            answer = cast(String)(key ~ " (no resource bundle)"); //$NON-NLS-1$
         }
     }
     if (msgs !is null) {
@@ -413,7 +413,7 @@ public static void interrupt() {
  * @param s2 string
  * @return true if the two instances of class String are equal
  */
-public static bool equalsIgnoreCase(String s1, String s2) {
+public static bool equalsIgnoreCase(CString s1, CString s2) {
     version(Tango){
         String s1b = new char[ s1.length ];
         String s2b = new char[ s1.length ];

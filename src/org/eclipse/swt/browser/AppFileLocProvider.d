@@ -19,6 +19,8 @@ import tango.text.Util;
 }
 
 import java.lang.all;
+import java.util.Vector;
+
 import org.eclipse.swt.browser.Mozilla;
 import org.eclipse.swt.browser.SimpleEnumerator;
 
@@ -68,7 +70,7 @@ nsrefcnt AddRef () {
 }
 
 extern(System)
-nsresult QueryInterface (cnsID* riid, void** ppvObject) {
+nsresult QueryInterface (in cnsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
 
     if (*riid == nsISupports.IID) {
@@ -116,19 +118,40 @@ void setProfilePath (String path) {
 /* nsIDirectoryServiceProvider2 */
 extern(System)
 nsresult GetFiles (char* prop, nsISimpleEnumerator* _retval) {
-    String propertyName = fromStringz(prop);
+    String propertyName = fromStringz(prop)._idup();
     String[] propertyValues = null;
 
     if (propertyName == XPCOM.NS_APP_PLUGINS_DIR_LIST) {
         if (pluginDirs is null) {
             int index = 0;
             /* set the first value(s) to the MOZ_PLUGIN_PATH environment variable value if it's defined */
-            String value = Environment.get (XPCOM.MOZILLA_PLUGIN_PATH);
+            version(Tango){
+                String value = Environment.get (XPCOM.MOZILLA_PLUGIN_PATH);
+            } else { // Phobos
+                implMissing(__FILE__, __LINE__);
+                String value;
+            }
             if (value !is null) {
                 if (value.length > 0) {
-                    String separator = System.getProperty ("file.separator"); // $NON-NLS-1$
-                    foreach (segment; delimiters(value, separator))
-                        pluginDirs ~= segment;
+                    String separator = System.getProperty ("path.separator"); // $NON-NLS-1$
+                    Vector segments = new Vector ();
+                    int start, end = -1;
+                    do {
+                        start = end + 1;
+                        end = value.indexOf (separator, start);
+                        String segment;
+                        if (end is -1) {
+                            segment = value.substring (start);
+                        } else {
+                            segment = value.substring (start, end);
+                        }
+                        if (segment.length () > 0) segments.addElement (stringcast(segment));
+                    } while (end !is -1);
+                    int segmentsSize = segments.size ();
+                    pluginDirs = new String [segmentsSize + 2];
+                    for (index = 0; index < segmentsSize; index++) {
+                        pluginDirs[index] = stringcast(segments.elementAt (index));
+                    }
                 }
             }
             if (pluginDirs is null) {
@@ -136,10 +159,10 @@ nsresult GetFiles (char* prop, nsISimpleEnumerator* _retval) {
             }
 
             /* set the next value to the GRE path + "plugins" */
-            pluginDirs ~= mozillaPath ~ PLUGINS_DIR;
+            pluginDirs[ index++ ] = mozillaPath ~ PLUGINS_DIR;
 
             /* set the next value to the home directory + "/.mozilla/plugins" */
-            pluginDirs ~= System.getProperty("user.home") ~ SEPARATOR_OS ~ USER_PLUGINS_DIR;
+            pluginDirs[ index++ ] = System.getProperty("user.home") ~ SEPARATOR_OS ~ USER_PLUGINS_DIR;
         }
         propertyValues = pluginDirs;
     }
@@ -185,7 +208,7 @@ nsresult GetFiles (char* prop, nsISimpleEnumerator* _retval) {
 /* nsIDirectoryServiceProvider implementation */
 extern(System)
 nsresult GetFile(char* prop, PRBool* persistent, nsIFile* _retval) {
-    String propertyName = tango.stdc.stringz.fromStringz( prop );
+    String propertyName = fromStringz( prop )._idup();
     String propertyValue = null;
 
     if (propertyName == (XPCOM.NS_APP_HISTORY_50_FILE)) {

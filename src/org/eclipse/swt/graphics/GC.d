@@ -410,7 +410,7 @@ void checkGC (int mask) {
         }
         if (dashes !is null) {
             if ((state & LINE_STYLE) !is 0) {
-                String dash_list = new char[dashes.length];
+                auto dash_list = new char[dashes.length];
                 for (int i = 0; i < dash_list.length; i++) {
                     dash_list[i] = cast(char)(width is 0 || data.lineStyle is SWT.LINE_CUSTOM ? dashes[i] : dashes[i] * width);
                 }
@@ -957,11 +957,11 @@ void drawImageAlpha(Image srcImage, int srcX, int srcY, int srcWidth, int srcHei
     byte[] alphaData = srcImage.alphaData;
     for (int y=0; y<srcHeight; y++) {
         int alphaIndex = (y + srcY) * imgWidth + srcX;
-        memmove(line.ptr, pixels + (y * stride), stride);
+        OS.memmove(line.ptr, pixels + (y * stride), stride);
         for (int x=3; x<stride; x+=4) {
             line[x] = alphaData is null ? alpha : alphaData[alphaIndex++];
         }
-        memmove(pixels + (y * stride), line.ptr, stride);
+        OS.memmove(pixels + (y * stride), line.ptr, stride);
     }
     if (srcWidth !is destWidth || srcHeight !is destHeight) {
         auto scaledPixbuf = OS.gdk_pixbuf_scale_simple(pixbuf, destWidth, destHeight, OS.GDK_INTERP_BILINEAR);
@@ -1006,15 +1006,15 @@ void drawImageMask(Image srcImage, int srcX, int srcY, int srcWidth, int srcHeig
                     byte[] maskLine = new byte[maskStride];
                     for (int y=0; y<srcHeight; y++) {
                         auto offset = pixels + (y * stride);
-                        memmove(line.ptr, offset, stride);
+                        OS.memmove(line.ptr, offset, stride);
                         auto maskOffset = maskPixels + (y * maskStride);
-                        memmove(maskLine.ptr, maskOffset, maskStride);
+                        OS.memmove(maskLine.ptr, maskOffset, maskStride);
                         for (int x=0; x<srcWidth; x++) {
                             if (maskLine[x * 3] is 0) {
                                 line[x*4+3] = 0;
                             }
                         }
-                        memmove(offset, line.ptr, stride);
+                        OS.memmove(offset, line.ptr, stride);
                     }
                     OS.g_object_unref(maskPixbuf);
                     auto scaledPixbuf = OS.gdk_pixbuf_scale_simple(pixbuf, destWidth, destHeight, OS.GDK_INTERP_BILINEAR);
@@ -1040,7 +1040,7 @@ void drawImageMask(Image srcImage, int srcX, int srcY, int srcWidth, int srcHeig
             int newWidth =  srcX + srcWidth;
             int newHeight = srcY + srcHeight;
             int bytesPerLine = (newWidth + 7) / 8;
-            String maskData = new char[bytesPerLine * newHeight];
+            auto maskData = new char[bytesPerLine * newHeight];
             auto mask = cast(GdkDrawable *) OS.gdk_bitmap_create_from_data(null, maskData.ptr, newWidth, newHeight);
             if (mask !is null) {
                 auto gc = OS.gdk_gc_new(mask);
@@ -3126,8 +3126,8 @@ static void setCairoFont(cairo_t* cairo, Font font) {
 static void setCairoFont(cairo_t* cairo, PangoFontDescription* font) {
     auto family = OS.pango_font_description_get_family(font);
     int len = /*OS.*/strlen(family);
-    String buffer = new char[len + 1];
-    memmove(buffer.ptr, family, len);
+    auto buffer = new char[len + 1];
+    OS.memmove(buffer.ptr, family, len);
     //TODO - convert font height from pango to cairo
     double height = OS.PANGO_PIXELS(OS.pango_font_description_get_size(font)) * 96 / 72;
     int pangoStyle = OS.pango_font_description_get_style(font);
@@ -3763,7 +3763,7 @@ void setString(String str, int flags) {
     if (str is data.str && (flags & ~SWT.DRAW_TRANSPARENT) is (data.drawFlags  & ~SWT.DRAW_TRANSPARENT)) {
         return;
     }
-    String buffer;
+    char[] buffer;
     int mnemonic, len = str.length ;
     auto layout = data.layout;
     char[] text = str.dup;

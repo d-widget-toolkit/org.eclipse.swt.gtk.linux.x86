@@ -14,7 +14,8 @@ module org.eclipse.swt.graphics.Path;
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.internal.Compatibility;
-import org.eclipse.swt.internal.cairo.Cairo;
+import org.eclipse.swt.internal.cairo.Cairo : Cairo;
+import org.eclipse.swt.internal.gtk.OS;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.graphics.Font;

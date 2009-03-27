@@ -11,20 +11,13 @@ const nsIID NS_ISUPPORTS_IID=
         { 0x00000000, 0x0000, 0x0000, 
           [ 0xc0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46 ] };
 
-version(D_Version2){
-    mixin("alias const(nsIID) cnsIID;");
-    mixin("alias const(nsID) cnsID;");
-} else { // D1
-    alias nsIID cnsIID;
-    alias nsID cnsID;
-}
 interface IUnknown
 {
     static const char[] IID_STR = NS_ISUPPORTS_IID_STR;
     static const nsIID IID = NS_ISUPPORTS_IID;
 
 extern(System):
-    nsresult QueryInterface( cnsIID* uuid, void **result);
+    nsresult QueryInterface( in nsIID* uuid, void **result);
 
     nsrefcnt AddRef();
     nsrefcnt Release();

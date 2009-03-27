@@ -38,10 +38,10 @@ extern(System) {
     align(4):
 
     struct GREVersionRange {
-        char    *lower;
-        int     lowerInclusive;
-        char    *upper;
-        int     upperInclusive;
+        CCharPtr    lower;
+        int         lowerInclusive;
+        CCharPtr    upper;
+        int         upperInclusive;
     }
 
     struct GREProperty {
@@ -55,5 +55,5 @@ const int PATH_MAX = 4096;
 extern(System):
 
 nsresult GRE_GetGREPathWithProperties(GREVersionRange *versions, PRUint32 versionsLength, GREProperty *properties, PRUint32 propertiesLength, char *buffer, PRUint32 buflen);
-nsresult XPCOMGlueStartup(char* xpcomFile);
+nsresult XPCOMGlueStartup(in char* xpcomFile);
 nsresult XPCOMGlueShutdown ();

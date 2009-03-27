@@ -18,10 +18,10 @@ interface nsIProperties : nsISupports {
   static const nsIID IID = NS_IPROPERTIES_IID;
 
 extern(System):
-  nsresult Get(char *prop, nsIID * iid, void * *result);
-  nsresult Set(char *prop, nsISupports value);
-  nsresult Has(char *prop, PRBool *_retval);
-  nsresult Undefine(char *prop);
+  nsresult Get(in char *prop, in nsIID * iid, void * *result);
+  nsresult Set(in char *prop, nsISupports value);
+  nsresult Has(in char *prop, PRBool *_retval);
+  nsresult Undefine(in char *prop);
   nsresult GetKeys(PRUint32 *count, char ***keys);
 
 }

@@ -18,7 +18,7 @@ interface nsIInterfaceRequestor : nsISupports {
   static const nsIID IID = NS_IINTERFACEREQUESTOR_IID;
 
 extern(System):
-  nsresult GetInterface(nsIID * uuid, void * *result);
+  nsresult GetInterface(in nsIID * uuid, void * *result);
 
 }
 

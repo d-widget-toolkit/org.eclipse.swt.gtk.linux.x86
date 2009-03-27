@@ -17,10 +17,10 @@ interface nsIServiceManager : nsISupports {
   static const nsIID IID = NS_ISERVICEMANAGER_IID;
 
 extern(System):
-  nsresult GetService(nsCID * aClass, nsIID * aIID, void * *result);
-  nsresult GetServiceByContractID( in char *aContractID, cnsIID * aIID, void * *result);
-  nsresult IsServiceInstantiated(nsCID * aClass, nsIID * aIID, PRBool *_retval);
-  nsresult IsServiceInstantiatedByContractID(char *aContractID, nsIID * aIID, PRBool *_retval);
+  nsresult GetService(in nsCID * aClass, in nsIID * aIID, void * *result);
+  nsresult GetServiceByContractID( in char *aContractID, in nsIID * aIID, void * *result);
+  nsresult IsServiceInstantiated(in nsCID * aClass, in nsIID * aIID, PRBool *_retval);
+  nsresult IsServiceInstantiatedByContractID(in char *aContractID, in nsIID * aIID, PRBool *_retval);
 
 }
 

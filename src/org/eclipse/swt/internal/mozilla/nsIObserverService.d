@@ -20,10 +20,10 @@ interface nsIObserverService : nsISupports {
   static const nsIID IID = NS_IOBSERVERSERVICE_IID;
 
 extern(System):
-  nsresult AddObserver(nsIObserver anObserver, char *aTopic, PRBool ownsWeak);
-  nsresult RemoveObserver(nsIObserver anObserver, char *aTopic);
-  nsresult NotifyObservers(nsISupports aSubject, char *aTopic, PRUnichar *someData);
-  nsresult EnumerateObservers(char *aTopic, nsISimpleEnumerator *_retval);
+  nsresult AddObserver(nsIObserver anObserver, in char *aTopic, PRBool ownsWeak);
+  nsresult RemoveObserver(nsIObserver anObserver, in char *aTopic);
+  nsresult NotifyObservers(nsISupports aSubject, in char *aTopic, PRUnichar *someData);
+  nsresult EnumerateObservers(in char *aTopic, nsISimpleEnumerator *_retval);
 
 }
 

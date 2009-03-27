@@ -24,23 +24,23 @@ interface nsIPrefBranch : nsISupports {
 
 extern(System):
   nsresult GetRoot(char * *aRoot);
-  nsresult GetPrefType(char *aPrefName, PRInt32 *_retval);
-  nsresult GetBoolPref(char *aPrefName, PRBool *_retval);
-  nsresult SetBoolPref(char *aPrefName, PRInt32 aValue);
-  nsresult GetCharPref(char *aPrefName, char **_retval);
-  nsresult SetCharPref(char *aPrefName, char *aValue);
-  nsresult GetIntPref(char *aPrefName, PRInt32 *_retval);
-  nsresult SetIntPref(char *aPrefName, PRInt32 aValue);
-  nsresult GetComplexValue(char *aPrefName, nsIID * aType, void * *aValue);
-  nsresult SetComplexValue(char *aPrefName, nsIID * aType, nsISupports aValue);
-  nsresult ClearUserPref(char *aPrefName);
-  nsresult LockPref(char *aPrefName);
-  nsresult PrefHasUserValue(char *aPrefName, PRBool *_retval);
-  nsresult PrefIsLocked(char *aPrefName, PRBool *_retval);
-  nsresult UnlockPref(char *aPrefName);
-  nsresult DeleteBranch(char *aStartingAt);
-  nsresult GetChildList(char *aStartingAt, PRUint32 *aCount, char ***aChildArray);
-  nsresult ResetBranch(char *aStartingAt);
+  nsresult GetPrefType(in char *aPrefName, PRInt32 *_retval);
+  nsresult GetBoolPref(in char *aPrefName, PRBool *_retval);
+  nsresult SetBoolPref(in char *aPrefName, PRInt32 aValue);
+  nsresult GetCharPref(in char *aPrefName, char **_retval);
+  nsresult SetCharPref(in char *aPrefName, in char *aValue);
+  nsresult GetIntPref(in char *aPrefName, PRInt32 *_retval);
+  nsresult SetIntPref(in char *aPrefName, PRInt32 aValue);
+  nsresult GetComplexValue(in char *aPrefName, in nsIID * aType, void * *aValue);
+  nsresult SetComplexValue(in char *aPrefName, in nsIID * aType, nsISupports aValue);
+  nsresult ClearUserPref(in char *aPrefName);
+  nsresult LockPref(in char *aPrefName);
+  nsresult PrefHasUserValue(in char *aPrefName, PRBool *_retval);
+  nsresult PrefIsLocked(in char *aPrefName, PRBool *_retval);
+  nsresult UnlockPref(in char *aPrefName);
+  nsresult DeleteBranch(in char *aStartingAt);
+  nsresult GetChildList(in char *aStartingAt, PRUint32 *aCount, char ***aChildArray);
+  nsresult ResetBranch(in char *aStartingAt);
 
 }
 

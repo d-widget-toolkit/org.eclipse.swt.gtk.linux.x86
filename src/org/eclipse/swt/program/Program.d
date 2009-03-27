@@ -173,7 +173,7 @@ struct GNOME {
         GList* function() gnome_vfs_get_registered_mime_types;
         char* function(char*) gnome_vfs_mime_type_from_name;
     }
-    Symbol symbols[] = [
+    static Symbol symbols[] = [
         { "gnome_vfs_mime_get_default_application", cast(void**)&gnome_vfs_mime_get_default_application },
         { "gnome_vfs_make_uri_from_input_with_dirs", cast(void**)&gnome_vfs_make_uri_from_input_with_dirs },
         { "gnome_vfs_mime_application_launch", cast(void**)&gnome_vfs_mime_application_launch },

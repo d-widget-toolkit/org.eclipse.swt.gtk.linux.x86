@@ -15,7 +15,7 @@ module org.eclipse.swt.graphics.TextLayout;
 import java.lang.all;
 
 import org.eclipse.swt.internal.Compatibility;
-import org.eclipse.swt.internal.cairo.Cairo;
+import org.eclipse.swt.internal.cairo.Cairo : Cairo;
 import org.eclipse.swt.internal.gtk.OS;
 import org.eclipse.swt.internal.Converter;
 import org.eclipse.swt.SWT;
@@ -176,7 +176,7 @@ void computeRuns () {
             lineIndex++;
         }
         segmentsText.getChars(oldPos, segementsLength, chars,  oldPos + lineIndex * 6);
-        String buffer = chars;// Converter.wcsToMbcs(null, chars, false);
+        auto buffer = chars;// Converter.wcsToMbcs(null, chars, false);
 
         OS.pango_layout_set_text (layout, buffer.ptr, buffer.length);
         ptr = OS.pango_layout_get_text(layout);
@@ -1587,7 +1587,7 @@ String getSegmentsText() {
         newChars[charCount + segmentCount .. charCount + segmentCount + separator.length ] = separator;
         segmentCount+=separator.length;
     }
-    return newChars[ 0 .. Math.min(charCount + segmentCount, newChars.length) ];
+    return cast(String)newChars[ 0 .. Math.min(charCount + segmentCount, newChars.length) ];
 }
 
 /**
@@ -2213,7 +2213,7 @@ int untranslateOffset(int offset) {
     return offset - invalidOffsets.length;
 }
 
-int validateOffset( String cont, int offset, int step) {
+int validateOffset( CString cont, int offset, int step) {
     if (invalidOffsets is null) return offset + step;
     int i = step > 0 ? 0 : invalidOffsets.length - 1;
     do {

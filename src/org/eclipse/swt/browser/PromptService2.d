@@ -13,8 +13,9 @@
 module org.eclipse.swt.browser.PromptService2;
 
 version(Tango){
-import tango.stdc.stdlib;
+    static import tango.stdc.stdlib;
 } else { // Phobos
+    static import std.c.stdlib;
 }
 
 import java.lang.all;
@@ -64,7 +65,7 @@ nsrefcnt AddRef () {
 }
 
 extern(System)
-nsresult QueryInterface (cnsID* riid, void** ppvObject) {
+nsresult QueryInterface (in cnsID* riid, void** ppvObject) {
     if (riid is null || ppvObject is null) return XPCOM.NS_ERROR_NO_INTERFACE;
  
     if (*riid == nsISupports.IID) {
@@ -163,7 +164,7 @@ String getLabel (int buttonFlag, int index, PRUnichar* buttonTitle) {
             auto span = XPCOM.strlen_PRUnichar (buttonTitle);
             //char[] dest = new char[length];
             //XPCOM.memmove (dest, buttonTitle, length * 2);
-            label = Utf.toString (buttonTitle[0 .. span]);
+            label = String_valueOf (buttonTitle[0 .. span]);
         }
     }
     return label;
@@ -178,12 +179,12 @@ nsresult Alert (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText)
     int span = XPCOM.strlen_PRUnichar (aDialogTitle);
     //char[] dest = new char[length];
     //XPCOM.memmove (dest, aDialogTitle, length * 2);
-    String titleLabel = Utf.toString (aDialogTitle[0 .. span]);
+    String titleLabel = String_valueOf (aDialogTitle[0 .. span]);
 
     span = XPCOM.strlen_PRUnichar (aText);
     //dest = new char[length];
     //XPCOM.memmove (dest, aText, length * 2);
-    String textLabel = Utf.toString (aText[0 .. span]);
+    String textLabel = String_valueOf (aText[0 .. span]);
 
     Shell shell = browser is null ? new Shell () : browser.getShell (); 
     MessageBox messageBox = new MessageBox (shell, SWT.OK | SWT.ICON_WARNING);
@@ -200,17 +201,17 @@ nsresult AlertCheck (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* a
     int span = XPCOM.strlen_PRUnichar (aDialogTitle);
     //char[] dest = new char[length];
     //XPCOM.memmove (dest, aDialogTitle, length * 2);
-    String titleLabel = Utf.toString (aDialogTitle[0 .. span]);
+    String titleLabel = String_valueOf (aDialogTitle[0 .. span]);
 
     span = XPCOM.strlen_PRUnichar (aText);
     //dest = new char[length];
     //XPCOM.memmove (dest, aText, length * 2);
-    String textLabel = Utf.toString (aText[0 .. span]);
+    String textLabel = String_valueOf (aText[0 .. span]);
 
     span = XPCOM.strlen_PRUnichar (aCheckMsg);
     //dest = new char[length];
     //XPCOM.memmove (dest, aCheckMsg, length * 2);
-    String checkLabel = Utf.toString (aCheckMsg[0..span]);
+    String checkLabel = String_valueOf (aCheckMsg[0..span]);
 
     Shell shell = browser is null ? new Shell () : browser.getShell ();
     PromptDialog dialog = new PromptDialog (shell);
@@ -233,12 +234,12 @@ nsresult Confirm (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aTex
     int span = XPCOM.strlen_PRUnichar (aDialogTitle);
     //char[] dest = new char[length];
     //XPCOM.memmove (dest, aDialogTitle, length * 2);
-    String titleLabel = Utf.toString (aDialogTitle[0 .. span]);
+    String titleLabel = String_valueOf (aDialogTitle[0 .. span]);
 
     span = XPCOM.strlen_PRUnichar (aText);
     //dest = new char[length];
     //XPCOM.memmove (dest, aText, length * 2);
-    String textLabel = Utf.toString (aText[0 .. span]);
+    String textLabel = String_valueOf (aText[0 .. span]);
 
     Shell shell = browser is null ? new Shell () : browser.getShell ();
     MessageBox messageBox = new MessageBox (shell, SWT.OK | SWT.CANCEL | SWT.ICON_QUESTION);
@@ -262,19 +263,19 @@ nsresult ConfirmEx (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aT
     int span = XPCOM.strlen_PRUnichar (aDialogTitle);
     //char[] dest = new char[length];
     //XPCOM.memmove (dest, aDialogTitle, length * 2);
-    String titleLabel = Utf.toString (aDialogTitle[0 .. span]);
+    String titleLabel = String_valueOf (aDialogTitle[0 .. span]);
 
     span = XPCOM.strlen_PRUnichar (aText);
     //dest = new char[length];
     //XPCOM.memmove (dest, aText, length * 2);
-    String textLabel = Utf.toString (aText[0 .. span]);
+    String textLabel = String_valueOf (aText[0 .. span]);
     
     String checkLabel = null;
     if (aCheckMsg !is null) {
         span = XPCOM.strlen_PRUnichar (aCheckMsg);
         //dest = new char[length];
         //XPCOM.memmove (dest, aCheckMsg, length * 2);
-        checkLabel = Utf.toString (aCheckMsg[0 .. span]);
+        checkLabel = String_valueOf (aCheckMsg[0 .. span]);
     }
     
     String button0Label = getLabel (aButtonFlags, nsIPromptService.BUTTON_POS_0, aButton0Title);
@@ -310,13 +311,13 @@ nsresult Prompt (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText
         span = XPCOM.strlen_PRUnichar (aDialogTitle);
         //dest = new char[length];
         //XPCOM.memmove (dest, aDialogTitle, length * 2);
-        titleLabel = Utf.toString (aDialogTitle[0 .. span]);
+        titleLabel = String_valueOf (aDialogTitle[0 .. span]);
     }
     
     span = XPCOM.strlen_PRUnichar (aText);
     //dest = new char[length];
     //XPCOM.memmove (dest, aText, length * 2);
-    textLabel = Utf.toString (aText[0 .. span]);
+    textLabel = String_valueOf (aText[0 .. span]);
     
     //int /*long*/[] valueAddr = new int /*long*/[1];
     //XPCOM.memmove (valueAddr, aValue, C.PTR_SIZEOF);
@@ -325,7 +326,7 @@ nsresult Prompt (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText
         span = XPCOM.strlen_PRUnichar (valueAddr[0]);
         //dest = new char[length];
         //XPCOM.memmove (dest, valueAddr[0], length * 2);
-        valueLabel = Utf.toString ((valueAddr[0])[0 .. span]);
+        valueLabel = String_valueOf ((valueAddr[0])[0 .. span]);
     }
     
     if (aCheckMsg !is null) {
@@ -333,7 +334,7 @@ nsresult Prompt (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText
         if (span > 0) {
             //dest = new char[length];
             //XPCOM.memmove (dest, aCheckMsg, length * 2);
-            checkLabel = Utf.toString (aCheckMsg[0 .. span]);
+            checkLabel = String_valueOf (aCheckMsg[0 .. span]);
         }
     }
 
@@ -350,15 +351,19 @@ nsresult Prompt (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText
         */
         int size;
         void* ptr;
-        wchar[] buffer;
+        String16 buffer;
         nsIServiceManager serviceManager;
         if (valueLabel !is null) {
             //cnt = valueLabel.length;
             //buffer = new wchar[cnt + 1];
             //valueLabel.getChars (0, cnt, buffer, 0);
-            buffer = toWCharArray(valueLabel);
+            buffer = valueLabel.toWCharArray();
             size = buffer.length * 2;
-            ptr = tango.stdc.stdlib.malloc (size);
+            version(Tango){
+                ptr = tango.stdc.stdlib.malloc (size);
+            } else { // Phobos
+                ptr = std.c.stdlib.malloc (size);
+            }
             (cast(wchar*)ptr)[0 .. buffer.length] = buffer[0 .. $];
             //XPCOM.memmove (ptr, buffer, size);
             //XPCOM.memmove (aValue, new int /*long*/[] {ptr}, C.PTR_SIZEOF);
@@ -404,7 +409,7 @@ nsresult PromptAuth(nsIDOMWindow aParent, nsIChannel aChannel, PRUint32 level, n
         //int span = XPCOM.strlen_PRUnichar (checkboxLabel);
         //char[] dest = new char[length];
         //XPCOM.memmove (dest, checkboxLabel, length * 2);
-        checkLabel = Utf.toString (fromString16z(checkboxLabel));
+        checkLabel = String_valueOf (fromString16z(checkboxLabel));
         checkValue = *checkboxValue; /* PRBool */
     }
 
@@ -505,7 +510,7 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
         //span = XPCOM.strlen_PRUnichar (aDialogTitle);
         //dest = new char[length];
         //XPCOM.memmove (dest, aDialogTitle, length * 2);
-        titleLabel = Utf.toString (fromString16z(aDialogTitle));
+        titleLabel = String_valueOf (fromString16z(aDialogTitle));
     } else {
         //titleLabel = SWT.getMessage ("SWT_Authentication_Required");    //$NON-NLS-1$
         titleLabel = "Authentication Required";
@@ -514,7 +519,7 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
     //span = XPCOM.strlen_PRUnichar (aText);
     //dest = new char[length];
     //XPCOM.memmove (dest, aText, length * 2);
-    textLabel = Utf.toString (fromString16z(aText));
+    textLabel = String_valueOf (fromString16z(aText));
     
     //int /*long*/[] userAddr = new int /*long*/[1];
     //XPCOM.memmove (userAddr, aUsername, C.PTR_SIZEOF);
@@ -523,7 +528,7 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
             //span = XPCOM.strlen_PRUnichar (userAddr[0]);
             //dest = new char[length];
             //XPCOM.memmove (dest, userAddr[0], length * 2);
-            userLabel = Utf.toString(fromString16z(*aUsername));       
+            userLabel = String_valueOf(fromString16z(*aUsername));       
     }
     
     //int /*long*/[] passAddr = new int /*long*/[1];
@@ -533,7 +538,7 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
             //span = XPCOM.strlen_PRUnichar (passAddr[0]);
             //dest = new char[length];
             //XPCOM.memmove (dest, passAddr[0], length * 2);
-            passLabel = Utf.toString(fromString16z(*aPassword));       
+            passLabel = String_valueOf(fromString16z(*aPassword));       
     }
     
     if (aCheckMsg !is null) {
@@ -541,7 +546,7 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
         //if (span > 0) {
             //dest = new char[length];
             //XPCOM.memmove (dest, aCheckMsg, length * 2);
-        checkLabel = Utf.toString (fromString16z(aCheckMsg));
+        checkLabel = String_valueOf (fromString16z(aCheckMsg));
         //}
     }
 
