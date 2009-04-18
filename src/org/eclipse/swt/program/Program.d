@@ -231,7 +231,7 @@ this() {
 /* Determine the desktop for the given display. */
 static int getDesktop(Display display) {
     if (display is null) return DESKTOP_UNKNOWN;
-    ValueWrapperInt desktopValue = cast(ValueWrapperInt)display.getData(DESKTOP_DATA);
+    Integer desktopValue = cast(Integer)display.getData(DESKTOP_DATA);
     if (desktopValue !is null) return desktopValue.value;
     int desktop = DESKTOP_UNKNOWN;
 
@@ -263,12 +263,12 @@ static int getDesktop(Display display) {
         if (gnome !is OS.None && (OS.GTK_VERSION >= OS.buildVERSION (2, 2, 0)) && gnome_init()) {
             desktop = DESKTOP_GNOME;
             int icon_theme = cast(int)GNOME.gnome_icon_theme_new();
-            display.setData(ICON_THEME_DATA, new ValueWrapperInt(icon_theme));
+            display.setData(ICON_THEME_DATA, new Integer(icon_theme));
             display.addListener(SWT.Dispose, new class(display) Listener {
                 Display display;
                 this( Display display ){ this.display = display; }
                 public void handleEvent(Event event) {
-                    ValueWrapperInt gnomeIconTheme = cast(ValueWrapperInt)display.getData(ICON_THEME_DATA);
+                    Integer gnomeIconTheme = cast(Integer)display.getData(ICON_THEME_DATA);
                     if (gnomeIconTheme is null) return;
                     display.setData(ICON_THEME_DATA, null);
                     /*
@@ -306,7 +306,7 @@ static int getDesktop(Display display) {
     }
 +/
 
-    display.setData(DESKTOP_DATA, new ValueWrapperInt(desktop));
+    display.setData(DESKTOP_DATA, new Integer(desktop));
     return desktop;
 }
 
@@ -688,7 +688,7 @@ static Program gnome_getProgram(Display display, String mimeType) {
         program.gnomeExpectUri = application.expects_uris is GNOME.GNOME_VFS_MIME_APPLICATION_ARGUMENT_TYPE_URIS;
 
         buffer = (fromStringz( application.id) ~ '\0')._idup();
-        ValueWrapperInt gnomeIconTheme = cast(ValueWrapperInt)display.getData(ICON_THEME_DATA);
+        Integer gnomeIconTheme = cast(Integer)display.getData(ICON_THEME_DATA);
         char* icon_name = GNOME.gnome_icon_lookup( cast(GtkIconTheme*) gnomeIconTheme.value, null, null, cast(char*)buffer.ptr, null, mimeTypeBuffer,
                 GNOME.GNOME_ICON_LOOKUP_FLAGS_NONE, null);
         char* path = null;
