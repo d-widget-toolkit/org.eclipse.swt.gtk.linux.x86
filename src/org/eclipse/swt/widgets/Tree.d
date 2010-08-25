@@ -277,7 +277,7 @@ override void cellDataProc (
             customDraw = column.customDraw;
         }
     }
-    if (modelIndex is -1) return 0;
+    if (modelIndex is -1) return;
     bool setData = false;
     if ((style & SWT.VIRTUAL) !is 0) {
         /*
@@ -300,7 +300,7 @@ override void cellDataProc (
                 if (imageList !is null && imageList.pixbufs.length > 0) {
                     if (isPixbuf) OS.g_object_set1 (cell, OS.pixbuf.ptr, cast(int)imageList.pixbufs [0]);
                 }
-                return 0;
+                return;
             }
         }
         if (!item.cached) {
@@ -1990,7 +1990,7 @@ override int gtk_popup_menu (GtkWidget* widget) {
 }
 
 override void gtk_row_activated (GtkTreeView* tree, GtkTreePath* path, GtkTreeViewColumn* column) {
-    if (path is null) return 0;
+    if (path is null) return;
     TreeItem item = null;
     GtkTreeIter iter;
     if (OS.gtk_tree_model_get_iter (modelHandle, &iter, path)) {
@@ -2001,7 +2001,7 @@ override void gtk_row_activated (GtkTreeView* tree, GtkTreePath* path, GtkTreeVi
     Event event = new Event ();
     event.item = item;
     postEvent (SWT.DefaultSelection, event);
-    return 0;
+    return;
 }
 
 override int gtk_test_collapse_row (
@@ -2675,7 +2675,7 @@ override void rendererRenderProc (
             }
         }
     }
-    return result;
+    //return result;
 }
 
 void resetCustomDraw () {
@@ -3330,7 +3330,6 @@ override void treeSelectionProc (
         OS.gtk_tree_model_get1 (modelHandle, iter, ID_COLUMN, cast(void**)&index);
         selection [length_] = index;
     }
-    return 0;
 }
 
 override void updateScrollBarValue (ScrollBar bar) {

@@ -236,7 +236,7 @@ override void cellDataProc (
             customDraw = column.customDraw;
         }
     }
-    if (modelIndex is -1) return 0;
+    if (modelIndex is -1) return;
     bool setData = false;
     if ((style & SWT.VIRTUAL) !is 0) {
         /*
@@ -259,7 +259,7 @@ override void cellDataProc (
                 if (imageList !is null && imageList.pixbufs.length > 0) {
                     if (isPixbuf) OS.g_object_set1 (cell, OS.pixbuf.ptr, cast(int)imageList.pixbufs [0] );
                 }
-                return 0;
+                return;
             }
         }
         if (!item.cached) {

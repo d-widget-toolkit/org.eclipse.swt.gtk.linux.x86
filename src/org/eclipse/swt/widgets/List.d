@@ -1558,7 +1558,6 @@ override void treeSelectionProc (GtkTreeModel *model, GtkTreePath *path, GtkTree
             selection [length_] = indices[0];
         }
     }
-    return 0;
 }
 
 }

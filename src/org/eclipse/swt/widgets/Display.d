@@ -1241,11 +1241,10 @@ void eventProcMeth (GdkEvent* event) {
     }
     if (!dispatch) {
         addGdkEvent (OS.gdk_event_copy (event));
-        return 0;
+        return;
     }
     OS.gtk_main_do_event (event);
     if (dispatchEvents is null) putGdkEvents ();
-    return 0;
 }
 
 /**
@@ -2805,7 +2804,7 @@ private static extern(C) void menuPositionProcFunc (GtkMenu* menu, int* x, int* 
 
 void menuPositionProc (GtkMenu* menu, int* x, int* y, int* push_in, void* user_data) {
     Widget widget = getWidget (cast(GtkWidget*)menu);
-    if (widget is null) return 0;
+    if (widget is null) return;
     widget.menuPositionProc (menu, x, y, push_in, user_data);
 }
 
@@ -3553,7 +3552,7 @@ public void setData (String key, Object value) {
         auto wrap = cast(ArrayWrapperObject) value;
         if( wrap is null ) SWT.error(SWT.ERROR_INVALID_ARGUMENT, null, " []");
         Object [] data = wrap.array;
-        auto handle = (cast(LONG) data [0]).value;
+        auto handle = (cast(LONG) data [0]).intValue;
         Widget widget = cast(Widget) data [1];
         if (widget !is null) {
             addWidget (cast(GtkWidget*)handle, widget);
@@ -3954,7 +3953,7 @@ private static extern(C) void sizeAllocateProcFunc (GtkWidget* handle, int /*lon
 
 void sizeAllocateProc (GtkWidget* handle, int /*long*/ arg0, int /*long*/ user_data) {
     Widget widget = getWidget ( cast(GtkWidget*)user_data);
-    if (widget is null) return 0;
+    if (widget is null) return;
     widget.sizeAllocateProc (handle, arg0, user_data);
 }
 
@@ -3991,7 +3990,7 @@ private static extern(C) void  treeSelectionProcFunc (GtkTreeModel *model, GtkTr
 
 void treeSelectionProcMeth (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter *iter, void* data) {
     Widget widget = getWidget (cast(GtkWidget*)data);
-    if (widget is null) return 0;
+    if (widget is null) return;
     widget.treeSelectionProc (model, path, iter, treeSelection, treeSelectionLength++);
 }
 

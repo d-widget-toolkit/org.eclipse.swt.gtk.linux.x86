@@ -157,7 +157,7 @@ class AccessibleObject {
         auto atkObject = cast(AtkObject*)obj;
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkComponent_get_extents");
         AccessibleObject object = getAccessibleObject (atkObject);
-        if (object is null) return 0;
+        if (object is null) return;
         *x = 0;
         *y = 0;
         *width = 0;
@@ -169,7 +169,7 @@ class AccessibleObject {
             }
         }
         AccessibleControlListener[] listeners = object.getControlListeners ();
-        if (listeners.length is 0) return 0;
+        if (listeners.length is 0) return;
 
         int parentX = *x, parentY = *y;
         int parentWidth = *width, parentHeight = *height;
@@ -211,7 +211,7 @@ class AccessibleObject {
         auto atkObject = cast(AtkObject*)obj;
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkComponent_get_position, object: {} x:{} y:{} coord:{}", atkObject, x, y, coord_type);
         AccessibleObject object = getAccessibleObject (atkObject);
-        if (object is null) return 0;
+        if (object is null) return;
         *x=0;
         *y=0;
         if (ATK.g_type_is_a (object.parentType, ATK_COMPONENT_TYPE)) {
@@ -221,7 +221,7 @@ class AccessibleObject {
             }
         }
         AccessibleControlListener[] listeners = object.getControlListeners ();
-        if (listeners.length is 0) return 0;
+        if (listeners.length is 0) return;
 
         int parentX, parentY;
         parentX = *x;
@@ -263,7 +263,7 @@ class AccessibleObject {
         auto atkObject = cast(AtkObject*)obj;
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkComponent_get_size");
         AccessibleObject object = getAccessibleObject (atkObject);
-        if (object is null) return 0;
+        if (object is null) return;
         *width=0;
         *height=0;
         if (ATK.g_type_is_a (object.parentType, ATK_COMPONENT_TYPE)) {
@@ -274,7 +274,7 @@ class AccessibleObject {
             }
         }
         AccessibleControlListener[] listeners = object.getControlListeners ();
-        if (listeners.length is 0) return 0;
+        if (listeners.length is 0) return;
 
         int parentWidth, parentHeight;
         parentWidth= *width;

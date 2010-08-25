@@ -699,7 +699,7 @@ private static extern(C) void logFunction (char* log_domain, int log_level, char
         }
         OS.g_log_default_handler (log_domain, log_level, message, user_data);
     }
-    return 0;
+    return;
 }
 
 void new_Object (Object object) {

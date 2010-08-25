@@ -119,7 +119,7 @@ private static extern(C) void getFuncFunc(
  * This function provides the data to the clipboard on request.
  * When this clipboard is disposed, the data will no longer be available.
  */
-void getFunc(
+int getFunc(
     GtkClipboard *clipboard,
     GtkSelectionData *selectionData,
     uint info)
