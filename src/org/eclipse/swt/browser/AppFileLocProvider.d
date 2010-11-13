@@ -103,7 +103,7 @@ void setProfilePath (String path) {
     profilePath = path;
     if (!Compatibility.fileExists (path, "")) { //$NON-NLS-1$
         nsILocalFile file;
-        scope auto nsEmbedString pathString = new nsEmbedString (toWCharArray(path));
+        scope nsEmbedString pathString = new nsEmbedString (toWCharArray(path));
         int rc = XPCOM.NS_NewLocalFile (cast(nsAString*)pathString, 1, &file);
         if (rc !is XPCOM.NS_OK) Mozilla.error (rc);
         if (file is null) Mozilla.error (XPCOM.NS_ERROR_NULL_POINTER);
