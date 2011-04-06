@@ -19,7 +19,8 @@ version(Tango){
     import tango.core.sync.Condition;
     import tango.core.sync.Mutex;
 } else { // Phobos
-    alias Object Mutex; // FIXME, real mutex is needed
+    import core.sync.condition;
+    import core.sync.mutex;
 }
 
 /**
@@ -34,18 +35,11 @@ class RunnableLock : Mutex {
     Thread thread;
     Exception throwable;
 
-    version(Tango){
-        Condition cond;
-    } else { // Phobos
-    }
+    Condition cond;
 
 this (Runnable runnable) {
     this.runnable = runnable;
-    version(Tango){
-        this.cond = new Condition(this);
-    } else { // Phobos
-        implMissing(__FILE__, __LINE__);
-    }
+    this.cond = new Condition(this);
 }
 
 bool done () {
@@ -58,18 +52,10 @@ void run () {
 }
 
 void notifyAll(){
-    version(Tango){
-        cond.notifyAll();
-    } else { // Phobos
-        implMissing(__FILE__, __LINE__);
-    }
+    cond.notifyAll();
 }
 void wait(){
-    version(Tango){
-        cond.wait();
-    } else { // Phobos
-        implMissing(__FILE__, __LINE__);
-    }
+    cond.wait();
 }
 
 }

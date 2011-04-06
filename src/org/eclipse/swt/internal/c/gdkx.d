@@ -95,7 +95,8 @@ alias int function(void *, void *) _BCD_func__7352;
 alias int function(void *, void *, void *) _BCD_func__7353;
 alias int function(void *, void *) _BCD_func__7354;
 version(DYNLINK){
-extern (C) char * function(_GdkFont *)gdk_x11_font_get_name;
+mixin(gshared!(
+"extern (C) char * function(_GdkFont *)gdk_x11_font_get_name;
 extern (C) void * function(_GdkFont *)gdk_x11_font_get_xdisplay;
 extern (C) void * function(_GdkFont *)gdk_x11_font_get_xfont;
 extern (C) void function(void *, int, int)gdk_x11_register_standard_event_type;
@@ -144,61 +145,64 @@ extern (C) _XImage * function(_GdkImage *)gdk_x11_image_get_ximage;
 extern (C) void * function(_GdkImage *)gdk_x11_image_get_xdisplay;
 extern (C) uint function(_GdkDrawable *)gdk_x11_drawable_get_xid;
 extern (C) void * function(_GdkDrawable *)gdk_x11_drawable_get_xdisplay;
-extern (C) extern void ** gdk_display;
+extern (C) extern void ** gdk_display;"
+));
 
-
-Symbol[] symbols = [
-    { "gdk_x11_font_get_name",  cast(void**)& gdk_x11_font_get_name},
-    { "gdk_x11_font_get_xdisplay",  cast(void**)& gdk_x11_font_get_xdisplay},
-    { "gdk_x11_font_get_xfont",  cast(void**)& gdk_x11_font_get_xfont},
-    { "gdk_x11_register_standard_event_type",  cast(void**)& gdk_x11_register_standard_event_type},
-    { "gdk_x11_display_ungrab",  cast(void**)& gdk_x11_display_ungrab},
-    { "gdk_x11_display_grab",  cast(void**)& gdk_x11_display_grab},
-    { "gdk_x11_get_xatom_name",  cast(void**)& gdk_x11_get_xatom_name},
-    { "gdk_x11_get_xatom_by_name",  cast(void**)& gdk_x11_get_xatom_by_name},
-    { "gdk_x11_xatom_to_atom",  cast(void**)& gdk_x11_xatom_to_atom},
-    { "gdk_x11_atom_to_xatom",  cast(void**)& gdk_x11_atom_to_xatom},
-    { "gdk_x11_get_xatom_name_for_display",  cast(void**)& gdk_x11_get_xatom_name_for_display},
-    { "gdk_x11_get_xatom_by_name_for_display",  cast(void**)& gdk_x11_get_xatom_by_name_for_display},
-    { "gdk_x11_xatom_to_atom_for_display",  cast(void**)& gdk_x11_xatom_to_atom_for_display},
-    { "gdk_x11_atom_to_xatom_for_display",  cast(void**)& gdk_x11_atom_to_xatom_for_display},
-    { "gdk_x11_lookup_xdisplay",  cast(void**)& gdk_x11_lookup_xdisplay},
-    { "gdk_x11_ungrab_server",  cast(void**)& gdk_x11_ungrab_server},
-    { "gdk_x11_grab_server",  cast(void**)& gdk_x11_grab_server},
-    { "gdk_net_wm_supports",  cast(void**)& gdk_net_wm_supports},
-    { "gdk_xid_table_lookup",  cast(void**)& gdk_xid_table_lookup},
-    { "gdk_x11_screen_supports_net_wm_hint",  cast(void**)& gdk_x11_screen_supports_net_wm_hint},
-    { "gdk_x11_display_broadcast_startup_message",  cast(void**)& gdk_x11_display_broadcast_startup_message},
-    { "gdk_x11_display_set_cursor_theme",  cast(void**)& gdk_x11_display_set_cursor_theme},
-    { "gdk_x11_display_get_startup_notification_id",  cast(void**)& gdk_x11_display_get_startup_notification_id},
-    { "gdk_x11_display_get_user_time",  cast(void**)& gdk_x11_display_get_user_time},
-    { "gdk_x11_get_server_time",  cast(void**)& gdk_x11_get_server_time},
-    { "gdk_xid_table_lookup_for_display",  cast(void**)& gdk_xid_table_lookup_for_display},
-    { "gdk_x11_colormap_foreign_new",  cast(void**)& gdk_x11_colormap_foreign_new},
-    { "gdkx_visual_get",  cast(void**)& gdkx_visual_get},
-    { "gdk_x11_screen_lookup_visual",  cast(void**)& gdk_x11_screen_lookup_visual},
-    { "gdk_x11_get_default_screen",  cast(void**)& gdk_x11_get_default_screen},
-    { "gdk_x11_get_default_xdisplay",  cast(void**)& gdk_x11_get_default_xdisplay},
-    { "gdk_x11_get_default_root_xwindow",  cast(void**)& gdk_x11_get_default_root_xwindow},
-    { "gdk_x11_screen_get_window_manager_name",  cast(void**)& gdk_x11_screen_get_window_manager_name},
-    { "gdk_x11_window_move_to_current_desktop",  cast(void**)& gdk_x11_window_move_to_current_desktop},
-    { "gdk_x11_window_set_user_time",  cast(void**)& gdk_x11_window_set_user_time},
-    { "gdk_x11_screen_get_screen_number",  cast(void**)& gdk_x11_screen_get_screen_number},
-    { "gdk_x11_screen_get_xscreen",  cast(void**)& gdk_x11_screen_get_xscreen},
-    { "gdk_x11_gc_get_xgc",  cast(void**)& gdk_x11_gc_get_xgc},
-    { "gdk_x11_gc_get_xdisplay",  cast(void**)& gdk_x11_gc_get_xdisplay},
-    { "gdk_x11_visual_get_xvisual",  cast(void**)& gdk_x11_visual_get_xvisual},
-    { "gdk_x11_display_get_xdisplay",  cast(void**)& gdk_x11_display_get_xdisplay},
-    { "gdk_x11_cursor_get_xcursor",  cast(void**)& gdk_x11_cursor_get_xcursor},
-    { "gdk_x11_cursor_get_xdisplay",  cast(void**)& gdk_x11_cursor_get_xdisplay},
-    { "gdk_x11_colormap_get_xcolormap",  cast(void**)& gdk_x11_colormap_get_xcolormap},
-    { "gdk_x11_colormap_get_xdisplay",  cast(void**)& gdk_x11_colormap_get_xdisplay},
-    { "gdk_x11_image_get_ximage",  cast(void**)& gdk_x11_image_get_ximage},
-    { "gdk_x11_image_get_xdisplay",  cast(void**)& gdk_x11_image_get_xdisplay},
-    { "gdk_x11_drawable_get_xid",  cast(void**)& gdk_x11_drawable_get_xid},
-    { "gdk_x11_drawable_get_xdisplay",  cast(void**)& gdk_x11_drawable_get_xdisplay},
-    { "gdk_display",  cast(void**)& gdk_display},
-];
+Symbol[] symbols;
+static this () {
+    symbols = [
+        Symbol("gdk_x11_font_get_name",  cast(void**)& gdk_x11_font_get_name),
+        Symbol("gdk_x11_font_get_xdisplay",  cast(void**)& gdk_x11_font_get_xdisplay),
+        Symbol("gdk_x11_font_get_xfont",  cast(void**)& gdk_x11_font_get_xfont),
+        Symbol("gdk_x11_register_standard_event_type",  cast(void**)& gdk_x11_register_standard_event_type),
+        Symbol("gdk_x11_display_ungrab",  cast(void**)& gdk_x11_display_ungrab),
+        Symbol("gdk_x11_display_grab",  cast(void**)& gdk_x11_display_grab),
+        Symbol("gdk_x11_get_xatom_name",  cast(void**)& gdk_x11_get_xatom_name),
+        Symbol("gdk_x11_get_xatom_by_name",  cast(void**)& gdk_x11_get_xatom_by_name),
+        Symbol("gdk_x11_xatom_to_atom",  cast(void**)& gdk_x11_xatom_to_atom),
+        Symbol("gdk_x11_atom_to_xatom",  cast(void**)& gdk_x11_atom_to_xatom),
+        Symbol("gdk_x11_get_xatom_name_for_display",  cast(void**)& gdk_x11_get_xatom_name_for_display),
+        Symbol("gdk_x11_get_xatom_by_name_for_display",  cast(void**)& gdk_x11_get_xatom_by_name_for_display),
+        Symbol("gdk_x11_xatom_to_atom_for_display",  cast(void**)& gdk_x11_xatom_to_atom_for_display),
+        Symbol("gdk_x11_atom_to_xatom_for_display",  cast(void**)& gdk_x11_atom_to_xatom_for_display),
+        Symbol("gdk_x11_lookup_xdisplay",  cast(void**)& gdk_x11_lookup_xdisplay),
+        Symbol("gdk_x11_ungrab_server",  cast(void**)& gdk_x11_ungrab_server),
+        Symbol("gdk_x11_grab_server",  cast(void**)& gdk_x11_grab_server),
+        Symbol("gdk_net_wm_supports",  cast(void**)& gdk_net_wm_supports),
+        Symbol("gdk_xid_table_lookup",  cast(void**)& gdk_xid_table_lookup),
+        Symbol("gdk_x11_screen_supports_net_wm_hint",  cast(void**)& gdk_x11_screen_supports_net_wm_hint),
+        Symbol("gdk_x11_display_broadcast_startup_message",  cast(void**)& gdk_x11_display_broadcast_startup_message),
+        Symbol("gdk_x11_display_set_cursor_theme",  cast(void**)& gdk_x11_display_set_cursor_theme),
+        Symbol("gdk_x11_display_get_startup_notification_id",  cast(void**)& gdk_x11_display_get_startup_notification_id),
+        Symbol("gdk_x11_display_get_user_time",  cast(void**)& gdk_x11_display_get_user_time),
+        Symbol("gdk_x11_get_server_time",  cast(void**)& gdk_x11_get_server_time),
+        Symbol("gdk_xid_table_lookup_for_display",  cast(void**)& gdk_xid_table_lookup_for_display),
+        Symbol("gdk_x11_colormap_foreign_new",  cast(void**)& gdk_x11_colormap_foreign_new),
+        Symbol("gdkx_visual_get",  cast(void**)& gdkx_visual_get),
+        Symbol("gdk_x11_screen_lookup_visual",  cast(void**)& gdk_x11_screen_lookup_visual),
+        Symbol("gdk_x11_get_default_screen",  cast(void**)& gdk_x11_get_default_screen),
+        Symbol("gdk_x11_get_default_xdisplay",  cast(void**)& gdk_x11_get_default_xdisplay),
+        Symbol("gdk_x11_get_default_root_xwindow",  cast(void**)& gdk_x11_get_default_root_xwindow),
+        Symbol("gdk_x11_screen_get_window_manager_name",  cast(void**)& gdk_x11_screen_get_window_manager_name),
+        Symbol("gdk_x11_window_move_to_current_desktop",  cast(void**)& gdk_x11_window_move_to_current_desktop),
+        Symbol("gdk_x11_window_set_user_time",  cast(void**)& gdk_x11_window_set_user_time),
+        Symbol("gdk_x11_screen_get_screen_number",  cast(void**)& gdk_x11_screen_get_screen_number),
+        Symbol("gdk_x11_screen_get_xscreen",  cast(void**)& gdk_x11_screen_get_xscreen),
+        Symbol("gdk_x11_gc_get_xgc",  cast(void**)& gdk_x11_gc_get_xgc),
+        Symbol("gdk_x11_gc_get_xdisplay",  cast(void**)& gdk_x11_gc_get_xdisplay),
+        Symbol("gdk_x11_visual_get_xvisual",  cast(void**)& gdk_x11_visual_get_xvisual),
+        Symbol("gdk_x11_display_get_xdisplay",  cast(void**)& gdk_x11_display_get_xdisplay),
+        Symbol("gdk_x11_cursor_get_xcursor",  cast(void**)& gdk_x11_cursor_get_xcursor),
+        Symbol("gdk_x11_cursor_get_xdisplay",  cast(void**)& gdk_x11_cursor_get_xdisplay),
+        Symbol("gdk_x11_colormap_get_xcolormap",  cast(void**)& gdk_x11_colormap_get_xcolormap),
+        Symbol("gdk_x11_colormap_get_xdisplay",  cast(void**)& gdk_x11_colormap_get_xdisplay),
+        Symbol("gdk_x11_image_get_ximage",  cast(void**)& gdk_x11_image_get_ximage),
+        Symbol("gdk_x11_image_get_xdisplay",  cast(void**)& gdk_x11_image_get_xdisplay),
+        Symbol("gdk_x11_drawable_get_xid",  cast(void**)& gdk_x11_drawable_get_xid),
+        Symbol("gdk_x11_drawable_get_xdisplay",  cast(void**)& gdk_x11_drawable_get_xdisplay),
+        Symbol("gdk_display",  cast(void**)& gdk_display),
+    ];
+}
 
 } else { // version(DYNLINK)
 extern (C) char * gdk_x11_font_get_name(_GdkFont *);
@@ -250,5 +254,5 @@ extern (C) _XImage * gdk_x11_image_get_ximage(_GdkImage *);
 extern (C) void * gdk_x11_image_get_xdisplay(_GdkImage *);
 extern (C) uint gdk_x11_drawable_get_xid(_GdkDrawable *);
 extern (C) void * gdk_x11_drawable_get_xdisplay(_GdkDrawable *);
-extern (C) extern void * gdk_display;
+mixin(gshared!("extern (C) extern void * gdk_display;"));
 } // version(DYNLINK)

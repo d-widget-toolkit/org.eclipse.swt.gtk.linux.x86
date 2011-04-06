@@ -9,42 +9,12 @@ import java.lang.all;
 version=DYNLINK;
 
 version(DYNLINK){
-    version(Tango){
-        import tango.sys.SharedLib : SharedLib;
-    } else { // Phobos
-    }
-    struct Symbol{
-        String name;
-        void** symbol;
-    }
+    import java.nonstandard.SharedLib;
 }
 
 void loadLib(){
     version(DYNLINK){
-        version(Tango){
-            String libname = "libgtk-x11-2.0.so";
-
-            SharedLib lib = SharedLib.load( libname );
-            if( lib is null ){
-                lib = SharedLib.load( libname ~ ".0" );
-            }
-
-            if ( lib !is null ) {
-                foreach( inout s; symbols ){
-                    try{
-                        *s.symbol = lib.getSymbol( s.name.ptr );
-                    }
-                    catch(Exception e){}
-                    if( *s.symbol is null ){
-                        getDwtLogger().trace( __FILE__, __LINE__,  "{}: Symbol '{}' not found", libname, s.name );
-                    }
-                }
-            } else {
-                getDwtLogger().trace( __FILE__, __LINE__,  "Could not load the library {}", libname );
-            }
-        } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
-        }
+        SharedLib.loadLibSymbols(symbols, "libgtk-x11-2.0.so");
     }
 }
 
@@ -238,7 +208,8 @@ _GtkDialog parent_instance;
 void * priv;
 }
 version(DYNLINK){
-alias extern (C) void function(_GtkPrintUnixDialog *, int) TGTKgtk_print_unix_dialog_set_manual_capabilities; extern(D) TGTKgtk_print_unix_dialog_set_manual_capabilities gtk_print_unix_dialog_set_manual_capabilities;
+mixin(gshared!(
+"alias extern (C) void function(_GtkPrintUnixDialog *, int) TGTKgtk_print_unix_dialog_set_manual_capabilities; extern(D) TGTKgtk_print_unix_dialog_set_manual_capabilities gtk_print_unix_dialog_set_manual_capabilities;
 alias extern (C) void function(_GtkPrintUnixDialog *, _GtkWidget *, _GtkWidget *) TGTKgtk_print_unix_dialog_add_custom_tab; extern(D) TGTKgtk_print_unix_dialog_add_custom_tab gtk_print_unix_dialog_add_custom_tab;
 alias extern (C) _GtkPrinter * function(_GtkPrintUnixDialog *) TGTKgtk_print_unix_dialog_get_selected_printer; extern(D) TGTKgtk_print_unix_dialog_get_selected_printer gtk_print_unix_dialog_get_selected_printer;
 alias extern (C) void * function(_GtkPrintUnixDialog *) TGTKgtk_print_unix_dialog_get_settings; extern(D) TGTKgtk_print_unix_dialog_get_settings gtk_print_unix_dialog_get_settings;
@@ -286,60 +257,64 @@ alias extern (C) void function(_GtkPageSetupUnixDialog *, void *) TGTKgtk_page_s
 alias extern (C) void * function(_GtkPageSetupUnixDialog *) TGTKgtk_page_setup_unix_dialog_get_page_setup; extern(D) TGTKgtk_page_setup_unix_dialog_get_page_setup gtk_page_setup_unix_dialog_get_page_setup;
 alias extern (C) void function(_GtkPageSetupUnixDialog *, void *) TGTKgtk_page_setup_unix_dialog_set_page_setup; extern(D) TGTKgtk_page_setup_unix_dialog_set_page_setup gtk_page_setup_unix_dialog_set_page_setup;
 alias extern (C) _GtkWidget * function(char *, _GtkWindow *) TGTKgtk_page_setup_unix_dialog_new; extern(D) TGTKgtk_page_setup_unix_dialog_new gtk_page_setup_unix_dialog_new;
-alias extern (C) uint function() TGTKgtk_page_setup_unix_dialog_get_type; extern(D) TGTKgtk_page_setup_unix_dialog_get_type gtk_page_setup_unix_dialog_get_type;
+alias extern (C) uint function() TGTKgtk_page_setup_unix_dialog_get_type; extern(D) TGTKgtk_page_setup_unix_dialog_get_type gtk_page_setup_unix_dialog_get_type;"
+));
 
-
-extern(D) Symbol[] symbols = [
-    { "gtk_print_unix_dialog_set_manual_capabilities",  cast(void**)& gtk_print_unix_dialog_set_manual_capabilities},
-    { "gtk_print_unix_dialog_add_custom_tab",  cast(void**)& gtk_print_unix_dialog_add_custom_tab},
-    { "gtk_print_unix_dialog_get_selected_printer",  cast(void**)& gtk_print_unix_dialog_get_selected_printer},
-    { "gtk_print_unix_dialog_get_settings",  cast(void**)& gtk_print_unix_dialog_get_settings},
-    { "gtk_print_unix_dialog_set_settings",  cast(void**)& gtk_print_unix_dialog_set_settings},
-    { "gtk_print_unix_dialog_get_current_page",  cast(void**)& gtk_print_unix_dialog_get_current_page},
-    { "gtk_print_unix_dialog_set_current_page",  cast(void**)& gtk_print_unix_dialog_set_current_page},
-    { "gtk_print_unix_dialog_get_page_setup",  cast(void**)& gtk_print_unix_dialog_get_page_setup},
-    { "gtk_print_unix_dialog_set_page_setup",  cast(void**)& gtk_print_unix_dialog_set_page_setup},
-    { "gtk_print_unix_dialog_new",  cast(void**)& gtk_print_unix_dialog_new},
-    { "gtk_print_unix_dialog_get_type",  cast(void**)& gtk_print_unix_dialog_get_type},
-    { "gtk_print_job_send",  cast(void**)& gtk_print_job_send},
-    { "gtk_print_job_get_track_print_status",  cast(void**)& gtk_print_job_get_track_print_status},
-    { "gtk_print_job_set_track_print_status",  cast(void**)& gtk_print_job_set_track_print_status},
-    { "gtk_print_job_get_surface",  cast(void**)& gtk_print_job_get_surface},
-    { "gtk_print_job_set_source_file",  cast(void**)& gtk_print_job_set_source_file},
-    { "gtk_print_job_get_status",  cast(void**)& gtk_print_job_get_status},
-    { "gtk_print_job_get_title",  cast(void**)& gtk_print_job_get_title},
-    { "gtk_print_job_get_printer",  cast(void**)& gtk_print_job_get_printer},
-    { "gtk_print_job_get_settings",  cast(void**)& gtk_print_job_get_settings},
-    { "gtk_print_job_new",  cast(void**)& gtk_print_job_new},
-    { "gtk_print_job_get_type",  cast(void**)& gtk_print_job_get_type},
-    { "gtk_enumerate_printers",  cast(void**)& gtk_enumerate_printers},
-    { "gtk_printer_get_capabilities",  cast(void**)& gtk_printer_get_capabilities},
-    { "gtk_printer_request_details",  cast(void**)& gtk_printer_request_details},
-    { "gtk_printer_has_details",  cast(void**)& gtk_printer_has_details},
-    { "gtk_printer_compare",  cast(void**)& gtk_printer_compare},
-    { "gtk_printer_list_papers",  cast(void**)& gtk_printer_list_papers},
-    { "gtk_printer_accepts_ps",  cast(void**)& gtk_printer_accepts_ps},
-    { "gtk_printer_accepts_pdf",  cast(void**)& gtk_printer_accepts_pdf},
-    { "gtk_printer_is_default",  cast(void**)& gtk_printer_is_default},
-    { "gtk_printer_is_virtual",  cast(void**)& gtk_printer_is_virtual},
-    { "gtk_printer_is_active",  cast(void**)& gtk_printer_is_active},
-    { "gtk_printer_get_job_count",  cast(void**)& gtk_printer_get_job_count},
-    { "gtk_printer_get_icon_name",  cast(void**)& gtk_printer_get_icon_name},
-    { "gtk_printer_get_location",  cast(void**)& gtk_printer_get_location},
-    { "gtk_printer_get_description",  cast(void**)& gtk_printer_get_description},
-    { "gtk_printer_get_state_message",  cast(void**)& gtk_printer_get_state_message},
-    { "gtk_printer_get_name",  cast(void**)& gtk_printer_get_name},
-    { "gtk_printer_get_backend",  cast(void**)& gtk_printer_get_backend},
-    { "gtk_printer_new",  cast(void**)& gtk_printer_new},
-    { "gtk_printer_get_type",  cast(void**)& gtk_printer_get_type},
-    { "gtk_print_capabilities_get_type",  cast(void**)& gtk_print_capabilities_get_type},
-    { "gtk_page_setup_unix_dialog_get_print_settings",  cast(void**)& gtk_page_setup_unix_dialog_get_print_settings},
-    { "gtk_page_setup_unix_dialog_set_print_settings",  cast(void**)& gtk_page_setup_unix_dialog_set_print_settings},
-    { "gtk_page_setup_unix_dialog_get_page_setup",  cast(void**)& gtk_page_setup_unix_dialog_get_page_setup},
-    { "gtk_page_setup_unix_dialog_set_page_setup",  cast(void**)& gtk_page_setup_unix_dialog_set_page_setup},
-    { "gtk_page_setup_unix_dialog_new",  cast(void**)& gtk_page_setup_unix_dialog_new},
-    { "gtk_page_setup_unix_dialog_get_type",  cast(void**)& gtk_page_setup_unix_dialog_get_type},
-];
+extern(D) Symbol[] symbols;
+extern(D) static this ()
+{
+    symbols = [
+        Symbol("gtk_print_unix_dialog_set_manual_capabilities",  cast(void**)& gtk_print_unix_dialog_set_manual_capabilities),
+        Symbol("gtk_print_unix_dialog_add_custom_tab",  cast(void**)& gtk_print_unix_dialog_add_custom_tab),
+        Symbol("gtk_print_unix_dialog_get_selected_printer",  cast(void**)& gtk_print_unix_dialog_get_selected_printer),
+        Symbol("gtk_print_unix_dialog_get_settings",  cast(void**)& gtk_print_unix_dialog_get_settings),
+        Symbol("gtk_print_unix_dialog_set_settings",  cast(void**)& gtk_print_unix_dialog_set_settings),
+        Symbol("gtk_print_unix_dialog_get_current_page",  cast(void**)& gtk_print_unix_dialog_get_current_page),
+        Symbol("gtk_print_unix_dialog_set_current_page",  cast(void**)& gtk_print_unix_dialog_set_current_page),
+        Symbol("gtk_print_unix_dialog_get_page_setup",  cast(void**)& gtk_print_unix_dialog_get_page_setup),
+        Symbol("gtk_print_unix_dialog_set_page_setup",  cast(void**)& gtk_print_unix_dialog_set_page_setup),
+        Symbol("gtk_print_unix_dialog_new",  cast(void**)& gtk_print_unix_dialog_new),
+        Symbol("gtk_print_unix_dialog_get_type",  cast(void**)& gtk_print_unix_dialog_get_type),
+        Symbol("gtk_print_job_send",  cast(void**)& gtk_print_job_send),
+        Symbol("gtk_print_job_get_track_print_status",  cast(void**)& gtk_print_job_get_track_print_status),
+        Symbol("gtk_print_job_set_track_print_status",  cast(void**)& gtk_print_job_set_track_print_status),
+        Symbol("gtk_print_job_get_surface",  cast(void**)& gtk_print_job_get_surface),
+        Symbol("gtk_print_job_set_source_file",  cast(void**)& gtk_print_job_set_source_file),
+        Symbol("gtk_print_job_get_status",  cast(void**)& gtk_print_job_get_status),
+        Symbol("gtk_print_job_get_title",  cast(void**)& gtk_print_job_get_title),
+        Symbol("gtk_print_job_get_printer",  cast(void**)& gtk_print_job_get_printer),
+        Symbol("gtk_print_job_get_settings",  cast(void**)& gtk_print_job_get_settings),
+        Symbol("gtk_print_job_new",  cast(void**)& gtk_print_job_new),
+        Symbol("gtk_print_job_get_type",  cast(void**)& gtk_print_job_get_type),
+        Symbol("gtk_enumerate_printers",  cast(void**)& gtk_enumerate_printers),
+        Symbol("gtk_printer_get_capabilities",  cast(void**)& gtk_printer_get_capabilities),
+        Symbol("gtk_printer_request_details",  cast(void**)& gtk_printer_request_details),
+        Symbol("gtk_printer_has_details",  cast(void**)& gtk_printer_has_details),
+        Symbol("gtk_printer_compare",  cast(void**)& gtk_printer_compare),
+        Symbol("gtk_printer_list_papers",  cast(void**)& gtk_printer_list_papers),
+        Symbol("gtk_printer_accepts_ps",  cast(void**)& gtk_printer_accepts_ps),
+        Symbol("gtk_printer_accepts_pdf",  cast(void**)& gtk_printer_accepts_pdf),
+        Symbol("gtk_printer_is_default",  cast(void**)& gtk_printer_is_default),
+        Symbol("gtk_printer_is_virtual",  cast(void**)& gtk_printer_is_virtual),
+        Symbol("gtk_printer_is_active",  cast(void**)& gtk_printer_is_active),
+        Symbol("gtk_printer_get_job_count",  cast(void**)& gtk_printer_get_job_count),
+        Symbol("gtk_printer_get_icon_name",  cast(void**)& gtk_printer_get_icon_name),
+        Symbol("gtk_printer_get_location",  cast(void**)& gtk_printer_get_location),
+        Symbol("gtk_printer_get_description",  cast(void**)& gtk_printer_get_description),
+        Symbol("gtk_printer_get_state_message",  cast(void**)& gtk_printer_get_state_message),
+        Symbol("gtk_printer_get_name",  cast(void**)& gtk_printer_get_name),
+        Symbol("gtk_printer_get_backend",  cast(void**)& gtk_printer_get_backend),
+        Symbol("gtk_printer_new",  cast(void**)& gtk_printer_new),
+        Symbol("gtk_printer_get_type",  cast(void**)& gtk_printer_get_type),
+        Symbol("gtk_print_capabilities_get_type",  cast(void**)& gtk_print_capabilities_get_type),
+        Symbol("gtk_page_setup_unix_dialog_get_print_settings",  cast(void**)& gtk_page_setup_unix_dialog_get_print_settings),
+        Symbol("gtk_page_setup_unix_dialog_set_print_settings",  cast(void**)& gtk_page_setup_unix_dialog_set_print_settings),
+        Symbol("gtk_page_setup_unix_dialog_get_page_setup",  cast(void**)& gtk_page_setup_unix_dialog_get_page_setup),
+        Symbol("gtk_page_setup_unix_dialog_set_page_setup",  cast(void**)& gtk_page_setup_unix_dialog_set_page_setup),
+        Symbol("gtk_page_setup_unix_dialog_new",  cast(void**)& gtk_page_setup_unix_dialog_new),
+        Symbol("gtk_page_setup_unix_dialog_get_type",  cast(void**)& gtk_page_setup_unix_dialog_get_type),
+    ];
+}
 
 } else { // version(DYNLINK)
 extern (C) void gtk_print_unix_dialog_set_manual_capabilities(_GtkPrintUnixDialog *, int);

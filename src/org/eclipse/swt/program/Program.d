@@ -173,19 +173,22 @@ struct GNOME {
         GList* function() gnome_vfs_get_registered_mime_types;
         char* function(char*) gnome_vfs_mime_type_from_name;
     }
-    static Symbol symbols[] = [
-        { "gnome_vfs_mime_get_default_application", cast(void**)&gnome_vfs_mime_get_default_application },
-        { "gnome_vfs_make_uri_from_input_with_dirs", cast(void**)&gnome_vfs_make_uri_from_input_with_dirs },
-        { "gnome_vfs_mime_application_launch", cast(void**)&gnome_vfs_mime_application_launch },
-        { "gnome_vfs_mime_application_free", cast(void**)&gnome_vfs_mime_application_free },
-        { "gnome_vfs_url_show", cast(void**)&gnome_vfs_url_show },
-        { "gnome_vfs_make_uri_from_input", cast(void**)&gnome_vfs_make_uri_from_input },
-        { "gnome_vfs_get_registered_mime_types", cast(void**)&gnome_vfs_get_registered_mime_types },
-        { "gnome_vfs_mime_get_extensions_list", cast(void**)&gnome_vfs_mime_get_extensions_list },
-        { "gnome_vfs_mime_extensions_list_free", cast(void**)&gnome_vfs_mime_extensions_list_free },
-        { "gnome_vfs_mime_registered_mime_type_list_free", cast(void**)&gnome_vfs_mime_registered_mime_type_list_free },
-        { "gnome_vfs_mime_type_from_name", cast(void**)&gnome_vfs_mime_type_from_name }
-    ];
+    static Symbol[] symbols;
+    static this () {
+        symbols = [
+            Symbol("gnome_vfs_mime_get_default_application", cast(void**)&gnome_vfs_mime_get_default_application ),
+            Symbol("gnome_vfs_make_uri_from_input_with_dirs", cast(void**)&gnome_vfs_make_uri_from_input_with_dirs ),
+            Symbol("gnome_vfs_mime_application_launch", cast(void**)&gnome_vfs_mime_application_launch ),
+            Symbol("gnome_vfs_mime_application_free", cast(void**)&gnome_vfs_mime_application_free ),
+            Symbol("gnome_vfs_url_show", cast(void**)&gnome_vfs_url_show ),
+            Symbol("gnome_vfs_make_uri_from_input", cast(void**)&gnome_vfs_make_uri_from_input ),
+            Symbol("gnome_vfs_get_registered_mime_types", cast(void**)&gnome_vfs_get_registered_mime_types ),
+            Symbol("gnome_vfs_mime_get_extensions_list", cast(void**)&gnome_vfs_mime_get_extensions_list ),
+            Symbol("gnome_vfs_mime_extensions_list_free", cast(void**)&gnome_vfs_mime_extensions_list_free ),
+            Symbol("gnome_vfs_mime_registered_mime_type_list_free", cast(void**)&gnome_vfs_mime_registered_mime_type_list_free ),
+            Symbol("gnome_vfs_mime_type_from_name", cast(void**)&gnome_vfs_mime_type_from_name )
+        ];
+    }
 }
 
 /**
@@ -785,7 +788,7 @@ static String[] getExtensions(Display display) {
             version(Tango){
                 bool contains = cast(bool)tango.core.Array.contains(extensions, mimeExts[index]);
             } else { // Phobos
-                bool contains = std.algorithm.find(extensions, mimeExts[index]) != std.iterator.end(extensions);
+                bool contains = std.algorithm.canFind(extensions, mimeExts[index]);
             }
             if (!contains) {
                 extensions ~= mimeExts[index];

@@ -63,7 +63,7 @@ public class Path : Resource {
      * platforms and should never be accessed from application code.
      * </p>
      */
-    public cairo_t* handle;
+    public org.eclipse.swt.internal.gtk.OS.cairo_t* handle;
 
     bool moved, closed = true;
 

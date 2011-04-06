@@ -711,7 +711,7 @@ public char getEchoChar () {
     checkWidget ();
     if ((style & SWT.SINGLE) !is 0) {
         if (!OS.gtk_entry_get_visibility (cast(GtkEntry*)handle)) {
-            return OS.gtk_entry_get_invisible_char (cast(GtkEntry*)handle);
+            return cast(char) OS.gtk_entry_get_invisible_char (cast(GtkEntry*)handle);
         }
     }
     return '\0';

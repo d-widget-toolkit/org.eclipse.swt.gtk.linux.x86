@@ -930,7 +930,7 @@ void createDisplay (DeviceData data) {
     }
     OS.gtk_set_locale();
     int cnt = 2;
-    CCharPtr[] args = [ "name".ptr, "--sync".ptr, null ];
+    CCharPtr[] args = [ "name".ptr, "--sync".ptr, "".ptr ];
     CCharPtr* a = args.ptr;
     if (!OS.gtk_init_check (&cnt, &a )) {
     }
@@ -2953,7 +2953,7 @@ public bool post (Event event) {
                 auto keysym = untranslateKey (event.keyCode);
                 if (keysym !is 0) keyCode = OS.XKeysymToKeycode (xDisplay, keysym);
                 if (keyCode is 0) {
-                    char key = event.character;
+                    char key = cast(char) event.character;
                     switch (key) {
                         case SWT.BS: keysym = OS.GDK_BackSpace; break;
                         case SWT.CR: keysym = OS.GDK_Return; break;

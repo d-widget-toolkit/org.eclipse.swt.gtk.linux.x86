@@ -182,7 +182,8 @@ short alpha;
 short alphaMask;
 }
 version(DYNLINK){
-extern (C) uint function(void *, _XConicalGradient *, int *, XRenderColor *, int)XRenderCreateConicalGradient;
+mixin(gshared!(
+"extern (C) uint function(void *, _XConicalGradient *, int *, XRenderColor *, int)XRenderCreateConicalGradient;
 extern (C) uint function(void *, _XRadialGradient *, int *, XRenderColor *, int)XRenderCreateRadialGradient;
 extern (C) uint function(void *, _XLinearGradient *, int *, XRenderColor *, int)XRenderCreateLinearGradient;
 extern (C) uint function(void *, XRenderColor *)XRenderCreateSolidFill;
@@ -225,55 +226,58 @@ extern (C) int function(void *, int, int)XRenderSetSubpixelOrder;
 extern (C) int function(void *, int)XRenderQuerySubpixelOrder;
 extern (C) int function(void *)XRenderQueryFormats;
 extern (C) int function(void *, int *, int *)XRenderQueryVersion;
-extern (C) int function(void *, int *, int *)XRenderQueryExtension;
+extern (C) int function(void *, int *, int *)XRenderQueryExtension;"
+));
 
-
-Symbol[] symbols = [
-    { "XRenderCreateConicalGradient",  cast(void**)& XRenderCreateConicalGradient},
-    { "XRenderCreateRadialGradient",  cast(void**)& XRenderCreateRadialGradient},
-    { "XRenderCreateLinearGradient",  cast(void**)& XRenderCreateLinearGradient},
-    { "XRenderCreateSolidFill",  cast(void**)& XRenderCreateSolidFill},
-    { "XRenderAddTraps",  cast(void**)& XRenderAddTraps},
-    { "XRenderCreateAnimCursor",  cast(void**)& XRenderCreateAnimCursor},
-    { "XRenderSetPictureFilter",  cast(void**)& XRenderSetPictureFilter},
-    { "XRenderQueryFilters",  cast(void**)& XRenderQueryFilters},
-    { "XRenderCreateCursor",  cast(void**)& XRenderCreateCursor},
-    { "XRenderParseColor",  cast(void**)& XRenderParseColor},
-    { "XRenderCompositeDoublePoly",  cast(void**)& XRenderCompositeDoublePoly},
-    { "XRenderCompositeTriFan",  cast(void**)& XRenderCompositeTriFan},
-    { "XRenderCompositeTriStrip",  cast(void**)& XRenderCompositeTriStrip},
-    { "XRenderCompositeTriangles",  cast(void**)& XRenderCompositeTriangles},
-    { "XRenderCompositeTrapezoids",  cast(void**)& XRenderCompositeTrapezoids},
-    { "XRenderFillRectangles",  cast(void**)& XRenderFillRectangles},
-    { "XRenderFillRectangle",  cast(void**)& XRenderFillRectangle},
-    { "XRenderCompositeText32",  cast(void**)& XRenderCompositeText32},
-    { "XRenderCompositeText16",  cast(void**)& XRenderCompositeText16},
-    { "XRenderCompositeText8",  cast(void**)& XRenderCompositeText8},
-    { "XRenderCompositeString32",  cast(void**)& XRenderCompositeString32},
-    { "XRenderCompositeString16",  cast(void**)& XRenderCompositeString16},
-    { "XRenderCompositeString8",  cast(void**)& XRenderCompositeString8},
-    { "XRenderFreeGlyphs",  cast(void**)& XRenderFreeGlyphs},
-    { "XRenderAddGlyphs",  cast(void**)& XRenderAddGlyphs},
-    { "XRenderFreeGlyphSet",  cast(void**)& XRenderFreeGlyphSet},
-    { "XRenderReferenceGlyphSet",  cast(void**)& XRenderReferenceGlyphSet},
-    { "XRenderCreateGlyphSet",  cast(void**)& XRenderCreateGlyphSet},
-    { "XRenderComposite",  cast(void**)& XRenderComposite},
-    { "XRenderFreePicture",  cast(void**)& XRenderFreePicture},
-    { "XRenderSetPictureTransform",  cast(void**)& XRenderSetPictureTransform},
-    { "XRenderSetPictureClipRegion",  cast(void**)& XRenderSetPictureClipRegion},
-    { "XRenderSetPictureClipRectangles",  cast(void**)& XRenderSetPictureClipRectangles},
-    { "XRenderChangePicture",  cast(void**)& XRenderChangePicture},
-    { "XRenderCreatePicture",  cast(void**)& XRenderCreatePicture},
-    { "XRenderQueryPictIndexValues",  cast(void**)& XRenderQueryPictIndexValues},
-    { "XRenderFindStandardFormat",  cast(void**)& XRenderFindStandardFormat},
-    { "XRenderFindFormat",  cast(void**)& XRenderFindFormat},
-    { "XRenderFindVisualFormat",  cast(void**)& XRenderFindVisualFormat},
-    { "XRenderSetSubpixelOrder",  cast(void**)& XRenderSetSubpixelOrder},
-    { "XRenderQuerySubpixelOrder",  cast(void**)& XRenderQuerySubpixelOrder},
-    { "XRenderQueryFormats",  cast(void**)& XRenderQueryFormats},
-    { "XRenderQueryVersion",  cast(void**)& XRenderQueryVersion},
-    { "XRenderQueryExtension",  cast(void**)& XRenderQueryExtension},
-];
+Symbol[] symbols;
+static this () {
+    symbols = [
+        Symbol("XRenderCreateConicalGradient",  cast(void**)& XRenderCreateConicalGradient),
+        Symbol("XRenderCreateRadialGradient",  cast(void**)& XRenderCreateRadialGradient),
+        Symbol("XRenderCreateLinearGradient",  cast(void**)& XRenderCreateLinearGradient),
+        Symbol("XRenderCreateSolidFill",  cast(void**)& XRenderCreateSolidFill),
+        Symbol("XRenderAddTraps",  cast(void**)& XRenderAddTraps),
+        Symbol("XRenderCreateAnimCursor",  cast(void**)& XRenderCreateAnimCursor),
+        Symbol("XRenderSetPictureFilter",  cast(void**)& XRenderSetPictureFilter),
+        Symbol("XRenderQueryFilters",  cast(void**)& XRenderQueryFilters),
+        Symbol("XRenderCreateCursor",  cast(void**)& XRenderCreateCursor),
+        Symbol("XRenderParseColor",  cast(void**)& XRenderParseColor),
+        Symbol("XRenderCompositeDoublePoly",  cast(void**)& XRenderCompositeDoublePoly),
+        Symbol("XRenderCompositeTriFan",  cast(void**)& XRenderCompositeTriFan),
+        Symbol("XRenderCompositeTriStrip",  cast(void**)& XRenderCompositeTriStrip),
+        Symbol("XRenderCompositeTriangles",  cast(void**)& XRenderCompositeTriangles),
+        Symbol("XRenderCompositeTrapezoids",  cast(void**)& XRenderCompositeTrapezoids),
+        Symbol("XRenderFillRectangles",  cast(void**)& XRenderFillRectangles),
+        Symbol("XRenderFillRectangle",  cast(void**)& XRenderFillRectangle),
+        Symbol("XRenderCompositeText32",  cast(void**)& XRenderCompositeText32),
+        Symbol("XRenderCompositeText16",  cast(void**)& XRenderCompositeText16),
+        Symbol("XRenderCompositeText8",  cast(void**)& XRenderCompositeText8),
+        Symbol("XRenderCompositeString32",  cast(void**)& XRenderCompositeString32),
+        Symbol("XRenderCompositeString16",  cast(void**)& XRenderCompositeString16),
+        Symbol("XRenderCompositeString8",  cast(void**)& XRenderCompositeString8),
+        Symbol("XRenderFreeGlyphs",  cast(void**)& XRenderFreeGlyphs),
+        Symbol("XRenderAddGlyphs",  cast(void**)& XRenderAddGlyphs),
+        Symbol("XRenderFreeGlyphSet",  cast(void**)& XRenderFreeGlyphSet),
+        Symbol("XRenderReferenceGlyphSet",  cast(void**)& XRenderReferenceGlyphSet),
+        Symbol("XRenderCreateGlyphSet",  cast(void**)& XRenderCreateGlyphSet),
+        Symbol("XRenderComposite",  cast(void**)& XRenderComposite),
+        Symbol("XRenderFreePicture",  cast(void**)& XRenderFreePicture),
+        Symbol("XRenderSetPictureTransform",  cast(void**)& XRenderSetPictureTransform),
+        Symbol("XRenderSetPictureClipRegion",  cast(void**)& XRenderSetPictureClipRegion),
+        Symbol("XRenderSetPictureClipRectangles",  cast(void**)& XRenderSetPictureClipRectangles),
+        Symbol("XRenderChangePicture",  cast(void**)& XRenderChangePicture),
+        Symbol("XRenderCreatePicture",  cast(void**)& XRenderCreatePicture),
+        Symbol("XRenderQueryPictIndexValues",  cast(void**)& XRenderQueryPictIndexValues),
+        Symbol("XRenderFindStandardFormat",  cast(void**)& XRenderFindStandardFormat),
+        Symbol("XRenderFindFormat",  cast(void**)& XRenderFindFormat),
+        Symbol("XRenderFindVisualFormat",  cast(void**)& XRenderFindVisualFormat),
+        Symbol("XRenderSetSubpixelOrder",  cast(void**)& XRenderSetSubpixelOrder),
+        Symbol("XRenderQuerySubpixelOrder",  cast(void**)& XRenderQuerySubpixelOrder),
+        Symbol("XRenderQueryFormats",  cast(void**)& XRenderQueryFormats),
+        Symbol("XRenderQueryVersion",  cast(void**)& XRenderQueryVersion),
+        Symbol("XRenderQueryExtension",  cast(void**)& XRenderQueryExtension),
+    ];
+}
 
 } else { // version(DYNLINK)
 extern (C) uint XRenderCreateConicalGradient(void *, _XConicalGradient *, int *, XRenderColor *, int);

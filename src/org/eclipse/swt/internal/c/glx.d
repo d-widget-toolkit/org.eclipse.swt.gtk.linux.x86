@@ -204,8 +204,8 @@ int count;
 }
 
 version(DYNLINK){
-
-extern (C) void function(uint, int*) dwt_glGetIntegerv;
+mixin(gshared!(
+"extern (C) void function(uint, int*) dwt_glGetIntegerv;
 extern (C) void function(int,int,int,int) dwt_glViewport;
 
 extern (C) int function(int)dwt_glXSwapIntervalSGI;
@@ -247,53 +247,56 @@ extern (C) char * function(void *, int, int)dwt_glXQueryServerString;
 extern (C) char * function(void *, int)dwt_glXGetClientString;
 extern (C) char * function(void *, int)dwt_glXQueryExtensionsString;
 extern (C) int function(void *, int *, int *)dwt_glXQueryVersion;
-extern (C) int function(void *, int *, int *)dwt_glXQueryExtension;
+extern (C) int function(void *, int *, int *)dwt_glXQueryExtension;"
+));
 
-
-Symbol[] symbols = [
-    { "glGetIntegerv", cast(void**)& dwt_glGetIntegerv},
-    { "glViewport", cast(void**)& dwt_glViewport},
-    { "glXSwapIntervalSGI",  cast(void**)& dwt_glXSwapIntervalSGI},
-    { "glXGetProcAddressARB",  cast(void**)& dwt_glXGetProcAddressARB},
-    { "glXMakeCurrent",  cast(void**)& dwt_glXMakeCurrent},
-    { "glXCreateContext",  cast(void**)& dwt_glXCreateContext},
-    { "glXDestroyGLXPixmap",  cast(void**)& dwt_glXDestroyGLXPixmap},
-    { "glXCreateGLXPixmap",  cast(void**)& dwt_glXCreateGLXPixmap},
-    { "glXChooseVisual",  cast(void**)& dwt_glXChooseVisual},
-    { "glXGetConfig",  cast(void**)& dwt_glXGetConfig},
-    { "glXUseXFont",  cast(void**)& dwt_glXUseXFont},
-    { "glXSwapBuffers",  cast(void**)& dwt_glXSwapBuffers},
-    { "glXWaitX",  cast(void**)& dwt_glXWaitX},
-    { "glXWaitGL",  cast(void**)& dwt_glXWaitGL},
-    { "glXGetSelectedEvent",  cast(void**)& dwt_glXGetSelectedEvent},
-    { "glXSelectEvent",  cast(void**)& dwt_glXSelectEvent},
-    { "glXQueryContext",  cast(void**)& dwt_glXQueryContext},
-    { "glXGetCurrentDisplay",  cast(void**)& dwt_glXGetCurrentDisplay},
-    { "glXGetCurrentReadDrawable",  cast(void**)& dwt_glXGetCurrentReadDrawable},
-    { "glXGetCurrentDrawable",  cast(void**)& dwt_glXGetCurrentDrawable},
-    { "glXGetCurrentContext",  cast(void**)& dwt_glXGetCurrentContext},
-    { "glXCopyContext",  cast(void**)& dwt_glXCopyContext},
-    { "glXMakeContextCurrent",  cast(void**)& dwt_glXMakeContextCurrent},
-    { "glXDestroyContext",  cast(void**)& dwt_glXDestroyContext},
-    { "glXIsDirect",  cast(void**)& dwt_glXIsDirect},
-    { "glXCreateNewContext",  cast(void**)& dwt_glXCreateNewContext},
-    { "glXQueryDrawable",  cast(void**)& dwt_glXQueryDrawable},
-    { "glXDestroyPbuffer",  cast(void**)& dwt_glXDestroyPbuffer},
-    { "glXCreatePbuffer",  cast(void**)& dwt_glXCreatePbuffer},
-    { "glXDestroyPixmap",  cast(void**)& dwt_glXDestroyPixmap},
-    { "glXCreatePixmap",  cast(void**)& dwt_glXCreatePixmap},
-    { "glXDestroyWindow",  cast(void**)& dwt_glXDestroyWindow},
-    { "glXCreateWindow",  cast(void**)& dwt_glXCreateWindow},
-    { "glXGetVisualFromFBConfig",  cast(void**)& dwt_glXGetVisualFromFBConfig},
-    { "glXGetFBConfigAttrib",  cast(void**)& dwt_glXGetFBConfigAttrib},
-    { "glXChooseFBConfig",  cast(void**)& dwt_glXChooseFBConfig},
-    { "glXGetFBConfigs",  cast(void**)& dwt_glXGetFBConfigs},
-    { "glXQueryServerString",  cast(void**)& dwt_glXQueryServerString},
-    { "glXGetClientString",  cast(void**)& dwt_glXGetClientString},
-    { "glXQueryExtensionsString",  cast(void**)& dwt_glXQueryExtensionsString},
-    { "glXQueryVersion",  cast(void**)& dwt_glXQueryVersion},
-    { "glXQueryExtension",  cast(void**)& dwt_glXQueryExtension},
-];
+Symbol[] symbols;
+static this () {
+    symbols = [
+        Symbol("glGetIntegerv", cast(void**)& dwt_glGetIntegerv),
+        Symbol("glViewport", cast(void**)& dwt_glViewport),
+        Symbol("glXSwapIntervalSGI",  cast(void**)& dwt_glXSwapIntervalSGI),
+        Symbol("glXGetProcAddressARB",  cast(void**)& dwt_glXGetProcAddressARB),
+        Symbol("glXMakeCurrent",  cast(void**)& dwt_glXMakeCurrent),
+        Symbol("glXCreateContext",  cast(void**)& dwt_glXCreateContext),
+        Symbol("glXDestroyGLXPixmap",  cast(void**)& dwt_glXDestroyGLXPixmap),
+        Symbol("glXCreateGLXPixmap",  cast(void**)& dwt_glXCreateGLXPixmap),
+        Symbol("glXChooseVisual",  cast(void**)& dwt_glXChooseVisual),
+        Symbol("glXGetConfig",  cast(void**)& dwt_glXGetConfig),
+        Symbol("glXUseXFont",  cast(void**)& dwt_glXUseXFont),
+        Symbol("glXSwapBuffers",  cast(void**)& dwt_glXSwapBuffers),
+        Symbol("glXWaitX",  cast(void**)& dwt_glXWaitX),
+        Symbol("glXWaitGL",  cast(void**)& dwt_glXWaitGL),
+        Symbol("glXGetSelectedEvent",  cast(void**)& dwt_glXGetSelectedEvent),
+        Symbol("glXSelectEvent",  cast(void**)& dwt_glXSelectEvent),
+        Symbol("glXQueryContext",  cast(void**)& dwt_glXQueryContext),
+        Symbol("glXGetCurrentDisplay",  cast(void**)& dwt_glXGetCurrentDisplay),
+        Symbol("glXGetCurrentReadDrawable",  cast(void**)& dwt_glXGetCurrentReadDrawable),
+        Symbol("glXGetCurrentDrawable",  cast(void**)& dwt_glXGetCurrentDrawable),
+        Symbol("glXGetCurrentContext",  cast(void**)& dwt_glXGetCurrentContext),
+        Symbol("glXCopyContext",  cast(void**)& dwt_glXCopyContext),
+        Symbol("glXMakeContextCurrent",  cast(void**)& dwt_glXMakeContextCurrent),
+        Symbol("glXDestroyContext",  cast(void**)& dwt_glXDestroyContext),
+        Symbol("glXIsDirect",  cast(void**)& dwt_glXIsDirect),
+        Symbol("glXCreateNewContext",  cast(void**)& dwt_glXCreateNewContext),
+        Symbol("glXQueryDrawable",  cast(void**)& dwt_glXQueryDrawable),
+        Symbol("glXDestroyPbuffer",  cast(void**)& dwt_glXDestroyPbuffer),
+        Symbol("glXCreatePbuffer",  cast(void**)& dwt_glXCreatePbuffer),
+        Symbol("glXDestroyPixmap",  cast(void**)& dwt_glXDestroyPixmap),
+        Symbol("glXCreatePixmap",  cast(void**)& dwt_glXCreatePixmap),
+        Symbol("glXDestroyWindow",  cast(void**)& dwt_glXDestroyWindow),
+        Symbol("glXCreateWindow",  cast(void**)& dwt_glXCreateWindow),
+        Symbol("glXGetVisualFromFBConfig",  cast(void**)& dwt_glXGetVisualFromFBConfig),
+        Symbol("glXGetFBConfigAttrib",  cast(void**)& dwt_glXGetFBConfigAttrib),
+        Symbol("glXChooseFBConfig",  cast(void**)& dwt_glXChooseFBConfig),
+        Symbol("glXGetFBConfigs",  cast(void**)& dwt_glXGetFBConfigs),
+        Symbol("glXQueryServerString",  cast(void**)& dwt_glXQueryServerString),
+        Symbol("glXGetClientString",  cast(void**)& dwt_glXGetClientString),
+        Symbol("glXQueryExtensionsString",  cast(void**)& dwt_glXQueryExtensionsString),
+        Symbol("glXQueryVersion",  cast(void**)& dwt_glXQueryVersion),
+        Symbol("glXQueryExtension",  cast(void**)& dwt_glXQueryExtension),
+    ];
+}
 
 } else { // version(DYNLINK)
 extern (C) int glXSwapIntervalSGI(int);

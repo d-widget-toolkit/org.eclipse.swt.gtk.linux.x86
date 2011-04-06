@@ -88,6 +88,8 @@ nsresult CreateInstance (nsISupports aOuter, nsID* iid, void** result) {
             return rv;
         }
     }
+
+    return XPCOM.NS_OK; // Not sure about this
 }
 
 extern(System)

@@ -63,33 +63,35 @@ class AccessibleFactory {
     private static GInterfaceInfo* SelectionIfaceDefinition;
     private static GInterfaceInfo* TextIfaceDefinition;
 
-    private static synchronized void static_this(){
-        AccessibleObject.static_this();
-        /* Action interface */
-        if( ActionIfaceDefinition is null ){
-            DefaultParentType = OS.g_type_from_name ("GtkAccessible"); //$NON-NLS-1$
-            ActionIfaceDefinition = cast(GInterfaceInfo*)OS.g_malloc (GInterfaceInfo.sizeof);
-            ActionIfaceDefinition.interface_init = &AccessibleFactory.initActionIfaceCB;
-        }
-        /* Component interface */
-        if( ComponentIfaceDefinition is null ){
-            ComponentIfaceDefinition = cast(GInterfaceInfo*)OS.g_malloc (GInterfaceInfo.sizeof);
-            ComponentIfaceDefinition.interface_init = &AccessibleFactory.initComponentIfaceCB;
-        }
-        /* Hypertext interface */
-        if( HypertextIfaceDefinition is null ){
-            HypertextIfaceDefinition = cast(GInterfaceInfo*)OS.g_malloc (GInterfaceInfo.sizeof);
-            HypertextIfaceDefinition.interface_init = &AccessibleFactory.initHypertextIfaceCB;
-        }
-        /* Selection interface */
-        if( SelectionIfaceDefinition is null ){
-            SelectionIfaceDefinition = cast(GInterfaceInfo*)OS.g_malloc (GInterfaceInfo.sizeof);
-            SelectionIfaceDefinition.interface_init = &AccessibleFactory.initSelectionIfaceCB;
-        }
-        /* Text interface */
-        if( TextIfaceDefinition is null ){
-            TextIfaceDefinition =cast(GInterfaceInfo*) OS.g_malloc (GInterfaceInfo.sizeof);
-            TextIfaceDefinition.interface_init = &AccessibleFactory.initTextIfaceCB;
+    private static void static_this(){
+        synchronized {
+            AccessibleObject.static_this();
+            /* Action interface */
+            if( ActionIfaceDefinition is null ){
+                DefaultParentType = OS.g_type_from_name ("GtkAccessible"); //$NON-NLS-1$
+                ActionIfaceDefinition = cast(GInterfaceInfo*)OS.g_malloc (GInterfaceInfo.sizeof);
+                ActionIfaceDefinition.interface_init = &AccessibleFactory.initActionIfaceCB;
+            }
+            /* Component interface */
+            if( ComponentIfaceDefinition is null ){
+                ComponentIfaceDefinition = cast(GInterfaceInfo*)OS.g_malloc (GInterfaceInfo.sizeof);
+                ComponentIfaceDefinition.interface_init = &AccessibleFactory.initComponentIfaceCB;
+            }
+            /* Hypertext interface */
+            if( HypertextIfaceDefinition is null ){
+                HypertextIfaceDefinition = cast(GInterfaceInfo*)OS.g_malloc (GInterfaceInfo.sizeof);
+                HypertextIfaceDefinition.interface_init = &AccessibleFactory.initHypertextIfaceCB;
+            }
+            /* Selection interface */
+            if( SelectionIfaceDefinition is null ){
+                SelectionIfaceDefinition = cast(GInterfaceInfo*)OS.g_malloc (GInterfaceInfo.sizeof);
+                SelectionIfaceDefinition.interface_init = &AccessibleFactory.initSelectionIfaceCB;
+            }
+            /* Text interface */
+            if( TextIfaceDefinition is null ){
+                TextIfaceDefinition =cast(GInterfaceInfo*) OS.g_malloc (GInterfaceInfo.sizeof);
+                TextIfaceDefinition.interface_init = &AccessibleFactory.initTextIfaceCB;
+            }
         }
     }
 
@@ -146,6 +148,7 @@ class AccessibleFactory {
         }
         else{
             getDwtLogger().info( __FILE__, __LINE__,  "AccessibleFactory.atkObjectFactoryCB_create_accessible cannot find factory instance" );
+            return null;
         }
     }
 
@@ -202,7 +205,7 @@ class AccessibleFactory {
 
         int /*long*/ type = 0;
         if (swtTypeName in Types ) {
-            type = Types[swtTypeName];
+            type = cast(int) Types[swtTypeName];
         } else {
             /* define the type */
             GTypeQuery* query = new GTypeQuery ();
@@ -210,8 +213,8 @@ class AccessibleFactory {
 
             GTypeInfo* typeInfo = new GTypeInfo ();
             typeInfo.base_init = &gTypeInfo_base_init_type;
-            typeInfo.class_size = query.class_size;
-            typeInfo.instance_size = query.instance_size;
+            typeInfo.class_size = cast(ushort) query.class_size;
+            typeInfo.instance_size = cast(ushort) query.instance_size;
             ObjectIfaceDefinition = typeInfo;
 
             type = OS.g_type_register_static (parentType, toStringz( swtTypeName ), ObjectIfaceDefinition, 0);

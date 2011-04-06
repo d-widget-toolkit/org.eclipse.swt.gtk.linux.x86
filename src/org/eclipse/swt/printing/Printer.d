@@ -65,8 +65,8 @@ public final class Printer : Device {
     GtkPrintJob* printJob;
     GtkPrintSettings* settings;
     void* pageSetup;
-    cairo_surface_t* surface;
-    cairo_t* cairo;
+    org.eclipse.swt.internal.gtk.OS.cairo_surface_t* surface;
+    org.eclipse.swt.internal.gtk.OS.cairo_t* cairo;
 
     /**
      * whether or not a GC was created for this printer

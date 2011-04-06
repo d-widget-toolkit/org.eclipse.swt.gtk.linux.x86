@@ -71,7 +71,8 @@ alias int function(void *, void *) _BCD_func__3949;
 alias int function(void *, void *, void *) _BCD_func__3950;
 alias int function(void *, void *) _BCD_func__3951;
 version(DYNLINK){
-extern (C) void function(void *, double, double, double, double)pango_cairo_error_underline_path;
+mixin(gshared!(
+"extern (C) void function(void *, double, double, double, double)pango_cairo_error_underline_path;
 extern (C) void function(void *, void *)pango_cairo_layout_path;
 extern (C) void function(void *, _PangoLayoutLine *)pango_cairo_layout_line_path;
 extern (C) void function(void *, void *, _PangoGlyphString *)pango_cairo_glyph_string_path;
@@ -97,38 +98,41 @@ extern (C) int function(void *)pango_cairo_font_map_get_font_type;
 extern (C) void * function()pango_cairo_font_map_get_default;
 extern (C) void * function(int)pango_cairo_font_map_new_for_font_type;
 extern (C) void * function()pango_cairo_font_map_new;
-extern (C) uint function()pango_cairo_font_map_get_type;
+extern (C) uint function()pango_cairo_font_map_get_type;"
+));
 
-
-Symbol[] symbols = [
-    { "pango_cairo_error_underline_path",  cast(void**)& pango_cairo_error_underline_path},
-    { "pango_cairo_layout_path",  cast(void**)& pango_cairo_layout_path},
-    { "pango_cairo_layout_line_path",  cast(void**)& pango_cairo_layout_line_path},
-    { "pango_cairo_glyph_string_path",  cast(void**)& pango_cairo_glyph_string_path},
-    { "pango_cairo_show_error_underline",  cast(void**)& pango_cairo_show_error_underline},
-    { "pango_cairo_show_layout",  cast(void**)& pango_cairo_show_layout},
-    { "pango_cairo_show_layout_line",  cast(void**)& pango_cairo_show_layout_line},
-    { "pango_cairo_show_glyph_string",  cast(void**)& pango_cairo_show_glyph_string},
-    { "pango_cairo_update_layout",  cast(void**)& pango_cairo_update_layout},
-    { "pango_cairo_create_layout",  cast(void**)& pango_cairo_create_layout},
-    { "pango_cairo_context_get_shape_renderer",  cast(void**)& pango_cairo_context_get_shape_renderer},
-    { "pango_cairo_context_set_shape_renderer",  cast(void**)& pango_cairo_context_set_shape_renderer},
-    { "pango_cairo_context_get_resolution",  cast(void**)& pango_cairo_context_get_resolution},
-    { "pango_cairo_context_set_resolution",  cast(void**)& pango_cairo_context_set_resolution},
-    { "pango_cairo_context_get_font_options",  cast(void**)& pango_cairo_context_get_font_options},
-    { "pango_cairo_context_set_font_options",  cast(void**)& pango_cairo_context_set_font_options},
-    { "pango_cairo_update_context",  cast(void**)& pango_cairo_update_context},
-    { "pango_cairo_font_get_scaled_font",  cast(void**)& pango_cairo_font_get_scaled_font},
-    { "pango_cairo_font_get_type",  cast(void**)& pango_cairo_font_get_type},
-    { "pango_cairo_font_map_create_context",  cast(void**)& pango_cairo_font_map_create_context},
-    { "pango_cairo_font_map_get_resolution",  cast(void**)& pango_cairo_font_map_get_resolution},
-    { "pango_cairo_font_map_set_resolution",  cast(void**)& pango_cairo_font_map_set_resolution},
-    { "pango_cairo_font_map_get_font_type",  cast(void**)& pango_cairo_font_map_get_font_type},
-    { "pango_cairo_font_map_get_default",  cast(void**)& pango_cairo_font_map_get_default},
-    { "pango_cairo_font_map_new_for_font_type",  cast(void**)& pango_cairo_font_map_new_for_font_type},
-    { "pango_cairo_font_map_new",  cast(void**)& pango_cairo_font_map_new},
-    { "pango_cairo_font_map_get_type",  cast(void**)& pango_cairo_font_map_get_type},
-];
+Symbol[] symbols;
+static this () {
+    symbols = [
+        Symbol("pango_cairo_error_underline_path",  cast(void**)& pango_cairo_error_underline_path),
+        Symbol("pango_cairo_layout_path",  cast(void**)& pango_cairo_layout_path),
+        Symbol("pango_cairo_layout_line_path",  cast(void**)& pango_cairo_layout_line_path),
+        Symbol("pango_cairo_glyph_string_path",  cast(void**)& pango_cairo_glyph_string_path),
+        Symbol("pango_cairo_show_error_underline",  cast(void**)& pango_cairo_show_error_underline),
+        Symbol("pango_cairo_show_layout",  cast(void**)& pango_cairo_show_layout),
+        Symbol("pango_cairo_show_layout_line",  cast(void**)& pango_cairo_show_layout_line),
+        Symbol("pango_cairo_show_glyph_string",  cast(void**)& pango_cairo_show_glyph_string),
+        Symbol("pango_cairo_update_layout",  cast(void**)& pango_cairo_update_layout),
+        Symbol("pango_cairo_create_layout",  cast(void**)& pango_cairo_create_layout),
+        Symbol("pango_cairo_context_get_shape_renderer",  cast(void**)& pango_cairo_context_get_shape_renderer),
+        Symbol("pango_cairo_context_set_shape_renderer",  cast(void**)& pango_cairo_context_set_shape_renderer),
+        Symbol("pango_cairo_context_get_resolution",  cast(void**)& pango_cairo_context_get_resolution),
+        Symbol("pango_cairo_context_set_resolution",  cast(void**)& pango_cairo_context_set_resolution),
+        Symbol("pango_cairo_context_get_font_options",  cast(void**)& pango_cairo_context_get_font_options),
+        Symbol("pango_cairo_context_set_font_options",  cast(void**)& pango_cairo_context_set_font_options),
+        Symbol("pango_cairo_update_context",  cast(void**)& pango_cairo_update_context),
+        Symbol("pango_cairo_font_get_scaled_font",  cast(void**)& pango_cairo_font_get_scaled_font),
+        Symbol("pango_cairo_font_get_type",  cast(void**)& pango_cairo_font_get_type),
+        Symbol("pango_cairo_font_map_create_context",  cast(void**)& pango_cairo_font_map_create_context),
+        Symbol("pango_cairo_font_map_get_resolution",  cast(void**)& pango_cairo_font_map_get_resolution),
+        Symbol("pango_cairo_font_map_set_resolution",  cast(void**)& pango_cairo_font_map_set_resolution),
+        Symbol("pango_cairo_font_map_get_font_type",  cast(void**)& pango_cairo_font_map_get_font_type),
+        Symbol("pango_cairo_font_map_get_default",  cast(void**)& pango_cairo_font_map_get_default),
+        Symbol("pango_cairo_font_map_new_for_font_type",  cast(void**)& pango_cairo_font_map_new_for_font_type),
+        Symbol("pango_cairo_font_map_new",  cast(void**)& pango_cairo_font_map_new),
+        Symbol("pango_cairo_font_map_get_type",  cast(void**)& pango_cairo_font_map_get_type),
+    ];
+}
 
 } else { // version(DYNLINK)
 extern (C) void pango_cairo_error_underline_path(void *, double, double, double, double);

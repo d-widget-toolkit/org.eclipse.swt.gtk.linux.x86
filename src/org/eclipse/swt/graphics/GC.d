@@ -192,7 +192,7 @@ public this(Drawable drawable, int style) {
     init_();
 }
 
-static void addCairoString(cairo_t* cairo, String str, float x, float y, Font font) {
+static void addCairoString(org.eclipse.swt.internal.gtk.OS.cairo_t* cairo, String str, float x, float y, Font font) {
     char* buffer = toStringz( str );
     if (OS.GTK_VERSION >= OS.buildVERSION(2, 8, 0)) {
         auto layout = OS.pango_cairo_create_layout(cairo);
@@ -534,7 +534,7 @@ public void copyArea(int srcX, int srcY, int width, int height, int destX, int d
     auto drawable = data.drawable;
     if (data.image is null && paint) OS.gdk_gc_set_exposures(handle, true);
     OS.gdk_draw_drawable(drawable, handle, drawable, srcX, srcY, destX, destY, width, height);
-    if (data.image is null & paint) {
+    if ((data.image is null) & paint) {
         OS.gdk_gc_set_exposures(handle, false);
         bool disjoint = (destX + width < srcX) || (srcX + width < destX) || (destY + height < srcY) || (srcY + height < destY);
         GdkRectangle rect;
@@ -1359,7 +1359,7 @@ public void drawPolyline(int[] pointArray) {
     OS.gdk_draw_lines(data.drawable, handle, cast(GdkPoint*)pointArray.ptr, pointArray.length / 2);
 }
 
-void drawPolyline(cairo_t* cairo, int[] pointArray, bool close) {
+void drawPolyline(org.eclipse.swt.internal.gtk.OS.cairo_t* cairo, int[] pointArray, bool close) {
     int count = pointArray.length / 2;
     if (count is 0) return;
     double xOffset = data.cairoXoffset, yOffset = data.cairoYoffset;
@@ -1846,7 +1846,7 @@ public void fillGradientRectangle(int x, int y, int width, int height, bool vert
     }
     auto cairo = data.cairo;
     if (cairo !is null) {
-        cairo_pattern_t* pattern;
+        org.eclipse.swt.internal.gtk.OS.cairo_pattern_t* pattern;
         if (vertical) {
             pattern = Cairo.cairo_pattern_create_linear (0.0, 0.0, 0.0, 1.0);
         } else {
@@ -3119,11 +3119,11 @@ public void setBackgroundPattern(Pattern pattern) {
     data.state &= ~BACKGROUND;
 }
 
-static void setCairoFont(cairo_t* cairo, Font font) {
+static void setCairoFont(org.eclipse.swt.internal.gtk.OS.cairo_t* cairo, Font font) {
     setCairoFont(cairo, font.handle);
 }
 
-static void setCairoFont(cairo_t* cairo, PangoFontDescription* font) {
+static void setCairoFont(org.eclipse.swt.internal.gtk.OS.cairo_t* cairo, PangoFontDescription* font) {
     auto family = OS.pango_font_description_get_family(font);
     int len = /*OS.*/strlen(family);
     auto buffer = new char[len + 1];
@@ -3141,7 +3141,7 @@ static void setCairoFont(cairo_t* cairo, PangoFontDescription* font) {
     Cairo.cairo_set_font_size(cairo, height);
 }
 
-static void setCairoClip(cairo_t* cairo, GdkRegion* clipRgn) {
+static void setCairoClip(org.eclipse.swt.internal.gtk.OS.cairo_t* cairo, GdkRegion* clipRgn) {
     Cairo.cairo_reset_clip(cairo);
     if (clipRgn is null) return;
     if (OS.GTK_VERSION >= OS.buildVERSION(2, 8, 0)) {
@@ -3159,7 +3159,7 @@ static void setCairoClip(cairo_t* cairo, GdkRegion* clipRgn) {
     Cairo.cairo_clip(cairo);
 }
 
-static void setCairoPatternColor( cairo_pattern_t* pattern, int offset, Color c, int alpha) {
+static void setCairoPatternColor( org.eclipse.swt.internal.gtk.OS.cairo_pattern_t* pattern, int offset, Color c, int alpha) {
     GdkColor* color = c.handle;
     double aa = (alpha & 0xFF) / cast(double)0xFF;
     double red = ((color.red & 0xFFFF) / cast(double)0xFFFF);

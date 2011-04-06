@@ -23,6 +23,7 @@ import org.eclipse.swt.graphics.Device;
 version(Tango){
     import tango.core.Exception;
 } else { // Phobos
+    import core.sync.exception: SyncException;
 }
 
 /**
@@ -185,16 +186,12 @@ public void syncExec (Runnable runnable) {
     }
     synchronized (lock) {
         bool interrupted = false;
-        version(Tango){
-            while (!lock.done ()) {
-                try {
-                    lock.wait ();
-                } catch (SyncException e) {
-                    interrupted = true;
-                }
+        while (!lock.done ()) {
+            try {
+                lock.wait ();
+            } catch (SyncException e) {
+                interrupted = true;
             }
-        } else { // Phobos
-            implMissing( __FILE__, __LINE__);
         }
         if (interrupted) {
             Compatibility.interrupt();

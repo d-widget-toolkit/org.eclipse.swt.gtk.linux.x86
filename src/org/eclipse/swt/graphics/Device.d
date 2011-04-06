@@ -120,11 +120,13 @@ public abstract class Device : Drawable {
 /*
 * TEMPORARY CODE.
 */
-static synchronized Device getDevice () {
-    if (DeviceFinder !is null) DeviceFinder.run();
-    Device device = CurrentDevice;
-    CurrentDevice = null;
-    return device;
+static Device getDevice () {
+    synchronized {
+        if (DeviceFinder !is null) DeviceFinder.run();
+        Device device = CurrentDevice;
+        CurrentDevice = null;
+        return device;
+    }
 }
 
 /**
@@ -260,19 +262,23 @@ void dispose_Object (Object object) {
     }
 }
 
-static synchronized Device findDevice (void* xDisplay) {
-    for (int i=0; i<Devices.length; i++) {
-        Device device = Devices [i];
-        if (device !is null && device.xDisplay is xDisplay) {
-            return device;
+static Device findDevice (void* xDisplay) {
+    synchronized {
+        for (int i=0; i<Devices.length; i++) {
+            Device device = Devices [i];
+            if (device !is null && device.xDisplay is xDisplay) {
+                return device;
+            }
         }
+        return null;
     }
-    return null;
 }
 
-synchronized static void deregister (Device device) {
-    for (int i=0; i<Devices.length; i++) {
-        if (device is Devices [i]) Devices [i] = null;
+static void deregister (Device device) {
+    synchronized {   
+        for (int i=0; i<Devices.length; i++) {
+            if (device is Devices [i]) Devices [i] = null;
+        }
     }
 }
 
@@ -722,17 +728,19 @@ void new_Object (Object object) {
     }
 }
 
-static synchronized void register (Device device) {
-    for (int i=0; i<Devices.length; i++) {
-        if (Devices [i] is null) {
-            Devices [i] = device;
-            return;
+static void register (Device device) {
+    synchronized {
+        for (int i=0; i<Devices.length; i++) {
+            if (Devices [i] is null) {
+                Devices [i] = device;
+                return;
+            }
         }
+        Device [] newDevices = new Device [Devices.length + 4];
+        System.arraycopy (Devices, 0, newDevices, 0, Devices.length);
+        newDevices [Devices.length] = device;
+        Devices = newDevices;
     }
-    Device [] newDevices = new Device [Devices.length + 4];
-    System.arraycopy (Devices, 0, newDevices, 0, Devices.length);
-    newDevices [Devices.length] = device;
-    Devices = newDevices;
 }
 
 /**

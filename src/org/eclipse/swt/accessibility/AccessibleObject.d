@@ -83,7 +83,7 @@ class AccessibleObject {
     }
 
     void addChild (AccessibleObject child) {
-        children.put(new LONG(cast(long)child.handle), child);
+        children.put(new LONG(cast(int)child.handle), child);
         child.setParent (this);
     }
 

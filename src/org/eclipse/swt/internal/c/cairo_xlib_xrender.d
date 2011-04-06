@@ -21,12 +21,16 @@ alias int function(void *, char *, uint) _BCD_func__2562;
 alias int function(void *, char *, uint) _BCD_func__2563;
 alias void function(void *) _BCD_func__2567;
 version(DYNLINK){
-extern (C) void * function(void *, uint, Screen *, XRenderPictFormat *, int, int)cairo_xlib_surface_create_with_xrender_format;
+mixin(gshared!(
+"extern (C) void * function(void *, uint, Screen *, XRenderPictFormat *, int, int)cairo_xlib_surface_create_with_xrender_format;"
+));
 
-
-Symbol[] symbols = [
-    { "cairo_xlib_surface_create_with_xrender_format",  cast(void**)& cairo_xlib_surface_create_with_xrender_format},
-];
+Symbol[] symbols;
+static this () {
+    symbols = [
+        Symbol("cairo_xlib_surface_create_with_xrender_format",  cast(void**)& cairo_xlib_surface_create_with_xrender_format),
+    ];
+}
 
 } else { // version(DYNLINK)
 extern (C) void * cairo_xlib_surface_create_with_xrender_format(void *, uint, Screen *, XRenderPictFormat *, int, int);

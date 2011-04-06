@@ -23,7 +23,8 @@ alias int function(void *, char *, uint) _BCD_func__2139;
 alias int function(void *, char *, uint) _BCD_func__2140;
 alias void function(void *) _BCD_func__2144;
 version(DYNLINK){
-extern (C) int function(void *)cairo_xlib_surface_get_height;
+mixin(gshared!(
+"extern (C) int function(void *)cairo_xlib_surface_get_height;
 extern (C) int function(void *)cairo_xlib_surface_get_width;
 extern (C) int function(void *)cairo_xlib_surface_get_depth;
 extern (C) Visual * function(void *)cairo_xlib_surface_get_visual;
@@ -33,22 +34,25 @@ extern (C) void * function(void *)cairo_xlib_surface_get_display;
 extern (C) void function(void *, uint, int, int)cairo_xlib_surface_set_drawable;
 extern (C) void function(void *, int, int)cairo_xlib_surface_set_size;
 extern (C) void * function(void *, uint, Screen *, int, int)cairo_xlib_surface_create_for_bitmap;
-extern (C) void * function(void *, uint, Visual *, int, int)cairo_xlib_surface_create;
+extern (C) void * function(void *, uint, Visual *, int, int)cairo_xlib_surface_create;"
+));
 
-
-Symbol[] symbols = [
-    { "cairo_xlib_surface_get_height",  cast(void**)& cairo_xlib_surface_get_height},
-    { "cairo_xlib_surface_get_width",  cast(void**)& cairo_xlib_surface_get_width},
-    { "cairo_xlib_surface_get_depth",  cast(void**)& cairo_xlib_surface_get_depth},
-    { "cairo_xlib_surface_get_visual",  cast(void**)& cairo_xlib_surface_get_visual},
-    { "cairo_xlib_surface_get_screen",  cast(void**)& cairo_xlib_surface_get_screen},
-    { "cairo_xlib_surface_get_drawable",  cast(void**)& cairo_xlib_surface_get_drawable},
-    { "cairo_xlib_surface_get_display",  cast(void**)& cairo_xlib_surface_get_display},
-    { "cairo_xlib_surface_set_drawable",  cast(void**)& cairo_xlib_surface_set_drawable},
-    { "cairo_xlib_surface_set_size",  cast(void**)& cairo_xlib_surface_set_size},
-    { "cairo_xlib_surface_create_for_bitmap",  cast(void**)& cairo_xlib_surface_create_for_bitmap},
-    { "cairo_xlib_surface_create",  cast(void**)& cairo_xlib_surface_create},
-];
+Symbol[] symbols;
+static this () {
+    symbols = [
+        Symbol("cairo_xlib_surface_get_height",  cast(void**)& cairo_xlib_surface_get_height),
+        Symbol("cairo_xlib_surface_get_width",  cast(void**)& cairo_xlib_surface_get_width),
+        Symbol("cairo_xlib_surface_get_depth",  cast(void**)& cairo_xlib_surface_get_depth),
+        Symbol("cairo_xlib_surface_get_visual",  cast(void**)& cairo_xlib_surface_get_visual),
+        Symbol("cairo_xlib_surface_get_screen",  cast(void**)& cairo_xlib_surface_get_screen),
+        Symbol("cairo_xlib_surface_get_drawable",  cast(void**)& cairo_xlib_surface_get_drawable),
+        Symbol("cairo_xlib_surface_get_display",  cast(void**)& cairo_xlib_surface_get_display),
+        Symbol("cairo_xlib_surface_set_drawable",  cast(void**)& cairo_xlib_surface_set_drawable),
+        Symbol("cairo_xlib_surface_set_size",  cast(void**)& cairo_xlib_surface_set_size),
+        Symbol("cairo_xlib_surface_create_for_bitmap",  cast(void**)& cairo_xlib_surface_create_for_bitmap),
+        Symbol("cairo_xlib_surface_create",  cast(void**)& cairo_xlib_surface_create),
+    ];
+}
 
 } else { // version(DYNLINK)
 extern (C) int cairo_xlib_surface_get_height(void *);

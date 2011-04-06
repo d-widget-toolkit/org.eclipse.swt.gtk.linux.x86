@@ -56,9 +56,9 @@ public class Pattern : Resource {
      * platforms and should never be accessed from application code.
      * </p>
      */
-    public cairo_pattern_t* handle;
+    public org.eclipse.swt.internal.gtk.OS.cairo_pattern_t* handle;
 
-    cairo_surface_t * surface;
+    org.eclipse.swt.internal.gtk.OS.cairo_surface_t * surface;
 
 /**
  * Constructs a new Pattern given an image. Drawing with the resulting

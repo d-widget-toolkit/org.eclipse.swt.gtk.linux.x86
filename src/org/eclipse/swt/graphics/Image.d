@@ -124,8 +124,8 @@ public final class Image : Resource, Drawable {
      */
     public GdkDrawable* mask;
 
-    cairo_surface_t* surface;
-    cairo_surface_t* surfaceData;
+    org.eclipse.swt.internal.gtk.OS.cairo_surface_t* surface;
+    org.eclipse.swt.internal.gtk.OS.cairo_surface_t* surfaceData;
 
     /**
      * specifies the transparent pixel
@@ -739,7 +739,7 @@ void createSurface() {
                 offset += stride;
             }
         }
-        surfaceData = cast(cairo_surface_t*) OS.g_malloc(stride * height);
+        surfaceData = cast(org.eclipse.swt.internal.gtk.OS.cairo_surface_t*) OS.g_malloc(stride * height);
         OS.memmove(surfaceData, pixels, stride * height);
         surface = Cairo.cairo_image_surface_create_for_data(cast(char*)surfaceData, Cairo.CAIRO_FORMAT_ARGB32, width, height, stride);
         OS.g_object_unref(pixbuf);

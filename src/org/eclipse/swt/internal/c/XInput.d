@@ -467,7 +467,8 @@ char first_axis;
 int [6] axis_data;
 }
 version(DYNLINK){
-extern (C) void function(XDeviceControl *)XFreeDeviceControl;
+mixin(gshared!(
+"extern (C) void function(XDeviceControl *)XFreeDeviceControl;
 extern (C) void function(XDeviceTimeCoord *)XFreeDeviceMotionEvents;
 extern (C) XDeviceTimeCoord * function(void *, XDevice *, uint, uint, int *, int *, int *)XGetDeviceMotionEvents;
 extern (C) int function(void *, XDevice *, uint, int, int, uint *, _XEvent *)XSendExtensionEvent;
@@ -506,51 +507,54 @@ extern (C) int function(void *, XDevice *, uint, uint, XDevice *, uint, int, uin
 extern (C) int function(void *, XDevice *, uint)XUngrabDevice;
 extern (C) int function(void *, XDevice *, uint, int, int, uint *, int, int, uint)XGrabDevice;
 extern (C) int function(void *, XDevice *, int, int)XChangePointerDevice;
-extern (C) int function(void *, XDevice *)XChangeKeyboardDevice;
+extern (C) int function(void *, XDevice *)XChangeKeyboardDevice;"
+));
 
-
-Symbol[] symbols = [
-    { "XFreeDeviceControl",  cast(void**)& XFreeDeviceControl},
-    { "XFreeDeviceMotionEvents",  cast(void**)& XFreeDeviceMotionEvents},
-    { "XGetDeviceMotionEvents",  cast(void**)& XGetDeviceMotionEvents},
-    { "XSendExtensionEvent",  cast(void**)& XSendExtensionEvent},
-    { "XGetDeviceDontPropagateList",  cast(void**)& XGetDeviceDontPropagateList},
-    { "XChangeDeviceDontPropagateList",  cast(void**)& XChangeDeviceDontPropagateList},
-    { "XGetSelectedExtensionEvents",  cast(void**)& XGetSelectedExtensionEvents},
-    { "XSelectExtensionEvent",  cast(void**)& XSelectExtensionEvent},
-    { "XChangeDeviceControl",  cast(void**)& XChangeDeviceControl},
-    { "XGetDeviceControl",  cast(void**)& XGetDeviceControl},
-    { "XSetDeviceValuators",  cast(void**)& XSetDeviceValuators},
-    { "XSetDeviceMode",  cast(void**)& XSetDeviceMode},
-    { "XCloseDevice",  cast(void**)& XCloseDevice},
-    { "XOpenDevice",  cast(void**)& XOpenDevice},
-    { "XFreeDeviceList",  cast(void**)& XFreeDeviceList},
-    { "XListInputDevices",  cast(void**)& XListInputDevices},
-    { "XGetExtensionVersion",  cast(void**)& XGetExtensionVersion},
-    { "XFreeDeviceState",  cast(void**)& XFreeDeviceState},
-    { "XQueryDeviceState",  cast(void**)& XQueryDeviceState},
-    { "XGetDeviceButtonMapping",  cast(void**)& XGetDeviceButtonMapping},
-    { "XSetDeviceButtonMapping",  cast(void**)& XSetDeviceButtonMapping},
-    { "XSetDeviceModifierMapping",  cast(void**)& XSetDeviceModifierMapping},
-    { "XGetDeviceModifierMapping",  cast(void**)& XGetDeviceModifierMapping},
-    { "XChangeDeviceKeyMapping",  cast(void**)& XChangeDeviceKeyMapping},
-    { "XGetDeviceKeyMapping",  cast(void**)& XGetDeviceKeyMapping},
-    { "XDeviceBell",  cast(void**)& XDeviceBell},
-    { "XChangeFeedbackControl",  cast(void**)& XChangeFeedbackControl},
-    { "XFreeFeedbackList",  cast(void**)& XFreeFeedbackList},
-    { "XGetFeedbackControl",  cast(void**)& XGetFeedbackControl},
-    { "XSetDeviceFocus",  cast(void**)& XSetDeviceFocus},
-    { "XGetDeviceFocus",  cast(void**)& XGetDeviceFocus},
-    { "XAllowDeviceEvents",  cast(void**)& XAllowDeviceEvents},
-    { "XUngrabDeviceButton",  cast(void**)& XUngrabDeviceButton},
-    { "XGrabDeviceButton",  cast(void**)& XGrabDeviceButton},
-    { "XUngrabDeviceKey",  cast(void**)& XUngrabDeviceKey},
-    { "XGrabDeviceKey",  cast(void**)& XGrabDeviceKey},
-    { "XUngrabDevice",  cast(void**)& XUngrabDevice},
-    { "XGrabDevice",  cast(void**)& XGrabDevice},
-    { "XChangePointerDevice",  cast(void**)& XChangePointerDevice},
-    { "XChangeKeyboardDevice",  cast(void**)& XChangeKeyboardDevice},
-];
+Symbol[] symbols;
+static this () {
+    symbols = [
+        Symbol("XFreeDeviceControl",  cast(void**)& XFreeDeviceControl),
+        Symbol("XFreeDeviceMotionEvents",  cast(void**)& XFreeDeviceMotionEvents),
+        Symbol("XGetDeviceMotionEvents",  cast(void**)& XGetDeviceMotionEvents),
+        Symbol("XSendExtensionEvent",  cast(void**)& XSendExtensionEvent),
+        Symbol("XGetDeviceDontPropagateList",  cast(void**)& XGetDeviceDontPropagateList),
+        Symbol("XChangeDeviceDontPropagateList",  cast(void**)& XChangeDeviceDontPropagateList),
+        Symbol("XGetSelectedExtensionEvents",  cast(void**)& XGetSelectedExtensionEvents),
+        Symbol("XSelectExtensionEvent",  cast(void**)& XSelectExtensionEvent),
+        Symbol("XChangeDeviceControl",  cast(void**)& XChangeDeviceControl),
+        Symbol("XGetDeviceControl",  cast(void**)& XGetDeviceControl),
+        Symbol("XSetDeviceValuators",  cast(void**)& XSetDeviceValuators),
+        Symbol("XSetDeviceMode",  cast(void**)& XSetDeviceMode),
+        Symbol("XCloseDevice",  cast(void**)& XCloseDevice),
+        Symbol("XOpenDevice",  cast(void**)& XOpenDevice),
+        Symbol("XFreeDeviceList",  cast(void**)& XFreeDeviceList),
+        Symbol("XListInputDevices",  cast(void**)& XListInputDevices),
+        Symbol("XGetExtensionVersion",  cast(void**)& XGetExtensionVersion),
+        Symbol("XFreeDeviceState",  cast(void**)& XFreeDeviceState),
+        Symbol("XQueryDeviceState",  cast(void**)& XQueryDeviceState),
+        Symbol("XGetDeviceButtonMapping",  cast(void**)& XGetDeviceButtonMapping),
+        Symbol("XSetDeviceButtonMapping",  cast(void**)& XSetDeviceButtonMapping),
+        Symbol("XSetDeviceModifierMapping",  cast(void**)& XSetDeviceModifierMapping),
+        Symbol("XGetDeviceModifierMapping",  cast(void**)& XGetDeviceModifierMapping),
+        Symbol("XChangeDeviceKeyMapping",  cast(void**)& XChangeDeviceKeyMapping),
+        Symbol("XGetDeviceKeyMapping",  cast(void**)& XGetDeviceKeyMapping),
+        Symbol("XDeviceBell",  cast(void**)& XDeviceBell),
+        Symbol("XChangeFeedbackControl",  cast(void**)& XChangeFeedbackControl),
+        Symbol("XFreeFeedbackList",  cast(void**)& XFreeFeedbackList),
+        Symbol("XGetFeedbackControl",  cast(void**)& XGetFeedbackControl),
+        Symbol("XSetDeviceFocus",  cast(void**)& XSetDeviceFocus),
+        Symbol("XGetDeviceFocus",  cast(void**)& XGetDeviceFocus),
+        Symbol("XAllowDeviceEvents",  cast(void**)& XAllowDeviceEvents),
+        Symbol("XUngrabDeviceButton",  cast(void**)& XUngrabDeviceButton),
+        Symbol("XGrabDeviceButton",  cast(void**)& XGrabDeviceButton),
+        Symbol("XUngrabDeviceKey",  cast(void**)& XUngrabDeviceKey),
+        Symbol("XGrabDeviceKey",  cast(void**)& XGrabDeviceKey),
+        Symbol("XUngrabDevice",  cast(void**)& XUngrabDevice),
+        Symbol("XGrabDevice",  cast(void**)& XGrabDevice),
+        Symbol("XChangePointerDevice",  cast(void**)& XChangePointerDevice),
+        Symbol("XChangeKeyboardDevice",  cast(void**)& XChangeKeyboardDevice),
+    ];
+}
 
 } else { // version(DYNLINK)
 extern (C) void XFreeDeviceControl(XDeviceControl *);

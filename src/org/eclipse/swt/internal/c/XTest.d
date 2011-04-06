@@ -28,7 +28,8 @@ alias void function(void *, char *, char *) _BCD_func__1530;
 alias int function(void *, char *, char *) _BCD_func__1531;
 alias void function(void *, char *, char *) _BCD_func__1532;
 version(DYNLINK){
-extern (C) int function(void *)XTestDiscard;
+mixin(gshared!(
+"extern (C) int function(void *)XTestDiscard;
 extern (C) void function(Visual *, uint)XTestSetVisualIDOfVisual;
 extern (C) void function(void *, uint)XTestSetGContextOfGC;
 extern (C) int function(void *, int)XTestGrabControl;
@@ -42,26 +43,29 @@ extern (C) int function(void *, uint, int, uint)XTestFakeButtonEvent;
 extern (C) int function(void *, uint, int, uint)XTestFakeKeyEvent;
 extern (C) int function(void *, uint)XTestCompareCurrentCursorWithWindow;
 extern (C) int function(void *, uint, uint)XTestCompareCursorWithWindow;
-extern (C) int function(void *, int *, int *, int *, int *)XTestQueryExtension;
+extern (C) int function(void *, int *, int *, int *, int *)XTestQueryExtension;"
+));
 
-
-Symbol[] symbols = [
-    { "XTestDiscard",  cast(void**)& XTestDiscard},
-    { "XTestSetVisualIDOfVisual",  cast(void**)& XTestSetVisualIDOfVisual},
-    { "XTestSetGContextOfGC",  cast(void**)& XTestSetGContextOfGC},
-    { "XTestGrabControl",  cast(void**)& XTestGrabControl},
-    { "XTestFakeDeviceMotionEvent",  cast(void**)& XTestFakeDeviceMotionEvent},
-    { "XTestFakeProximityEvent",  cast(void**)& XTestFakeProximityEvent},
-    { "XTestFakeDeviceButtonEvent",  cast(void**)& XTestFakeDeviceButtonEvent},
-    { "XTestFakeDeviceKeyEvent",  cast(void**)& XTestFakeDeviceKeyEvent},
-    { "XTestFakeRelativeMotionEvent",  cast(void**)& XTestFakeRelativeMotionEvent},
-    { "XTestFakeMotionEvent",  cast(void**)& XTestFakeMotionEvent},
-    { "XTestFakeButtonEvent",  cast(void**)& XTestFakeButtonEvent},
-    { "XTestFakeKeyEvent",  cast(void**)& XTestFakeKeyEvent},
-    { "XTestCompareCurrentCursorWithWindow",  cast(void**)& XTestCompareCurrentCursorWithWindow},
-    { "XTestCompareCursorWithWindow",  cast(void**)& XTestCompareCursorWithWindow},
-    { "XTestQueryExtension",  cast(void**)& XTestQueryExtension},
-];
+Symbol[] symbols;
+static this () {
+    symbols = [
+        Symbol("XTestDiscard",  cast(void**)& XTestDiscard),
+        Symbol("XTestSetVisualIDOfVisual",  cast(void**)& XTestSetVisualIDOfVisual),
+        Symbol("XTestSetGContextOfGC",  cast(void**)& XTestSetGContextOfGC),
+        Symbol("XTestGrabControl",  cast(void**)& XTestGrabControl),
+        Symbol("XTestFakeDeviceMotionEvent",  cast(void**)& XTestFakeDeviceMotionEvent),
+        Symbol("XTestFakeProximityEvent",  cast(void**)& XTestFakeProximityEvent),
+        Symbol("XTestFakeDeviceButtonEvent",  cast(void**)& XTestFakeDeviceButtonEvent),
+        Symbol("XTestFakeDeviceKeyEvent",  cast(void**)& XTestFakeDeviceKeyEvent),
+        Symbol("XTestFakeRelativeMotionEvent",  cast(void**)& XTestFakeRelativeMotionEvent),
+        Symbol("XTestFakeMotionEvent",  cast(void**)& XTestFakeMotionEvent),
+        Symbol("XTestFakeButtonEvent",  cast(void**)& XTestFakeButtonEvent),
+        Symbol("XTestFakeKeyEvent",  cast(void**)& XTestFakeKeyEvent),
+        Symbol("XTestCompareCurrentCursorWithWindow",  cast(void**)& XTestCompareCurrentCursorWithWindow),
+        Symbol("XTestCompareCursorWithWindow",  cast(void**)& XTestCompareCursorWithWindow),
+        Symbol("XTestQueryExtension",  cast(void**)& XTestQueryExtension),
+    ];
+}
 
 } else { // version(DYNLINK)
 extern (C) int XTestDiscard(void *);

@@ -55,26 +55,30 @@ alias int function(void *, void *) _BCD_func__2118;
 alias int function(void *, void *, void *) _BCD_func__2119;
 alias int function(void *, void *) _BCD_func__2120;
 version(DYNLINK){
-extern (C) char * function(char *, char *)g_module_build_path;
+mixin(gshared!(
+"extern (C) char * function(char *, char *)g_module_build_path;
 extern (C) char * function(void *)g_module_name;
 extern (C) int function(void *, char *, void * *)g_module_symbol;
 extern (C) char * function()g_module_error;
 extern (C) void function(void *)g_module_make_resident;
 extern (C) int function(void *)g_module_close;
 extern (C) void * function(char *, int)g_module_open;
-extern (C) int function()g_module_supported;
+extern (C) int function()g_module_supported;"
+));
 
-
-Symbol[] symbols = [
-    { "g_module_build_path",  cast(void**)& g_module_build_path},
-    { "g_module_name",  cast(void**)& g_module_name},
-    { "g_module_symbol",  cast(void**)& g_module_symbol},
-    { "g_module_error",  cast(void**)& g_module_error},
-    { "g_module_make_resident",  cast(void**)& g_module_make_resident},
-    { "g_module_close",  cast(void**)& g_module_close},
-    { "g_module_open",  cast(void**)& g_module_open},
-    { "g_module_supported",  cast(void**)& g_module_supported},
-];
+Symbol[] symbols;
+static this () {
+    symbols = [
+        Symbol("g_module_build_path",  cast(void**)& g_module_build_path),
+        Symbol("g_module_name",  cast(void**)& g_module_name),
+        Symbol("g_module_symbol",  cast(void**)& g_module_symbol),
+        Symbol("g_module_error",  cast(void**)& g_module_error),
+        Symbol("g_module_make_resident",  cast(void**)& g_module_make_resident),
+        Symbol("g_module_close",  cast(void**)& g_module_close),
+        Symbol("g_module_open",  cast(void**)& g_module_open),
+        Symbol("g_module_supported",  cast(void**)& g_module_supported),
+    ];
+}
 
 } else { // version(DYNLINK)
 extern (C) char * g_module_build_path(char *, char *);
