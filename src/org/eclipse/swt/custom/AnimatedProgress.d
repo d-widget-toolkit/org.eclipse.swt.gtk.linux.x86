@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.custom.AnimatedProgress;
 
-import java.lang.all;
-
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
@@ -30,6 +28,7 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Display;
+import java.lang.Runnable;
 
 /**
  * A control for showing progress feedback for a long running operation.
@@ -121,11 +120,11 @@ private static int checkStyle (int style) {
  * </ul>
  */
 public void clear(){
-	synchronized {
-	    checkWidget();
-	    if (active) stop();
-	    showStripes = false;
-	    redraw();
+    synchronized {
+        checkWidget();
+        if (active) stop();
+        showStripes = false;
+        redraw();
     }
 }
 public override Point computeSize(int wHint, int hHint, bool changed) {
@@ -212,41 +211,41 @@ void paintStripes(GC gc) {
 * </ul>
 */
 public void start() {
-	synchronized {
-	    checkWidget();
-	    if (active) return;
-	
-	    active = true;
-	    showStripes = true;
-	
-	    Display display = getDisplay();
-	    Runnable [] timer = new Runnable [1];
-	
-	    timer [0] = new class( display, timer ) Runnable {
-	        Display disp;
-	        Runnable [] runs;
-	        this( Display disp, Runnable[] runs ){
-	            this.disp = disp;
-	            this.runs = runs;
-	        }
-	        public void run () {
-	            if (!active) return;
-	            GC gc = new GC(this.outer);
-	            paintStripes(gc);
-	            gc.dispose();
-	            disp.timerExec (SLEEP, runs [0]);
-	        }
-	    };
-	    display.timerExec (SLEEP, timer [0]);
+    synchronized {
+        checkWidget();
+        if (active) return;
+
+        active = true;
+        showStripes = true;
+
+        Display display = getDisplay();
+        Runnable [] timer = new Runnable [1];
+
+        timer [0] = new class( display, timer ) Runnable {
+            Display disp;
+            Runnable [] runs;
+            this( Display disp, Runnable[] runs ){
+                this.disp = disp;
+                this.runs = runs;
+            }
+            public void run () {
+                if (!active) return;
+                GC gc = new GC(this.outer);
+                paintStripes(gc);
+                gc.dispose();
+                disp.timerExec (SLEEP, runs [0]);
+            }
+        };
+        display.timerExec (SLEEP, timer [0]);
     }
 }
 /**
 * Stop the animation.   Freeze the presentation at its current appearance.
 */
 public void stop() {
-	synchronized {
-    	//checkWidget();
-    	active = false;
-	}
+    synchronized {
+        //checkWidget();
+        active = false;
+    }
 }
 }

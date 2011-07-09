@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.LEDataOutputStream;
 
-import java.lang.all;
-
 
 import java.io.OutputStream;
 
@@ -30,7 +28,7 @@ public this(OutputStream output) {
  * Write the specified number of bytes of the given byte array,
  * starting at the specified offset, to the output stream.
  */
-public override void write(byte b[], int off, int len) {
+public override void write(in byte b[], int off, int len) {
     ostr.write(b, off, len);
 }
 /**

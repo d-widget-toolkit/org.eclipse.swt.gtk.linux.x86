@@ -40,11 +40,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.swt.widgets.Event;
 import java.lang.all;
-
-version(Tango){
-import tango.text.Unicode;
-} else { // Phobos
-}
+import java.nonstandard.UnsafeUtf;
 
 
 /**
@@ -551,7 +547,7 @@ String parse (String string) {
     int start = 0, tagStart = 0, linkStart = 0, endtagStart = 0, refStart = 0;
     while (index < length_) {
         int increment;
-        dchar c = CharacterFirstToLower (buffer [index .. $ ], increment );
+        dchar c = Character.toLowerCase (buffer.dcharAt (index, increment));
 
         switch (state) {
             case 0:
@@ -684,7 +680,7 @@ int parseMnemonics (char[] buffer, int start, int end, StringBuffer result) {
                 mnemonic = result.length();
             }
         } else {
-            result.append ( firstCodePointStr( buffer [index .. $ ], incr ));
+            result.append (buffer.dcharAsStringAt(index, incr));
         }
         index+=incr;
     }

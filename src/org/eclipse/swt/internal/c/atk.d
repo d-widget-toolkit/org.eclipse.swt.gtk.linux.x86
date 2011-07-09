@@ -1289,7 +1289,7 @@ static this () {
         Symbol("atk_role_register",  cast(void**)& atk_role_register),
         Symbol("atk_state_type_for_name",  cast(void**)& atk_state_type_for_name),
         Symbol("atk_state_type_get_name",  cast(void**)& atk_state_type_get_name),
-        Symbol("atk_state_type_register",  cast(void**)& atk_state_type_register),
+        Symbol("atk_state_type_register",  cast(void**)& atk_state_type_register)
     ];
 }
 

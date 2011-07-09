@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.custom.PaintObjectEvent;
 
-import java.lang.all;
-
 
 import org.eclipse.swt.events.TypedEvent;
 import org.eclipse.swt.graphics.GC;

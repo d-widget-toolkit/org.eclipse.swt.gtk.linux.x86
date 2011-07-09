@@ -43,7 +43,7 @@ static this () {
         Symbol("cairo_ps_surface_dsc_comment",  cast(void**)& cairo_ps_surface_dsc_comment),
         Symbol("cairo_ps_surface_set_size",  cast(void**)& cairo_ps_surface_set_size),
         Symbol("cairo_ps_surface_create_for_stream",  cast(void**)& cairo_ps_surface_create_for_stream),
-        Symbol("cairo_ps_surface_create",  cast(void**)& cairo_ps_surface_create),
+        Symbol("cairo_ps_surface_create",  cast(void**)& cairo_ps_surface_create)
     ];
 }
 

@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.graphics.TextLayout;
 
-import java.lang.all;
-
 import org.eclipse.swt.internal.Compatibility;
 import org.eclipse.swt.internal.cairo.Cairo : Cairo;
 import org.eclipse.swt.internal.gtk.OS;
@@ -32,6 +30,7 @@ import org.eclipse.swt.graphics.Region;
 import org.eclipse.swt.graphics.Resource;
 import org.eclipse.swt.graphics.TextStyle;
 import java.lang.all;
+import java.nonstandard.UnsafeUtf;
 
 version(Tango){
     import tango.stdc.string : memmove;
@@ -188,7 +187,7 @@ void computeRuns () {
         int i = 0;
         while( i < chars.length ){
             int incr;
-            dchar c = firstCodePoint( chars[ i .. $ ], incr );
+            dchar c = chars.dcharAt(i, incr);
             if (c is LTR_MARK || c is RTL_MARK || c is ZWNBS || c is ZWS) {
                 offsetCount+=3;
             }
@@ -201,7 +200,7 @@ void computeRuns () {
         int i = 0;
         while( i < chars.length ){
             int incr;
-            dchar c = firstCodePoint( chars[ i .. $ ], incr );
+            dchar c = chars.dcharAt(i, incr);
             if (c is LTR_MARK || c is RTL_MARK || c is ZWNBS || c is ZWS) {
                 invalidOffsets[offsetCount++] = i;
                 invalidOffsets[offsetCount++] = i+1;
@@ -617,7 +616,7 @@ void drawBorder(GC gc, int x, int y, GdkColor* selectionColor) {
                 if (color is null && style.foreground !is null) color = style.foreground.handle;
                 if (color is null) color = data.foreground;
                 int width = 1;
-                float[] dashes = null;
+                TryConst!(float)[] dashes = null;
                 switch (style.borderStyle) {
                     case SWT.BORDER_SOLID: break;
                     case SWT.BORDER_DASH: dashes = width !is 0 ? GC.LINE_DASH : GC.LINE_DASH_ZERO; break;
@@ -949,11 +948,11 @@ public Rectangle getBounds(int start, int end) {
     end = translateOffset(end);
     auto ptr = OS.pango_layout_get_text(layout);
     auto cont = fromStringz(ptr);
-    start = cont.utf8AdjustOffset( start );
-    end = cont.utf8AdjustOffset( end );
+    cont.adjustUTF8index( start );
+    cont.adjustUTF8index( end );
     int incr = 1;
     if( end < cont.length ){
-        incr = cont.getRelativeCodePointOffset( end, 1 );
+        incr = cont.UTF8strideAt(end);
     }
     int byteStart = start;//(OS.g_utf8_offset_to_pointer (ptr, start) - ptr);
     int byteEnd = end + incr;//(OS.g_utf8_offset_to_pointer (ptr, end + 1) - ptr);
@@ -1289,7 +1288,7 @@ public Point getLocation(int offset, bool trailing) {
     offset = translateOffset(offset);
     auto ptr = OS.pango_layout_get_text(layout);
     auto cont = fromStringz(ptr);
-    offset = cont.utf8AdjustOffset(offset);
+    cont.adjustUTF8index(offset);
     // leading ZWS+ZWNBS are 2 codepoints in 6 bytes, so we miss 4 bytes here
     int byteOffset = offset;//(OS.g_utf8_offset_to_pointer(ptr, offset) - ptr);
     int slen = cont.length;
@@ -1345,8 +1344,8 @@ int _getOffset (int offset, int movement, bool forward) {
     if ((movement & SWT.MOVEMENT_CHAR) !is 0){
         //PORTING take care of utf8
         int toffset = translateOffset(offset);
-        toffset = dcont.utf8AdjustOffset( toffset );
-        int incr = dcont.getRelativeCodePointOffset( toffset, step );
+        dcont.adjustUTF8index( toffset );
+        int incr = dcont.toUTF8shift(toffset, step);
         return offset + incr;
     }
     PangoLogAttr* attrs;
@@ -1356,7 +1355,7 @@ int _getOffset (int offset, int movement, bool forward) {
     if (attrs is null) return offset + step;
     length_ = dcont.length;//OS.g_utf8_strlen(cont, -1);
     offset = translateOffset(offset);
-    offset = dcont.utf8AdjustOffset( offset );
+    dcont.adjustUTF8index( offset );
 
     PangoLogAttr* logAttr;
     offset = validateOffset( dcont, offset, step);
@@ -1971,8 +1970,8 @@ public void setStyle (TextStyle style, int start, int end) {
     if (start > end) return;
     start = Math.min(Math.max(0, start), length_ - 1);
     end = Math.min(Math.max(0, end), length_ - 1);
-    start = text.utf8AdjustOffset( start );
-    end = text.utf8AdjustOffset( end );
+    text.adjustUTF8index( start );
+    text.adjustUTF8index( end );
 
 
     /*
@@ -1982,12 +1981,11 @@ public void setStyle (TextStyle style, int start, int end) {
     *
     * NOTE that fix only LamAlef ligatures.
     */
-    int relIndex;
-    if ((start > 0 ) && isAlef(text[ start .. $ ].firstCodePoint()) && isLam(text.getRelativeCodePoint( start, -1, relIndex ))) {
-        start += relIndex;
+    if ((start > 0 ) && isAlef(text.dcharAt(start)) && isLam(text.dcharBefore(start))) {
+        start += text.offsetBefore(start);
     }
-    if ((end < length_ - 1) && isLam(text[ end .. $ ].firstCodePoint()) && isAlef(text.getRelativeCodePoint(end, 1,relIndex))) {
-        end += relIndex;
+    if ((end < length_ - 1) && isLam(text.dcharAt(end)) && isAlef(text.dcharAfter(end))) {
+        end = text.offsetAfter(end);
     }
 
     int low = -1;
@@ -2213,7 +2211,7 @@ int untranslateOffset(int offset) {
     return offset - invalidOffsets.length;
 }
 
-int validateOffset( CString cont, int offset, int step) {
+int validateOffset( in char[] cont, int offset, int step) {
     if (invalidOffsets is null) return offset + step;
     int i = step > 0 ? 0 : invalidOffsets.length - 1;
     do {
@@ -2221,7 +2219,7 @@ int validateOffset( CString cont, int offset, int step) {
             offset += step;
         }
         else{
-            offset += cont.getRelativeCodePointOffset( offset, step );
+            offset += cont.toUTF8shift( offset, step );
         }
         while (0 <= i && i < invalidOffsets.length) {
             if (invalidOffsets[i] is offset) break;

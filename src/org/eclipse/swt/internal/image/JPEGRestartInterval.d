@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.JPEGRestartInterval;
 
-import java.lang.all;
-
 import org.eclipse.swt.internal.image.JPEGFixedSizeSegment;
 import org.eclipse.swt.internal.image.LEDataInputStream;
 import org.eclipse.swt.internal.image.JPEGFileFormat;

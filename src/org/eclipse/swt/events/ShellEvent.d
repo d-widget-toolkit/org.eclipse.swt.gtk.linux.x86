@@ -54,7 +54,7 @@ public this(Event e) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} doit={}}", super.toString[ 0 .. $-2 ], doit );
+    return Format( "{} doit={}}", super.toString[ 0 .. $-1 ], doit );
 }
 }
 

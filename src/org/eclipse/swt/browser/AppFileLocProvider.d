@@ -13,8 +13,9 @@
 module org.eclipse.swt.browser.AppFileLocProvider;
 
 version(Tango){
-import tango.sys.Environment;
+    import tango.sys.Environment;
 } else { // Phobos
+    import std.process: Environment = environment;
 }
 
 import java.lang.all;
@@ -124,12 +125,7 @@ nsresult GetFiles (char* prop, nsISimpleEnumerator* _retval) {
         if (pluginDirs is null) {
             int index = 0;
             /* set the first value(s) to the MOZ_PLUGIN_PATH environment variable value if it's defined */
-            version(Tango){
-                String value = Environment.get (XPCOM.MOZILLA_PLUGIN_PATH);
-            } else { // Phobos
-                implMissing(__FILE__, __LINE__);
-                String value;
-            }
+            String value = Environment.get (XPCOM.MOZILLA_PLUGIN_PATH);
             if (value !is null) {
                 if (value.length > 0) {
                     String separator = System.getProperty ("path.separator"); // $NON-NLS-1$

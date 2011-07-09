@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.custom.ExtendedModifyListener;
 
-import java.lang.all;
-
 import org.eclipse.swt.internal.SWTEventListener;
 import org.eclipse.swt.custom.ExtendedModifyEvent;
 

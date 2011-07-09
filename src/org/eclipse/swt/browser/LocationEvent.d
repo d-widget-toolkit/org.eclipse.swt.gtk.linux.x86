@@ -56,7 +56,7 @@ this(Widget w) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} {location = {}, top = {}, doit = {}}", 
-        super.toString[1 .. $-2], location, top, doit );  
+    return Format( "{} location = {}, top = {}, doit = {}}", 
+        super.toString()[0 .. $-1], location, top, doit );  
 }
 }

@@ -442,7 +442,7 @@ public this(Device device, ImageData source, int hotspotX, int hotspotY) {
     init_();
 }
 
-GdkCursor* createCursor(byte[] sourceData, byte[] maskData, int width, int height, int hotspotX, int hotspotY, bool reverse) {
+GdkCursor* createCursor(in byte[] sourceData, in byte[] maskData, int width, int height, int hotspotX, int hotspotY, bool reverse) {
     auto sourcePixmap = OS.gdk_bitmap_create_from_data(null, cast(char*)sourceData.ptr, width, height);
     auto maskPixmap = OS.gdk_bitmap_create_from_data(null, cast(char*)maskData.ptr, width, height);
     GdkCursor* cursor = null;

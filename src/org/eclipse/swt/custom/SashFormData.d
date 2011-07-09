@@ -14,21 +14,14 @@ module org.eclipse.swt.custom.SashFormData;
 
 import java.lang.all;
 
-version(Tango){
-    static import tango.text.Util;
-    import tango.util.Convert;
-} else { // Phobos
-    import std.conv;
-}
-
 class SashFormData {
 
     long weight;
 
 String getName () {
     String str = this.classinfo.name;
-    int index = str.lastIndexOf( '.' );
-    if (index is -1 ) return str;
+    int index = str.lastIndexOf ('.');
+    if (index is -1) return str;
     return str[ index + 1 .. $ ];
 }
 
@@ -39,6 +32,6 @@ String getName () {
  * @return a string representation of the event
  */
 public override String toString () {
-    return getName()~" {weight="~to!(String)(weight)~"}"; //$NON-NLS-2$
+    return getName()~" {weight="~String_valueOf(weight)~"}"; //$NON-NLS-2$
 }
 }

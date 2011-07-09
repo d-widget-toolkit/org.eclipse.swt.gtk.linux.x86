@@ -12,9 +12,8 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.TIFFRandomFileAccess;
 
-import java.lang.all;
-
 import org.eclipse.swt.internal.image.LEDataInputStream;
+import java.lang.all;
 
 final class TIFFRandomFileAccess {
 

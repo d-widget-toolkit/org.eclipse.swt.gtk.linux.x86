@@ -1782,7 +1782,7 @@ static this () {
         Symbol("XQueryFont",  cast(void**)& XQueryFont),
         Symbol("XLoadQueryFont",  cast(void**)& XLoadQueryFont),
         Symbol("_Xdebug",  cast(void**)& _Xdebug),
-        Symbol("_Xmblen",  cast(void**)& _Xmblen),
+        Symbol("_Xmblen",  cast(void**)& _Xmblen)
     ];
 }
 

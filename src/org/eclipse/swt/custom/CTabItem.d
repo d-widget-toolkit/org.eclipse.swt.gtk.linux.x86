@@ -32,14 +32,10 @@ import org.eclipse.swt.widgets.Item;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swt.custom.CTabFolder;
 
-
-version (Tango)
+version(Tango){
     import tango.text.convert.Utf;
-    
-else
-{
+} else {
     import std.conv;
-
     alias to!(string) toString;
     alias to!(dstring) toString32;
 }
@@ -227,7 +223,7 @@ void drawClose(GC gc) {
                                      x+9,y+2, x+7,y+4, x+7,y+5, x+9,y+7, x+9,y+9,
                                      x+7,y+9, x+5,y+7, x+4,y+7, x+2,y+9, x,y+9,
                                      x,y+7, x+2,y+5, x+2,y+4, x,y+2];
-            Color fill = new Color(display, cast(RGB)CTabFolder.CLOSE_FILL);
+            Color fill = new Color(display, CTabFolder.CLOSE_FILL);
             gc.setBackground(fill);
             gc.fillPolygon(shape);
             fill.dispose();
@@ -240,7 +236,7 @@ void drawClose(GC gc) {
                                      x+10,y+3, x+8,y+5, x+8,y+6, x+10,y+8, x+10,y+10,
                                      x+8,y+10, x+6,y+8, x+5,y+8, x+3,y+10, x+1,y+10,
                                      x+1,y+8, x+3,y+6, x+3,y+5, x+1,y+3];
-            Color fill = new Color(display, cast(RGB)CTabFolder.CLOSE_FILL);
+            Color fill = new Color(display, CTabFolder.CLOSE_FILL);
             gc.setBackground(fill);
             gc.fillPolygon(shape);
             fill.dispose();
@@ -299,8 +295,8 @@ void drawSelected(GC gc ) {
         // draw selected tab background and outline
         shape = null;
         if (this.parent.onBottom) {
-            int[] left = parent.simple ? CTabFolder.SIMPLE_BOTTOM_LEFT_CORNER : CTabFolder.BOTTOM_LEFT_CORNER;
-            int[] right = parent.simple ? cast(int[])CTabFolder.SIMPLE_BOTTOM_RIGHT_CORNER : parent.curve;
+            TryConst!(int)[] left = parent.simple ? CTabFolder.SIMPLE_BOTTOM_LEFT_CORNER : CTabFolder.BOTTOM_LEFT_CORNER;
+            TryConst!(int[]) right = parent.simple ? CTabFolder.SIMPLE_BOTTOM_RIGHT_CORNER : parent.curve;
             if (parent.borderLeft is 0 && parent.indexOf(this) is parent.firstIndex) {
                 left = [x, y+height];
             }
@@ -323,8 +319,8 @@ void drawSelected(GC gc ) {
             shape[index++] = parent.simple ? rightEdge - 1 : rightEdge + parent.curveWidth - parent.curveIndent;
             shape[index++] = y - 1;
         } else {
-            int[] left = parent.simple ? CTabFolder.SIMPLE_TOP_LEFT_CORNER : CTabFolder.TOP_LEFT_CORNER;
-            int[] right = parent.simple ? cast(int[])CTabFolder.SIMPLE_TOP_RIGHT_CORNER : parent.curve;
+            TryConst!(int)[] left = parent.simple ? CTabFolder.SIMPLE_TOP_LEFT_CORNER : CTabFolder.TOP_LEFT_CORNER;
+            TryConst!(int[]) right = parent.simple ? CTabFolder.SIMPLE_TOP_RIGHT_CORNER : parent.curve;
             if (parent.borderLeft is 0 && parent.indexOf(this) is parent.firstIndex) {
                 left = [x, y];
             }
@@ -486,7 +482,7 @@ void drawHighlight(GC gc, int rightEdge) {
             rightEdge - parent.curveIndent,
             1 + y);
 
-    int[] leftHighlightCurve = CTabFolder.TOP_LEFT_CORNER_HILITE;
+    const int[] leftHighlightCurve = CTabFolder.TOP_LEFT_CORNER_HILITE;
 
     int d = parent.tabHeight - parent.topCurveHighlightEnd.length /2;
 
@@ -557,7 +553,7 @@ void drawRightUnselectedBorder(GC gc) {
     int startX = x + width - 1;
 
     if (this.parent.onBottom) {
-        int[] right = parent.simple
+        TryConst!(int[]) right = parent.simple
             ? CTabFolder.SIMPLE_UNSELECTED_INNER_CORNER
             : CTabFolder.BOTTOM_RIGHT_CORNER;
 
@@ -571,7 +567,7 @@ void drawRightUnselectedBorder(GC gc) {
         shape[index++] = startX;
         shape[index++] = y - 1;
     } else {
-        int[] right = parent.simple
+        TryConst!(int[]) right = parent.simple
             ? CTabFolder.SIMPLE_UNSELECTED_INNER_CORNER
             : CTabFolder.TOP_RIGHT_CORNER;
 
@@ -613,7 +609,7 @@ void drawLeftUnselectedBorder(GC gc) {
 
     int[] shape = null;
     if (this.parent.onBottom) {
-        int[] left = parent.simple
+        TryConst!(int[]) left = parent.simple
             ? CTabFolder.SIMPLE_UNSELECTED_INNER_CORNER
             : CTabFolder.BOTTOM_LEFT_CORNER;
 
@@ -626,7 +622,7 @@ void drawLeftUnselectedBorder(GC gc) {
             shape[index++] = y + height + left[2 * i + 1] - 1;
         }
     } else {
-        int[] left = parent.simple
+        TryConst!(int[]) left = parent.simple
             ? CTabFolder.SIMPLE_UNSELECTED_INNER_CORNER
             : CTabFolder.TOP_LEFT_CORNER;
 

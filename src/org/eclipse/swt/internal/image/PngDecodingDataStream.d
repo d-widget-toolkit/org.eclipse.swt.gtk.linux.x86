@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.PngDecodingDataStream;
 
-import java.lang.all;
-
 
 import java.io.InputStream;
 

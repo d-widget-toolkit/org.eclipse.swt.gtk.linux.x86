@@ -48,12 +48,7 @@ import org.eclipse.swt.custom.CTabFolderLayout;
 import org.eclipse.swt.custom.CTabFolderEvent;
 
 import java.lang.all;
-version(Tango){
-    import tango.util.Convert;
-    static import tango.text.convert.Utf;
-} else { // Phobos
-    import std.conv;
-}
+import java.nonstandard.UnsafeUtf;
 
 /**
  *
@@ -890,7 +885,7 @@ void drawChevron(GC gc) {
         }
         count = items.length - showCount;
     }
-    String chevronString = count > 99 ? "99+" : to!(String)(count); //$NON-NLS-1$
+    String chevronString = count > 99 ? "99+" : String_valueOf(count); //$NON-NLS-1$
     switch (chevronImageState) {
         case NORMAL: {
             Color chevronBorder = single ? getSelectionForeground() : getForeground();
@@ -1109,7 +1104,7 @@ void drawTabArea(Event event) {
 
     // Draw Tab Header
     if (onBottom) {
-        int[] left, right;
+        TryConst!(int)[] left, right;
         if ((getStyle() & SWT.BORDER) !is 0) {
             left = simple ? SIMPLE_BOTTOM_LEFT_CORNER : BOTTOM_LEFT_CORNER;
             right = simple ? SIMPLE_BOTTOM_RIGHT_CORNER : BOTTOM_RIGHT_CORNER;
@@ -1134,7 +1129,7 @@ void drawTabArea(Event event) {
         shape[index++] = x+width;
         shape[index++] = y-highlight_header;
     } else {
-        int[] left, right;
+        TryConst!(int)[] left, right;
         if ((getStyle() & SWT.BORDER) !is 0) {
             left = simple ? SIMPLE_TOP_LEFT_CORNER : TOP_LEFT_CORNER;
             right = simple ? SIMPLE_TOP_RIGHT_CORNER : TOP_RIGHT_CORNER;
@@ -1314,7 +1309,7 @@ dchar _findMnemonic (String string) {
     do {
         while (index < length_ && string[index] !is '&') index++;
         if (++index >= length_) return '\0';
-        if (string[index] !is '&') return CharacterFirstToLower(string[index..$]);
+        if (string[index] !is '&') return Character.toLowerCase (string.dcharAt (index));
         index++;
     } while (index < length_);
     return '\0';
@@ -1687,7 +1682,7 @@ void initAccessible() {
                 if (text !is null) {
                     dchar mnemonic = _findMnemonic(text);
                     if (mnemonic !is '\0') {
-                        shortcut = Format("Alt+{}", mnemonic); //$NON-NLS-1$
+                        shortcut = "Alt+"~dcharToString(mnemonic); //$NON-NLS-1$
                     }
                 }
             }

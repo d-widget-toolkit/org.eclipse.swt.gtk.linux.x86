@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.events.ArmEvent;
 
-import java.lang.all;
-
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.events.TypedEvent;
 
@@ -27,7 +25,7 @@ import org.eclipse.swt.events.TypedEvent;
 
 public final class ArmEvent : TypedEvent {
 
-    //static const long serialVersionUID = 3258126964249212217L;
+    //static final long serialVersionUID = 3258126964249212217L;
 
 /**
  * Constructs a new instance of this class based on the

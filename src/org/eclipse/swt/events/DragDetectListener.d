@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.events.DragDetectListener;
 
-import java.lang.all;
-
 
 public import org.eclipse.swt.internal.SWTEventListener;
 public import org.eclipse.swt.events.DragDetectEvent;

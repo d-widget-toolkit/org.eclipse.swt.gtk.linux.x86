@@ -48,11 +48,7 @@ import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.swt.widgets.Widget;
 
 import java.lang.all;
-version(Tango){
-static import tango.text.convert.Utf;
-static import tango.text.Unicode;
-} else { // Phobos
-}
+import java.nonstandard.UnsafeUtf;
 
 /**
  * The CCombo class represents a selectable user interface object
@@ -588,7 +584,7 @@ dchar _findMnemonic (String str) {
     do {
         while (index < length && str[index] !is '&') index++;
         if (++index >= length) return '\0';
-        if (str[index] !is '&') return Character.toLowerCase (str.dcharAt (index));
+        if (str[index] !is '&') return Character.toLowerCase( str.dcharAt(index) );
         index++;
     } while (index < length);
     return '\0';
@@ -1163,7 +1159,7 @@ void popupEvent(Event event) {
              * In Windows, hiding the popup during the deactivate causes the deactivate
              * to be called twice and the selection event to be disappear.
              */
-            if (!"carbon".equals(SWT.getPlatform())) {
+            if ("carbon" != (SWT.getPlatform())) {
                 Point point = arrow.toControl(getDisplay().getCursorLocation());
                 Point size = arrow.getSize();
                 Rectangle rect = new Rectangle(0, 0, size.x, size.y);

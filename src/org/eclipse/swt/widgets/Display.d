@@ -930,8 +930,8 @@ void createDisplay (DeviceData data) {
     }
     OS.gtk_set_locale();
     int cnt = 2;
-    CCharPtr[] args = [ "name".ptr, "--sync".ptr, "".ptr ];
-    CCharPtr* a = args.ptr;
+    auto args = [ "name".ptr, "--sync".ptr, "".ptr ];
+    auto a = args.ptr;
     if (!OS.gtk_init_check (&cnt, &a )) {
     }
     assert( cnt is 1 );

@@ -44,11 +44,7 @@ struct nsID
 
 }
 
-version(D_Version2){
-    mixin("alias const(nsID) cnsID;");
-} else { // D1
-    alias nsID cnsID;
-}
+alias TryConst!(nsID) cnsID;
 alias nsID  nsCID;
 alias nsID  nsIID;
 alias cnsID cnsCID;

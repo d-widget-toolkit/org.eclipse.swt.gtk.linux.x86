@@ -2752,7 +2752,7 @@ static this () {
         Symbol("gdk_colormap_unref",  cast(void**)& gdk_colormap_unref),
         Symbol("gdk_colormap_ref",  cast(void**)& gdk_colormap_ref),
         Symbol("gdk_colormap_new",  cast(void**)& gdk_colormap_new),
-        Symbol("gdk_colormap_get_type",  cast(void**)& gdk_colormap_get_type),
+        Symbol("gdk_colormap_get_type",  cast(void**)& gdk_colormap_get_type)
     ];
 }
 

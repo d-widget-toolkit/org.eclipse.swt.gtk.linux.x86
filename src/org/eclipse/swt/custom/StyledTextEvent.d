@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.custom.StyledTextEvent;
 
-import java.lang.all;
-
 
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.widgets.Event;

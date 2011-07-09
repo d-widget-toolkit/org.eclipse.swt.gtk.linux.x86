@@ -42,7 +42,7 @@ this(Widget w) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} {title = {}}", 
-        super.toString[1 .. $-2], title );  
+    return Format( "{} title = {}}", 
+        super.toString[0 .. $-1], title );  
 }
 }

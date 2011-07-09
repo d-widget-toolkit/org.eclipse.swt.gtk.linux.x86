@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.JPEGVariableSizeSegment;
 
-import java.lang.all;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.internal.image.JPEGSegment;
 import org.eclipse.swt.internal.image.LEDataInputStream;

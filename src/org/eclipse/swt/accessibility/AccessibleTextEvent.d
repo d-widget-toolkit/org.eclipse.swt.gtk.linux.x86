@@ -12,10 +12,9 @@
  *******************************************************************************/
 module org.eclipse.swt.accessibility.AccessibleTextEvent;
 
-import java.lang.all;
-
 
 import org.eclipse.swt.internal.SWTEventObject;
+import java.lang.all;
 
 /**
  * Instances of this class are sent as a result of
@@ -38,7 +37,7 @@ public class AccessibleTextEvent : SWTEventObject {
     public int childID;             // IN
     public int offset, length;      // OUT
 
-    //static const long serialVersionUID = 3977019530868308275L;
+    //static final long serialVersionUID = 3977019530868308275L;
 
 /**
  * Constructs a new instance of this class.
@@ -55,7 +54,7 @@ public this (Object source) {
  *
  * @return a string representation of the event
  */
-public override String toString () {
+override public String toString () {
     return Format( "AccessibleTextEvent {{childID={} offset={} length={}}",
         childID,
         offset,

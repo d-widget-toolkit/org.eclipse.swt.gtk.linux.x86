@@ -21,7 +21,9 @@ import org.eclipse.swt.custom.TextChangeListener;
 import org.eclipse.swt.custom.StyledTextEvent;
 import org.eclipse.swt.custom.StyledTextListener;
 import org.eclipse.swt.custom.StyledText;
+
 import java.lang.all;
+import java.nonstandard.UnsafeUtf;
 
 version(Tango){
     static import tango.io.model.IFile;
@@ -514,7 +516,7 @@ public String getLine(int index) {
         while ((length_ - 1 >=0) && isDelimiter(buf.slice[length_ - 1])) {
             length_--;
         }
-        return buf.toString()[ 0 .. length_ ]._idup();
+        return buf.slice()[ 0 .. length_ ]._idup();
     }
 }
 /**
@@ -548,7 +550,7 @@ String getFullLine(int index) {
         int gapLength = gapEnd - gapStart;
         buffer.append(textStore[ start .. gapStart ]);
         buffer.append(textStore[ gapEnd .. gapEnd + length_ - gapLength - (gapStart - start) ]);
-        return buffer.toString()._idup();
+        return buffer.toString();
     }
 }
 /**
@@ -571,6 +573,7 @@ public int getLineCount(){
 }
 /**
  * Returns the line at the given offset.
+ * DWT: index can be an invalid UTF-8 index
  * <p>
  *
  * @param charPosition logical character offset (i.e., does not include gap)
@@ -733,7 +736,7 @@ public String getTextRange(int start, int length_) {
     StringBuffer buf = new StringBuffer();
     buf.append(textStore[ start .. start + gapStart - start ] );
     buf.append(textStore[ gapEnd .. gapEnd + end - gapStart ] );
-    return buf.toString()._idup();
+    return buf.toString();
 }
 /**
  * Removes the specified <code>TextChangeListener</code>.
@@ -896,33 +899,6 @@ void delete_(int position, int length_, int numLines) {
     }
     lineCount_ -= numOldLines;
     gapLine = getLineAtPhysicalOffset(gapStart);
-}
-
-/++
- + SWT extension
- +/
-int utf8AdjustOffset( int offset ){
-    if (textStore is null)
-        return offset;
-    if (offset is 0)
-        return offset;
-    if( offset >= textStore.length ){
-        return offset;
-    }
-    if (!gapExists() || (offset < gapStart)){
-        while( (textStore[offset] & 0xC0) is 0x80 ){
-            offset--;
-        }
-        return offset;
-    }
-    int gapLength= gapEnd - gapStart;
-    if( offset+gapLength >= textStore.length ){
-        return offset;
-    }
-    while( (textStore[offset+gapLength] & 0xC0) is 0x80 ){
-        offset--;
-    }
-    return offset;
 }
 
 

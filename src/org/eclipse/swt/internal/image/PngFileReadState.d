@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.PngFileReadState;
 
-import java.lang.all;
-
 
 class PngFileReadState {
     bool readIHDR;

@@ -1243,7 +1243,7 @@ static this () {
         Symbol("pango_coverage_copy",  cast(void**)& pango_coverage_copy),
         Symbol("pango_coverage_unref",  cast(void**)& pango_coverage_unref),
         Symbol("pango_coverage_ref",  cast(void**)& pango_coverage_ref),
-        Symbol("pango_coverage_new",  cast(void**)& pango_coverage_new),
+        Symbol("pango_coverage_new",  cast(void**)& pango_coverage_new)
     ];
 }
 

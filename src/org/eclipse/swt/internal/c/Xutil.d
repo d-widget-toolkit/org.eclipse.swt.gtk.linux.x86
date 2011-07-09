@@ -292,7 +292,7 @@ static this () {
         Symbol("XAllocStandardColormap",  cast(void**)& XAllocStandardColormap),
         Symbol("XAllocSizeHints",  cast(void**)& XAllocSizeHints),
         Symbol("XAllocIconSize",  cast(void**)& XAllocIconSize),
-        Symbol("XAllocClassHint",  cast(void**)& XAllocClassHint),
+        Symbol("XAllocClassHint",  cast(void**)& XAllocClassHint)
     ];
 }
 

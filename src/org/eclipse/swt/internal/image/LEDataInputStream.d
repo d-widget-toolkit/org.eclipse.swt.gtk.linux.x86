@@ -12,10 +12,9 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.LEDataInputStream;
 
-import java.lang.all;
-
 
 import java.io.InputStream;
+import java.lang.all;
 
 final class LEDataInputStream : InputStream{
 
@@ -125,7 +124,7 @@ final class LEDataInputStream : InputStream{
         if (offset < 0 || offset > buffer.length ||
             len < 0 || (len > buffer.length - offset)) {
             throw new ArrayIndexOutOfBoundsException(__FILE__,__LINE__);
-        }
+            }
 
         int cacheCopied = 0;
         int newOffset = offset;

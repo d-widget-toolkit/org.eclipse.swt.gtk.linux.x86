@@ -13085,7 +13085,7 @@ static this () {
         Symbol( "gtk_accel_group_unlock",  cast(void**)& gtk_accel_group_unlock),
         Symbol( "gtk_accel_group_lock",  cast(void**)& gtk_accel_group_lock),
         Symbol( "gtk_accel_group_new",  cast(void**)& gtk_accel_group_new),
-        Symbol( "gtk_accel_group_get_type",  cast(void**)& gtk_accel_group_get_type),
+        Symbol( "gtk_accel_group_get_type",  cast(void**)& gtk_accel_group_get_type)
     ];
 }
 

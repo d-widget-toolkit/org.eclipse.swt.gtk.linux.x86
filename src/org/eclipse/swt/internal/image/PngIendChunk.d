@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.PngIendChunk;
 
-import java.lang.all;
-
 
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.internal.image.PngFileReadState;

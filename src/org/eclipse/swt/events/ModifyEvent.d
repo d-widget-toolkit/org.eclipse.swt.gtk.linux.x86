@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.events.ModifyEvent;
 
-import java.lang.all;
-
 
 import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.events.TypedEvent;

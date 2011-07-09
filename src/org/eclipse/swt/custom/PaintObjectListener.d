@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.custom.PaintObjectListener;
 
-import java.lang.all;
-
 
 import org.eclipse.swt.internal.SWTEventListener;
 import org.eclipse.swt.custom.PaintObjectEvent;

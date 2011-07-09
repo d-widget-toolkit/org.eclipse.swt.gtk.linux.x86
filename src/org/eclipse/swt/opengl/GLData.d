@@ -10,17 +10,9 @@
  * Port to the D Programming Language:
  *     John Reimer <terminal.node@gmail.com>
  *******************************************************************************/
-
 module org.eclipse.swt.opengl.GLData;
 
 import java.lang.all;
-
-version(Tango){
-    import tango.text.Util;
-    import tango.util.Convert;
-} else { // Phobos
-    import std.conv;
-}
 
 /**
  * The GLData class is a device-independent description
@@ -29,7 +21,7 @@ version(Tango){
  * @see GLCanvas
  * @see <a href="http://www.eclipse.org/swt/snippets/#opengl">OpenGL snippets</a>
  * @see <a href="http://www.eclipse.org/swt/">Sample code and further information</a>
- * 
+ *
  * @since 3.2
  */
 
@@ -37,13 +29,13 @@ public class GLData {
     /**
      * Specifies a double-buffered surface.  During context
      * creation, only double-buffered formats are considered
-     * when set to true. 
+     * when set to true.
      */
     public bool doubleBuffer;
 
     /**
      * Specifies a stereo surface.  During context creation,
-     * only stereo formats are considered when set to true. 
+     * only stereo formats are considered when set to true.
      */
     public bool stereo;
 
@@ -133,23 +125,22 @@ public class GLData {
      * are preferred.
      */
     public int samples;
-    
+
 /**
  * Returns a string containing a concise, human-readable
  * description of the receiver.
  *
  * @return a string representation of the data
  */
-
-    override public String toString() {
-        String string = doubleBuffer ? "doubleBuffer," : "";
-        string ~= stereo ? "stereo," : "";
-        string ~= "r:" ~     to!(String)(redSize)  ~ " g:" ~ to!(String)(greenSize) ~ 
-                  " b:" ~    to!(String)(blueSize) ~ " a:" ~ to!(String)(alphaSize) ~ "," ~
-                  "depth:" ~ to!(String)(depthSize) ~ ",stencil:" ~ to!(String)(stencilSize) ~
-                  ",accum r:" ~ to!(String)(accumRedSize) ~ "g:" ~ to!(String)(accumGreenSize) ~ 
-                  "b:" ~ to!(String)(accumBlueSize) ~ "a:" ~ to!(String)(accumAlphaSize) ~
-                  ",sampleBuffers:" ~ to!(String)(sampleBuffers) ~ ",samples:" ~ to!(String)(samples);
-        return string;
-    }
+override public String toString() {
+    String string = doubleBuffer ? "doubleBuffer," : "";
+    string ~= stereo ? "stereo," : "";
+    string ~= "r:" ~     String_valueOf(redSize)  ~ " g:" ~ String_valueOf(greenSize) ~
+              " b:" ~    String_valueOf(blueSize) ~ " a:" ~ String_valueOf(alphaSize) ~ "," ~
+              "depth:" ~ String_valueOf(depthSize) ~ ",stencil:" ~ String_valueOf(stencilSize) ~
+              ",accum r:" ~ String_valueOf(accumRedSize) ~ "g:" ~ String_valueOf(accumGreenSize) ~
+              "b:" ~ String_valueOf(accumBlueSize) ~ "a:" ~ String_valueOf(accumAlphaSize) ~
+              ",sampleBuffers:" ~ String_valueOf(sampleBuffers) ~ ",samples:" ~ String_valueOf(samples);
+    return string;
+}
 }

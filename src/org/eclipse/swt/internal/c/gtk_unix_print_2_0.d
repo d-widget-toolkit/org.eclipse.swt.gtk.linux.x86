@@ -312,7 +312,7 @@ extern(D) static this ()
         Symbol("gtk_page_setup_unix_dialog_get_page_setup",  cast(void**)& gtk_page_setup_unix_dialog_get_page_setup),
         Symbol("gtk_page_setup_unix_dialog_set_page_setup",  cast(void**)& gtk_page_setup_unix_dialog_set_page_setup),
         Symbol("gtk_page_setup_unix_dialog_new",  cast(void**)& gtk_page_setup_unix_dialog_new),
-        Symbol("gtk_page_setup_unix_dialog_get_type",  cast(void**)& gtk_page_setup_unix_dialog_get_type),
+        Symbol("gtk_page_setup_unix_dialog_get_type",  cast(void**)& gtk_page_setup_unix_dialog_get_type)
     ];
 }
 

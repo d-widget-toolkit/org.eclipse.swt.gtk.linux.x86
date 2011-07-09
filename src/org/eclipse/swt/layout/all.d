@@ -1,7 +1,5 @@
 module org.eclipse.swt.layout.all;
 
-import java.lang.all;
-
 public import org.eclipse.swt.layout.FillData;
 public import org.eclipse.swt.layout.FillLayout;
 public import org.eclipse.swt.layout.FormAttachment;

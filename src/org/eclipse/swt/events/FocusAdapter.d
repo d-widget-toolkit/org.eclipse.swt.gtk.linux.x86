@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.events.FocusAdapter;
 
-import java.lang.all;
-
 import org.eclipse.swt.events.FocusListener;
 
 /**

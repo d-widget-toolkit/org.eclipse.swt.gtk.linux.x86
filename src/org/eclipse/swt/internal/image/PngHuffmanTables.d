@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.PngHuffmanTables;
 
-import java.lang.all;
-
 import org.eclipse.swt.internal.image.PngHuffmanTable;
 import org.eclipse.swt.internal.image.PngDecodingDataStream;
 import org.eclipse.swt.internal.image.PngLzBlockReader;
@@ -26,7 +24,7 @@ public class PngHuffmanTables {
     static PngHuffmanTable FixedDistanceTable;
 
     static const int LiteralTableSize = 288;
-    static const int[] FixedLiteralLengths = [
+    static int[] FixedLiteralLengths = [
         8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
         8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
         8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8,
@@ -42,7 +40,7 @@ public class PngHuffmanTables {
     ];
 
     static const int DistanceTableSize = 32;
-    static const int[] FixedDistanceLengths = [
+    static int[] FixedDistanceLengths = [
         5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
         5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5,
     ];

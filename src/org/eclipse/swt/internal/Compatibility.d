@@ -117,8 +117,9 @@ public static int ceil(int p, int q) {
  * @param child the file's name
  * @return true if the file exists
  */
-public static bool fileExists(CString parent, CString child) {
-    return (new File (parent, child)).exists();
+public static bool fileExists(String parent, String child) {
+    scope f = new File(parent, child);
+    return f.exists();
 }
 
 /**
@@ -192,8 +193,8 @@ public static OutputStream newDeflaterOutputStream(OutputStream stream) {
  * @return a stream on the file if it could be opened.
  * @exception IOException
  */
-public static InputStream newFileInputStream(CString filename) {
-    return new FileInputStream(filename._idup());
+public static InputStream newFileInputStream(String filename) {
+    return new FileInputStream(filename);
 }
 
 /**
@@ -203,8 +204,8 @@ public static InputStream newFileInputStream(CString filename) {
  * @return a stream on the file if it could be opened.
  * @exception IOException
  */
-public static OutputStream newFileOutputStream(CString filename) {
-    return new FileOutputStream(filename._idup());
+public static OutputStream newFileOutputStream(String filename) {
+    return new FileOutputStream(filename);
 }
 
 /**
@@ -272,12 +273,12 @@ public static bool isWhitespace(dchar c) {
  * @exception ProcessException
  *  if the program cannot be executed
  */
-public static void exec(CString prog) {
+public static void exec(String prog) {
     version(Tango){
         auto proc = new Process( prog );
         proc.execute;
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
+        implMissingInPhobos();
     }
 }
 
@@ -293,12 +294,12 @@ public static void exec(CString prog) {
  * @exception ProcessException
  *  if the program cannot be executed
  */
-public static void exec(CString[] progArray) {
+public static void exec(String[] progArray) {
     version(Tango){
         auto proc = new Process( progArray );
         proc.execute;
     } else { // Phobos
-        implMissing( __FILE__, __LINE__ );
+        implMissingInPhobos();
     }
 }
 
@@ -341,8 +342,8 @@ private static ResourceBundle msgs = null;
  *
  * @see SWT#getMessage(String)
  */
-public static String getMessage(CString key) {
-    String answer = key._idup();
+public static String getMessage(String key) {
+    String answer = key;
 
     if (key is null) {
         SWT.error (SWT.ERROR_NULL_ARGUMENT);
@@ -351,7 +352,7 @@ public static String getMessage(CString key) {
         try {
             msgs = ResourceBundle.getBundle(SWTMessagesBundleData); //$NON-NLS-1$
         } catch (MissingResourceException ex) {
-            answer = cast(String)(key ~ " (no resource bundle)"); //$NON-NLS-1$
+            answer = key ~ " (no resource bundle)"; //$NON-NLS-1$
         }
     }
     if (msgs !is null) {
@@ -362,8 +363,8 @@ public static String getMessage(CString key) {
     return answer;
 }
 
-public static String getMessage(CString key, Object[] args) {
-    String answer = key._idup();
+public static String getMessage(String key, Object[] args) {
+    String answer = key;
 
     if (key is null || args is null) {
         SWT.error (SWT.ERROR_NULL_ARGUMENT);
@@ -372,7 +373,7 @@ public static String getMessage(CString key, Object[] args) {
         try {
             msgs = ResourceBundle.getBundle(SWTMessagesBundleData); //$NON-NLS-1$
         } catch (MissingResourceException ex) {
-            answer = cast(String)(key ~ " (no resource bundle)"); //$NON-NLS-1$
+            answer = key ~ " (no resource bundle)"; //$NON-NLS-1$
         }
     }
     if (msgs !is null) {
@@ -413,20 +414,8 @@ public static void interrupt() {
  * @param s2 string
  * @return true if the two instances of class String are equal
  */
-public static bool equalsIgnoreCase(CString s1, CString s2) {
-    version(Tango){
-        String s1b = new char[ s1.length ];
-        String s2b = new char[ s1.length ];
-        scope(exit){
-            delete s1b;
-            delete s2b;
-        }
-        String s1c = Unicode.toFold( s1, s1b );
-        String s2c = Unicode.toFold( s2, s2b );
-        return s1c == s2c;
-    } else { // Phobos
-        return std.string.icmp( s1, s2 ) is 0;
-    }
+public static bool equalsIgnoreCase(in char[] s1, in char[] s2) {
+    return .equalsIgnoreCase(s1, s2);
 }
 
 }

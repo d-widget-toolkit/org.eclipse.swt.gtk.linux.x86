@@ -44,6 +44,7 @@ version(Tango){
     static import tango.time.chrono.Calendar;
 } else { // Phobos
     import std.conv;
+    static import std.datetime;
 }
 
 
@@ -97,7 +98,13 @@ private class Calendar{
             this.month      = greg.getMonth( time );
             this.year       = greg.getYear( time );
         } else { // Phobos
-            implMissing( __FILE__, __LINE__ );
+            auto time = std.datetime.Clock.currTime();
+            this.second     = time.second;
+            this.minute     = time.minute;
+            this.hour       = time.hour;
+            this.dayofmonth = time.day;
+            this.month      = time.month;
+            this.year       = time.year;
         }
     }
     int getActualMaximum(int field){
@@ -299,7 +306,7 @@ private class Calendar{
 
 private class DateFormatSymbols {
     private const String[] ampm = [ "AM"[], "PM" ];
-    String[] getAmPmStrings(){
+    TryConst!(String[]) getAmPmStrings(){
         return ampm;
     }
 }
@@ -565,8 +572,7 @@ void commitCurrentField() {
 
 String formattedStringValue(int fieldName, int value, bool adjust) {
     if (fieldName is Calendar.AM_PM) {
-        String[] ampm = formatSymbols.getAmPmStrings();
-        return ampm[value];
+        return formatSymbols.getAmPmStrings()[value];
     }
     if (adjust) {
         if (fieldName is Calendar.HOUR && value is 0) {
@@ -598,7 +604,7 @@ int getFieldIndex(int fieldName) {
 
 String getFormattedString(int style) {
     if ((style & SWT.TIME) !is 0) {
-        String[] ampm = formatSymbols.getAmPmStrings();
+        auto ampm = formatSymbols.getAmPmStrings();
         int h = calendar.get(Calendar.HOUR); if (h is 0) h = 12;
         int m = calendar.get(Calendar.MINUTE);
         int s = calendar.get(Calendar.SECOND);
@@ -911,7 +917,7 @@ void onVerify(Event event) {
     int length_ = end - start;
     String newText = event.text;
     if (fieldName is Calendar.AM_PM) {
-        String[] ampm = formatSymbols.getAmPmStrings();
+        auto ampm = formatSymbols.getAmPmStrings();
         if (newText.equalsIgnoreCase(ampm[Calendar.AM].substring(0, 1)) || newText.equalsIgnoreCase(ampm[Calendar.AM])) {
             setTextField(fieldName, Calendar.AM, true, false);
         } else if (newText.equalsIgnoreCase(ampm[Calendar.PM].substring(0, 1)) || newText.equalsIgnoreCase(ampm[Calendar.PM])) {

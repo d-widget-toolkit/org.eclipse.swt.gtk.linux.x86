@@ -63,7 +63,7 @@ static this () {
         Symbol("XTestFakeKeyEvent",  cast(void**)& XTestFakeKeyEvent),
         Symbol("XTestCompareCurrentCursorWithWindow",  cast(void**)& XTestCompareCurrentCursorWithWindow),
         Symbol("XTestCompareCursorWithWindow",  cast(void**)& XTestCompareCursorWithWindow),
-        Symbol("XTestQueryExtension",  cast(void**)& XTestQueryExtension),
+        Symbol("XTestQueryExtension",  cast(void**)& XTestQueryExtension)
     ];
 }
 

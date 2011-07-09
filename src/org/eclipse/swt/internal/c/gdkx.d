@@ -200,7 +200,7 @@ static this () {
         Symbol("gdk_x11_image_get_xdisplay",  cast(void**)& gdk_x11_image_get_xdisplay),
         Symbol("gdk_x11_drawable_get_xid",  cast(void**)& gdk_x11_drawable_get_xid),
         Symbol("gdk_x11_drawable_get_xdisplay",  cast(void**)& gdk_x11_drawable_get_xdisplay),
-        Symbol("gdk_display",  cast(void**)& gdk_display),
+        Symbol("gdk_display",  cast(void**)& gdk_display)
     ];
 }
 

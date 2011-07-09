@@ -28,7 +28,7 @@ mixin(gshared!(
 Symbol[] symbols;
 static this () {
     symbols = [
-        Symbol("cairo_xlib_surface_create_with_xrender_format",  cast(void**)& cairo_xlib_surface_create_with_xrender_format),
+        Symbol("cairo_xlib_surface_create_with_xrender_format",  cast(void**)& cairo_xlib_surface_create_with_xrender_format)
     ];
 }
 

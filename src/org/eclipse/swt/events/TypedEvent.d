@@ -103,6 +103,6 @@ String getName () {
 public override String toString() {
     String str_widget = widget is null ? "null" : widget.toString;
     String str_data   = data is null ? "null" : data.toString;
-    return Format( "{}{{time={} data={}}", str_widget, time, str_data );
+    return Format( "{}{{{} time={} data={}}", getName(), str_widget, time, str_data );
 }
 }

@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.custom.CTabFolder2Listener;
 
-import java.lang.all;
-
 import org.eclipse.swt.internal.SWTEventListener;
 import org.eclipse.swt.custom.CTabFolderEvent;
 
@@ -139,11 +137,11 @@ private class _DgCTabFolder2ListenerT(Dg,T...) : CTabFolder2Listener {
     version(Tango){
         alias ParameterTupleOf!(Dg) DgArgs;
         static assert( is(DgArgs == Tuple!(CTabFolderEvent,T)),
-                    "Delegate args not correct: "~DgArgs.stringof~" vs. (Event,"~T.stringof~")" );
+                "Delegate args not correct: "~DgArgs.stringof~" vs. (Event,"~T.stringof~")" );
     } else { // Phobos
         alias ParameterTypeTuple!(Dg) DgArgs;
         static assert( is(DgArgs == TypeTuple!(CTabFolderEvent,T)),
-                    "Delegate args not correct: "~DgArgs.stringof~" vs. (Event,"~T.stringof~")" );
+                "Delegate args not correct: "~DgArgs.stringof~" vs. (Event,"~T.stringof~")" );
     }
 
     Dg dg;

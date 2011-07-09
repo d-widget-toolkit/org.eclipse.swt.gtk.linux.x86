@@ -12,12 +12,11 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.JPEGQuantizationTable;
 
-import java.lang.all;
-
 import org.eclipse.swt.internal.image.LEDataInputStream;
 import org.eclipse.swt.internal.image.JPEGVariableSizeSegment;
 import org.eclipse.swt.internal.image.JPEGFileFormat;
 
+import java.lang.System;
 
 final class JPEGQuantizationTable : JPEGVariableSizeSegment {
     public static byte[] DefaultLuminanceQTable = [

@@ -25,7 +25,7 @@ static this () {
     symbols = [
         Symbol("cairo_pdf_surface_set_size",  cast(void**)& cairo_pdf_surface_set_size),
         Symbol("cairo_pdf_surface_create_for_stream",  cast(void**)& cairo_pdf_surface_create_for_stream),
-        Symbol("cairo_pdf_surface_create",  cast(void**)& cairo_pdf_surface_create),
+        Symbol("cairo_pdf_surface_create",  cast(void**)& cairo_pdf_surface_create)
     ];
 }
 

@@ -313,7 +313,7 @@ void checkGC (int mask) {
         }
         if ((state & LINE_STYLE) !is 0) {
             float dashesOffset = 0;
-            float[] dashes = null;
+            TryConst!(float)[] dashes = null;
             float width = data.lineWidth;
             switch (data.lineStyle) {
                 case SWT.LINE_SOLID: break;
@@ -386,7 +386,7 @@ void checkGC (int mask) {
         int join_style = 0;
         int width = cast(int)data.lineWidth;
         int line_style = 0;
-        float[] dashes = null;
+        TryConst!(float)[] dashes = null;
         switch (data.lineCap) {
             case SWT.CAP_ROUND: cap_style = OS.GDK_CAP_ROUND; break;
             case SWT.CAP_FLAT: cap_style = OS.GDK_CAP_BUTT; break;
@@ -724,7 +724,7 @@ public void drawFocus(int x, int y, int width, int height) {
         OS.gtk_widget_style_get1(data.device.shellHandle, OS.focus_line_width.ptr, &lineWidth );
         Cairo.cairo_save(cairo);
         Cairo.cairo_set_line_width(cairo, lineWidth);
-        double[] dashes = [1, 1];
+        double[2] dashes = 1;
         double dash_offset = -lineWidth / 2f;
         while (dash_offset < 0) dash_offset += 2;
         Cairo.cairo_set_dash(cairo, dashes.ptr, dashes.length, dash_offset);

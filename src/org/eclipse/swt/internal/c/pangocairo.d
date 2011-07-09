@@ -130,7 +130,7 @@ static this () {
         Symbol("pango_cairo_font_map_get_default",  cast(void**)& pango_cairo_font_map_get_default),
         Symbol("pango_cairo_font_map_new_for_font_type",  cast(void**)& pango_cairo_font_map_new_for_font_type),
         Symbol("pango_cairo_font_map_new",  cast(void**)& pango_cairo_font_map_new),
-        Symbol("pango_cairo_font_map_get_type",  cast(void**)& pango_cairo_font_map_get_type),
+        Symbol("pango_cairo_font_map_get_type",  cast(void**)& pango_cairo_font_map_get_type)
     ];
 }
 

@@ -14,8 +14,6 @@ module org.eclipse.swt.custom.CBanner;
 
 import java.lang.all;
 
-
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.SWTException;
 import org.eclipse.swt.graphics.Color;

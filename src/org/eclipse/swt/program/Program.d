@@ -499,7 +499,7 @@ static String[] parseCommand(String cmd) {
             else {
                 /* Use white space for the delimiters. */
                 eIndex = sIndex;
-                while (eIndex < cmd.length && !Compatibility.isWhitespace( firstCodePoint( cmd[ eIndex .. $ ]))) eIndex++;
+                while (eIndex < cmd.length && !Compatibility.isWhitespace(cmd.charAt(eIndex))) eIndex++;
                 args ~= cmd.substring(sIndex, eIndex);
                 sIndex = eIndex + 1;
             }

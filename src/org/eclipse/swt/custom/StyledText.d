@@ -82,14 +82,14 @@ import org.eclipse.swt.custom.StyledTextDropTargetEffect;
 import org.eclipse.swt.custom.StyledTextListener;
 import org.eclipse.swt.custom.ST;
 
+import java.lang.all;
+import java.nonstandard.UnsafeUtf;
+
 version(Tango){
     static import tango.io.model.IFile;
-    import tango.util.Convert;
 } else { // Phobos
-    import std.conv;
     static import std.string;
 }
-import java.lang.all;
 
 
 /**
@@ -150,6 +150,7 @@ import java.lang.all;
  */
 public class StyledText : Canvas {
     alias Canvas.computeSize computeSize;
+package:
 
     static const char TAB = '\t';
     version(Tango){
@@ -196,17 +197,18 @@ public class StyledText : Canvas {
     int rightMargin;
     int bottomMargin;
     int columnX;                        // keep track of the horizontal caret position when changing lines/pages. Fixes bug 5935
-    int caretOffset = 0;
+    int/*UTF8index*/ caretOffset = 0;
     int caretAlignment;
     Point selection;                    // x and y are start and end caret offsets of selection
     Point clipboardSelection;           // x and y are start and end caret offsets of previous selection
-    int selectionAnchor;                // position of selection anchor. 0 based offset from beginning of text
+    bool selectedTextValid = true;      // DWT: false if we just changed a text witch was selected
+    int/*UTF8index*/ selectionAnchor;   // position of selection anchor. 0 based offset from beginning of text
     Point doubleClickSelection;         // selection after last mouse double click
     bool editable = true;
     bool wordWrap = false;
-    bool doubleClickEnabled = true;  // see getDoubleClickEnabled
-    bool overwrite = false;          // insert/overwrite edit mode
-    int textLimit = -1;                 // limits the number of characters the user can type in the widget. Unlimited by default.
+    bool doubleClickEnabled = true;     // see getDoubleClickEnabled
+    bool overwrite = false;             // insert/overwrite edit mode
+    int/*UTF8index*/ textLimit = -1;           // limits the number of characters the user can type in the widget. Unlimited by default.
     int[int] keyActionMap;
     Color background = null;            // workaround for bug 4791
     Color foreground = null;            //
@@ -238,12 +240,12 @@ public class StyledText : Canvas {
     int lineSpacing;
 
     const static bool IS_CARBON, IS_GTK, IS_MOTIF;
-    static this(){
+mixin(sharedStaticThis!(`{
         String platform = SWT.getPlatform();
         IS_CARBON = ("carbon" == platform);
         IS_GTK    = ("gtk"    == platform);
         IS_MOTIF  = ("motif"  == platform);
-    }
+    }`));
 
     /**
      * The Printing class : printing of a range of text.
@@ -512,6 +514,7 @@ public class StyledText : Canvas {
         } else if (data.scope_ is PrinterData.SELECTION) {
             startLine = content.getLineAtOffset(selection.x);
             if (selection.y > 0) {
+                // DWT: index isn't a valid UTF-8 index
                 endLine = content.getLineAtOffset(selection.x + selection.y - 1);
             } else {
                 endLine = startLine - 1;
@@ -708,7 +711,7 @@ public class StyledText : Canvas {
                     printLayout.setText("");
                 }
             } else {
-                printLayout.setText(to!(String)(index));
+                printLayout.setText(String_valueOf(index));
             }
             int paintX = x - printMargin - printLayout.getBounds().width;
             printLayout.draw(gc, paintX, y);
@@ -836,7 +839,7 @@ public class StyledText : Canvas {
      * Determines if Unicode RTF should be written.
      * Don't write Unicode RTF on Windows 95/98/ME or NT.
      */
-    void setUnicode() {
+    void setUnicode() {/*!!!*/
 //         const String Win95 = "windows 95";
 //         const String Win98 = "windows 98";
 //         const String WinME = "windows me";
@@ -873,11 +876,9 @@ public class StyledText : Canvas {
      * @param end end offset of segment
      */
     void write(String string, int start, int end) {
-        start = 0;
-        end = string.length;
-        int incr = 1;
-        for (int index = start; index < end; index+=incr) {
-            dchar ch = firstCodePoint( string[index .. $], incr );
+        int incr;
+        for (int index = start; index < end; index += incr) {
+            dchar ch = string.dcharAt(index, incr);
             if (ch > 0xFF && WriteUnicode) {
                 // write the sub string from the last escaped character
                 // to the current one. Fixes bug 21698.
@@ -885,7 +886,7 @@ public class StyledText : Canvas {
                     write( string[start .. index ] );
                 }
                 write("\\u");
-                write( to!(String)( cast(short)ch ));
+                write( String_valueOf( cast(short)ch ));
                 write(' ');                     // control word delimiter
                 start = index + incr;
             } else if (ch is '}' || ch is '{' || ch is '\\') {
@@ -896,6 +897,7 @@ public class StyledText : Canvas {
                 }
                 write('\\');
                 write(cast(char)ch); // ok because one of {}\
+                assert(incr == 1);
                 start = index + 1;
             }
         }
@@ -915,7 +917,7 @@ public class StyledText : Canvas {
         // specify code page, necessary for copy to work in bidi
         // systems that don't support Unicode RTF.
         // PORTING_TODO: String cpg = System.getProperty("file.encoding").toLowerCase();
-        String cpg = "UTF16";
+        //String cpg = "UTF16";
         /+
         if (cpg.startsWith("cp") || cpg.startsWith("ms")) {
             cpg = cpg.substring(2, cpg.length());
@@ -1764,13 +1766,14 @@ void clearSelection(bool sendEvent) {
         // therefore make sure redraw range is valid.
         int redrawStart = Math.min(selectionStart, length);
         int redrawEnd = Math.min(selectionEnd, length);
-        if (redrawEnd - redrawStart > 0) {
+        if (redrawEnd - redrawStart > 0 && selectedTextValid) {
             internalRedrawRange(redrawStart, redrawEnd - redrawStart);
         }
         if (sendEvent) {
             sendSelectionEvent();
         }
     }
+    selectedTextValid = true;
 }
 public override Point computeSize (int wHint, int hHint, bool changed) {
     checkWidget();
@@ -2243,13 +2246,13 @@ void doBackspace() {
         int lineIndex = content.getLineAtOffset(caretOffset);
         int lineOffset = content.getOffsetAtLine(lineIndex);
         if (caretOffset is lineOffset) {
-            // SWT: on line start, delete line break
+            // DWT: on line start, delete line break
             lineOffset = content.getOffsetAtLine(lineIndex - 1);
             event.start = lineOffset + content.getLine(lineIndex - 1).length;
             event.end = caretOffset;
         } else {
             TextLayout layout = renderer.getTextLayout(lineIndex);
-            int start = layout.getPreviousOffset(caretOffset - lineOffset, SWT.MOVEMENT_CLUSTER);
+            int start = layout.getPreviousOffset(caretOffset - lineOffset, SWT.MOVEMENT_CHAR);
             renderer.disposeTextLayout(layout);
             event.start = start + lineOffset;
             event.end = caretOffset;
@@ -2287,7 +2290,7 @@ void doContent(dchar key) {
         // replace character at caret offset if the caret is not at the
         // end of the line
         if (event.end < lineOffset + line.length) {
-            event.end+=dcharToString( key ).length;
+            event.end += line.UTF8strideAt(event.end - lineOffset);
         }
         event.text = dcharToString( key );
     } else {
@@ -2772,7 +2775,7 @@ void doPageEnd() {
             if (index is -1 && lineIndex > 0) {
                 bottomOffset = content.getOffsetAtLine(lineIndex - 1) + content.getLine(lineIndex - 1).length;
             } else {
-                bottomOffset = content.getOffsetAtLine(lineIndex) + Math.max(0, layout.getLineOffsets()[index + 1] - 1);
+                bottomOffset = content.getOffsetAtLine(lineIndex) + Math.max(0, getPreviousCharOffset(lineIndex, layout.getLineOffsets()[index + 1]));
             }
             renderer.disposeTextLayout(layout);
         } else {
@@ -3968,7 +3971,7 @@ public int getOffsetAtLocation(Point point) {
     if (point is null) {
         SWT.error(SWT.ERROR_NULL_ARGUMENT);
     }
-    int[] trailing = new int[1];
+    int[1] trailing;
     int offset = getOffsetAtPoint(point.x, point.y, trailing, true);
     if (offset is -1) {
         SWT.error(SWT.ERROR_INVALID_ARGUMENT);
@@ -4004,7 +4007,8 @@ int getOffsetAtPoint(int x, int y, int lineIndex) {
             String line = content.getLine(lineIndex);
             int level;
             int offset = offsetInLine;
-            while (offset > 0 && Character.isDigit(line.dcharAt(offset))) offset--;
+            while (offset > 0 && Character.isDigit(line.dcharAt(offset)))
+                offset = line.offsetBefore(offset);
             if (offset is 0 && Character.isDigit(line.dcharAt(offset))) {
                 level = isMirrored() ? 1 : 0;
             } else {
@@ -4634,7 +4638,8 @@ public String getText(int start, int end) {
     if (start < 0 || start >= contentLength || end < 0 || end >= contentLength || start > end) {
         SWT.error(SWT.ERROR_INVALID_RANGE);
     }
-    return content.getTextRange(start, end - start + 1);
+    auto res = content.getTextRange(start, content.getCharCount() - start);
+    return res[0 .. res.offsetAfter(end - start)];
 }
 /**
  * Returns the smallest bounding rectangle that includes the characters between two offsets.
@@ -4808,9 +4813,12 @@ int getCaretDirection() {
     int offset = caretOffset - lineOffset;
     int lineLength = line.length;
     if (lineLength is 0) return isMirrored() ? SWT.RIGHT : SWT.LEFT;
-    if (caretAlignment is PREVIOUS_OFFSET_TRAILING && offset > 0) offset--;
-    if (offset is lineLength && offset > 0) offset--;
-    while (offset > 0 && Character.isDigit(line.dcharAt(offset))) offset--;
+    if (caretAlignment is PREVIOUS_OFFSET_TRAILING && offset > 0)
+        offset = line.offsetBefore(offset);
+    if (offset is lineLength && offset > 0)
+        offset = line.offsetBefore(offset);
+    while (offset > 0 && Character.isDigit(line.dcharAt(offset)))
+        offset = line.offsetBefore(offset);
     if (offset is 0 && Character.isDigit(line.dcharAt(offset))) {
         return isMirrored() ? SWT.RIGHT : SWT.LEFT;
     }
@@ -4904,8 +4912,8 @@ Point getPointAtOffset(int offset) {
     int offsetInLine = offset - lineOffset;
     int lineLength = line.length;
     if (lineIndex < content.getLineCount() - 1) {
-        int endLineOffset = content.getOffsetAtLine(lineIndex + 1) - 1;
-        if (lineLength < offsetInLine && offsetInLine <= endLineOffset) {
+        int afterEndLineOffset = content.getOffsetAtLine(lineIndex + 1);
+        if (lineLength < offsetInLine && offsetInLine < afterEndLineOffset) {
             offsetInLine = lineLength;
         }
     }
@@ -4913,9 +4921,7 @@ Point getPointAtOffset(int offset) {
     TextLayout layout = renderer.getTextLayout(lineIndex);
     if (lineLength !is 0  && offsetInLine <= lineLength) {
         if (offsetInLine is lineLength) {
-            // SWT: Instead of go back one byte, go back one codepoint
-            int offsetInLine_m1 = layout.getPreviousOffset(offsetInLine, SWT.MOVEMENT_CLUSTER);
-            point = layout.getLocation(offsetInLine_m1, true);
+            point = layout.getLocation(getPreviousCharOffset(lineIndex, offsetInLine), true);
         } else {
             switch (caretAlignment) {
                 case OFFSET_LEADING:
@@ -4926,9 +4932,7 @@ Point getPointAtOffset(int offset) {
                     if (offsetInLine is 0) {
                         point = layout.getLocation(offsetInLine, false);
                     } else {
-                        // SWT: Instead of go back one byte, go back one codepoint
-                        int offsetInLine_m1 = layout.getPreviousOffset(offsetInLine, SWT.MOVEMENT_CLUSTER);
-                        point = layout.getLocation(offsetInLine_m1, true);
+                        point = layout.getLocation(getPreviousCharOffset(lineIndex, offsetInLine), true);
                     }
                     break;
             }
@@ -5077,7 +5081,7 @@ void internalRedrawRange(int start, int length) {
         int endIndex = layout.getLineIndex(Math.min(end, layout.getText().length));
         if (startIndex is endIndex) {
             /* Redraw rect between start and end offset if start and end offsets are in same wrapped line */
-            Rectangle rect = layout.getBounds(start, end - 1);
+            Rectangle rect = layout.getBounds( start, getPreviousCharOffset(startLine, end) );
             rect.x += lineX;
             rect.y += startLineY;
             super.redraw(rect.x, rect.y, rect.width, rect.height, false);
@@ -5087,7 +5091,7 @@ void internalRedrawRange(int start, int length) {
     }
 
     /* Redraw start line from the start offset to the end of client area */
-    Rectangle startRect = layout.getBounds(start, offsets[startIndex + 1] - 1);
+    Rectangle startRect = layout.getBounds( start, getPreviousCharOffset(startLine, offsets[startIndex + 1]) );
     if (startRect.height is 0) {
         Rectangle bounds = layout.getLineBounds(startIndex);
         startRect.x = bounds.width;
@@ -5106,7 +5110,7 @@ void internalRedrawRange(int start, int length) {
         offsets = layout.getLineOffsets();
     }
     int endIndex = layout.getLineIndex(Math.min(end, layout.getText().length));
-    Rectangle endRect = layout.getBounds(offsets[endIndex], end - 1);
+    Rectangle endRect = layout.getBounds(offsets[endIndex], getPreviousCharOffset(endLine, end));
     if (endRect.height is 0) {
         Rectangle bounds = layout.getLineBounds(endIndex);
         endRect.y = bounds.y;
@@ -5124,7 +5128,7 @@ void internalRedrawRange(int start, int length) {
     }
 }
 void handleCompositionOffset (Event event) {
-    int[] trailing = new int [1];
+    int[1] trailing;
     event.index = getOffsetAtPoint(event.x, event.y, trailing, true);
     event.count = trailing[0];
 }
@@ -5151,7 +5155,7 @@ void handleCompositionChanged(Event event) {
             int lineIndex = getCaretLine();
             int lineOffset = content.getOffsetAtLine(lineIndex);
             TextLayout layout = renderer.getTextLayout(lineIndex);
-            caretWidth = layout.getBounds(start - lineOffset, start + length - 1 - lineOffset).width;
+            caretWidth = layout.getBounds(start - lineOffset, getPreviousCharOffset(lineIndex, start + length - lineOffset)).width;
             renderer.disposeTextLayout(layout);
         }
     }
@@ -5666,7 +5670,7 @@ void initializeAccessible() {
                 if (text !is null) {
                     dchar mnemonic = _findMnemonic (text);
                     if (mnemonic !is '\0') {
-                        shortcut = Format("Alt+{}", mnemonic ); //$NON-NLS-1$
+                        shortcut = "Alt+"~dcharToString(mnemonic); //$NON-NLS-1$
                     }
                 }
             }
@@ -5747,7 +5751,7 @@ dchar _findMnemonic (String string) {
     do {
         while (index < length_ && string[index] !is '&') index++;
         if (++index >= length_) return '\0';
-        if (string[index] !is '&') return CharacterFirstToLower(string[index .. $ ] );
+        if (string[index] !is '&') return Character.toLowerCase (string.dcharAt (index));
         index++;
     } while (index < length_);
     return '\0';
@@ -7827,8 +7831,6 @@ public void setSelection(int start, int end) {
  */
 void setSelection(int start, int length, bool sendEvent) {
     int end = start + length;
-    start = content.utf8AdjustOffset(start);
-    end = content.utf8AdjustOffset(end);
     if (start > end) {
         int temp = end;
         end = start;
@@ -8327,7 +8329,7 @@ public void setWordWrap(bool wrap) {
     setCaretLocation();
     super.redraw();
 }
-// SWT: If necessary, scroll to show the location
+// DWT: If necessary, scroll to show the location
 bool showLocation(Rectangle rect, bool scrollPage) {
     int clientAreaWidth = this.clientAreaWidth - leftMargin - rightMargin;
     int clientAreaHeight = this.clientAreaHeight - topMargin - bottomMargin;
@@ -8444,6 +8446,7 @@ void updateSelection(int startOffset, int replacedLength, int newLength) {
         int redrawStart = startOffset + newLength;
         internalRedrawRange(redrawStart, selection.y + netNewLength - redrawStart);
     }
+    selectedTextValid = false;
     if (selection.y > startOffset && selection.x < startOffset + replacedLength) {
         // selection intersects replaced text. set caret behind text change
         setSelection(startOffset + newLength, 0, true);
@@ -8452,5 +8455,15 @@ void updateSelection(int startOffset, int replacedLength, int newLength) {
         setSelection(selection.x + newLength - replacedLength, selection.y - selection.x, true);
     }
     setCaretLocation();
+}
+
+// DWT: to use instead of "offsetInLine - 1"
+int getPreviousCharOffset(String F = __FILE__, uint L = __LINE__)(int lineIndex, int offsetInLine) {
+    String line = content.getLine(lineIndex);
+    if(offsetInLine < 0 || offsetInLine > line.length) {
+        getDwtLogger().warn(F, L, Format("Clamped UTF-8 offset:\noffsetInLine = {}, line.length = {}, line = {}", offsetInLine, line.length, line));
+        return offsetInLine - 1;
+    }
+    return line.offsetBefore(offsetInLine);
 }
 }

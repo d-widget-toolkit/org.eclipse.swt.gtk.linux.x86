@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.custom.StyledTextListener;
 
-import java.lang.all;
-
 
 import org.eclipse.swt.events.VerifyEvent;
 import org.eclipse.swt.internal.SWTEventListener;

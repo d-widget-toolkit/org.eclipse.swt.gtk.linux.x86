@@ -14,7 +14,6 @@ module org.eclipse.swt.custom.StyleRange;
 
 import java.lang.all;
 
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Color;
 import org.eclipse.swt.graphics.TextStyle;
@@ -22,7 +21,6 @@ import org.eclipse.swt.internal.CloneableCompatibility;
 import org.eclipse.swt.custom.StyleRange;
 import org.eclipse.swt.custom.TextChangedEvent;
 import org.eclipse.swt.custom.TextChangingEvent;
-
 
 /**
  * <code>StyleRange</code> defines a set of styles for a specified
@@ -219,7 +217,7 @@ public override String toString() {
     }
     String str = super.toString();
     int index = str.indexOf( '{');
-    str = str[ index + 1 .. $ ];
+    str = str.substring( index + 1 );
     if (str.length > 1) buffer.append(", ");
     buffer.append(str);
     return buffer.toString();

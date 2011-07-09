@@ -134,6 +134,6 @@ public this(Event e) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} detail={}}", super.toString[ 0 .. $-2 ], detail );
+    return Format( "{} detail={}}", super.toString[ 0 .. $-1 ], detail );
 }
 }

@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.layout.FillData;
 
-import java.lang.all;
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.widgets.Control;

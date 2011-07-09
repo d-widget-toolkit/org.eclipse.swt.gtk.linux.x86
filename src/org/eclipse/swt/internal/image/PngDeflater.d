@@ -12,9 +12,8 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.PngDeflater;
 
-import java.lang.all;
-
 import java.io.ByteArrayOutputStream;
+import java.lang.all;
 
 public class PngDeflater {
 
@@ -24,7 +23,7 @@ public class PngDeflater {
     static const int MAX_MATCHES = 32;
     static const int HASH = 8209;
 
-    byte[] istr;
+    TryConst!(byte)[] istr;
     int inLength;
 
     ByteArrayOutputStream bytes;
@@ -122,8 +121,8 @@ static class Code {
 
 }
 
-static /+const+/ Code lengthCodes[];
-static /+const+/ Code distanceCodes[];
+static TryConst!(Code[]) lengthCodes;
+static TryConst!(Code[]) distanceCodes;
 
 static this() {
     lengthCodes = [
@@ -221,7 +220,7 @@ void updateAdler(byte value) {
 
 }
 
-int hash(byte[] bytes) {
+int hash(in byte[] bytes) {
 
     int hash = ((bytes[0] & 0xff) << 24 | (bytes[1] & 0xff) << 16 | (bytes[2] & 0xff) << 8) % HASH;
     if (hash < 0) {
@@ -270,7 +269,7 @@ void outputLiteral(byte literal) {
 
 }
 
-Code findCode(int value, Code[] codes) {
+TryConst!(Code) findCode(int value, in Code[] codes) {
 
     int i, j, k;
 
@@ -293,7 +292,6 @@ Code findCode(int value, Code[] codes) {
 
 void outputMatch(int length, int distance) {
 
-    Code d, l;
     int thisLength;
 
     while (length > 0) {
@@ -315,7 +313,7 @@ void outputMatch(int length, int distance) {
         length = length - thisLength;
 
         // find length code
-        l = findCode(thisLength, lengthCodes);
+        auto l = findCode(thisLength, lengthCodes);
 
         // transmit the length code
         // 256 through 279 are 7 bits long starting at 0000000
@@ -333,7 +331,7 @@ void outputMatch(int length, int distance) {
         }
 
         // find distance code
-        d = findCode(distance, distanceCodes);
+        auto d = findCode(distance, distanceCodes);
 
         // transmit the distance code
         // 5 bits long starting at 00000
@@ -595,7 +593,7 @@ void store() {
 
 }
 
-public byte[] deflate(byte[] input) {
+public byte[] deflate(in byte[] input) {
 
     istr = input;
     inLength = input.length;

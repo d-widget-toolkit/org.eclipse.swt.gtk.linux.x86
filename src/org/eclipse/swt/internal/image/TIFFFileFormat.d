@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.TIFFFileFormat;
 
-import java.lang.all;
-
 import org.eclipse.swt.internal.image.TIFFRandomFileAccess;
 import org.eclipse.swt.internal.image.TIFFDirectory;
 import org.eclipse.swt.SWT;
@@ -21,6 +19,7 @@ import org.eclipse.swt.graphics.ImageData;
 import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.internal.image.FileFormat;
 
+import java.lang.all;
 
 /**
  * Baseline TIFF decoder revision 6.0

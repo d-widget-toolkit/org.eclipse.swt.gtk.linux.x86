@@ -12,13 +12,12 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.PngInputStream;
 
-import java.lang.all;
-
 import java.io.InputStream;
 import org.eclipse.swt.internal.image.PngIdatChunk;
 import org.eclipse.swt.internal.image.PngChunkReader;
 import org.eclipse.swt.internal.image.PngChunk;
 
+import java.lang.all;
 
 public class PngInputStream : InputStream {
 

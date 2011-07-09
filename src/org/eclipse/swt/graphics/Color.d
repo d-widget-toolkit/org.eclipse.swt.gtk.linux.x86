@@ -110,7 +110,7 @@ public this(Device device, int red, int green, int blue) {
  *
  * @see #dispose
  */
-public this(Device device, RGB rgb) {
+public this(Device device, in RGB rgb) {
     super(device);
     if (rgb is null) SWT.error(SWT.ERROR_NULL_ARGUMENT);
     init_(rgb.red, rgb.green, rgb.blue);

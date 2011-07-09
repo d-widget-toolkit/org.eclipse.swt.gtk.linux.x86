@@ -14,6 +14,7 @@ module org.eclipse.swt.widgets.Widget;
 
 import org.eclipse.swt.SWT;
 import java.lang.all;
+import java.nonstandard.UnsafeUtf;
 
 import org.eclipse.swt.events.DisposeListener;
 import org.eclipse.swt.internal.Converter;
@@ -26,10 +27,6 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.TypedListener;
 
 import java.lang.Thread;
-version(Tango){
-import tango.stdc.string;
-} else { // Phobos
-}
 
 
 /**
@@ -961,31 +958,28 @@ char [] fixMnemonic (String str) {
 }
 
 char [] fixMnemonic (String str, bool replace) {
-    int len = str.length;
-    auto text = str[0 .. len].dup;
+    char[] text = str.dup;
     int i = 0, j = 0;
-    char [] result = new char [len * 2];
-    while (i < len) {
+    char [] result = new char [str.length * 2];
+    while (i < str.length) {
         switch (text [i]) {
             case '&':
-                if (i + 1 < len && text [i + 1] is '&') {
-                    i++;
+                if (i + 1 < str.length && text [i + 1] == '&') {
+                    result [j++] = text [i++];
                 } else {
-                    if (replace) {
-                        text [i] = '_';
-                    } else {
-                        i++;
-                    }
+                    if (replace) result [j++] = '_';
                 }
+                i++;
                 break;
             case '_':
                 if (replace) result [j++] = '_';
-                break;
+                //FALL THROUGH
             default:
+                result [j++] = text [i++];
         }
-        result [j++] = text [i++];
     }
-    return result[0..j];
+    if (j < result.length) result [j++] = 0;
+    return result[0 .. j];
 }
 
 /**
@@ -1345,14 +1339,14 @@ char [] sendIMKeyEvent (int type, GdkEventKey* keyEvent, char [] chars) {
     while (index < chars.length) {
         Event event = new Event ();
         //PORTING take care of utf8
-        if (keyEvent !is null && chars.codepointCount() <= 1) {
+        if (keyEvent !is null && chars.UCScount() <= 1) {
             setKeyState (event, keyEvent);
         } else {
             setInputState (event, state);
         }
         //PORTING take care of utf8
         int incr;
-        event.character = cast(wchar) firstCodePoint( chars [index..$], incr );
+        event.character = cast(wchar) chars.dcharAt(index, incr);
         sendEvent (type, event);
 
         /*

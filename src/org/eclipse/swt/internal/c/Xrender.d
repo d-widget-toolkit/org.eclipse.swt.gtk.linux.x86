@@ -275,7 +275,7 @@ static this () {
         Symbol("XRenderQuerySubpixelOrder",  cast(void**)& XRenderQuerySubpixelOrder),
         Symbol("XRenderQueryFormats",  cast(void**)& XRenderQueryFormats),
         Symbol("XRenderQueryVersion",  cast(void**)& XRenderQueryVersion),
-        Symbol("XRenderQueryExtension",  cast(void**)& XRenderQueryExtension),
+        Symbol("XRenderQueryExtension",  cast(void**)& XRenderQueryExtension)
     ];
 }
 

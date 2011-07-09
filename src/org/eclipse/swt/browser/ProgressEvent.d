@@ -45,7 +45,7 @@ this(Widget w) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} {current = {}, total = {}}", 
-        super.toString[1 .. $-2], current, total );  
+    return Format( "{} current = {}, total = {}}", 
+        super.toString()[0 .. $-1], current, total );  
 }
 }

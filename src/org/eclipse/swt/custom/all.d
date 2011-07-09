@@ -1,7 +1,5 @@
 module org.eclipse.swt.custom.all;
 
-import java.lang.all;
-
 public import org.eclipse.swt.custom.AnimatedProgress;
 public import org.eclipse.swt.custom.BidiSegmentEvent;
 public import org.eclipse.swt.custom.BidiSegmentListener;

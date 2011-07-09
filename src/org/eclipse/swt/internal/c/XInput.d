@@ -552,7 +552,7 @@ static this () {
         Symbol("XUngrabDevice",  cast(void**)& XUngrabDevice),
         Symbol("XGrabDevice",  cast(void**)& XGrabDevice),
         Symbol("XChangePointerDevice",  cast(void**)& XChangePointerDevice),
-        Symbol("XChangeKeyboardDevice",  cast(void**)& XChangeKeyboardDevice),
+        Symbol("XChangeKeyboardDevice",  cast(void**)& XChangeKeyboardDevice)
     ];
 }
 

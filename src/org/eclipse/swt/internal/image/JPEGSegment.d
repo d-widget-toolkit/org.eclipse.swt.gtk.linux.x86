@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.JPEGSegment;
 
-import java.lang.all;
-
 import org.eclipse.swt.internal.image.LEDataOutputStream;
 
 

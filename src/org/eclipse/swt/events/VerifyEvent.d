@@ -63,6 +63,6 @@ public this(Event e) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} start={} end={} text={}}", super.toString[ 0 .. $-2 ], start, end, text );
+    return Format( "{} start={} end={} text={}}", super.toString[ 0 .. $-1 ], start, end, text );
 }
 }

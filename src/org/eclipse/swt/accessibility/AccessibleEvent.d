@@ -12,10 +12,9 @@
  *******************************************************************************/
 module org.eclipse.swt.accessibility.AccessibleEvent;
 
-import java.lang.all;
-
 
 import org.eclipse.swt.internal.SWTEventObject;
+import java.lang.all;
 
 /**
  * Instances of this class are sent as a result of
@@ -49,7 +48,7 @@ public class AccessibleEvent : SWTEventObject {
      */
     public String result;
 
-    //static const long serialVersionUID = 3257567304224026934L;
+    //static final long serialVersionUID = 3257567304224026934L;
 
 /**
  * Constructs a new instance of this class.
@@ -66,7 +65,7 @@ public this(Object source) {
  *
  * @return a string representation of the event
  */
-public String toString () {
-    return Format( "AccessibleEvent {childID={} result={}}", childID, result );
+override public String toString () {
+    return Format( "AccessibleEvent {{childID={} result={}}", childID, result );
 }
 }

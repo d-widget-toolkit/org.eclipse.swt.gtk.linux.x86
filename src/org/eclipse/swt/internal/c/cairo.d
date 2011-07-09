@@ -691,7 +691,7 @@ static this () {
         Symbol("cairo_reference",  cast(void**)& cairo_reference),
         Symbol("cairo_create",  cast(void**)& cairo_create),
         Symbol("cairo_version_string",  cast(void**)& cairo_version_string),
-        Symbol("cairo_version",  cast(void**)& cairo_version),
+        Symbol("cairo_version",  cast(void**)& cairo_version)
     ];
 }
 

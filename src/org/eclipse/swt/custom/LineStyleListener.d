@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.custom.LineStyleListener;
 
-import java.lang.all;
-
 import org.eclipse.swt.internal.SWTEventListener;
 import org.eclipse.swt.custom.LineStyleEvent;
 

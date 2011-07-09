@@ -132,7 +132,7 @@ public this(Event e) {
  */
 public override String toString() {
     return Format( "{} item={} detail={} x={} y={} width={} height={} stateMask={} text={} doit={}}",
-        super.toString[ 0 .. $-2 ],
+        super.toString[ 0 .. $-1 ],
         item,
         detail,
         x,

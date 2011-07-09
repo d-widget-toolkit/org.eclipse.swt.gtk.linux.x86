@@ -14,7 +14,6 @@ module org.eclipse.swt.custom.ScrolledCompositeLayout;
 
 import java.lang.all;
 
-
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.graphics.Point;
 import org.eclipse.swt.graphics.Rectangle;

@@ -70,6 +70,6 @@ public this(Event e) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} x={} y={} doit={}}", super.toString[ 0 .. $-2 ], x, y, doit );
+    return Format( "{} x={} y={} doit={}}", super.toString[ 0 .. $-1 ], x, y, doit );
 }
 }

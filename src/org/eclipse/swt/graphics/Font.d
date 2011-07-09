@@ -140,13 +140,13 @@ public this(Device device, FontData[] fds) {
  *    <li>ERROR_NO_HANDLES - if a font could not be created from the given arguments</li>
  * </ul>
  */
-public this(Device device, in String name, int height, int style) {
+public this(Device device, String name, int height, int style) {
     super(device);
     init_(name, height, style, null);
     init_();
 }
 
-/*public*/ this(Device device, in String name, float height, int style) {
+/*public*/ this(Device device, String name, float height, int style) {
     super(device);
     init_(name, height, style, null);
     init_();
@@ -243,7 +243,7 @@ public override hash_t toHash() {
     return cast(hash_t)/*64*/handle;
 }
 
-void init_( in String name, float height, int style, in String fontString) {
+void init_( String name, float height, int style, String fontString) {
     if (name is null) SWT.error(SWT.ERROR_NULL_ARGUMENT);
     if (height < 0) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
     if (fontString !is null) {

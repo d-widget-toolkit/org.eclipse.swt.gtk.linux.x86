@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.events.SelectionListener;
 
-import java.lang.all;
-
 
 public import org.eclipse.swt.internal.SWTEventListener;
 public import org.eclipse.swt.events.SelectionEvent;
@@ -85,11 +83,11 @@ private class _DgSelectionListenerT(Dg,T...) : SelectionListener {
     version(Tango){
         alias ParameterTupleOf!(Dg) DgArgs;
         static assert( is(DgArgs == Tuple!(SelectionEvent,T)),
-                    "Delegate args not correct: "~DgArgs.stringof~" vs. (Event,"~T.stringof~")" );
+                "Delegate args not correct: "~DgArgs.stringof~" vs. (Event,"~T.stringof~")" );
     } else { // Phobos
         alias ParameterTypeTuple!(Dg) DgArgs;
         static assert( is(DgArgs == TypeTuple!(SelectionEvent,T)),
-                    "Delegate args not correct: "~DgArgs.stringof~" vs. (Event,"~T.stringof~")" );
+                "Delegate args not correct: "~DgArgs.stringof~" vs. (Event,"~T.stringof~")" );
     }
 
     Dg dg;

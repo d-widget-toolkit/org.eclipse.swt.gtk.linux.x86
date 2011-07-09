@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.PngLzBlockReader;
 
-import java.lang.all;
-
 import org.eclipse.swt.internal.image.PngDecodingDataStream;
 import org.eclipse.swt.internal.image.PngHuffmanTables;
 

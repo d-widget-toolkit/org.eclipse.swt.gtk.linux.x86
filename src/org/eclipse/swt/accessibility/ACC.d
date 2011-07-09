@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.accessibility.ACC;
 
-import java.lang.all;
-
 
 /**
  * Class ACC contains all the constants used in defining an

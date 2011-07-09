@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.JPEGArithmeticConditioningTable;
 
-import java.lang.all;
-
 import org.eclipse.swt.internal.image.JPEGVariableSizeSegment;
 import org.eclipse.swt.internal.image.JPEGFileFormat;
 import org.eclipse.swt.internal.image.LEDataInputStream;

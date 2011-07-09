@@ -76,7 +76,7 @@ static this () {
         Symbol("g_module_make_resident",  cast(void**)& g_module_make_resident),
         Symbol("g_module_close",  cast(void**)& g_module_close),
         Symbol("g_module_open",  cast(void**)& g_module_open),
-        Symbol("g_module_supported",  cast(void**)& g_module_supported),
+        Symbol("g_module_supported",  cast(void**)& g_module_supported)
     ];
 }
 

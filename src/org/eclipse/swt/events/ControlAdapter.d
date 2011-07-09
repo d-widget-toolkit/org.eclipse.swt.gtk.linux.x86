@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.events.ControlAdapter;
 
-import java.lang.all;
-
 import org.eclipse.swt.events.ControlListener;
 /**
  * This adapter class provides default implementations for the

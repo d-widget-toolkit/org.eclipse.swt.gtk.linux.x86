@@ -131,7 +131,7 @@ public void javaToNative(Object object, TransferData transferData) {
     if (transferData.type is  cast(void*)XBM_ID) typeStr = "xbm";
     if (transferData.type is  cast(void*)XPM_ID) typeStr = "xpm";
     if (transferData.type is  cast(void*)XV_ID) typeStr = "xv";
-    CCharPtr type = typeStr.ptr;
+    auto type = typeStr.ptr;
     char* buffer;
     uint len;
     if (type is null) return;

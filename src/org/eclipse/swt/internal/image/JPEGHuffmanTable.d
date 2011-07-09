@@ -12,12 +12,11 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.JPEGHuffmanTable;
 
-import java.lang.all;
-
 import org.eclipse.swt.internal.image.JPEGVariableSizeSegment;
 import org.eclipse.swt.internal.image.LEDataInputStream;
 import org.eclipse.swt.internal.image.JPEGFileFormat;
 
+import java.lang.System;
 /**
  * JPEGHuffmanTable class actually represents two types of object:
  * 1) A DHT (Define Huffman Tables) segment, which may represent

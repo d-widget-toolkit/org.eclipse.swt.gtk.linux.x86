@@ -43,8 +43,8 @@ this(Widget w) {
  * @return a string representation of the event
  */
 public override String toString() {
-    return Format( "{} {text = {}}", 
-        super.toString[1 .. $-2], text );  
+    return Format( "{} text = {}}", 
+        super.toString()[0 .. $-1], text );  
 }
 
 }

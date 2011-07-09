@@ -38,9 +38,9 @@ extern(System) {
     align(4):
 
     struct GREVersionRange {
-        CCharPtr    lower;
+        TryConst!(char)* lower;
         int         lowerInclusive;
-        CCharPtr    upper;
+        TryConst!(char)* upper;
         int         upperInclusive;
     }
 

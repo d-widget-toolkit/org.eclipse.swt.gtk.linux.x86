@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.accessibility.AccessibleTextAdapter;
 
-import java.lang.all;
-
 import org.eclipse.swt.accessibility.AccessibleTextEvent;
 import org.eclipse.swt.accessibility.AccessibleTextListener;
 

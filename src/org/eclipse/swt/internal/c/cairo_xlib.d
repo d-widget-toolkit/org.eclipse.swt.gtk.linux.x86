@@ -50,7 +50,7 @@ static this () {
         Symbol("cairo_xlib_surface_set_drawable",  cast(void**)& cairo_xlib_surface_set_drawable),
         Symbol("cairo_xlib_surface_set_size",  cast(void**)& cairo_xlib_surface_set_size),
         Symbol("cairo_xlib_surface_create_for_bitmap",  cast(void**)& cairo_xlib_surface_create_for_bitmap),
-        Symbol("cairo_xlib_surface_create",  cast(void**)& cairo_xlib_surface_create),
+        Symbol("cairo_xlib_surface_create",  cast(void**)& cairo_xlib_surface_create)
     ];
 }
 

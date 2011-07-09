@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.custom.ST;
 
-import java.lang.all;
-
 
 /**
  * This class provides access to the public constants provided by <code>StyledText</code>.

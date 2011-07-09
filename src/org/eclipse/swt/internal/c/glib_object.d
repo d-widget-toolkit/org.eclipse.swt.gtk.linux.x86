@@ -4413,7 +4413,7 @@ static this () {
         Symbol("g_array_append_vals",  cast(void**)& g_array_append_vals),
         Symbol("g_array_free",  cast(void**)& g_array_free),
         Symbol("g_array_sized_new",  cast(void**)& g_array_sized_new),
-        Symbol("g_array_new",  cast(void**)& g_array_new),
+        Symbol("g_array_new",  cast(void**)& g_array_new)
     ];
 }
 

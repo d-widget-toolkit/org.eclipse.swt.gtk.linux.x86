@@ -202,8 +202,8 @@ this(Widget w) {
  */
 
 public String toString() {
-    return Format( "{} {required = {}, browser = {}, location = {}, size = {}, addressbar = {}, menubar = {}, statusbar = {}, toolbar = {}}", 
-        super.toString[1 .. $-2], 
+    return Format( "{} required={} browser={} location={} size={} addressbar={} menubar={} statusbar={} toolbar={}}", 
+        super.toString[0 .. $-1], 
         required, browser, 
         location, size, addressBar, 
         menuBar, statusBar, toolBar ); 

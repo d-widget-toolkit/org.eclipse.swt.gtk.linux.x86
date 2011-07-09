@@ -11,8 +11,6 @@
  *     Frank Benoit <benoit@tionex.de>
  *******************************************************************************/
 module org.eclipse.swt.custom.CTabFolderAdapter;
-
-import java.lang.all;
 import org.eclipse.swt.custom.CTabFolderEvent;
 import org.eclipse.swt.custom.CTabFolderListener;
 

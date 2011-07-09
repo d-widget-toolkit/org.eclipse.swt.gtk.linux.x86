@@ -12,8 +12,6 @@
  *******************************************************************************/
 module org.eclipse.swt.internal.image.LZWNode;
 
-import java.lang.all;
-
 
 final class LZWNode {
     public LZWNode left, right, children;

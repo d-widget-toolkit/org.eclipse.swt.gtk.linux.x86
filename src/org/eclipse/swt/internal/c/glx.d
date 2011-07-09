@@ -294,7 +294,7 @@ static this () {
         Symbol("glXGetClientString",  cast(void**)& dwt_glXGetClientString),
         Symbol("glXQueryExtensionsString",  cast(void**)& dwt_glXQueryExtensionsString),
         Symbol("glXQueryVersion",  cast(void**)& dwt_glXQueryVersion),
-        Symbol("glXQueryExtension",  cast(void**)& dwt_glXQueryExtension),
+        Symbol("glXQueryExtension",  cast(void**)& dwt_glXQueryExtension)
     ];
 }
 

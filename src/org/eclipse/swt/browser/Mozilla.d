@@ -16,10 +16,11 @@ import java.lang.all;
 
 
 version(Tango){
-import tango.text.locale.Core;
-import tango.sys.Environment;
-import tango.stdc.string;
+    import tango.text.locale.Core;
+    import tango.sys.Environment;
+    import tango.stdc.string;
 } else { // Phobos
+    import std.process: Environment = environment;
 }
 
 //import org.eclipse.swt.internal.c.gtk;
@@ -318,13 +319,8 @@ public void create (Composite parent, int style) {
                         if (Device.DEBUG) getDwtLogger().error (__FILE__, __LINE__, "cannot use detected XULRunner: {}", mozillaPath); //$NON-NLS-1$
                         
                         /* attempt to XPCOMGlueStartup the GRE pointed at by MOZILLA_FIVE_HOME */
-                        version(Tango){
-                            auto ptr = Environment.get(XPCOM.MOZILLA_FIVE_HOME);
-                        } else { // Phobos
-                            implMissing(__FILE__, __LINE__);
-                            String ptr;
-                        }
-
+                        auto ptr = Environment.get(XPCOM.MOZILLA_FIVE_HOME);
+                        
                         if (ptr is null) {
                             IsXULRunner = false;
                         } else {
@@ -374,12 +370,7 @@ public void create (Composite parent, int style) {
             }
 
             /* attempt to use the GRE pointed at by MOZILLA_FIVE_HOME */
-            version(Tango){
-                auto mozFiveHome = Environment.get(XPCOM.MOZILLA_FIVE_HOME);
-            } else { // Phobos
-                implMissing(__FILE__, __LINE__);
-                String mozFiveHome;
-            }
+            auto mozFiveHome = Environment.get(XPCOM.MOZILLA_FIVE_HOME);
             if (mozFiveHome !is null) {
                 mozillaPath = mozFiveHome;
             } else {
@@ -652,7 +643,7 @@ public void create (Composite parent, int style) {
             String language = Culture.current.twoLetterLanguageName ();
             String country = Region.current.twoLetterRegionName ();
         } else { // Phobos
-            implMissing(__FILE__, __LINE__);
+            implMissingInPhobos();
             String language = "en";
             String country = "us";
         }
@@ -1461,7 +1452,7 @@ static void error (int code ) {
 }
 
 extern(D)
-static String error (int code, CString file, int line) {
+static void error (int code, String file, int line) {
     getDwtLogger().info( __FILE__, __LINE__,  "File: {}  Line: {}", file, line);
     throw new SWTError ("XPCOM error " ~ Integer.toString(code)); //$NON-NLS-1$
 }
@@ -2701,7 +2692,7 @@ nsresult IsPreferred (char* aContentType, char** aDesiredContentType, PRBool* re
 
                 //nsICategoryManager categoryManager = new nsICategoryManager (result[0]);
                 //result[0] = 0;
-                CCharPtr categoryBytes = "Gecko-Content-Viewers"; //$NON-NLS-1$
+                auto categoryBytes = "Gecko-Content-Viewers".ptr; //$NON-NLS-1$
                 char* result;
                 rc = categoryManager.GetCategoryEntry (categoryBytes, aContentType, &result);
                 categoryManager.Release ();
