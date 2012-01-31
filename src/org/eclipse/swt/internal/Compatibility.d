@@ -22,7 +22,7 @@ import java.text.MessageFormat;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 import java.util.zip.InflaterInputStream;
-//import java.util.zip.DeflaterOutputStream;
+import java.util.zip.DeflaterOutputStream;
 
 import org.eclipse.swt.SWT;
 
@@ -181,9 +181,7 @@ public static int pow2(int n) {
  * @since 3.4
  */
 public static OutputStream newDeflaterOutputStream(OutputStream stream) {
-    implMissing(__FILE__,__LINE__);
-    return null;
-    //DWT_TODO return new DeflaterOutputStream(stream);
+    return new DeflaterOutputStream(stream);
 }
 
 /**
