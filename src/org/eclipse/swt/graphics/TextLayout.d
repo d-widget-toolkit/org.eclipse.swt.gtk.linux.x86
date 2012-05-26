@@ -243,6 +243,7 @@ void computeRuns () {
                         underlineStyle = OS.PANGO_UNDERLINE_ERROR;
                     }
                     break;
+                default: break;
             }
             if (underlineStyle !is OS.PANGO_UNDERLINE_NONE && style.underlineColor is null) {
                 auto attr = OS.pango_attr_underline_new(underlineStyle);
@@ -621,6 +622,7 @@ void drawBorder(GC gc, int x, int y, GdkColor* selectionColor) {
                     case SWT.BORDER_SOLID: break;
                     case SWT.BORDER_DASH: dashes = width !is 0 ? GC.LINE_DASH : GC.LINE_DASH_ZERO; break;
                     case SWT.BORDER_DOT: dashes = width !is 0 ? GC.LINE_DOT : GC.LINE_DOT_ZERO; break;
+                    default: break;
                 }
                 if (cairo !is null && OS.GTK_VERSION >= OS.buildVERSION(2, 8, 0)) {
                     Cairo.cairo_set_source_rgba(cairo, (color.red & 0xFFFF) / cast(float)0xFFFF, (color.green & 0xFFFF) / cast(float)0xFFFF, (color.blue & 0xFFFF) / cast(float)0xFFFF, data.alpha / cast(float)0xFF);
@@ -761,6 +763,7 @@ void drawBorder(GC gc, int x, int y, GdkColor* selectionColor) {
                                 OS.gdk_draw_rectangle(data.drawable, gdkGC, 1, rect.x, underlineY, rect.width, underlineThickness);
                             }
                             break;
+                        default: break;
                     }
                 }
                 if (rects !is null) OS.g_free(rects);
@@ -1752,6 +1755,7 @@ public void setAlignment (int alignment) {
         case SWT.RIGHT:
             align_ = rtl ? OS.PANGO_ALIGN_LEFT : OS.PANGO_ALIGN_RIGHT;
             break;
+        default: break;
     }
     OS.pango_layout_set_alignment(layout, align_);
 }

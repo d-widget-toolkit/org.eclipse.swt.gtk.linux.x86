@@ -191,6 +191,7 @@ public this (Composite parent, int style, GLData data) {
                     glWindow = null;
                 }
                 break;
+            default: break;
             }
         }
     };

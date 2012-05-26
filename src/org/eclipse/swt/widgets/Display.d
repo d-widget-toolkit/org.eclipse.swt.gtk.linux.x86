@@ -3249,7 +3249,8 @@ void releaseDisplay () {
     //flushData = null;
     closures = null;
     indexTable = signalIds = treeSelection = null;
-    widgetTable = modalShells = null;
+    widgetTable = null;
+    modalShells = null;
     data = null;
     values = null;
     keys = null;

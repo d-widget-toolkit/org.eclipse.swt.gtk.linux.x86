@@ -319,7 +319,7 @@ public int getStyle() {
  * @see #equals
  */
 public override hash_t toHash () {
-    return typeid(String).getHash(&name) ^ getHeight() ^ style;
+    return typeid(String).getHash(&name) ^ cast(int)(0.5f + height) ^ style;
 }
 
 /**

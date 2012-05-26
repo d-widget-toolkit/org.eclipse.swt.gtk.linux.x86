@@ -32,7 +32,6 @@ version(Tango){
     static import std.string;
     static import std.file;
     static import std.algorithm;
-    static import std.iterator;
 }
 
 version( build ){
@@ -605,7 +604,7 @@ static String[][ String ] gnome24_getMimeInfo() {
         scope file = new tango.io.device.File.File("/usr/share/mime/globs");
         scope it = new tango.io.stream.Lines.Lines!(char)( file );
     } else { // Phobos
-        scope it = std.string.splitlines( cast(String)std.file.read("/usr/share/mime/globs"));
+        scope it = std.string.splitLines( cast(String)std.file.read("/usr/share/mime/globs"));
     }
     // process file one line at a time
     String[][ String ] mimeInfo;
