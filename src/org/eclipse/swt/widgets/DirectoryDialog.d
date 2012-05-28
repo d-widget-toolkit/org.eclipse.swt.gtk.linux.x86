@@ -52,7 +52,7 @@ public class DirectoryDialog : Dialog {
     version(Tango){
         static const String SEPARATOR = tango.io.model.IFile.FileConst.PathSeparatorString;
     } else { // Phobos
-        static String SEPARATOR = std.path.sep;
+        static String SEPARATOR = std.path.pathSeparator;
     }
 
 /**

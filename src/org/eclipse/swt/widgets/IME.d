@@ -343,6 +343,7 @@ override int /*long*/ gtk_preedit_changed (GtkIMContext* imcontext) {
                         case OS.PANGO_UNDERLINE_ERROR:
                             styles [i].underlineStyle = SWT.UNDERLINE_ERROR;
                             break;
+                        default: break;
                     }
                     if (styles [i].underline) {
                         attr = OS.pango_attr_iterator_get(iterator, OS.PANGO_ATTR_UNDERLINE_COLOR);

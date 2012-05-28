@@ -204,7 +204,7 @@ public int getRed() {
  * @see #equals
  */
 public override hash_t toHash() {
-    if (isDisposed()) return 0;
+    if (handle is null) return 0;
     return handle.red ^ handle.green ^ handle.blue;
 }
 
