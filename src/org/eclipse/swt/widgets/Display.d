@@ -3539,7 +3539,11 @@ public void setData (String key, Object value) {
     if (key.equals (DISPATCH_EVENT_KEY)) {
         ArrayWrapperInt wrappedValue;
         if (value is null || (null !is (wrappedValue=cast(ArrayWrapperInt)value))) {
-            dispatchEvents = wrappedValue.array;
+            if (wrappedValue is null) {
+                dispatchEvents = [];
+            } else {
+                dispatchEvents = wrappedValue.array;
+            }
             if (value is null) putGdkEvents ();
             return;
         }
