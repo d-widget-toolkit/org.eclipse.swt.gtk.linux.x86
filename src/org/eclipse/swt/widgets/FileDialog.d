@@ -60,7 +60,7 @@ public class FileDialog : Dialog {
     version(Tango){
         static const char SEPARATOR = tango.io.model.IFile.FileConst.PathSeparatorChar;
     } else { // Phobos
-        static const char SEPARATOR = std.path.pathSeparator[0];
+        static const char SEPARATOR = std.path.dirSeparator[0];
     }
     static const char EXTENSION_SEPARATOR = ';';
 
