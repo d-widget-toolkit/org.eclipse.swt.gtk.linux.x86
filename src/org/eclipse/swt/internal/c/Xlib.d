@@ -7,7 +7,6 @@ module org.eclipse.swt.internal.c.Xlib;
 import java.lang.all;
 
 extern(C):
-align(4):
 
 const int XlibSpecificationRelease = 6;
 const int X_HAVE_UTF8_STRING = 1;

@@ -10,7 +10,6 @@ public import org.eclipse.swt.internal.c.cairo;
 public import org.eclipse.swt.internal.c.glib_object;
 
 extern(C):
-align(4):
 
 const int GDK_CURRENT_TIME = 0;
 const int GDK_PARENT_RELATIVE = 1;

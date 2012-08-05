@@ -5,9 +5,9 @@ import java.lang.all;
 import java.text.ParseException;
 
 
-align(1)
 struct nsID
 {
+align(1):
     PRUint32 m0;
     PRUint16 m1;
     PRUint16 m2;

@@ -9,7 +9,6 @@ import java.lang.all;
 public import org.eclipse.swt.internal.c.glib_object;
 
 extern(C):
-align(4):
 
 
 alias _AtkValueIface AtkValueIface;

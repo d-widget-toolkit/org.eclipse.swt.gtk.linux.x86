@@ -7,7 +7,6 @@ module org.eclipse.swt.internal.c.X;
 import java.lang.all;
 
 extern(C):
-align(4):
 
 const int X_PROTOCOL = 11;
 const int X_PROTOCOL_REVISION = 0;

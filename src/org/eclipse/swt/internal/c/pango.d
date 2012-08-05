@@ -24,7 +24,6 @@ void loadLib(){
 
 
 extern(C):
-align(4):
 
 
 struct _IO_FILE{};

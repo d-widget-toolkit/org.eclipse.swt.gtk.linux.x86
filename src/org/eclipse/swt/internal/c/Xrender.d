@@ -9,7 +9,6 @@ import java.lang.all;
 public import org.eclipse.swt.internal.c.Xlib;
 
 extern(C):
-align(4):
 
 const int PictStandardARGB32 = 0;
 const int PictStandardRGB24 = 1;

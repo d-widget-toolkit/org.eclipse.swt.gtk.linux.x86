@@ -9,7 +9,6 @@ import java.lang.all;
 public import org.eclipse.swt.internal.c.glib_object;
 
 extern(C):
-align(4):
 
 alias void GModule;
 alias void function(void *) _BCD_func__1618;

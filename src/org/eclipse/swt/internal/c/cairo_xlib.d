@@ -11,7 +11,6 @@ public import org.eclipse.swt.internal.c.cairo;
 public import org.eclipse.swt.internal.c.Xlib;
 
 extern(C):
-align(4):
 
 alias void function(void *, char *, int, int, char * *) _BCD_func__1143;
 alias int function(void *) _BCD_func__1190;

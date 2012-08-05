@@ -10,7 +10,7 @@ public import org.eclipse.swt.internal.c.cairo;
 public import org.eclipse.swt.internal.c.Xrender;
 
 extern(C):
-align(4):
+
 alias void function(void *, char *, int, int, char * *) _BCD_func__1573;
 alias int function(void *) _BCD_func__1614;
 alias int function(void *, XErrorEvent *) _BCD_func__1615;

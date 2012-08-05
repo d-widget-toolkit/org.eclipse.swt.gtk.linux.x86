@@ -19,7 +19,6 @@ void loadLib(){
 }
 
 extern(C):
-align(4):
 
 public import org.eclipse.swt.internal.c.atk;
 public import org.eclipse.swt.internal.c.cairo;

@@ -9,7 +9,6 @@ import java.lang.all;
 public import org.eclipse.swt.internal.c.Xlib;
 
 extern(C):
-align(4):
 
 struct XExtensionVersion{ int a; int b; };
 

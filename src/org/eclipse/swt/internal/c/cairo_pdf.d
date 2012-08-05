@@ -8,8 +8,6 @@ import java.lang.all;
 public import org.eclipse.swt.internal.c.glib_object;
 public import org.eclipse.swt.internal.c.cairo;
 
-align(4):
-
 alias int function(void *, char *, uint) _BCD_func__480;
 alias int function(void *, char *, uint) _BCD_func__479;
 alias void function(void *) _BCD_func__484;
