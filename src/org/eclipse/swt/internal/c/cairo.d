@@ -7,7 +7,6 @@ module org.eclipse.swt.internal.c.cairo;
 import java.lang.all;
 
 extern(C):
-align(4):
 
 const int CAIRO_VERSION_MAJOR = 1;
 const int CAIRO_VERSION_MINOR = 4;

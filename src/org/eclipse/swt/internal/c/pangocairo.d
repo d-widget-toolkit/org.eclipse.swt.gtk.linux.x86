@@ -11,7 +11,6 @@ public import org.eclipse.swt.internal.c.pango;
 public import org.eclipse.swt.internal.c.glib_object;
 
 extern(C):
-align(4):
 
 alias void function(void *, _PangoAttrShape *, int, void *) _BCD_func__2844;
 alias _BCD_func__2844 PangoCairoShapeRendererFunc;

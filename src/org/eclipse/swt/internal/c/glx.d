@@ -21,7 +21,6 @@ void loadLib(){
 }
 
 extern(C):
-align(4):
 
 alias __GLXEvent GLXEvent;
 alias uint GLXDrawable;

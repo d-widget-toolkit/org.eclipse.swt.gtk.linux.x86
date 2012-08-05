@@ -38,7 +38,6 @@ void loadLib(){
 
 
 extern(C):
-align(4):
 
 version( ARGS_TYPED ){
     alias _GtkVSeparatorClass aGtkVSeparatorClass;

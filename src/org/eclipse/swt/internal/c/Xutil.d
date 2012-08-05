@@ -9,7 +9,6 @@ import java.lang.all;
 public import org.eclipse.swt.internal.c.Xlib;
 
 extern(C):
-align(4):
 
 const int NoValue = 0x0000;
 const int XValue = 0x0001;

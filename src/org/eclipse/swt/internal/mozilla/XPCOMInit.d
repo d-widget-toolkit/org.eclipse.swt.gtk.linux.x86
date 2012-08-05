@@ -35,8 +35,6 @@ import org.eclipse.swt.internal.mozilla.Common;
 
 extern(System) {
 
-    align(4):
-
     struct GREVersionRange {
         TryConst!(char)* lower;
         int         lowerInclusive;

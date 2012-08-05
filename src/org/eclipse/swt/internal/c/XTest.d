@@ -10,7 +10,6 @@ public import org.eclipse.swt.internal.c.Xlib;
 public import org.eclipse.swt.internal.c.XInput;
 
 extern(C):
-align(4):
 
 const int X_XTestGetVersion = 0;
 const int X_XTestCompareCursor = 1;

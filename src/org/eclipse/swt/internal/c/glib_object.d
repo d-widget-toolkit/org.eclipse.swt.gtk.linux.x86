@@ -7,7 +7,6 @@ module org.eclipse.swt.internal.c.glib_object;
 import java.lang.all;
 
 extern(C):
-align(4):
 
 struct __gconv_step{}
 struct __gconv_step_data{}
