@@ -41,10 +41,10 @@ public final class GCData {
     public Pattern foregroundPattern;
     public Pattern backgroundPattern;
     public GdkRegion* clipRgn;
-    public float lineWidth;
+    public float lineWidth = 0;
     public int lineStyle = SWT.LINE_SOLID;
     public float[] lineDashes;
-    public float lineDashesOffset;
+    public float lineDashesOffset = 0;
     public float lineMiterLimit = 10;
     public int lineCap = SWT.CAP_FLAT;
     public int lineJoin = SWT.JOIN_MITER;
@@ -58,7 +58,7 @@ public final class GCData {
     public Image image;
     public GdkDrawable* drawable;
     public cairo_t* cairo;
-    public double cairoXoffset, cairoYoffset;
+    public double cairoXoffset = 0, cairoYoffset = 0;
     public bool disposeCairo;
     public double[] clippingTransform;
     public String str;
