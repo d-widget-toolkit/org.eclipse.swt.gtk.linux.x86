@@ -395,7 +395,7 @@ public bool contains(float x, float y, GC gc, bool outline) {
 public void cubicTo(float cx1, float cy1, float cx2, float cy2, float x, float y) {
     if (isDisposed()) SWT.error(SWT.ERROR_GRAPHIC_DISPOSED);
     if (!moved) {
-        double currentX, currentY;
+        double currentX = 0, currentY = 0;
         Cairo.cairo_get_current_point(handle, &currentX, &currentY);
         Cairo.cairo_move_to(handle, currentX, currentY);
         moved = true;
@@ -493,7 +493,7 @@ public void getCurrentPoint(float[] point) {
     if (isDisposed()) SWT.error(SWT.ERROR_GRAPHIC_DISPOSED);
     if (point is null) SWT.error(SWT.ERROR_NULL_ARGUMENT);
     if (point.length < 2) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
-    double x, y;
+    double x = 0, y = 0;
     Cairo.cairo_get_current_point(handle, &x, &y);
     point[0] = cast(float)x;
     point[1] = cast(float)y;
@@ -583,7 +583,7 @@ public PathData getPathData() {
 public void lineTo(float x, float y) {
     if (isDisposed()) SWT.error(SWT.ERROR_GRAPHIC_DISPOSED);
     if (!moved) {
-        double currentX, currentY;
+        double currentX = 0, currentY = 0;
         Cairo.cairo_get_current_point(handle, &currentX, &currentY);
         Cairo.cairo_move_to(handle, currentX, currentY);
         moved = true;
@@ -632,7 +632,7 @@ public void moveTo(float x, float y) {
  */
 public void quadTo(float cx, float cy, float x, float y) {
     if (isDisposed()) SWT.error(SWT.ERROR_GRAPHIC_DISPOSED);
-    double currentX, currentY;
+    double currentX = 0, currentY = 0;
     Cairo.cairo_get_current_point(handle, &currentX, &currentY);
     if (!moved) {
         Cairo.cairo_move_to(handle, currentX, currentY);

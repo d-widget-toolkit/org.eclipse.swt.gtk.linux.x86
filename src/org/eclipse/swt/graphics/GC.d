@@ -199,7 +199,7 @@ static void addCairoString(org.eclipse.swt.internal.gtk.OS.cairo_t* cairo, Strin
         if (layout is null) SWT.error(SWT.ERROR_NO_HANDLES);
         OS.pango_layout_set_text(layout, buffer, -1);
         OS.pango_layout_set_font_description(layout, font.handle);
-        double currentX, currentY;
+        double currentX = 0, currentY = 0;
         Cairo.cairo_get_current_point(cairo, &currentX, &currentY);
         if (currentX !is x || currentY !is y) {
             Cairo.cairo_move_to(cairo, x, y);
@@ -431,7 +431,7 @@ GdkRegion* convertRgn(GdkRegion* rgn, double[] matrix) {
     OS.gdk_region_get_rectangles(rgn, &rects, &nRects);
     GdkRectangle* rect;
     int[8] pointArray;
-    double x, y;
+    double x = 0, y = 0;
     for (int i=0; i<nRects; i++) {
         rect = rects +i;
         x = rect.x;

@@ -523,8 +523,8 @@ override int /*long*/ gtk_clicked (GtkWidget* widget) {
                 case OS.GDK_BUTTON_PRESS:
                 case OS.GDK_2BUTTON_PRESS:
                 case OS.GDK_BUTTON_RELEASE: {
-                    double x_win;
-                    double y_win;
+                    double x_win = 0;
+                    double y_win = 0;
                     OS.gdk_event_get_coords (eventPtr, &x_win, &y_win);
                     int x = OS.GTK_WIDGET_X (arrowHandle) - OS.GTK_WIDGET_X (handle);
                     int width = OS.GTK_WIDGET_WIDTH (arrowHandle);
