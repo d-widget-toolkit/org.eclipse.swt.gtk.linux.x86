@@ -593,6 +593,7 @@ void disposeLayout() {
     data.context = null;
 }
 
+override
 void destroy() {
     if (data.disposeCairo) {
         auto cairo = data.cairo;

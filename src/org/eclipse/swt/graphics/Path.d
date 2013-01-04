@@ -648,6 +648,7 @@ public void quadTo(float cx, float cy, float x, float y) {
     closed = false;
 }
 
+override
 void destroy() {
     Cairo.cairo_destroy(handle);
     handle = null;

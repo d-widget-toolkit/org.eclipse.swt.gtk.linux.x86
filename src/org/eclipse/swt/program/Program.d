@@ -992,6 +992,7 @@ public override hash_t toHash() {
  *
  * @return a string representation of the program
  */
+override
 public String toString() {
     return Format( "Program {{{}}", name );
 }

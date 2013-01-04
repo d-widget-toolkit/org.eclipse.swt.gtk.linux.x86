@@ -935,6 +935,7 @@ public bool getListVisible () {
     return false;
 }
 
+override
 String getNameText () {
     return getText ();
 }

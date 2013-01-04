@@ -425,6 +425,7 @@ public int getFocusIndex () {
     return index;
 }
 
+override
 GdkColor* getForegroundColor () {
     return getTextColor ();
 }

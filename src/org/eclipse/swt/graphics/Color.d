@@ -117,6 +117,7 @@ public this(Device device, in RGB rgb) {
     init_();
 }
 
+override
 void destroy() {
     int pixel = handle.pixel;
     if (device.colorRefCount !is null) {

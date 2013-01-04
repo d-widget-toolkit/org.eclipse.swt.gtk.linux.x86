@@ -200,10 +200,12 @@ static int checkStyle (int style) {
     return checkBits (style, SWT.LEFT, SWT.CENTER, SWT.RIGHT, 0, 0, 0);
 }
 
+override
 protected void checkSubclass () {
     if (!isValidSubclass ()) error (SWT.ERROR_INVALID_SUBCLASS);
 }
 
+override
 void createWidget (int index) {
     parent.createItem (this, index);
     setOrientation ();
@@ -212,6 +214,7 @@ void createWidget (int index) {
     text = "";
 }
 
+override
 void deregister() {
     super.deregister ();
     display.removeWidget (handle);
@@ -219,6 +222,7 @@ void deregister() {
     if (labelHandle !is null) display.removeWidget (labelHandle);
 }
 
+override
 void destroyWidget () {
     parent.destroyItem (this);
     releaseHandle ();
@@ -399,6 +403,7 @@ override int gtk_size_allocate (GtkWidget* widget, int allocation) {
     return 0;
 }
 
+override
 void hookEvents () {
     super.hookEvents ();
     OS.g_signal_connect_closure (handle, OS.clicked.ptr, display.closures [CLICKED], false);
@@ -438,6 +443,7 @@ public void pack () {
     setWidth(width);
 }
 
+override
 void register () {
     super.register ();
     display.addWidget (handle, this);
@@ -445,6 +451,7 @@ void register () {
     if (labelHandle !is null) display.addWidget (labelHandle, this);
 }
 
+override
 void releaseHandle () {
     super.releaseHandle ();
     handle = buttonHandle = labelHandle = imageHandle = null;
@@ -452,6 +459,7 @@ void releaseHandle () {
     parent = null;
 }
 
+override
 void releaseParent () {
     super.releaseParent ();
     if (parent.sortColumn is this) {
@@ -584,6 +592,7 @@ public void setMoveable (bool moveable) {
     OS.gtk_tree_view_column_set_reorderable (handle, moveable);
 }
 
+override
 void setOrientation() {
     if ((parent.style & SWT.RIGHT_TO_LEFT) !is 0) {
         if (buttonHandle !is null) {

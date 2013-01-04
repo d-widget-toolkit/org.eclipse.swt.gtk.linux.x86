@@ -152,6 +152,7 @@ public this(Device device, String name, int height, int style) {
     init_();
 }
 
+override
 void destroy() {
     OS.pango_font_description_free(handle);
     handle = null;
@@ -288,6 +289,7 @@ public override bool isDisposed() {
  *
  * @return a string representation of the receiver
  */
+override
 public String toString () {
     if (isDisposed()) return "Font {*DISPOSED*}";
     return Format( "Font {{{}}", handle );

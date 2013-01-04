@@ -47,8 +47,8 @@ public class Clipboard {
 
     private Display display;
 
-    private static void* GTKCLIPBOARD;
-    private static void* GTKPRIMARYCLIPBOARD;
+    static void* GTKCLIPBOARD;
+    static void* GTKPRIMARYCLIPBOARD;
     private static void* TARGET;
     private static bool static_this_completed = false;
     private static void static_this(){

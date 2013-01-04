@@ -393,11 +393,13 @@ bool isInlineEnabled () {
     return hooks (SWT.ImeComposition);
 }
 
+override
 void releaseParent () {
     super.releaseParent ();
     if (this is parent.getIME ()) parent.setIME (null);
 }
 
+override
 void releaseWidget () {
     super.releaseWidget ();
     parent = null;

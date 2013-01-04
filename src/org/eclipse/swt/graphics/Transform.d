@@ -151,6 +151,7 @@ static float[] checkTransform(float[] elements) {
     return elements;
 }
 
+override
 void destroy() {
     handle = null;
 }

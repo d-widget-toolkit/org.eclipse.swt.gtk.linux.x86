@@ -958,6 +958,7 @@ void createRenderers (GtkTreeViewColumn* columnHandle, int modelIndex, bool chec
     }
 }
 
+override
 void createWidget (int index) {
     super.createWidget (index);
     items = new TreeItem [4];
@@ -1193,6 +1194,7 @@ public override Rectangle getClientArea () {
     return new Rectangle (fixedX  - binX , fixedY  - binY , width, height);
 }
 
+override
 int getClientWidth () {
     int w, h;
     OS.gtk_widget_realize (handle);

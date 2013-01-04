@@ -319,6 +319,7 @@ int[] computePolyline(int left, int top, int right, int bottom) {
     return coordinates;
 }
 
+override
 void destroy() {
     font = null;
     text = null;

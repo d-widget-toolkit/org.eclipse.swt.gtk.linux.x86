@@ -458,6 +458,7 @@ GdkCursor* createCursor(in byte[] sourceData, in byte[] maskData, int width, int
     return cursor;
 }
 
+override
 void destroy() {
     OS.gdk_cursor_destroy(handle);
     handle = null;

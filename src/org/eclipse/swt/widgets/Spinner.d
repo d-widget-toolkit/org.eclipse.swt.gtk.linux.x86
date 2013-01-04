@@ -594,6 +594,7 @@ override int /*long*/ gtk_changed (GtkWidget* widget) {
     return 0;
 }
 
+override
 int /*long*/ gtk_commit (GtkIMContext* imContext, char* text) {
     if (text is null) return 0;
     if (!OS.gtk_editable_get_editable (cast(GtkEditable*)handle)) return 0;
