@@ -498,10 +498,12 @@ public void addSelectionListener (SelectionListener listener) {
     addListener (SWT.DefaultSelection, typedListener);
 }
 
+override
 protected void checkSubclass () {
     if (!isValidSubclass ()) error (SWT.ERROR_INVALID_SUBCLASS);
 }
 
+override
 public Point computeSize (int wHint, int hHint, bool changed) {
     checkWidget ();
     int width = 0, height = 0;
@@ -530,6 +532,7 @@ public Point computeSize (int wHint, int hHint, bool changed) {
     return new Point (width, height);
 }
 
+override
 void createHandle (int index) {
     if ((style & SWT.CALENDAR) !is 0) {
         state |= HANDLE;
@@ -549,6 +552,7 @@ void createHandle (int index) {
     }
 }
 
+override
 void createWidget (int index) {
     super.createWidget (index);
     if ((style & SWT.CALENDAR) !is 0) {
@@ -720,6 +724,7 @@ public int getMonth () {
     }
 }
 
+override
 String getNameText() {
     if((style & SWT.TIME) !is 0){
         return Format( "{}:{}:{}", getHours(), getMinutes(), getSeconds() );
@@ -784,6 +789,7 @@ override int gtk_month_changed (GtkWidget* widget) {
     return 0;
 }
 
+override
 void hookEvents () {
     super.hookEvents();
     if ((style & SWT.CALENDAR) !is 0) {
@@ -964,6 +970,7 @@ void onVerify(Event event) {
     }
 }
 
+override
 void releaseWidget () {
     super.releaseWidget();
     //TODO: need to do anything here?
@@ -1036,12 +1043,14 @@ void sendSelectionEvent () {
     }
 }
 
+override
 public void setBackground(Color color) {
     checkWidget();
     super.setBackground(color);
     if (text !is null) text.setBackground(color);
 }
 
+override
 public void setFont(Font font) {
     checkWidget();
     super.setFont(font);
@@ -1049,6 +1058,7 @@ public void setFont(Font font) {
     redraw();
 }
 
+override
 public void setForeground(Color color) {
     checkWidget();
     super.setForeground(color);

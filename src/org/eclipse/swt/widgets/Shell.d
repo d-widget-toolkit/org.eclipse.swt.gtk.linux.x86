@@ -898,6 +898,7 @@ override public Point getLocation () {
     return new Point (x, y);
 }
 
+override
 public bool getMaximized () {
     checkWidget();
     return !fullScreen && super.getMaximized ();
@@ -983,6 +984,7 @@ override public bool getVisible () {
  * @since 3.0
  *
  */
+override
 public Region getRegion () {
     /* This method is needed for @since 3.0 Javadoc */
     checkWidget ();
@@ -1194,6 +1196,7 @@ public void open () {
     if (!restoreFocus () && !traverseGroup (true)) setFocus ();
 }
 
+override
 public bool print (GC gc) {
     checkWidget ();
     if (gc is null) error (SWT.ERROR_NULL_ARGUMENT);
@@ -1638,6 +1641,7 @@ public void setMinimumSize (Point size) {
  * @since 3.0
  *
  */
+override
 public void setRegion (Region region) {
     checkWidget ();
     if ((style & SWT.NO_TRIM) is 0) return;
@@ -1779,6 +1783,7 @@ override int /*long*/ shellMapProc (GtkWidget* handle, int /*long*/ arg0, int /*
     return 0;
 }
 
+override
 void showWidget () {
     if ((state & FOREIGN_HANDLE) !is 0) return;
     OS.gtk_container_add (cast(GtkContainer*)shellHandle, vboxHandle);

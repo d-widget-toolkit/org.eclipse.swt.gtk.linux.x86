@@ -1166,6 +1166,7 @@ public override Rectangle getClientArea () {
     return new Rectangle (fixedX - binX, fixedY - binY, width, height);
 }
 
+override
 int getClientWidth () {
     int w, h;
     OS.gtk_widget_realize (handle);

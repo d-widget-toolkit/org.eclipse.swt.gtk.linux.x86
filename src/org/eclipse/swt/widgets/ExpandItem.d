@@ -594,6 +594,7 @@ public override void setImage (Image image) {
     }
 }
 
+override
 void setOrientation() {
     super.setOrientation ();
     if ((parent.style & SWT.RIGHT_TO_LEFT) !is 0) {

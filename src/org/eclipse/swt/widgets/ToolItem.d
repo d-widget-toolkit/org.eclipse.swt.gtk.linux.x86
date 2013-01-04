@@ -916,6 +916,7 @@ public override void setImage (Image image) {
     parent.relayout ();
 }
 
+override
 void setOrientation () {
     if ((parent.style & SWT.RIGHT_TO_LEFT) !is 0) {
         if (handle !is null) OS.gtk_widget_set_direction (handle, OS.GTK_TEXT_DIR_RTL);

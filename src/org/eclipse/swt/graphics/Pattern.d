@@ -184,6 +184,7 @@ public this(Device device, float x1, float y1, float x2, float y2, Color color1,
     init_();
 }
 
+override
 void destroy() {
     Cairo.cairo_pattern_destroy(handle);
     handle = null;

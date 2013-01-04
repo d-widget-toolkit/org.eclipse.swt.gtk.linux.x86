@@ -230,6 +230,7 @@ public bool contains(Point pt) {
     return contains(pt.x, pt.y);
 }
 
+override
 void destroy() {
     OS.gdk_region_destroy(handle);
     handle = null;

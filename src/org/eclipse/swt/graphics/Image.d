@@ -763,6 +763,7 @@ void destroyMask() {
     mask = null;
 }
 
+override
 void destroy() {
     if (memGC !is null) memGC.dispose();
     if (pixmap !is null) OS.g_object_unref(pixmap);

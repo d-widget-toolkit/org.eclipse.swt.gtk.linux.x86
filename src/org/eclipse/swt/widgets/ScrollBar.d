@@ -163,6 +163,7 @@ void destroyHandle () {
     super.destroyWidget ();
 }
 
+override
 void destroyWidget () {
     parent.destroyScrollBar (this);
     releaseHandle ();
@@ -469,6 +470,7 @@ override void register () {
     if (adjustmentHandle !is null) display.addWidget (cast(GtkWidget*)adjustmentHandle, this);
 }
 
+override
 void releaseHandle () {
     super.releaseHandle ();
     parent = null;
@@ -601,6 +603,7 @@ public void setMinimum (int value) {
     OS.g_signal_handlers_unblock_matched (adjustmentHandle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udVALUE_CHANGED);
 }
 
+override
 void setOrientation () {
     super.setOrientation ();
     if ((parent.style & SWT.MIRRORED) !is 0) {

@@ -453,6 +453,7 @@ override void fixChildren (Shell newShell, Shell oldShell, Decorations newDecora
     }
 }
 
+override
 void fixModal(GtkWidget* group, GtkWidget* modalGroup)  {
     Control[] controls = _getChildren ();
     for (int i = 0; i < controls.length; i++) {
@@ -601,6 +602,7 @@ override public Rectangle getClientArea () {
     return super.getClientArea();
 }
 
+override
 int getClientWidth() {
     return (state & ZERO_WIDTH) !is 0 ? 0 : OS.GTK_WIDGET_WIDTH (clientHandle ());
 }
@@ -1108,6 +1110,7 @@ void moveBelow (GtkWidget* child, GtkWidget* sibling) {
     parentHandle = cast(GtkWidget*)fixed;
 }
 
+override
 void moveChildren(int oldWidth) {
     Control[] children = _getChildren ();
     for (int i = 0; i < children.length; i++) {

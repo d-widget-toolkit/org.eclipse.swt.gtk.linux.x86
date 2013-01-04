@@ -374,6 +374,7 @@ public Menu getMenu () {
     return menu;
 }
 
+override
 String getNameText () {
     if ((style & SWT.SEPARATOR) !is 0) return "|";
     return super.getNameText ();
