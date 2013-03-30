@@ -16,7 +16,8 @@ import java.lang.all;
 
 // do it here, so it can be evaluated at compile time
 // this saves a static ctor.
-private int buildSWT_VERSION (int major, int minor) {
+// T=bool hack to get body in to .di
+private int buildSWT_VERSION(T=bool) (int major, int minor) {
     return major * 1000 + minor;
 }
 
