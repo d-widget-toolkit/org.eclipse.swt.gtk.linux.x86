@@ -89,6 +89,7 @@ version(Tango){
     static import tango.io.model.IFile;
 } else { // Phobos
     static import std.string;
+    static import std.ascii;
 }
 
 
@@ -156,7 +157,7 @@ package:
     version(Tango){
         static const String PlatformLineDelimiter = tango.io.model.IFile.FileConst.NewlineString;
     } else { // Phobos
-        static const String PlatformLineDelimiter = std.string.newline;
+        static const String PlatformLineDelimiter = std.ascii.newline;
     }
     static const int BIDI_CARET_WIDTH = 3;
     static const int DEFAULT_WIDTH  = 64;

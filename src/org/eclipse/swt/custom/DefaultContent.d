@@ -29,6 +29,7 @@ version(Tango){
     static import tango.io.model.IFile;
 } else { // Phobos
     static import std.string;
+    static import std.ascii;
 }
 
 
@@ -36,7 +37,7 @@ class DefaultContent : StyledTextContent {
     version(Tango){
         private const static String LineDelimiter = tango.io.model.IFile.FileConst.NewlineString;
     } else { // Phobos
-        private const static String LineDelimiter = std.string.newline;
+        private const static String LineDelimiter = std.ascii.newline;
     }
 
     StyledTextListener[] textListeners; // stores text listeners for event sending
