@@ -730,7 +730,7 @@ public void setSelection (TabItem [] items) {
     if (items.length is 0) {
         setSelection (-1, false);
     } else {
-        for (int i=items.length-1; i>=0; --i) {
+        for (auto i=items.length-1; i>=0; --i) {
             int index = indexOf (items [i]);
             if (index !is -1) setSelection (index, false);
         }

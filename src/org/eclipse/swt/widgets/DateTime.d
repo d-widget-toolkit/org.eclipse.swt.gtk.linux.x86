@@ -112,7 +112,7 @@ private class Calendar{
         case YEAR:
             return 2100;
         case MONTH:
-            return MONTH_DAYS.length -1;
+            return cast(int)MONTH_DAYS.length -1;
         case DAY_OF_MONTH:
             return MONTH_DAYS[month];
         case HOUR:
@@ -942,7 +942,7 @@ void onVerify(Event event) {
         if (s !is -1) value = value.substring(s + 1);
         newText = value ~ newText;
     }
-    int newTextLength = newText.length;
+    int newTextLength = to!int(newText.length);
     bool first = characterCount is 0;
     characterCount = (newTextLength < length_) ? newTextLength : 0;
     int max = calendar.getActualMaximum(fieldName);

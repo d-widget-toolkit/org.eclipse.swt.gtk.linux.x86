@@ -41,6 +41,8 @@ import org.eclipse.swt.custom.StyledTextEvent;
 import java.lang.all;
 import java.nonstandard.UnsafeUtf;
 
+import std.conv;
+
 /**
  * A StyledTextRenderer renders the content of a StyledText widget.
  * This class can be used to render to the display or to a printer.
@@ -372,7 +374,7 @@ void drawBullet(Bullet bullet, GC gc, int paintX, int paintY, int index, int lin
     style = cast(StyleRange)style.clone();
     style.metrics = null;
     if (style.font is null) style.font = getFont(style.fontStyle);
-    layout.setStyle(style, 0, string.length);
+    layout.setStyle(style, 0, to!int(string.length));
     int x = paintX + Math.max(0, metrics.width - layout.getBounds().width - BULLET_MARGIN);
     layout.draw(gc, x, paintY);
     layout.dispose();
@@ -381,7 +383,7 @@ int drawLine(int lineIndex, int paintX, int paintY, GC gc, Color widgetBackgroun
     TextLayout layout = getTextLayout(lineIndex);
     String line = content.getLine(lineIndex);
     int lineOffset = content.getOffsetAtLine(lineIndex);
-    int lineLength = line.length;
+    int lineLength = to!int(line.length);
     Point selection = styledText.getSelection();
     int selectionStart = selection.x - lineOffset;
     int selectionEnd = selection.y - lineOffset;
@@ -415,7 +417,7 @@ int drawLine(int lineIndex, int paintX, int paintY, GC gc, Color widgetBackgroun
         if (selectionStart <= lineLength && lineLength < selectionEnd ) {
             flags |= SWT.LAST_LINE_SELECTION;
         }
-        layout.draw(gc, paintX, paintY, start, end > 0 ? line.offsetBefore(end) : end - 1, selectionFg, selectionBg, flags);
+        layout.draw(gc, paintX, paintY, start, end > 0 ? to!int(line.offsetBefore(end)) : end - 1, selectionFg, selectionBg, flags);
     }
 
     // draw objects
@@ -501,8 +503,8 @@ int getHeight () {
         int height = lineHeight[i];
         if (height is -1) {
             if (width > 0) {
-                int length = content.getLine(i).length;
-                height = ((length * averageCharWidth / width) + 1) * defaultLineHeight;
+                auto length = content.getLine(i).length;
+                height = to!int((length * averageCharWidth / width) + 1) * defaultLineHeight;
             } else {
                 height = defaultLineHeight;
             }
@@ -708,15 +710,15 @@ TextLayout getTextLayout(int lineIndex, int orientation, int width, int lineSpac
                         System.arraycopy(bullets, delta, bullets, 0, bullets.length - delta);
                         System.arraycopy(bulletsIndices, delta, bulletsIndices, 0, bulletsIndices.length - delta);
                     }
-                    int startIndex = Math.max(0, bullets.length - delta);
-                    for (int i = startIndex; i < bullets.length; i++) bullets[i] = null;
+                    auto startIndex = Math.max(0, bullets.length - delta);
+                    for (auto i = startIndex; i < bullets.length; i++) bullets[i] = null;
                 } else {
                     if (-delta < bullets.length) {
                         System.arraycopy(bullets, 0, bullets, -delta, bullets.length + delta);
                         System.arraycopy(bulletsIndices, 0, bulletsIndices, -delta, bulletsIndices.length + delta);
                     }
-                    int endIndex = Math.min(bullets.length, -delta);
-                    for (int i = 0; i < endIndex; i++) bullets[i] = null;
+                    auto endIndex = Math.min(bullets.length, -delta);
+                    for (size_t i = 0; i < endIndex; i++) bullets[i] = null;
                 }
             }
             this.topIndex = topIndex;
@@ -761,7 +763,7 @@ TextLayout getTextLayout(int lineIndex, int orientation, int width, int lineSpac
         ranges = event.ranges;
         styles = event.styles;
         if (styles !is null) {
-            styleCount = styles.length;
+            styleCount = to!int(styles.length);
             if (styledText.isFixedLineHeight()) {
                 for (int i = 0; i < styleCount; i++) {
                     if (styles[i].isVariableHeight()) {
@@ -832,7 +834,7 @@ TextLayout getTextLayout(int lineIndex, int orientation, int width, int lineSpac
     layout.setJustify(justify);
 
     int lastOffset = 0;
-    int length = line.length;
+    int length = to!int(line.length);
     if (styles !is null) {
         if (ranges !is null) {
             int rangeCount = styleCount << 1;
@@ -847,7 +849,7 @@ TextLayout getTextLayout(int lineIndex, int orientation, int width, int lineSpac
                 }
                 if (start >= length) break;
                 if (lastOffset < start) {
-                    layout.setStyle(null, lastOffset, line.offsetBefore(start));
+                    layout.setStyle(null, lastOffset, to!int(line.offsetBefore(start)));
                 }
                 layout.setStyle(getStyleRange(styles[i >> 1]), start, end);
                 lastOffset = Math.max(lastOffset, end);
@@ -864,7 +866,7 @@ TextLayout getTextLayout(int lineIndex, int orientation, int width, int lineSpac
                 }
                 if (start >= length) break;
                 if (lastOffset < start) {
-                    layout.setStyle(null, lastOffset, line.offsetBefore(start));
+                    layout.setStyle(null, lastOffset, to!int(line.offsetBefore(start)));
                 }
                 layout.setStyle(getStyleRange(styles[i]), start, end);
                 lastOffset = Math.max(lastOffset, end);
@@ -877,7 +879,7 @@ TextLayout getTextLayout(int lineIndex, int orientation, int width, int lineSpac
         int compositionOffset = ime.getCompositionOffset();
         if (compositionOffset !is -1) {
             int commitCount = ime.getCommitCount();
-            int compositionLength = ime.getText().length;
+            int compositionLength = to!int(ime.getText().length);
             if (compositionLength !is commitCount) {
                 int compositionLine = content.getLineAtOffset(compositionOffset);
                 if (compositionLine is lineIndex) {
@@ -905,11 +907,11 @@ TextLayout getTextLayout(int lineIndex, int orientation, int width, int lineSpac
                         }
                     } else {
                         int start = compositionOffset - lineOffset;
-                        int end = line.offsetBefore(start + compositionLength);
+                        int end = to!int(line.offsetBefore(start + compositionLength));
                         TextStyle userStyle = layout.getStyle(start);
                         if (userStyle is null) {
-                            if (start > 0) userStyle = layout.getStyle(line.offsetBefore(start));
-                            if (userStyle is null && line.offsetAfter(end) < length) userStyle = layout.getStyle(line.offsetAfter(end));
+                            if (start > 0) userStyle = layout.getStyle(to!int(line.offsetBefore(start)));
+                            if (userStyle is null && line.offsetAfter(end) < length) userStyle = layout.getStyle(to!int(line.offsetAfter(end)));
                             if (userStyle !is null) {
                                 TextStyle newStyle = new TextStyle();
                                 newStyle.font = userStyle.font;
@@ -1176,7 +1178,7 @@ void setStyleRanges (int[] newRanges, StyleRange[] newStyles) {
         }
         styles = new StyleRange[newStyles.length];
         System.arraycopy(newStyles, 0, styles, 0, styles.length);
-        styleCount = newStyles.length;
+        styleCount = to!int(newStyles.length);
         return;
     }
     if (newRanges !is null && ranges is null) {
@@ -1204,7 +1206,7 @@ void setStyleRanges (int[] newRanges, StyleRange[] newStyles) {
             insert = modifyStart is modifyEnd && ranges[modifyStart] >= end;
         }
         if (insert) {
-            addMerge(newRanges, newStyles, newRanges.length, modifyStart, modifyStart);
+            addMerge(newRanges, newStyles, to!int(newRanges.length), modifyStart, modifyStart);
             return;
         }
         modifyEnd = modifyStart;
@@ -1251,7 +1253,7 @@ void setStyleRanges (int[] newRanges, StyleRange[] newStyles) {
             insert = modifyStart is modifyEnd && styles[modifyStart].start >= end;
         }
         if (insert) {
-            addMerge(newStyles, newStyles.length, modifyStart, modifyStart);
+            addMerge(newStyles, to!int(newStyles.length), modifyStart, modifyStart);
             return;
         }
         modifyEnd = modifyStart;
@@ -1339,9 +1341,9 @@ void textChanging(TextChangingEvent event) {
                 }
             }
             if (delta > 0) {
-                for (int i = layouts.length - 1; i >= layoutEndLine; i--) {
+                for (auto i = layouts.length - 1; i >= layoutEndLine; i--) {
                     if (0 <= i && i < layouts.length) {
-                        endIndex = i + delta;
+                        endIndex = to!int(i + delta);
                         if (0 <= endIndex && endIndex < layouts.length) {
                             layouts[endIndex] = layouts[i];
                             layouts[i] = null;

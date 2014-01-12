@@ -33,6 +33,8 @@ import org.eclipse.swt.internal.gtk.OS;
 import org.eclipse.swt.graphics.Rectangle;
 import java.lang.all;
 
+import std.conv;
+
 /**
  * Instances of this class are controls which are capable
  * of containing other controls.
@@ -478,7 +480,7 @@ void fixTabList (Control control) {
     }
     if (count is 0) return;
     Control [] newList = null;
-    int length = tabList.length - count;
+    int length = to!int(tabList.length - count);
     if (length !is 0) {
         newList = new Control [length];
         int index = 0;
@@ -1178,7 +1180,7 @@ override void printWidget (GC gc, GdkDrawable* drawable, int depth, int x, int y
     newClip.intersect (clientRect);
     gc.setClipping (newClip);
     Control [] children = _getChildren ();
-    for (int i=children.length-1; i>=0; --i) {
+    for (auto i=children.length-1; i>=0; --i) {
         Control child = children [i];
         if (child.getVisible ()) {
             Point location = child.getLocation ();

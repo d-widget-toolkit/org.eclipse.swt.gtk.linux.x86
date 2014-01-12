@@ -30,6 +30,7 @@ version(Tango){
     import core.sys.posix.stdlib : realpath;
     import std.c.locale;
     static import std.c.string;
+    import std.conv;
 }
 
 import  org.eclipse.swt.internal.c.gtk,
@@ -3001,7 +3002,7 @@ public static const int PictOpOver = 3;
         version(Tango){
             return tango.stdc.string.strlen( ptr );
         } else { // Phobos
-            return std.c.string.strlen( ptr );
+            return to!int(std.c.string.strlen( ptr ));
         }
     }
     //localeconv_decimal_point() localeconv()->decimal_point

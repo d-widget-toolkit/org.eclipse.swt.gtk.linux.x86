@@ -22,6 +22,7 @@ import org.eclipse.swt.internal.image.FileFormat;
 import java.io.ByteArrayOutputStream;
 import java.lang.all;
 
+import std.conv;
 
 final class OS2BMPFileFormat : FileFormat {
     static const int BMPFileHeaderSize = 14;
@@ -146,7 +147,7 @@ PaletteData paletteFromBytes(byte[] bytes, int numColors) {
  * the given device independent palette.
  */
 static byte[] paletteToBytes(PaletteData pal) {
-    int n = pal.colors is null ? 0 : (pal.colors.length < 256 ? pal.colors.length : 256);
+    int n = pal.colors is null ? 0 : to!int(pal.colors.length < 256 ? pal.colors.length : 256);
     byte[] bytes = new byte[n * 3];
     int offset = 0;
     for (int i = 0; i < n; i++) {
@@ -225,7 +226,7 @@ override void unloadIntoByteStream(ImageLoader loader) {
     } else {
         if (pal.isDirect)
             SWT.error(SWT.ERROR_INVALID_IMAGE);
-        numCols = pal.colors.length;
+        numCols = to!int(pal.colors.length);
         rgbs = paletteToBytes(pal);
     }
     // Fill in file header, except for bfsize, which is done later.
@@ -247,7 +248,7 @@ override void unloadIntoByteStream(ImageLoader loader) {
     byte[] data = ostr.toByteArray();
 
     // Calculate file size
-    fileHeader[1] = fileHeader[4] + data.length;
+    fileHeader[1] = fileHeader[4] + to!int(data.length);
 
     // Write the headers
     try {

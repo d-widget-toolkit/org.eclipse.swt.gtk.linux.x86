@@ -47,6 +47,7 @@ version(Tango){
     import tango.stdc.string;
 } else {
     import std.c.string;
+    import std.conv;
 }
 
 
@@ -330,7 +331,7 @@ void checkGC (int mask) {
                 for (int i = 0; i < cairoDashes.length; i++) {
                     cairoDashes[i] = width is 0 || data.lineStyle is SWT.LINE_CUSTOM ? dashes[i] : dashes[i] * width;
                 }
-                Cairo.cairo_set_dash(cairo, cairoDashes.ptr, cairoDashes.length, dashesOffset);
+                Cairo.cairo_set_dash(cairo, cairoDashes.ptr, to!int(cairoDashes.length), dashesOffset);
             } else {
                 Cairo.cairo_set_dash(cairo, null, 0, 0);
             }
@@ -414,7 +415,7 @@ void checkGC (int mask) {
                 for (int i = 0; i < dash_list.length; i++) {
                     dash_list[i] = cast(char)(width is 0 || data.lineStyle is SWT.LINE_CUSTOM ? dashes[i] : dashes[i] * width);
                 }
-                OS.gdk_gc_set_dashes(handle, 0, dash_list.ptr, dash_list.length);
+                OS.gdk_gc_set_dashes(handle, 0, dash_list.ptr, to!int(dash_list.length));
             }
             line_style = OS.GDK_LINE_ON_OFF_DASH;
         } else {
@@ -1329,7 +1330,7 @@ public void drawPolygon(int[] pointArray) {
         Cairo.cairo_stroke(cairo);
         return;
     }
-    OS.gdk_draw_polygon(data.drawable, handle, 0, cast(GdkPoint*)pointArray.ptr, pointArray.length / 2);
+    OS.gdk_draw_polygon(data.drawable, handle, 0, cast(GdkPoint*)pointArray.ptr, to!int(pointArray.length / 2));
 }
 
 /**
@@ -1357,11 +1358,11 @@ public void drawPolyline(int[] pointArray) {
         Cairo.cairo_stroke(cairo);
         return;
     }
-    OS.gdk_draw_lines(data.drawable, handle, cast(GdkPoint*)pointArray.ptr, pointArray.length / 2);
+    OS.gdk_draw_lines(data.drawable, handle, cast(GdkPoint*)pointArray.ptr, to!int(pointArray.length / 2));
 }
 
 void drawPolyline(org.eclipse.swt.internal.gtk.OS.cairo_t* cairo, int[] pointArray, bool close) {
-    int count = pointArray.length / 2;
+    auto count = pointArray.length / 2;
     if (count is 0) return;
     double xOffset = data.cairoXoffset, yOffset = data.cairoYoffset;
     Cairo.cairo_move_to(cairo, pointArray[0] + xOffset, pointArray[1] + yOffset);
@@ -1978,7 +1979,7 @@ public void fillPolygon(int[] pointArray) {
         Cairo.cairo_fill(cairo);
         return;
     }
-    OS.gdk_draw_polygon(data.drawable, handle, 1, cast(GdkPoint*)pointArray.ptr, pointArray.length / 2);
+    OS.gdk_draw_polygon(data.drawable, handle, 1, cast(GdkPoint*)pointArray.ptr, to!int(pointArray.length / 2));
 }
 
 /**
@@ -3126,9 +3127,9 @@ static void setCairoFont(org.eclipse.swt.internal.gtk.OS.cairo_t* cairo, Font fo
 
 static void setCairoFont(org.eclipse.swt.internal.gtk.OS.cairo_t* cairo, PangoFontDescription* font) {
     auto family = OS.pango_font_description_get_family(font);
-    int len = /*OS.*/strlen(family);
+    auto len = /*OS.*/strlen(family);
     auto buffer = new char[len + 1];
-    OS.memmove(buffer.ptr, family, len);
+    OS.memmove(buffer.ptr, family, to!int(len));
     //TODO - convert font height from pango to cairo
     double height = OS.PANGO_PIXELS(OS.pango_font_description_get_size(font)) * 96 / 72;
     int pangoStyle = OS.pango_font_description_get_style(font);
@@ -3765,7 +3766,7 @@ void setString(String str, int flags) {
         return;
     }
     char[] buffer;
-    int mnemonic, len = str.length ;
+    size_t mnemonic, len = str.length ;
     auto layout = data.layout;
     char[] text = str.dup;
     if ((flags & SWT.DRAW_MNEMONIC) !is 0 && (mnemonic = fixMnemonic(text)) !is -1) {
@@ -3780,8 +3781,8 @@ void setString(String str, int flags) {
         System.arraycopy(buffer2, 0, buffer, buffer1.length, buffer2.length);
         auto attr_list = OS.pango_attr_list_new();
         auto attr = OS.pango_attr_underline_new(OS.PANGO_UNDERLINE_LOW);
-        attr.start_index = buffer1.length;
-        attr.end_index = buffer1.length + 1;
+        attr.start_index = to!int(buffer1.length);
+        attr.end_index = to!int(buffer1.length + 1);
         OS.pango_attr_list_insert(attr_list, attr);
         OS.pango_layout_set_attributes(layout, attr_list);
         OS.pango_attr_list_unref(attr_list);
@@ -3789,7 +3790,7 @@ void setString(String str, int flags) {
         buffer = text.dup;
         OS.pango_layout_set_attributes(layout, null);
     }
-    OS.pango_layout_set_text(layout, buffer.ptr, buffer.length);
+    OS.pango_layout_set_text(layout, buffer.ptr, to!int(buffer.length));
     OS.pango_layout_set_single_paragraph_mode(layout, (flags & SWT.DRAW_DELIMITER) is 0);
     OS.pango_layout_set_tabs(layout, (flags & SWT.DRAW_TAB) !is 0 ? null : data.device.emptyTab);
     data.str = str;

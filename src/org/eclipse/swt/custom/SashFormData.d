@@ -20,7 +20,7 @@ class SashFormData {
 
 String getName () {
     String str = this.classinfo.name;
-    int index = str.lastIndexOf ('.');
+    auto index = str.lastIndexOf ('.');
     if (index is -1) return str;
     return str[ index + 1 .. $ ];
 }

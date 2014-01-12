@@ -92,9 +92,9 @@ public override void javaToNative(Object object, TransferData transferData) {
         if (error !is null || uriPtr is null) continue;
         String temp = fromStringz( uriPtr )._idup();
         OS.g_free(uriPtr);
-        int newLength = (i > 0) ? buffer.length+separator.length+temp.length :  temp.length;
+        size_t newLength = (i > 0) ? buffer.length+separator.length+temp.length :  temp.length;
         auto newBuffer = new char[newLength];
-        int offset = 0;
+        size_t offset = 0;
         if (i > 0) {
             System.arraycopy(buffer, 0, newBuffer, 0, buffer.length);
             offset +=  buffer.length;
@@ -105,11 +105,12 @@ public override void javaToNative(Object object, TransferData transferData) {
         buffer = newBuffer;
     }
     if (buffer.length is 0) return;
-    char* ptr = cast(char*)OS.g_malloc(buffer.length+1);
+    import std.conv;
+    char* ptr = cast(char*)OS.g_malloc(to!uint(buffer.length+1));
     ptr[ 0 .. buffer.length ] = buffer;
     ptr[ buffer.length ] = '\0';
     transferData.pValue = ptr;
-    transferData.length = buffer.length;
+    transferData.length = to!uint(buffer.length);
     transferData.format = 8;
     transferData.result = 1;
 }
@@ -140,8 +141,9 @@ public override Object nativeToJava(TransferData transferData) {
         }
     }
     if (offset < temp.length - 2) {
-        int size =  temp.length - offset;
-        char* file = cast(char*)OS.g_malloc(size + 1);
+        import std.conv;
+        auto size =  temp.length - offset;
+        char* file = cast(char*)OS.g_malloc(to!uint(size + 1));
         file[ 0 .. size ] = temp[ offset .. offset+size ];
         file[ size ] = '\0';
         files ~= file;

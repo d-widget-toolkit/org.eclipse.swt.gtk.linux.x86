@@ -465,7 +465,7 @@ void storeBytes(String key, char* value) {
 }
 
 void store(String key, String value) {
-    int length = key.length + 1 + value.length + 1;
+    int length = to!int(key.length + 1 + value.length + 1);
     if (index + length + 1 > settingsData.length) {
         char [] newData = new char[settingsData.length + Math.max(length + 1, 1024)];
         newData[] = '\0';

@@ -105,7 +105,7 @@ public static PrinterData[] getPrinterList() {
 }
 
 private static extern(C) int GtkPrinterFunc_List (GtkPrinter* printer, void* user_data) {
-    int length_ = printerList.length;
+    int length_ = to!int(printerList.length);
     PrinterData [] newList = new PrinterData [length_ + 1];
     System.arraycopy (printerList, 0, newList, 0, length_);
     printerList = newList;

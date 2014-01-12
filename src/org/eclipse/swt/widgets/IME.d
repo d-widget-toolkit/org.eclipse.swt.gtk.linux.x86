@@ -23,6 +23,8 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Event;
 
+import std.conv;
+
 /**
  * Instances of this class represent input method editors.
  * These are typically in-line pre-edit text areas that allow
@@ -267,9 +269,9 @@ override int /*long*/ gtk_commit (GtkIMContext* imcontext, char* textPtr) {
             Event event = new Event();
             event.detail = SWT.COMPOSITION_CHANGED;
             event.start = startOffset;
-            event.end = startOffset + text.length;
+            event.end = to!int(startOffset + text.length);
             event.text = text = chars !is null ? chars : "";
-            commitCount = text.length;
+            commitCount = to!int(text.length);
             sendEvent (SWT.ImeComposition, event);
             doit = event.doit;
             text = "";
@@ -366,7 +368,7 @@ override int /*long*/ gtk_preedit_changed (GtkIMContext* imcontext) {
     }
     if (chars !is null) {
         if (text.length is 0) startOffset = -1;
-        int end = startOffset + text.length;
+        int end = to!int(startOffset + text.length);
         if (startOffset is -1) {
             Event event = new Event ();
             event.detail = SWT.COMPOSITION_SELECTION;

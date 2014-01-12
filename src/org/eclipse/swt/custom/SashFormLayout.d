@@ -24,6 +24,8 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.SashFormData;
 import java.lang.all;
 
+import std.conv;
+
 /**
  * This class provides the layout for SashForm
  *
@@ -121,7 +123,7 @@ protected override void layout(Composite composite, bool flushCache) {
     if (sashForm.sashes.length < controls.length - 1) {
         Sash[] newSashes = new Sash[controls.length - 1];
         System.arraycopy(sashForm.sashes, 0, newSashes, 0, sashForm.sashes.length);
-        for (int i = sashForm.sashes.length; i < newSashes.length; i++) {
+        for (auto i = sashForm.sashes.length; i < newSashes.length; i++) {
             newSashes[i] = new Sash(sashForm, sashForm.sashStyle);
             newSashes[i].setBackground(sashForm.background);
             newSashes[i].setForeground(sashForm.foreground);
@@ -138,7 +140,7 @@ protected override void layout(Composite composite, bool flushCache) {
         } else {
             Sash[] newSashes = new Sash[controls.length - 1];
             System.arraycopy(sashForm.sashes, 0, newSashes, 0, newSashes.length);
-            for (int i = controls.length - 1; i < sashForm.sashes.length; i++) {
+            for (auto i = controls.length - 1; i < sashForm.sashes.length; i++) {
                 sashForm.sashes[i].dispose();
             }
             sashForm.sashes = newSashes;

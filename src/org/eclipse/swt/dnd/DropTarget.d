@@ -44,6 +44,8 @@ static import tango.stdc.string;
 } else { // Phobos
 }
 
+import std.conv;
+
 /**
  *
  * Class <code>DropTarget</code> defines the target object for a drag and drop transfer.
@@ -607,10 +609,10 @@ public Control getControl () {
  */
 public DropTargetListener[] getDropListeners() {
     Listener[] listeners = getListeners(DND.DragEnter);
-    int length = listeners.length;
+    auto length = listeners.length;
     DropTargetListener[] dropListeners = new DropTargetListener[length];
     int count = 0;
-    for (int i = 0; i < length; i++) {
+    for (typeof(length) i = 0; i < length; i++) {
         Listener listener = listeners[i];
         if ( auto l = cast(DNDListener)listener ) {
             dropListeners[count] = cast(DropTargetListener) (l.getEventListener());
@@ -751,19 +753,22 @@ public void setTransfer(Transfer[] transferAgents){
             String[] typeNames = transfer.getTypeNames();
             for (int j = 0; j < typeIds.length; j++) {
                 GtkTargetEntry* entry = new GtkTargetEntry();
-                entry.target = cast(char*)OS.g_malloc(typeNames[j].length +1);
+                entry.target = cast(char*)
+                    OS.g_malloc(to!uint(typeNames[j].length +1));
                 entry.target[ 0 .. typeNames[j].length ] = typeNames[j];
                 entry.target[ typeNames[j].length ] = '\0';
                 entry.info = typeIds[j];
                 GtkTargetEntry*[] newTargets = new GtkTargetEntry*[targets.length + 1];
-                SimpleType!(GtkTargetEntry*).arraycopy(targets, 0, newTargets, 0, targets.length);
+                SimpleType!(GtkTargetEntry*).arraycopy(targets, 0, newTargets,
+                                             0, to!uint(targets.length));
                 newTargets[targets.length] = entry;
                 targets = newTargets;
             }
         }
     }
 
-    auto pTargets = OS.g_malloc(targets.length * GtkTargetEntry.sizeof);
+    auto pTargets = OS.g_malloc(to!uint(
+                                targets.length * GtkTargetEntry.sizeof));
     for (int i = 0; i < targets.length; i++) {
         OS.memmove(pTargets + i*GtkTargetEntry.sizeof, targets[i], GtkTargetEntry.sizeof);
     }
@@ -777,7 +782,8 @@ public void setTransfer(Transfer[] transferAgents){
             }
         }
     }
-    OS.gtk_drag_dest_set(control.handle, 0, pTargets, targets.length, actions);
+    OS.gtk_drag_dest_set(control.handle, 0, pTargets,
+                         to!uint(targets.length), actions);
 
     for (int i = 0; i < targets.length; i++) {
         OS.g_free(targets[i].target);

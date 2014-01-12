@@ -50,6 +50,8 @@ import org.eclipse.swt.widgets.Widget;
 import java.lang.all;
 import java.nonstandard.UnsafeUtf;
 
+import std.conv;
+
 /**
  * The CCombo class represents a selectable user interface object
  * that combines a text field and a list and issues notification
@@ -580,7 +582,7 @@ void dropDown (bool drop) {
 dchar _findMnemonic (String str) {
     if (str is null) return '\0';
     int index = 0;
-    int length = str.length;
+    auto length = str.length;
     do {
         while (index < length && str[index] !is '&') index++;
         if (++index >= length) return '\0';
@@ -1611,7 +1613,7 @@ public void setVisibleItemCount (int count) {
 }
 String stripMnemonic (String string) {
     int index = 0;
-    int length_ = string.length;
+    int length_ = to!int(string.length);
     do {
         while ((index < length_) && (string[index] !is '&')) index++;
         if (++index >= length_) return string;

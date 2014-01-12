@@ -49,6 +49,7 @@ import java.lang.Thread;
 version(Tango){
 import tango.stdc.string;
 } else { // Phobos
+    import std.conv;
 }
 
 /**
@@ -639,7 +640,7 @@ void addMouseHoverTimeout (GtkWidget* handle) {
 
 void addPopup (Menu menu) {
     if (popups is null) popups = new Menu [4];
-    int length = popups.length;
+    int length = to!int(popups.length);
     for (int i=0; i<length; i++) {
         if (popups [i] is menu) return;
     }
@@ -659,7 +660,7 @@ void addPopup (Menu menu) {
 void addWidget (GtkWidget* handle, Widget widget) {
     if (handle is null) return;
     if (freeSlot is -1) {
-        int len = (freeSlot = indexTable.length) + GROW_SIZE;
+        int len = freeSlot = to!int(indexTable.length) + GROW_SIZE;
         int[] newIndexTable = new int[len];
         Widget[] newWidgetTable = new Widget [len];
         System.arraycopy (indexTable, 0, newIndexTable, 0, freeSlot);
@@ -862,7 +863,7 @@ protected void checkSubclass () {
 
 void clearModal (Shell shell) {
     if (modalShells is null) return;
-    int index = 0, length_ = modalShells.length;
+    int index = 0, length_ = to!int(modalShells.length);
     while (index < length_) {
         if (modalShells [index] is shell) break;
         if (modalShells [index] is null) return;
@@ -1025,7 +1026,7 @@ Image createImage (String name) {
     bool hasAlpha = cast(bool)OS.gdk_pixbuf_get_has_alpha (pixbuf);
     char* pixels = OS.gdk_pixbuf_get_pixels (pixbuf);
     byte [] data = new byte [stride * height];
-    OS.memmove (data.ptr, pixels, data.length);
+    OS.memmove (data.ptr, pixels, to!int(data.length));
     OS.g_object_unref (pixbuf);
     ImageData imageData = null;
     if (hasAlpha) {
@@ -1188,7 +1189,7 @@ public void disposeExec (Runnable runnable) {
         }
     }
     Runnable [] newDisposeList = new Runnable [disposeList.length + 4];
-    SimpleType!(Runnable).arraycopy (disposeList, 0, newDisposeList, 0, disposeList.length);
+    SimpleType!(Runnable).arraycopy (disposeList, 0, newDisposeList, 0, to!int(disposeList.length));
     newDisposeList [disposeList.length] = runnable;
     disposeList = newDisposeList;
 }
@@ -3014,7 +3015,7 @@ void postEvent (Event event) {
     */
     if (eventQueue is null) eventQueue = new Event [4];
     int index = 0;
-    int length = eventQueue.length;
+    int length = to!int(eventQueue.length);
     while (index < length) {
         if (eventQueue [index] is null) break;
         index++;
@@ -3392,7 +3393,7 @@ bool runDeferredEvents () {
         /* Take an event off the queue */
         Event event = eventQueue [0];
         if (event is null) break;
-        int len = eventQueue.length;
+        int len = to!int(eventQueue.length);
         System.arraycopy (eventQueue, 1, eventQueue, 0, --len);
         eventQueue [len] = null;
 
@@ -3423,7 +3424,7 @@ bool runPopups () {
     while (popups !is null) {
         Menu menu = popups [0];
         if (menu is null) break;
-        int len = popups.length;
+        int len = to!int(popups.length);
         System.arraycopy (popups, 1, popups, 0, --len);
         popups [len] = null;
         runDeferredEvents ();
@@ -3682,7 +3683,7 @@ void setModalDialog (Dialog modalDailog) {
 
 void setModalShell (Shell shell) {
     if (modalShells is null) modalShells = new Shell [4];
-    int index = 0, length = modalShells.length;
+    int index = 0, length = to!int(modalShells.length);
     while (index < length) {
         if (modalShells [index] is shell) return;
         if (modalShells [index] is null) break;
@@ -3790,7 +3791,7 @@ public bool sleep () {
     if (getMessageCount () !is 0) return true;
     if (fds is null) {
         allocated_nfds = 2;
-        GPollFD* ptr = cast(GPollFD*) OS.g_malloc( GPollFD.sizeof * allocated_nfds );
+        GPollFD* ptr = cast(GPollFD*) OS.g_malloc( to!int(GPollFD.sizeof * allocated_nfds ));
         fds = ptr[ 0 .. allocated_nfds ];
     }
     max_priority = timeout = 0;
@@ -3803,7 +3804,7 @@ public bool sleep () {
             while ((nfds = OS.g_main_context_query (context, max_priority, &timeout, fds.ptr, allocated_nfds)) > allocated_nfds) {
                 OS.g_free (fds.ptr);
                 allocated_nfds = nfds;
-                GPollFD* ptr = cast(GPollFD*) OS.g_malloc( GPollFD.sizeof * allocated_nfds );
+                GPollFD* ptr = cast(GPollFD*) OS.g_malloc( to!int(GPollFD.sizeof * allocated_nfds ));
                 fds = ptr[ 0 .. allocated_nfds ];
             }
             GPollFunc poll = OS.g_main_context_get_poll_func (context);
@@ -3886,7 +3887,7 @@ public void timerExec (int milliseconds, Runnable runnable) {
         }
         if (index is timerList.length) {
             Runnable [] newTimerList = new Runnable [timerList.length + 4];
-            SimpleType!(Runnable).arraycopy (timerList, 0, newTimerList, 0, timerList.length);
+            SimpleType!(Runnable).arraycopy (timerList, 0, newTimerList, 0, to!int(timerList.length));
             timerList = newTimerList;
             int [] newTimerIds = new int [timerIds.length + 4];
             System.arraycopy (timerIds, 0, newTimerIds, 0, timerIds.length);
@@ -4004,7 +4005,7 @@ void saveResources () {
     if (resources is null) {
         resources = new Resource [RESOURCE_SIZE];
     } else {
-        resourceCount = resources.length;
+        resourceCount = to!int(resources.length);
         Resource [] newResources = new Resource [resourceCount + RESOURCE_SIZE];
         System.arraycopy (resources, 0, newResources, 0, resourceCount);
         resources = newResources;

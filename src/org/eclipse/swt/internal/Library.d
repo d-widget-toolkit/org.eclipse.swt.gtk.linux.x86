@@ -14,6 +14,8 @@ module org.eclipse.swt.internal.Library;
 
 import java.lang.all;
 
+import std.conv;
+
 // do it here, so it can be evaluated at compile time
 // this saves a static ctor.
 // empty () hack to get body in to .di
@@ -58,7 +60,7 @@ public class Library {
 static int parseVersion(String aVersion) {
     if (aVersion == null) return 0;
     int major = 0, minor = 0, micro = 0;
-    int length = aVersion.length, index = 0, start = 0;
+    int length = to!int(aVersion.length), index = 0, start = 0;
     bool isDigit( char c ){
         return c >= '0' && c <= '9';
     }

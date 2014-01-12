@@ -42,6 +42,8 @@ import org.eclipse.swt.widgets.Display;
 import java.lang.all;
 import java.nonstandard.UnsafeUtf;
 
+import std.conv;
+
 /**
  * A Label which supports aligned text and/or an image and different border styles.
  * <p>
@@ -214,8 +216,8 @@ private void drawBevelRect(GC gc, int x, int y, int w, int h, Color topleft, Col
  */
 dchar _findMnemonic (String str) {
     if (str is null) return '\0';
-    int index = 0;
-    int length = str.length;
+    size_t index = 0;
+    auto length = str.length;
     do {
         while (index < length && str[index] !is '&') index++;
         if (++index >= length) return '\0';
@@ -508,7 +510,7 @@ void onPaint(PaintEvent event) {
     // draw the text
     if (lines !is null) {
         int lineHeight = gc.getFontMetrics().getHeight();
-        int textHeight = lines.length * lineHeight;
+        int textHeight = to!int(lines.length * lineHeight);
         int lineY = Math.max(vIndent, rect.y + (rect.height - textHeight) / 2);
         gc.setForeground(getForeground());
         for (int i = 0; i < lines.length; i++) {
@@ -794,7 +796,7 @@ protected String shortenText(GC gc, String t, int width) {
     if (t is null) return null;
     int w = gc.textExtent(ELLIPSIS, DRAW_FLAGS).x;
     if (width<=w) return t;
-    int l = t.length;
+    int l = to!int(t.length);
     int max = l/2;
     int min = 0;
     int mid = (max+min)/2 - 1;

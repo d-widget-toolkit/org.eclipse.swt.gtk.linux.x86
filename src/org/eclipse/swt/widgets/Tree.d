@@ -41,6 +41,8 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.TypedListener;
 import java.lang.all;
 
+import std.conv;
+
 /**
  * Instances of this class provide a selectable user interface object
  * that displays a hierarchy of items and issues notification when an
@@ -671,7 +673,7 @@ void createColumn (TreeColumn column, int index) {
         if (modelIndex is modelLength) {
             auto oldModel = modelHandle;
             uint[] types = getColumnTypes (columnCount + 4); // grow by 4 rows at a time
-            auto newModel = OS.gtk_tree_store_newv (types.length, types.ptr);
+            auto newModel = OS.gtk_tree_store_newv (to!int(types.length), types.ptr);
             if (newModel is null) error (SWT.ERROR_NO_HANDLES);
             copyModel (oldModel, FIRST_COLUMN, newModel, FIRST_COLUMN, types, null, null, modelLength);
             OS.gtk_tree_view_set_model (handle, newModel);
@@ -737,7 +739,7 @@ override void createHandle (int index) {
     scrolledHandle = cast(GtkWidget*)OS.gtk_scrolled_window_new (null, null);
     if (scrolledHandle is null) error (SWT.ERROR_NO_HANDLES);
     uint[] types = getColumnTypes (1);
-    modelHandle = cast(GtkTreeStore*)OS.gtk_tree_store_newv (types.length, types.ptr);
+    modelHandle = cast(GtkTreeStore*)OS.gtk_tree_store_newv (to!int(types.length), types.ptr);
     if (modelHandle is null) error (SWT.ERROR_NO_HANDLES);
     handle = cast(GtkWidget*)OS.gtk_tree_view_new_with_model (modelHandle);
     if (handle is null) error (SWT.ERROR_NO_HANDLES);
@@ -1044,7 +1046,7 @@ void destroyItem (TreeColumn column) {
     if (columnCount is 0) {
         auto oldModel = modelHandle;
         uint[] types = getColumnTypes (1);
-        auto newModel = OS.gtk_tree_store_newv (types.length, types.ptr);
+        auto newModel = OS.gtk_tree_store_newv (to!int(types.length), types.ptr);
         if (newModel is null) error (SWT.ERROR_NO_HANDLES);
         copyModel(oldModel, column.modelIndex, newModel, FIRST_COLUMN, types, null, null, FIRST_COLUMN + CELL_TYPES);
         OS.gtk_tree_view_set_model (handle, newModel);
@@ -3033,7 +3035,7 @@ public void setSelection (TreeItem [] items) {
     // SWT extension: allow null for zero length string
     //if (items is null) error (SWT.ERROR_NULL_ARGUMENT);
     deselectAll ();
-    int length = items.length;
+    int length = to!int(items.length);
     if (length is 0 || ((style & SWT.SINGLE) !is 0 && length > 1)) return;
     bool fixColumn = showFirstColumn ();
     auto selection = OS.gtk_tree_view_get_selection (handle);

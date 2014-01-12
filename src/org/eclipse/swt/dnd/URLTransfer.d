@@ -74,7 +74,8 @@ public void javaToNative (Object object, TransferData transferData){
         DND.error(DND.ERROR_INVALID_DATA);
     }
     String16 string = stringcast(object).toWCharArray();
-    int byteCount = (string.length+1)*2;
+    import std.conv;
+    auto byteCount = to!uint((string.length+1)*2);
     wchar* pValue = cast(wchar*)OS.g_malloc(byteCount);
     if (pValue is null) return;
     pValue[ 0 .. string.length ] = string[];

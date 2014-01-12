@@ -320,7 +320,7 @@ public this(Device device, ImageData source, int hotspotX, int hotspotY) {
                     false, false);
             } else {
                 RGB[] rgbs = palette.getRGBs();
-                int length = rgbs.length;
+                auto length = rgbs.length;
                 byte[] srcReds = new byte[length];
                 byte[] srcGreens = new byte[length];
                 byte[] srcBlues = new byte[length];
@@ -387,7 +387,7 @@ public this(Device device, ImageData source, int hotspotX, int hotspotY) {
                         false, false);
             } else {
                 RGB[] rgbs = palette.getRGBs();
-                int length = rgbs.length;
+                auto length = rgbs.length;
                 byte[] srcReds = new byte[length];
                 byte[] srcGreens = new byte[length];
                 byte[] srcBlues = new byte[length];

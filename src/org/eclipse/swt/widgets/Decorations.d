@@ -28,6 +28,8 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swt.widgets.Button;
 import java.lang.all;
 
+import std.conv;
+
 /**
  * Instances of this class provide the appearance and
  * behavior of <code>Shells</code>, but are not top
@@ -724,7 +726,7 @@ public void setText (String string) {
 
 void sort (Image [] images) {
     /* Shell Sort from K&R, pg 108 */
-    int length = images.length;
+    int length = to!int(images.length);
     if (length <= 1) return;
     ImageData [] datas = new ImageData [length];
     for (int i = 0; i < length; i++) {

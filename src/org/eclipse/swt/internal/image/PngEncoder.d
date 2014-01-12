@@ -25,6 +25,7 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.internal.Compatibility;
 import org.eclipse.swt.internal.image.PngChunk;
 
+import std.conv;
 
 final class PngEncoder {
 
@@ -96,7 +97,7 @@ void writeInt(ByteArrayOutputStream baos, int theInt) {
 
 void writeChunk(in byte[] tag, in byte[] buffer) {
 
-    int bufferLength = (buffer !is null) ? buffer.length : 0;
+    int bufferLength = (buffer !is null) ? to!int(buffer.length) : 0;
 
     chunk = new PngChunk(bufferLength);
 
@@ -142,7 +143,7 @@ void writePalette() {
 
     if (RGBs.length > 256) SWT.error(SWT.ERROR_INVALID_IMAGE);
 
-    ByteArrayOutputStream baos = new ByteArrayOutputStream(RGBs.length);
+    ByteArrayOutputStream baos = new ByteArrayOutputStream(to!int(RGBs.length));
 
     for (int i = 0; i < RGBs.length; i++) {
 

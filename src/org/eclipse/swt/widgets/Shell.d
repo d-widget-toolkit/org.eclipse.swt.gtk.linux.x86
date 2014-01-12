@@ -45,6 +45,7 @@ import org.eclipse.swt.widgets.Widget;
 version(Tango){
 import Unicode = tango.text.Unicode;
 } else { // Phobos
+    import std.conv;
 }
 
 /**
@@ -931,7 +932,7 @@ Shell getModalShell () {
     Shell [] modalShells = display.modalShells;
     if (modalShells !is null) {
         int bits = SWT.APPLICATION_MODAL | SWT.SYSTEM_MODAL;
-        int index = modalShells.length;
+        int index = to!int(modalShells.length);
         while (--index >= 0) {
             Shell modal = modalShells [index];
             if (modal !is null) {
@@ -1271,7 +1272,7 @@ void setActiveControl (Control control) {
     Control [] activate = (control is null) ? new Control[0] : control.getPath ();
     Control [] deactivate = (lastActive is null) ? new Control[0] : lastActive.getPath ();
     lastActive = control;
-    int index = 0, length = Math.min (activate.length, deactivate.length);
+    int index = 0, length = to!int(Math.min (activate.length, deactivate.length));
     while (index < length) {
         if (activate [index] !is deactivate [index]) break;
         index++;
@@ -1283,12 +1284,12 @@ void setActiveControl (Control control) {
     * this happens, keep processing those widgets that
     * are not disposed.
     */
-    for (int i=deactivate.length-1; i>=index; --i) {
+    for (int i=to!int(deactivate.length-1); i>=index; --i) {
         if (!deactivate [i].isDisposed ()) {
             deactivate [i].sendEvent (SWT.Deactivate);
         }
     }
-    for (int i=activate.length-1; i>=index; --i) {
+    for (int i=to!int(activate.length-1); i>=index; --i) {
         if (!activate [i].isDisposed ()) {
             activate [i].sendEvent (SWT.Activate);
         }
@@ -1664,7 +1665,7 @@ public override void setText (String string) {
     * garbage after the last character in  the title.
     * The fix is to pad the title.
     */
-    int length_ = string.length;
+    int length_ = to!int(string.length);
     char [] chars = new char [Math.max (6, length_) + 1];
     chars[ 0 .. length_ ] = string[ 0 .. length_];
     for (int i=length_; i<chars.length; i++)  chars [i] = ' ';

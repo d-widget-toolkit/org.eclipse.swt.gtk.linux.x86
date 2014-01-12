@@ -30,6 +30,8 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swt.widgets.Event;
 
+import std.conv;
+
 /**
  * Instances of this class support the layout of selectable
  * tool bar items.
@@ -318,7 +320,7 @@ override int /*long*/ gtk_key_press_event (GtkWidget* widget, GdkEventKey* gdkEv
     auto result = super.gtk_key_press_event (widget, gdkEvent);
     if (result !is 0) return result;
     ToolItem [] items = getItems ();
-    int length = items.length;
+    int length = to!int(items.length);
     int index = 0;
     while (index < length) {
         if (items [index].hasFocus ()) break;

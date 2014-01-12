@@ -28,6 +28,8 @@ import org.eclipse.swt.widgets.Decorations;
 import org.eclipse.swt.widgets.Shell;
 import java.lang.all;
 
+import std.conv;
+
 /**
  * Instances of this class are user interface objects that contain
  * menu items.
@@ -498,7 +500,7 @@ public MenuItem [] getItems () {
 override String getNameText () {
     String result = "";
     MenuItem [] items = getItems ();
-    int length_ = items.length;
+    int length_ = to!int(items.length);
     if (length_ > 0) {
         for (int i=0; i<length_-1; i++) {
             result = result ~ items [i].getNameText() ~ ", ";

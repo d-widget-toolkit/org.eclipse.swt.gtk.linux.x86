@@ -161,10 +161,11 @@ protected override void javaToNative (Object object, TransferData transferData) 
     }
     byte[] buffer = (cast(ArrayWrapperByte)object).array;
     if (buffer.length is 0) return;
-    byte* pValue = cast(byte*)OS.g_malloc(buffer.length);
+    import std.conv;
+    byte* pValue = cast(byte*)OS.g_malloc(to!uint(buffer.length));
     if (pValue is null) return;
     pValue[ 0 .. buffer.length ] = buffer;
-    transferData.length = buffer.length;
+    transferData.length = to!uint(buffer.length);
     transferData.format = 8;
     transferData.pValue = cast(char*)pValue;
     transferData.result = 1;

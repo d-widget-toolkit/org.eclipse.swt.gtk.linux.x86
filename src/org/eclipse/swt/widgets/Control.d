@@ -58,6 +58,8 @@ import org.eclipse.swt.accessibility.Accessible;
 
 import java.lang.Thread;
 
+import std.conv;
+
 
 /**
  * Control is the abstract superclass of all windowed user interface classes.
@@ -3435,7 +3437,7 @@ void setBackgroundColor (GtkWidget* handle, GdkColor* color) {
     auto ptr = OS.gtk_rc_style_get_bg_pixmap_name (style, index);
     if (ptr !is null) OS.g_free (ptr);
     String name = color is null ? "<parent>" : "<none>" ;
-    ptr = cast(char*)OS.g_malloc (name.length+1);
+    ptr = cast(char*)OS.g_malloc (to!int(name.length+1));
     ptr[ 0 .. name.length ] = name;
     ptr[ name.length ] = '\0';
     OS.gtk_rc_style_set_bg_pixmap_name (style, index, ptr);
@@ -4162,7 +4164,7 @@ void setZOrder (Control sibling, bool above, bool fixRelations, bool fixChildren
             if (above) {
                 index = 0;
             } else {
-                index = children.length - 1;
+                index = to!int(children.length - 1);
             }
         }
 
@@ -4228,7 +4230,7 @@ void showWidget () {
 
 void sort (int [] items) {
     /* Shell Sort from K&R, pg 108 */
-    int length = items.length;
+    int length = to!int(items.length);
     for (int gap=length/2; gap>0; gap/=2) {
         for (int i=gap; i<length; i++) {
             for (int j=i-gap; j>=0; j-=gap) {
@@ -4395,7 +4397,7 @@ bool traverseGroup (bool next) {
     Control root = computeTabRoot ();
     Control group = computeTabGroup ();
     Control [] list = root.computeTabList ();
-    int length = list.length;
+    int length = to!int(list.length);
     int index = 0;
     while (index < length) {
         if (list [index] is group) break;
@@ -4421,7 +4423,7 @@ bool traverseGroup (bool next) {
 
 bool traverseItem (bool next) {
     Control [] children = parent._getChildren ();
-    int length = children.length;
+    int length = to!int(children.length);
     int index = 0;
     while (index < length) {
         if (children [index] is this) break;

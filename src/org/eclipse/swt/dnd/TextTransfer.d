@@ -77,8 +77,8 @@ override public void javaToNative (Object object, TransferData transferData) {
     if (!checkText(object) || !isSupportedType(transferData)) {
         DND.error(DND.ERROR_INVALID_DATA);
     }
-    String string = stringcast(object);
-    char* utf8 = toStringz(string);
+    String str = stringcast(object);
+    char* utf8 = toStringz(str);
     if  (transferData.type is cast(void*) COMPOUND_TEXT_ID) {
         void* encoding;
         int format;
@@ -93,13 +93,14 @@ override public void javaToNative (Object object, TransferData transferData) {
         transferData.result = 1;
     }
     if (transferData.type is cast(void*)UTF8_STRING_ID) {
-        char* pValue = cast(char*)OS.g_malloc(string.length+1);
+        import std.conv;
+        char* pValue = cast(char*)OS.g_malloc(to!uint(str.length+1));
         if (pValue is  null) return;
-        pValue[ 0 .. string.length ] = string;
-        pValue[ string.length ] = '\0';
+        pValue[ 0 .. str.length ] = str;
+        pValue[ str.length ] = '\0';
         transferData.type = cast(void*)UTF8_STRING_ID;
         transferData.format = 8;
-        transferData.length = string.length;
+        transferData.length = to!uint(str.length);
         transferData.pValue = pValue;
         transferData.result = 1;
     }

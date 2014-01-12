@@ -18,6 +18,8 @@ import java.io.InputStream;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.internal.image.PngLzBlockReader;
 
+import std.conv;
+
 public class PngDecodingDataStream : InputStream {
 
     alias InputStream.read read;
@@ -95,9 +97,9 @@ public override int read() {
     return nextDecodedByte & 0xFF;
 }
 
-public override int read(byte[] buffer, int off, int len) {
-    for (int i = 0; i < len; i++) {
-        int b = read();
+public override ptrdiff_t read(byte[] buffer, size_t off, size_t len) {
+    for (size_t i = 0; i < len; i++) {
+        size_t b = read();
         if (b is -1) return i;
         buffer[off + i] = cast(byte)b;
     }

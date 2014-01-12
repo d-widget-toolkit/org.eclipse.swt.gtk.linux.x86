@@ -22,6 +22,7 @@ import org.eclipse.swt.graphics.ImageLoader;
 import org.eclipse.swt.graphics.ImageLoaderEvent;
 import java.lang.all;
 
+import std.conv;
 
 final class LZWCodec {
     int bitsPerPixel, blockSize, blockIndex, currentByte, bitsLeft,
@@ -458,12 +459,12 @@ void copyRow(byte[] buf, int copies) {
 int readBlock() {
     int size = -1;
     try {
-        size = inputStream.read();
+        size = to!int(inputStream.read());
         if (size is -1) {
             SWT.error(SWT.ERROR_INVALID_IMAGE);
         }
         block[0] = cast(byte)size;
-        size = inputStream.read(block, 1, size);
+        size = to!int(inputStream.read(block, 1, size));
         if (size is -1) {
             SWT.error(SWT.ERROR_INVALID_IMAGE);
         }

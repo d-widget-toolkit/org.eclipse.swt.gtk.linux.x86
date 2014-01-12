@@ -19,6 +19,8 @@ import org.eclipse.swt.internal.image.PngIhdrChunk;
 import org.eclipse.swt.internal.image.PngChunk;
 import java.lang.all;
 
+import std.conv;
+
 class PngIdatChunk : PngChunk {
 
     static const int HEADER_BYTES_LENGTH = 2;
@@ -28,7 +30,7 @@ class PngIdatChunk : PngChunk {
     static const int ADLER_DATA_OFFSET = DATA_OFFSET + 2; // plus variable compressed data length
 
 this(byte headerByte1, byte headerByte2, byte[] data, int adler) {
-    super(data.length + HEADER_BYTES_LENGTH + ADLER_FIELD_LENGTH);
+    super(to!uint(data.length + HEADER_BYTES_LENGTH + ADLER_FIELD_LENGTH));
     setType(TYPE_IDAT);
     reference[HEADER_BYTE1_DATA_OFFSET] = headerByte1;
     reference[HEADER_BYTE2_DATA_OFFSET] = headerByte2;

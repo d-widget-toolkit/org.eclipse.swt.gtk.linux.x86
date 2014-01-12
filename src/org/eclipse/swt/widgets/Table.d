@@ -565,7 +565,8 @@ void createColumn (TableColumn column, int index) {
         if (modelIndex is modelLength) {
             auto oldModel = modelHandle;
             auto types = getColumnTypes (columnCount + 4); // grow by 4 rows at a time
-            auto newModel = OS.gtk_list_store_newv (types.length, types.ptr);
+            auto newModel = OS.gtk_list_store_newv
+                (to!int(types.length), types.ptr);
             if (newModel is null) error (SWT.ERROR_NO_HANDLES);
             void* ptr;
             for (int i=0; i<itemCount; i++) {
@@ -650,7 +651,8 @@ override void createHandle (int index) {
     scrolledHandle = cast(GtkWidget*)OS.gtk_scrolled_window_new (null, null);
     if (scrolledHandle is null) error (SWT.ERROR_NO_HANDLES);
     auto types = getColumnTypes (1);
-    modelHandle = cast(GtkWidget*)OS.gtk_list_store_newv (types.length, types.ptr);
+    modelHandle = cast(GtkWidget*)OS.gtk_list_store_newv
+        (to!int(types.length), types.ptr);
     if (modelHandle is null) error (SWT.ERROR_NO_HANDLES);
     handle = cast(GtkWidget*)OS.gtk_tree_view_new_with_model (modelHandle);
     if (handle is null) error (SWT.ERROR_NO_HANDLES);
@@ -757,10 +759,11 @@ void createItem (TableColumn column, int index) {
 
 void createItem (TableItem item, int index) {
     if (!(0 <= index && index <= itemCount)) error (SWT.ERROR_INVALID_RANGE);
-    if (itemCount is items.length) {
-        int length = drawCount is 0 ? items.length + 4 : Math.max (4, items.length * 3 / 2);
+    if (itemCount == items.length) {
+        int length = to!int(drawCount == 0 ? items.length + 4
+                            : Math.max (4, items.length * 3 / 2));
         TableItem [] newItems = new TableItem [length];
-        System.arraycopy (items, 0, newItems, 0, items.length);
+        System.arraycopy (items, 0, newItems, 0, to!int(items.length));
         items = newItems;
     }
     item.handle = cast(GtkWidget*) OS.g_malloc( GtkTreeIter.sizeof );
@@ -1006,7 +1009,8 @@ void destroyItem (TableColumn column) {
     if (columnCount is 0) {
         auto oldModel = modelHandle;
         auto types = getColumnTypes (1);
-        auto newModel = OS.gtk_list_store_newv (types.length, types.ptr);
+        auto newModel = OS.gtk_list_store_newv
+            (to!int(types.length), types.ptr);
         if (newModel is null) error (SWT.ERROR_NO_HANDLES);
         void* ptr;
         for (int i=0; i<itemCount; i++) {
@@ -2774,7 +2778,7 @@ public void select (int [] indices) {
     checkWidget ();
     // SWT extension: allow null for zero length string
     //if (indices is null) error (SWT.ERROR_NULL_ARGUMENT);
-    int length = indices.length;
+    int length = to!int(indices.length);
     if (length is 0 || ((style & SWT.SINGLE) !is 0 && length > 1)) return;
     bool fixColumn = showFirstColumn ();
     auto selection = OS.gtk_tree_view_get_selection (handle);
@@ -3188,7 +3192,7 @@ public void setSelection (int [] indices) {
     // SWT extension: allow null for zero length string
     //if (indices is null) error (SWT.ERROR_NULL_ARGUMENT);
     deselectAll ();
-    int length = indices.length;
+    int length = to!int(indices.length);
     if (length is 0 || ((style & SWT.SINGLE) !is 0 && length > 1)) return;
     bool fixColumn = showFirstColumn ();
     selectFocusIndex (indices [0]);
@@ -3254,7 +3258,7 @@ public void setSelection (TableItem [] items) {
     //if (items is null) error (SWT.ERROR_NULL_ARGUMENT);
     bool fixColumn = showFirstColumn ();
     deselectAll ();
-    int length = items.length;
+    int length = to!int(items.length);
     if (!(length is 0 || ((style & SWT.SINGLE) !is 0 && length > 1))) {
         bool first = true;
         for (int i = 0; i < length; i++) {

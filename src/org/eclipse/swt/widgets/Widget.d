@@ -28,6 +28,7 @@ import org.eclipse.swt.widgets.TypedListener;
 
 import java.lang.Thread;
 
+import std.conv;
 
 /**
  * This class is the abstract superclass of all user interface objects.
@@ -653,7 +654,7 @@ String getName () {
 //  int index = str.lastIndexOf ('.');
 //  if (index is -1) return str;
     String str = this.classinfo.name;
-    int index = str.length;
+    auto index = str.length;
     while ((--index > 0) && (str[index] !is '.')) {}
     return str[index + 1 .. $ ];
 }
@@ -1345,7 +1346,7 @@ char [] sendIMKeyEvent (int type, GdkEventKey* keyEvent, char [] chars) {
             setInputState (event, state);
         }
         //PORTING take care of utf8
-        int incr;
+        ptrdiff_t incr;
         event.character = cast(wchar) chars.dcharAt(index, incr);
         sendEvent (type, event);
 
@@ -1467,7 +1468,7 @@ public void setData (String key, Object value) {
     } else {
         if ((state & KEYED_DATA) !is 0) {
             if (index !is table.length) {
-                int len = table.length - 2;
+                int len = to!int(table.length - 2);
                 if (len is 1) {
                     data = table [0];
                     state &= ~KEYED_DATA;

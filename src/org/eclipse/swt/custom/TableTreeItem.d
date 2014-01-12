@@ -29,6 +29,8 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swt.custom.TableTree;
 import java.lang.all;
 
+import std.conv;
+
 
 /**
  * A TableTreeItem is a selectable user interface object
@@ -423,7 +425,7 @@ int getIndent() {
  */
 public TableTreeItem getItem (int index) {
     checkWidget();
-    int count = items.length;
+    auto count = items.length;
     if (!(0 <= index && index < count)) SWT.error (SWT.ERROR_INVALID_RANGE);
     return items [index];
 }
@@ -436,7 +438,7 @@ public TableTreeItem getItem (int index) {
  */
 public int getItemCount () {
     //checkWidget();
-    return items.length;
+    return to!int(items.length);
 }
 
 /**
@@ -571,7 +573,7 @@ int visibleChildrenCount () {
 
 public override void dispose () {
     if (isDisposed()) return;
-    for (int i = items.length - 1; i >= 0; i--) {
+    for (auto i = items.length - 1; i >= 0; i--) {
         items[i].dispose();
     }
     super.dispose();
@@ -873,7 +875,7 @@ void setVisible (bool show) {
         if (items.length !is 0) {
             if (expanded) {
                 tableItem.setImage(0, parent.getMinusImage());
-                for (int i = 0, length = items.length; i < length; i++) {
+                for (size_t i = 0, length = items.length; i < length; i++) {
                     items[i].setVisible(true);
                 }
             } else {
@@ -883,7 +885,7 @@ void setVisible (bool show) {
 
     } else {
 
-        for (int i = 0, length = items.length; i < length; i++) {
+        for (size_t i = 0, length = items.length; i < length; i++) {
             items[i].setVisible(false);
         }
         // remove row from table

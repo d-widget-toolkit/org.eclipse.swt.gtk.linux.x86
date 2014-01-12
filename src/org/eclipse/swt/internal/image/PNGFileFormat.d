@@ -33,6 +33,7 @@ import java.lang.all;
 
 import java.io.BufferedInputStream;
 
+import std.conv;
 
 final class PNGFileFormat : FileFormat {
     static const int SIGNATURE_LENGTH = 8;
@@ -188,7 +189,8 @@ override bool isFileFormat(LEDataInputStream stream) {
 byte[] validateBitDepth(byte[] data) {
     if (headerChunk.getBitDepth() > 8) {
         byte[] result = new byte[data.length / 2];
-        compress16BitDepthTo8BitDepth(data, 0, result, 0, result.length);
+        compress16BitDepthTo8BitDepth
+            (data, 0, result, 0, to!int(result.length));
         return result;
     } else {
         return data;

@@ -27,6 +27,8 @@ import org.eclipse.swt.widgets.TypedListener;
 
 import java.lang.all;
 
+import std.conv;
+
 /**
  * Instances of this class are controls that allow the user
  * to choose an item from a list of items, or optionally
@@ -151,7 +153,7 @@ public void add (String string) {
     checkWidget();
     // SWT extension: allow null for zero length string
     //if (string is null) error (SWT.ERROR_NULL_ARGUMENT);
-    add (string, items.length);
+    add (string, to!int(items.length));
 }
 
 /**
@@ -866,7 +868,7 @@ public String getItem (int index) {
  */
 public int getItemCount () {
     checkWidget();
-    return items.length;
+    return to!int(items.length);
 }
 
 /**
@@ -979,15 +981,15 @@ public int getOrientation () {
 public Point getSelection () {
     checkWidget ();
     if ((style & SWT.READ_ONLY) !is 0) {
-        int length = 0;
+        size_t length = 0;
         if (OS.GTK_VERSION >= OS.buildVERSION (2, 4, 0)) {
             int index = OS.gtk_combo_box_get_active (handle);
             if (index !is -1) length = getItem (index).length;
         } else {
             auto str = OS.gtk_entry_get_text (entryHandle);
-            if (str !is null) length = cast(int)/*64*/OS.g_utf8_strlen (str, -1);
+            if (str !is null) length = OS.g_utf8_strlen (str, -1);
         }
-        return new Point (0, length);
+        return new Point (0, to!int(length));
     }
     int start;
     int end;
@@ -1254,7 +1256,7 @@ override int gtk_delete_text (GtkWidget* widget, int start_pos, int end_pos) {
             pos = cast(int)/*64*/end_pos;
             OS.g_signal_handlers_block_matched (entryHandle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udCHANGED);
             OS.g_signal_handlers_block_matched (entryHandle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udINSERT_TEXT);
-            OS.gtk_editable_insert_text (entryHandle, newText.ptr, newText.length, &pos);
+            OS.gtk_editable_insert_text (entryHandle, newText.ptr, to!int(newText.length), &pos);
             OS.g_signal_handlers_unblock_matched (entryHandle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udINSERT_TEXT);
             OS.g_signal_handlers_unblock_matched (entryHandle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udCHANGED);
             OS.gtk_editable_set_position (entryHandle, pos );
@@ -1330,7 +1332,7 @@ override int gtk_insert_text (GtkEditable* widget, char* new_text, int new_text_
     pos = position;
     if (pos is -1) {
         auto ptr = OS.gtk_entry_get_text (entryHandle);
-        pos = fromStringz(ptr).length;
+        pos = to!int(fromStringz(ptr).length);
     }
     String newText = verifyText (oldText, pos, pos);
     if (newText !is oldText) {
@@ -1345,7 +1347,7 @@ override int gtk_insert_text (GtkEditable* widget, char* new_text, int new_text_
                 OS.g_signal_handlers_unblock_matched (entryHandle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udCHANGED);
             }
             OS.g_signal_handlers_block_matched (entryHandle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udINSERT_TEXT);
-            OS.gtk_editable_insert_text (entryHandle, newText.ptr, newText.length, &pos);
+            OS.gtk_editable_insert_text (entryHandle, newText.ptr, to!int(newText.length), &pos);
             OS.g_signal_handlers_unblock_matched (entryHandle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udINSERT_TEXT);
             newStart = newEnd = pos;
         }
@@ -1395,7 +1397,7 @@ override int gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
                 break;
             case OS.GDK_Page_Down:
             case OS.GDK_KP_Page_Down:
-                newIndex = items.length - 1;
+                newIndex = to!int(items.length - 1);
                 break;
             default:
         }
@@ -1658,11 +1660,11 @@ public void remove (String string) {
  */
 public void removeAll () {
     checkWidget();
-    int count = items.length;
+    auto count = items.length;
     items = null;
     if (OS.GTK_VERSION >= OS.buildVERSION (2, 4, 0)) {
         clearText ();
-        for (int i = count - 1; i >= 0; i--) {
+        for (int i = to!int(count) - 1; i >= 0; i--) {
             OS.gtk_combo_box_remove_text (handle, i);
         }
     } else {
@@ -1916,18 +1918,18 @@ public void setItems (String [] items) {
     for (int i=0; i<items.length; i++) {
         if (items [i] is null) error (SWT.ERROR_INVALID_ARGUMENT);
     }
-    int count = this.items.length;
+    auto count = this.items.length;
     this.items = new String[](items.length);
     System.arraycopy (items, 0, this.items, 0, items.length);
     if (OS.GTK_VERSION >= OS.buildVERSION (2, 4, 0)) {
         clearText ();
-        for (int i = count - 1; i >= 0; i--) {
+        for (int i = to!int(count) - 1; i >= 0; i--) {
             OS.gtk_combo_box_remove_text (handle, i);
         }
-        for (int i = 0; i < items.length; i++) {
+        for (size_t i = 0; i < items.length; i++) {
             String string = items [i];
             char* buffer = string.toStringzValidPtr();
-            OS.gtk_combo_box_insert_text (handle, i, buffer);
+            OS.gtk_combo_box_insert_text (handle, to!int(i), buffer);
             if ((style & SWT.RIGHT_TO_LEFT) !is 0 && popupHandle !is null) {
                 display.doSetDirectionProc(popupHandle, OS.GTK_TEXT_DIR_RTL);
             }
@@ -2191,7 +2193,7 @@ override bool translateTraversal (GdkEventKey* keyEvent) {
                 char* preeditString;
                 OS.gtk_im_context_get_preedit_string (imContext, &preeditString, null, null);
                 if (preeditString !is null) {
-                    int length = fromStringz(preeditString).length;
+                    auto length = fromStringz(preeditString).length;
                     OS.g_free (preeditString);
                     if (length !is 0) return false;
                 }

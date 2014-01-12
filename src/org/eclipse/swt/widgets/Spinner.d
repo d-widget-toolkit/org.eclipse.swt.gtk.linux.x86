@@ -225,7 +225,7 @@ public override Point computeSize (int wHint, int hHint, bool changed) {
     if (digits > 0) {
         //PROTING_TODO: Efficiency
         String buffer = string ~ getDecimalSeparator ();
-        int count = digits - string.length;
+        int count = to!int(digits - string.length);
         while (count >= 0) {
             buffer ~= "0";
             count--;
@@ -235,9 +235,9 @@ public override Point computeSize (int wHint, int hHint, bool changed) {
     auto buffer1 = string;
     auto ptr = OS.pango_layout_get_text (layout);
     String buffer2 = fromStringz( ptr )._idup();
-    OS.pango_layout_set_text (layout, buffer1.ptr, buffer1.length);
+    OS.pango_layout_set_text (layout, buffer1.ptr, to!int(buffer1.length));
     OS.pango_layout_get_size (layout, w.ptr, h.ptr);
-    OS.pango_layout_set_text (layout, buffer2.ptr, buffer2.length);
+    OS.pango_layout_set_text (layout, buffer2.ptr, to!int(buffer2.length));
     int width = OS.PANGO_PIXELS (w [0]);
     int height = OS.PANGO_PIXELS (h [0]);
     width = wHint is SWT.DEFAULT ? width : wHint;
@@ -640,7 +640,7 @@ override int /*long*/ gtk_delete_text (GtkWidget* widget, int start_pos, int end
             pos = cast(int)/*64*/end_pos;
             OS.g_signal_handlers_block_matched (handle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udCHANGED);
             OS.g_signal_handlers_block_matched (handle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udINSERT_TEXT);
-            OS.gtk_editable_insert_text (cast(GtkEditable*)handle, newText.ptr, newText.length, &pos);
+            OS.gtk_editable_insert_text (cast(GtkEditable*)handle, newText.ptr, to!int(newText.length), &pos);
             OS.g_signal_handlers_unblock_matched (handle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udINSERT_TEXT);
             OS.g_signal_handlers_unblock_matched (handle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udCHANGED);
             OS.gtk_editable_set_position (cast(GtkEditable*)handle, pos);
@@ -682,7 +682,7 @@ override int /*long*/ gtk_insert_text (GtkEditable* widget, char* new_text, int 
                 OS.g_signal_handlers_unblock_matched (handle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udCHANGED);
             }
             OS.g_signal_handlers_block_matched (handle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udINSERT_TEXT);
-            OS.gtk_editable_insert_text (cast(GtkEditable*)handle, newText.ptr, newText.length, &pos);
+            OS.gtk_editable_insert_text (cast(GtkEditable*)handle, newText.ptr, to!int(newText.length), &pos);
             OS.g_signal_handlers_unblock_matched (handle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udINSERT_TEXT);
             newStart = newEnd = pos;
         }

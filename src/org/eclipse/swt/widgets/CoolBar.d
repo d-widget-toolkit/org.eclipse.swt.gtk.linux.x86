@@ -27,6 +27,8 @@ import org.eclipse.swt.widgets.Listener;
 
 import java.lang.all;
 
+import std.conv;
+
 /**
  * Instances of this class provide an area for dynamically
  * positioning the items they contain.
@@ -230,7 +232,7 @@ public CoolItem getItem (int index) {
  */
 public int getItemCount () {
     checkWidget();
-    return originalItems.length;
+    return to!int(originalItems.length);
 }
 /**
  * Returns an array of <code>CoolItem</code>s in the order
@@ -337,7 +339,7 @@ void insertItemIntoRow(CoolItem item, int rowIndex, int x_root) {
         item.wrap = true;
         items[rowIndex][0].wrap = false;
     }
-    int oldLength = items[rowIndex].length;
+    int oldLength = to!int(items[rowIndex].length);
     CoolItem[] newRow = new CoolItem[oldLength + 1];
     System.arraycopy(items[rowIndex], 0, newRow, 0, index);
     newRow[index] = item;
@@ -399,13 +401,13 @@ void createItem (CoolItem item, int index) {
                 row++;
             }
         } else {
-            row = items.length - 1;
-            i = items[row].length;
+            row = to!int(items.length - 1);
+            i = to!int(items[row].length);
         }
 
         // Set the last item in the row to the preferred size
         // and add the new one just to it's right
-        int lastIndex = items[row].length - 1;
+        int lastIndex = to!int(items[row].length - 1);
         CoolItem lastItem = items[row][lastIndex];
         if (lastItem.ideal) {
             Rectangle bounds = lastItem.internalGetBounds();
@@ -418,7 +420,7 @@ void createItem (CoolItem item, int index) {
             item.wrap = true;
             items[row][0].wrap = false;
         }
-        int oldLength = items[row].length;
+        int oldLength = to!int(items[row].length);
         CoolItem[] newRow = new CoolItem[oldLength + 1];
         System.arraycopy(items[row], 0, newRow, 0, i);
         newRow[i] = item;
@@ -427,7 +429,7 @@ void createItem (CoolItem item, int index) {
     }
     item.requestedWidth = CoolItem.MINIMUM_WIDTH;
 
-    int length = originalItems.length;
+    int length = to!int(originalItems.length);
     CoolItem [] newOriginals = new CoolItem [length + 1];
     System.arraycopy (originalItems, 0, newOriginals, 0, index);
     System.arraycopy (originalItems, index, newOriginals, index + 1, length - index);
@@ -448,7 +450,7 @@ void destroyItem(CoolItem item) {
         if (originalItems [index] is item) break;
         index++;
     }
-    int length = originalItems.length - 1;
+    int length = to!int(originalItems.length - 1);
     CoolItem [] newOriginals = new CoolItem [length];
     System.arraycopy (originalItems, 0, newOriginals, 0, index);
     System.arraycopy (originalItems, index + 1, newOriginals, index, length - index);
@@ -472,8 +474,8 @@ void moveDown(CoolItem item, int x_root) {
     if (newRowIndex is items.length) {
         /* Create a new bottom row for the item. */
         CoolItem[][] newRows = new CoolItem[][](items.length + 1);
-        SimpleType!(CoolItem[]).arraycopy(items, 0, newRows, 0, items.length);
-        int row = items.length;
+        SimpleType!(CoolItem[]).arraycopy(items, 0, newRows, 0, to!int(items.length));
+        int row = to!int(items.length);
         newRows[row] = new CoolItem[1];
         newRows[row][0] = item;
         items = newRows;
@@ -572,7 +574,7 @@ void moveUp(CoolItem item, int x_root) {
     if (oldRowIndex is 0) {
         /* Create a new top row for the item. */
         CoolItem[][] newRows = new CoolItem[][]( items.length + 1 );
-        SimpleType!(CoolItem[]).arraycopy(items, 0, newRows, 1, items.length);
+        SimpleType!(CoolItem[]).arraycopy(items, 0, newRows, 1, to!int(items.length));
         newRows[0] = new CoolItem[1];
         newRows[0][0] = item;
         items = newRows;
@@ -797,7 +799,7 @@ override void removeControl (Control control) {
  */
 void removeItemFromRow(CoolItem item, int rowIndex, bool disposed) {
     int index = findItem(item).x;
-    int newLength = items[rowIndex].length - 1;
+    int newLength = to!int(items[rowIndex].length - 1);
     Rectangle itemBounds = item.internalGetBounds();
     item.wrap = false;
     if (newLength > 0) {
@@ -809,7 +811,7 @@ void removeItemFromRow(CoolItem item, int rowIndex, bool disposed) {
     } else {
         CoolItem[][] newRows = new CoolItem[][]( items.length - 1 );
         SimpleType!(CoolItem[]).arraycopy(items, 0, newRows, 0, rowIndex);
-        SimpleType!(CoolItem[]).arraycopy(items, rowIndex + 1, newRows, rowIndex, newRows.length - rowIndex);
+        SimpleType!(CoolItem[]).arraycopy(items, rowIndex + 1, newRows, rowIndex, to!int(newRows.length - rowIndex));
         items = newRows;
         return;
     }
@@ -844,7 +846,7 @@ int layoutItems () {
     wrapItems(width);
     int rowSpacing = (style & SWT.FLAT) !is 0 ? 0 : ROW_SPACING;
     for (int row = 0; row < items.length; row++) {
-        int count = items[row].length;
+        int count = to!int(items[row].length);
         int x = 0;
 
         /* determine the height and the available width for the row */
@@ -955,7 +957,7 @@ public int[] getItemOrder () {
 void setItemOrder (int[] itemOrder) {
     // SWT extension: allow null for zero length string
     //if (itemOrder is null) error(SWT.ERROR_NULL_ARGUMENT);
-    int count = originalItems.length;
+    int count = to!int(originalItems.length);
     if (itemOrder.length !is count) error(SWT.ERROR_INVALID_ARGUMENT);
 
     /* Ensure that itemOrder does not contain any duplicates. */
@@ -1042,7 +1044,7 @@ public int[] getWrapIndices () {
     checkWidget();
     if (items.length <= 1) return null;
     int[] wrapIndices = new int[]( items.length - 1 );
-    int i = 0, nextWrap = items[0].length;
+    int i = 0, nextWrap = to!int(items[0].length);
     for (int row = 1; row < items.length; row++) {
         if (items[row][0].wrap) wrapIndices[i++] = nextWrap;
         nextWrap += items[row].length;
@@ -1093,7 +1095,7 @@ public void setLocked (bool locked) {
 public void setWrapIndices (int[] indices) {
     checkWidget();
     if (indices is null) indices = new int[0];
-    int count = originalItems.length;
+    int count = to!int(originalItems.length);
     for (int i=0; i<indices.length; i++) {
         if (indices[i] < 0 || indices[i] >= count) {
             error (SWT.ERROR_INVALID_ARGUMENT);
@@ -1159,7 +1161,7 @@ public void setItemLayout (int[] itemOrder, int[] wrapIndices, Point[] sizes) {
     relayout();
 }
 void wrapItems (int maxWidth) {
-    int itemCount = originalItems.length;
+    int itemCount = to!int(originalItems.length);
     if (itemCount < 2) return;
     CoolItem[] itemsVisual = new CoolItem[itemCount];
     int start = 0;

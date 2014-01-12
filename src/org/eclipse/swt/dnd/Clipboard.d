@@ -525,7 +525,7 @@ public TransferData[] getAvailableTypes(int clipboards) {
     }
     if ((clipboards & DND.SELECTION_CLIPBOARD) !is 0) {
         auto types = getAvailablePrimaryTypes();
-        int offset = 0;
+        size_t offset = 0;
         if (result !is null) {
             TransferData[] newResult = new TransferData[result.length + types.length];
             System.arraycopy(result,0, newResult, 0, result.length);
@@ -534,7 +534,7 @@ public TransferData[] getAvailableTypes(int clipboards) {
         } else {
             result = new TransferData[types.length];
         }
-        for (int i = 0; i < types.length; i++) {
+        for (size_t i = 0; i < types.length; i++) {
             result[offset+i] = new TransferData();
             result[offset+i].type = types[i];
         }

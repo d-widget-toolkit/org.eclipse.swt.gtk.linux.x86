@@ -19,6 +19,8 @@ import org.eclipse.swt.internal.gtk.OS;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Display;
 
+import std.conv;
+
 
 class ImageList {
     GdkPixbuf* [] pixbufs;
@@ -91,7 +93,7 @@ public bool isDisposed () {
 }
 
 public void put (int index, Image image) {
-    int count = images.length;
+    int count = to!int(images.length);
     if (!(0 <= index && index < count)) return;
     if (image !is null) {
         set (index, image);

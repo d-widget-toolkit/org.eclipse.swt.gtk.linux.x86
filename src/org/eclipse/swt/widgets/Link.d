@@ -42,6 +42,7 @@ import org.eclipse.swt.widgets.Event;
 import java.lang.all;
 import java.nonstandard.UnsafeUtf;
 
+import std.conv;
 
 /**
  * Instances of this class represent a selectable
@@ -546,7 +547,7 @@ public void removeSelectionListener (SelectionListener listener) {
 }
 
 String parse (String string) {
-    int length_ = string.length;
+    int length_ = to!int(string.length);
     offsets = new Point[]( length_ / 4 );
     ids = new String[]( length_ / 4 );
     mnemonics = new int[] ( length_ / 4 + 1 );
@@ -556,7 +557,7 @@ String parse (String string) {
     int index = 0, state = 0, linkIndex = 0;
     int start = 0, tagStart = 0, linkStart = 0, endtagStart = 0, refStart = 0;
     while (index < length_) {
-        int increment;
+        ptrdiff_t increment;
         dchar c = Character.toLowerCase (buffer.dcharAt (index, increment));
 
         switch (state) {
@@ -681,7 +682,7 @@ String parse (String string) {
 int parseMnemonics (char[] buffer, int start, int end, StringBuffer result) {
     int mnemonic = -1, index = start;
     while (index < end) {
-        int incr = 1;
+        ptrdiff_t incr = 1;
         if ( buffer[index] is '&') {
             if (index + 1 < end && buffer [index + 1] is '&') {
                 result.append (buffer [index]);

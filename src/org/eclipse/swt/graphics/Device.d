@@ -333,8 +333,8 @@ public DeviceData getDeviceData () {
     data.tracking = tracking;
     if (tracking) {
         synchronized (trackingLock) {
-            int count = 0, length = objects.length;
-            for (int i=0; i<length; i++) {
+            auto count = 0, length = objects.length;
+            for (ptrdiff_t i=0; i<length; i++) {
                 if (objects [i] !is null) count++;
             }
             int index = 0;

@@ -129,8 +129,8 @@ public this () {
  */
 public this(String str) {
     if (str is null) SWT.error(SWT.ERROR_NULL_ARGUMENT);
-    int start = 0;
-    int end = indexOf( str, '|' );
+    ptrdiff_t start = 0;
+    auto end = indexOf( str, '|' );
     if (end is -1 ) SWT.error(SWT.ERROR_INVALID_ARGUMENT);
     String version1 = str[ start .. end ];
     try {
@@ -369,8 +369,8 @@ getDwtLogger().trace( __FILE__, __LINE__,  "setLocal {}", locale );
     lang = country = variant = null;
     if (locale !is null) {
         char sep = '_';
-        int length = locale.length;
-        int firstSep, secondSep;
+        auto length = locale.length;
+        typeof(length) firstSep, secondSep;
 
         firstSep = indexOf( locale, sep );
         if (firstSep is -1 ) {

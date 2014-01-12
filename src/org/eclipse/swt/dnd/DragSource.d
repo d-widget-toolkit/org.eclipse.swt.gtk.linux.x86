@@ -40,6 +40,8 @@ import java.lang.all;
 
 import java.lang.Thread;
 
+import std.conv;
+
 /**
  *
  * <code>DragSource</code> defines the source object for a drag and drop transfer.
@@ -457,10 +459,10 @@ public Control getControl () {
  */
 public DragSourceListener[] getDragListeners() {
     Listener[] listeners = getListeners(DND.DragStart);
-    int length = listeners.length;
+    auto length = listeners.length;
     DragSourceListener[] dragListeners = new DragSourceListener[length];
     int count = 0;
-    for (int i = 0; i < length; i++) {
+    for (typeof(length) i = 0; i < length; i++) {
         Listener listener = listeners[i];
         if ( auto l = cast(DNDListener)listener ) {
             dragListeners[count] = cast(DragSourceListener) (l.getEventListener());
@@ -598,23 +600,25 @@ public void setTransfer(Transfer[] transferAgents){
             for (int j = 0; j < typeIds.length; j++) {
                 GtkTargetEntry* entry = new GtkTargetEntry();
                 String type = typeNames[j];
-                entry.target = cast(char*)OS.g_malloc(type.length+1);
+                entry.target = cast(char*)OS.g_malloc(to!uint(type.length+1));
                 entry.target[ 0 .. type.length ] = type[];
                 entry.target[ type.length ] = '\0';
                 entry.info = typeIds[j];
                 GtkTargetEntry*[] newTargets = new GtkTargetEntry*[targets.length + 1];
-                SimpleType!(GtkTargetEntry*).arraycopy(targets, 0, newTargets, 0, targets.length);
+                SimpleType!(GtkTargetEntry*).arraycopy(targets, 0, newTargets,
+                                             0, to!uint(targets.length));
                 newTargets[targets.length] = entry;
                 targets = newTargets;
             }
         }
     }
 
-    void* pTargets = OS.g_malloc(targets.length * GtkTargetEntry.sizeof);
+    void* pTargets = OS.g_malloc(to!uint(
+                                 targets.length * GtkTargetEntry.sizeof));
     for (int i = 0; i < targets.length; i++) {
         OS.memmove(pTargets + i*GtkTargetEntry.sizeof, targets[i], GtkTargetEntry.sizeof);
     }
-    targetList = OS.gtk_target_list_new(pTargets, targets.length);
+    targetList = OS.gtk_target_list_new(pTargets, to!uint(targets.length));
 
     for (int i = 0; i < targets.length; i++) {
         OS.g_free(targets[i].target);

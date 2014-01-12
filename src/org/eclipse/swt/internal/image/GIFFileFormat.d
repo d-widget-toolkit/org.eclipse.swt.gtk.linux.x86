@@ -23,6 +23,7 @@ import org.eclipse.swt.graphics.ImageLoaderEvent;
 import org.eclipse.swt.graphics.ImageLoader;
 import java.lang.all;
 
+import std.conv;
 
 final class GIFFileFormat : FileFormat {
     String signature;
@@ -123,7 +124,7 @@ final class GIFFileFormat : FileFormat {
             //images ~= image;
             try {
                 /* Read the 0-byte terminator at the end of the image. */
-                id = inputStream.read();
+                id = to!int(inputStream.read());
                 if (id > 0) {
                     /* We read the terminator earlier. */
                     byte[1] arr;
@@ -144,7 +145,7 @@ final class GIFFileFormat : FileFormat {
      */
     int readID() {
         try {
-            return inputStream.read();
+            return to!int(inputStream.read());
         } catch (IOException e) {
             SWT.error(SWT.ERROR_IO, e);
         }
@@ -198,7 +199,7 @@ final class GIFFileFormat : FileFormat {
         // field size is correct, we can just skip over
         // the block contents.
         try {
-            int extSize = inputStream.read();
+            int extSize = to!int(inputStream.read());
             if (extSize < 0) {
                 SWT.error(SWT.ERROR_INVALID_IMAGE);
             }
@@ -220,14 +221,14 @@ final class GIFFileFormat : FileFormat {
         try {
             byte[] comment = new byte[0];
             byte[] block = new byte[255];
-            int size = inputStream.read();
+            int size = to!int(inputStream.read());
             while ((size > 0) && (inputStream.read(block, 0, size) !is -1)) {
                 byte[] oldComment = comment;
                 comment = new byte[oldComment.length + size];
                 System.arraycopy(oldComment, 0, comment, 0, oldComment.length);
                 System.arraycopy(block, 0, comment, oldComment.length, size);
                 //comment ~= block[ 0 .. size ];
-                size = inputStream.read();
+                size = to!int(inputStream.read());
             }
             return comment;
         } catch (Exception e) {
@@ -251,14 +252,14 @@ final class GIFFileFormat : FileFormat {
             // Read the text.
             byte[] text = new byte[0];
             byte[] block = new byte[255];
-            int size = inputStream.read();
+            int size = to!int(inputStream.read());
             while ((size > 0) && (inputStream.read(block, 0, size) !is -1)) {
                 byte[] oldText = text;
                 text = new byte[oldText.length + size];
                 System.arraycopy(oldText, 0, text, 0, oldText.length);
                 System.arraycopy(block, 0, text, oldText.length, size);
                 //text ~= block[ 0 .. size ];
-                size = inputStream.read();
+                size = to!int(inputStream.read());
             }
             return text;
         } catch (Exception e) {
@@ -319,14 +320,14 @@ final class GIFFileFormat : FileFormat {
             // Read application data.
             byte[] data = new byte[0];
             byte[] block = new byte[255];
-            int size = inputStream.read();
+            int size = to!int(inputStream.read());
             while ((size > 0) && (inputStream.read(block, 0, size) !is -1)) {
                 byte[] oldData = data;
                 data = new byte[oldData.length + size];
                 System.arraycopy(oldData, 0, data, 0, oldData.length);
                 System.arraycopy(block, 0, data, oldData.length, size);
                 //data ~= block[ 0 .. size ];
-                size = inputStream.read();
+                size = to!int(inputStream.read());
             }
             // Look for the NETSCAPE 'repeat count' field for an animated GIF.
             bool netscape =
@@ -401,7 +402,7 @@ final class GIFFileFormat : FileFormat {
         }
         int initialCodeSize = -1;
         try {
-            initialCodeSize = inputStream.read();
+            initialCodeSize = to!int(inputStream.read());
         } catch (IOException e) {
             SWT.error(SWT.ERROR_IO, e);
         }
@@ -452,7 +453,7 @@ final class GIFFileFormat : FileFormat {
 
         /* Step 1: Acquire GIF parameters. */
         ImageData[] data = loader.data;
-        int frameCount = data.length;
+        int frameCount = to!int(data.length);
         bool multi = frameCount > 1;
         ImageData firstImage = data[0];
         int logicalScreenWidth = multi ? loader.logicalScreenWidth : firstImage.width;

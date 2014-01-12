@@ -34,6 +34,7 @@ import java.lang.all;
 version(Tango){
 import tango.stdc.string;
 } else { // Phobos
+    import std.conv;
 }
 
 /**
@@ -550,7 +551,7 @@ public this(Device device, String filename) {
     super(device);
     if (filename is null) SWT.error(SWT.ERROR_NULL_ARGUMENT);
     try {
-        int length = filename.length;
+        auto length = filename.length;
         auto pixbuf = OS.gdk_pixbuf_new_from_file(toStringz(filename), null);
         if (pixbuf !is null) {
             bool hasAlpha = cast(bool)OS.gdk_pixbuf_get_has_alpha(pixbuf);
@@ -607,7 +608,8 @@ void createAlphaMask (int width, int height) {
             GdkImage* gdkImage = new GdkImage();
             *gdkImage = *imagePtr;
             if (gdkImage.bpl is width) {
-                OS.memmove(gdkImage.mem, alphaData.ptr, alphaData.length);
+                OS.memmove(gdkImage.mem, alphaData.ptr,
+                           to!int(alphaData.length));
             } else {
                 byte[] line = new byte[gdkImage.bpl];
                 for (int y = 0; y < height; y++) {
@@ -869,7 +871,7 @@ public ImageData getImageData() {
     int stride = OS.gdk_pixbuf_get_rowstride(pixbuf);
     auto pixels = OS.gdk_pixbuf_get_pixels(pixbuf);
     byte[] srcData = new byte[stride * height];
-    OS.memmove(srcData.ptr, pixels, srcData.length);
+    OS.memmove(srcData.ptr, pixels, to!int(srcData.length));
     OS.g_object_unref(pixbuf);
 
     PaletteData palette = new PaletteData(0xFF0000, 0xFF00, 0xFF);
@@ -884,7 +886,7 @@ public ImageData getImageData() {
         GdkImage* gdkImage = new GdkImage();
         OS.memmove(gdkImage, gdkImagePtr, GdkImage.sizeof );
         byte[] maskData = new byte[gdkImage.bpl * gdkImage.height];
-        OS.memmove(maskData.ptr, gdkImage.mem, maskData.length);
+        OS.memmove(maskData.ptr, gdkImage.mem, to!int(maskData.length));
         OS.g_object_unref(gdkImagePtr);
         int maskPad;
         for (maskPad = 1; maskPad < 128; maskPad++) {
@@ -999,11 +1001,11 @@ void init_(ImageData image) {
                 false, false);
         } else {
             RGB[] rgbs = palette.getRGBs();
-            int length = rgbs.length;
+            auto length = rgbs.length;
             byte[] srcReds = new byte[length];
             byte[] srcGreens = new byte[length];
             byte[] srcBlues = new byte[length];
-            for (int i = 0; i < rgbs.length; i++) {
+            for (ptrdiff_t i = 0; i < rgbs.length; i++) {
                 RGB rgb = rgbs[i];
                 if (rgb is null) continue;
                 srcReds[i] = cast(byte)rgb.red;

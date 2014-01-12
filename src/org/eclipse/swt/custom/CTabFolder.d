@@ -50,6 +50,8 @@ import org.eclipse.swt.custom.CTabFolderEvent;
 import java.lang.all;
 import java.nonstandard.UnsafeUtf;
 
+import std.conv;
+
 /**
  *
  * Instances of this class implement the notebook user interface
@@ -466,7 +468,7 @@ public void addCTabFolder2Listener(CTabFolder2Listener listener) {
     if (listener is null) SWT.error (SWT.ERROR_NULL_ARGUMENT);
     // add to array
     CTabFolder2Listener[] newListeners = new CTabFolder2Listener[folderListeners.length + 1];
-    SimpleType!(CTabFolder2Listener).arraycopy(folderListeners, 0, newListeners, 0, folderListeners.length);
+    SimpleType!(CTabFolder2Listener).arraycopy(folderListeners, 0, newListeners, 0, to!uint(folderListeners.length));
     folderListeners = newListeners;
     folderListeners[folderListeners.length - 1] = listener;
 }
@@ -494,7 +496,7 @@ public void addCTabFolderListener(CTabFolderListener listener) {
     if (listener is null) SWT.error (SWT.ERROR_NULL_ARGUMENT);
     // add to array
     CTabFolderListener[] newTabListeners = new CTabFolderListener[tabListeners.length + 1];
-    SimpleType!(CTabFolderListener).arraycopy(tabListeners, 0, newTabListeners, 0, tabListeners.length);
+    SimpleType!(CTabFolderListener).arraycopy(tabListeners, 0, newTabListeners, 0, to!uint(tabListeners.length));
     tabListeners = newTabListeners;
     tabListeners[tabListeners.length - 1] = listener;
     // display close button to be backwards compatible
@@ -618,7 +620,7 @@ void createItem (CTabItem item, int index) {
     items = newItems;
     if (selectedIndex >= index) selectedIndex ++;
     int[] newPriority = new int[priority.length + 1];
-    int next = 0,  priorityIndex = priority.length;
+    int next = 0,  priorityIndex = to!int(priority.length);
     for (int i = 0; i < priority.length; i++) {
         if (!mru && priority[i] is index) {
             priorityIndex = next++;
@@ -733,7 +735,7 @@ void drawBackground(GC gc, int[] shape, int x, int y, int width, int height, Col
                     }
                     Color lastColor = colors[colors.length-1];
                     if (lastColor is null) lastColor = defaultBackground;
-                    for (int i = percents.length-1; i >= 0; i--) {
+                    for (auto i = percents.length-1; i >= 0; i--) {
                         gc.setForeground(lastColor);
                         lastColor = colors[i];
                         if (lastColor is null) lastColor = defaultBackground;
@@ -877,13 +879,13 @@ void drawChevron(GC gc) {
     int y = chevronRect.y + indent;
     int count;
     if (single) {
-        count = selectedIndex is -1 ? items.length : items.length - 1;
+        count = to!int(selectedIndex is -1 ? items.length : items.length - 1);
     } else {
         int showCount = 0;
         while (showCount < priority.length && items[priority[showCount]].showing) {
             showCount++;
         }
-        count = items.length - showCount;
+        count = to!int(items.length - showCount);
     }
     String chevronString = count > 99 ? "99+" : String_valueOf(count); //$NON-NLS-1$
     switch (chevronImageState) {
@@ -1279,7 +1281,7 @@ public CTabItem getItem (Point pt) {
  */
 public int getItemCount(){
     //checkWidget();
-    return items.length;
+    return to!int(items.length);
 }
 /**
  * Return the tab items.
@@ -1305,7 +1307,7 @@ public CTabItem [] getItems() {
 dchar _findMnemonic (String string) {
     if (string is null) return '\0';
     int index = 0;
-    int length_ = string.length;
+    int length_ = to!int(string.length);
     do {
         while (index < length_ && string[index] !is '&') index++;
         if (++index >= length_) return '\0';
@@ -1316,7 +1318,7 @@ dchar _findMnemonic (String string) {
 }
 String stripMnemonic (String string) {
     int index = 0;
-    int length_ = string.length;
+    int length_ = to!int(string.length);
     do {
         while ((index < length_) && (string[index] !is '&')) index++;
         if (++index >= length_) return string;
@@ -1706,11 +1708,11 @@ void initAccessible() {
             }
             if (childID is ACC.CHILDID_NONE) {
                 if (showChevron && chevronRect.contains(testPoint)) {
-                    childID = items.length + CHEVRON_CHILD_ID;
+                    childID = to!int(items.length) + CHEVRON_CHILD_ID;
                 } else if (showMin && minRect.contains(testPoint)) {
-                    childID = items.length + MINIMIZE_CHILD_ID;
+                    childID = to!int(items.length) + MINIMIZE_CHILD_ID;
                 } else if (showMax && maxRect.contains(testPoint)) {
-                    childID = items.length + MAXIMIZE_CHILD_ID;
+                    childID = to!int(items.length) + MAXIMIZE_CHILD_ID;
                 } else {
                     Rectangle location = getBounds();
                     location.height = location.height - getClientArea().height;
@@ -1754,7 +1756,7 @@ void initAccessible() {
 
         override
         public void getChildCount(AccessibleControlEvent e) {
-            e.detail = items.length + EXTRA_CHILD_ID_COUNT;
+            e.detail = to!int(items.length) + EXTRA_CHILD_ID_COUNT;
         }
 
         override
@@ -1831,7 +1833,7 @@ void initAccessible() {
 
         override
         public void getChildren(AccessibleControlEvent e) {
-            int childIdCount = items.length + EXTRA_CHILD_ID_COUNT;
+            int childIdCount = to!int(items.length) + EXTRA_CHILD_ID_COUNT;
             Object[] children = new Object[childIdCount];
             for (int i = 0; i < childIdCount; i++) {
                 children[i] = new Integer(i);
@@ -1873,7 +1875,7 @@ void onKeyDown (Event event) {
     switch (event.keyCode) {
         case SWT.ARROW_LEFT:
         case SWT.ARROW_RIGHT:
-            int count = items.length;
+            auto count = items.length;
             if (count is 0) return;
             if (selectedIndex  is -1) return;
             int leadKey = (getStyle() & SWT.RIGHT_TO_LEFT) !is 0 ? SWT.ARROW_RIGHT : SWT.ARROW_LEFT;
@@ -1935,7 +1937,7 @@ void onDispose(Event event) {
         showMenu.dispose();
         showMenu = null;
     }
-    int length = items.length;
+    int length = to!int(items.length);
     for (int i = 0; i < length; i++) {
         if (items[i] !is null) {
             items[i].dispose();
@@ -2274,9 +2276,9 @@ void onMouse(Event event) {
     }
 }
 bool onPageTraversal(Event event) {
-    int count = items.length;
+    auto count = items.length;
     if (count is 0) return false;
-    int index = selectedIndex;
+    size_t index = selectedIndex;
     if (index  is -1) {
         index = 0;
     } else {
@@ -2316,7 +2318,7 @@ bool onPageTraversal(Event event) {
             }
         }
     }
-    setSelection (index, true);
+    setSelection (to!int(index), true);
     return true;
 }
 void onPaint(Event event) {
@@ -2445,7 +2447,7 @@ public void removeCTabFolder2Listener(CTabFolder2Listener listener) {
     }
     CTabFolder2Listener[] newTabListeners = new CTabFolder2Listener[folderListeners.length - 1];
     SimpleType!(CTabFolder2Listener).arraycopy(folderListeners, 0, newTabListeners, 0, index);
-    SimpleType!(CTabFolder2Listener).arraycopy(folderListeners, index + 1, newTabListeners, index, folderListeners.length - index - 1);
+    SimpleType!(CTabFolder2Listener).arraycopy(folderListeners, index + 1, newTabListeners, index, to!uint(folderListeners.length - index - 1));
     folderListeners = newTabListeners;
 }
 /**
@@ -2482,7 +2484,7 @@ public void removeCTabFolderListener(CTabFolderListener listener) {
     }
     CTabFolderListener[] newTabListeners = new CTabFolderListener[tabListeners.length - 1];
     SimpleType!(CTabFolderListener).arraycopy(tabListeners, 0, newTabListeners, 0, index);
-    SimpleType!(CTabFolderListener).arraycopy(tabListeners, index + 1, newTabListeners, index, tabListeners.length - index - 1);
+    SimpleType!(CTabFolderListener).arraycopy(tabListeners, index + 1, newTabListeners, index, to!uint(tabListeners.length - index - 1));
     tabListeners = newTabListeners;
 }
 /**
@@ -2928,7 +2930,7 @@ bool setItemLocation() {
         }
         int x = 0;
         int defaultX = getDisplay().getBounds().width + 10; // off screen
-        firstIndex = items.length - 1;
+        firstIndex = to!int(items.length - 1);
         for (int i = 0; i < items.length; i++) {
             CTabItem item = items[i];
             if (!item.showing) {
@@ -3033,7 +3035,7 @@ bool setItemSize() {
             widths = maxWidths;
         } else {
             // determine compression for each item
-            int extra = (tabAreaWidth - minWidth) / items.length;
+            auto extra = (tabAreaWidth - minWidth) / items.length;
             while (true) {
                 int large = 0, totalWidth = 0;
                 for (int i = 0 ; i < items.length; i++) {
@@ -3053,7 +3055,8 @@ bool setItemSize() {
             }
             widths = new int[items.length];
             for (int i = 0; i < items.length; i++) {
-                widths[i] = Math.min(maxWidths[i], minWidths[i] + extra);
+                widths[i] = to!int(Math.min
+                                   (maxWidths[i], minWidths[i] + extra));
             }
         }
     }
@@ -3422,15 +3425,15 @@ public void setSelectionBackground(Color[] colors, int[] percents, bool vertical
         //If the colors is exactly two more than percents then last is highlight
         //Keep track of *real* colorsLength (minus the highlight)
         if(percents.length is colors.length - 2) {
-            highlightBeginColor = colors[colors.length - 1];
-            colorsLength = colors.length - 1;
+            highlightBeginColor = colors[to!int(colors.length - 1)];
+            colorsLength = to!int(colors.length - 1);
         } else {
-            colorsLength = colors.length;
+            colorsLength = to!int(colors.length);
         }
         if (getDisplay().getDepth() < 15) {
             // Don't use gradients on low color displays
             colors = [colors[colorsLength - 1]];
-            colorsLength = colors.length;
+            colorsLength = to!int(colors.length);
             percents = null;
         }
     } else {

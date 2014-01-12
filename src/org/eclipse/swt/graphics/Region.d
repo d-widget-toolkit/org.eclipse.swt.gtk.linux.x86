@@ -22,6 +22,8 @@ import org.eclipse.swt.graphics.Rectangle;
 import org.eclipse.swt.graphics.Device;
 import org.eclipse.swt.internal.gtk.OS;
 
+import std.conv;
+
 
 /**
  * Instances of this class represent areas of an x-y coordinate
@@ -116,7 +118,8 @@ public void add (int[] pointArray) {
     * with enough points for a polygon.
     */
     if (pointArray.length < 6) return;
-    auto polyRgn = OS.gdk_region_polygon(cast(GdkPoint*)pointArray.ptr, pointArray.length / 2, OS.GDK_EVEN_ODD_RULE);
+    auto polyRgn = OS.gdk_region_polygon(cast(GdkPoint*)pointArray.ptr,
+                      to!int(pointArray.length / 2), OS.GDK_EVEN_ODD_RULE);
     OS.gdk_region_union(handle, polyRgn);
     OS.gdk_region_destroy(polyRgn);
 }
@@ -471,7 +474,8 @@ public void subtract (int[] pointArray) {
     * with enough points for a polygon.
     */
     if (pointArray.length < 6) return;
-    auto polyRgn = OS.gdk_region_polygon( cast(GdkPoint*)pointArray.ptr, pointArray.length / 2, OS.GDK_EVEN_ODD_RULE);
+    auto polyRgn = OS.gdk_region_polygon( cast(GdkPoint*)pointArray.ptr,
+                      to!int(pointArray.length / 2), OS.GDK_EVEN_ODD_RULE);
     OS.gdk_region_subtract(handle, polyRgn);
     OS.gdk_region_destroy(polyRgn);
 }

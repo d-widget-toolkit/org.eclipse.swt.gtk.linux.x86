@@ -31,6 +31,8 @@ import org.eclipse.swt.widgets.Display;
 
 import java.lang.all;
 
+import std.conv;
+
 /**
  * Instances of this class represent a selectable user interface object
  * that issues notification when pressed and released.
@@ -855,7 +857,7 @@ public override void setText (String string) {
     auto label = OS.gtk_bin_get_child (cast(GtkBin*)handle);
     OS.gtk_label_set_text_with_mnemonic (cast(GtkLabel*)label, chars.toStringzValidPtr() );
 
-    auto ptr = cast(char*)OS.g_malloc (accelString.length + 1);
+    auto ptr = cast(char*)OS.g_malloc (to!int(accelString.length + 1));
     ptr[ 0 .. accelString.length ] = accelString;
     ptr[ accelString.length ] = '\0';
 

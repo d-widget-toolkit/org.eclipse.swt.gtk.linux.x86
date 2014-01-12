@@ -16,6 +16,8 @@ module org.eclipse.swt.internal.image.LEDataInputStream;
 import java.io.InputStream;
 import java.lang.all;
 
+import std.conv;
+
 final class LEDataInputStream : InputStream{
 
     alias InputStream.read read;
@@ -69,7 +71,7 @@ final class LEDataInputStream : InputStream{
     /**
      * Answers how many bytes are available for reading without blocking
      */
-    public override int available() {
+    public override size_t available() {
         if (buf is null) throw new IOException("buf is null");
         return (buf.length - pos) + host.available();
     }
@@ -92,8 +94,8 @@ final class LEDataInputStream : InputStream{
      * Don't imitate the JDK behaviour of reading a random number
      * of bytes when you can actually read them all.
      */
-    public override int read(byte b[], int off, int len) {
-        int read = 0, count;
+    public override ptrdiff_t read(byte[] b, size_t off, size_t len) {
+        size_t read = 0, count;
         while (read !is len && (count = readData(b, off, len - read)) !is -1) {
             off += count;
             read += count;
@@ -130,7 +132,7 @@ final class LEDataInputStream : InputStream{
      *
      * @exception java.io.IOException if an IOException occurs.
      */
-    private int readData(byte[] buffer, int offset, int len) {
+    private size_t readData(byte[] buffer, size_t offset, size_t len) {
         if (buf is null) throw new IOException("buf is null");
         if (offset < 0 || offset > buffer.length ||
             len < 0 || (len > buffer.length - offset)) {
@@ -138,12 +140,12 @@ final class LEDataInputStream : InputStream{
             }
 
         int cacheCopied = 0;
-        int newOffset = offset;
+        int newOffset = to!int(offset);
 
         // Are there pushback bytes available?
-        int available = buf.length - pos;
+        int available = to!int(buf.length - pos);
         if (available > 0) {
-            cacheCopied = (available >= len) ? len : available;
+            cacheCopied = (available >= len) ? to!int(len) : available;
             System.arraycopy(buf, pos, buffer, newOffset, cacheCopied);
             newOffset += cacheCopied;
             pos += cacheCopied;
@@ -152,7 +154,7 @@ final class LEDataInputStream : InputStream{
         // Have we copied enough?
         if (cacheCopied is len) return len;
 
-        int inCopied = host.read( buffer, newOffset, len - cacheCopied );
+        int inCopied = to!int(host.read(buffer, newOffset, len - cacheCopied));
         if( inCopied is -1 ) inCopied = -1;
         if (inCopied > 0 ) return inCopied + cacheCopied;
         if (cacheCopied is 0) return inCopied;
@@ -195,7 +197,7 @@ final class LEDataInputStream : InputStream{
      * @exception   java.io.IOException if the pushback buffer is too small
      */
     public void unread(byte[] b) {
-        int l = b.length;
+        int l = to!int(b.length);
         if (l > pos) throw new IOException("cannot unread");
         position -= l;
         pos -= l;

@@ -27,6 +27,7 @@ import java.lang.all;
 
 version(Tango){
 } else { // Phobos
+    import std.conv;
 }
 
 /**
@@ -209,7 +210,7 @@ override void createHandle (int index) {
     * 0 - text
     */
     auto types = [OS.G_TYPE_STRING ()];
-    modelHandle = cast(GtkWidget*)OS.gtk_list_store_newv (types.length, cast(uint*)types.ptr);
+    modelHandle = cast(GtkWidget*)OS.gtk_list_store_newv (to!int(types.length), cast(uint*)types.ptr);
     if (modelHandle is null) error (SWT.ERROR_NO_HANDLES);
     handle = OS.gtk_tree_view_new_with_model (modelHandle);
     if (handle is null) error (SWT.ERROR_NO_HANDLES);
@@ -1169,7 +1170,7 @@ public void select (int [] indices) {
     checkWidget ();
     // SWT extension: allow null for zero length string
     //if (indices is null) error (SWT.ERROR_NULL_ARGUMENT);
-    int length = indices.length;
+    int length = to!int(indices.length);
     if (length is 0 || ((style & SWT.SINGLE) !is 0 && length > 1)) return;
     GtkTreeIter iter;
     int count = OS.gtk_tree_model_iter_n_children (cast(GtkTreeStore*)modelHandle, null);
@@ -1405,7 +1406,7 @@ public void setSelection(int[] indices) {
     // SWT extension: allow null for zero length string
     //if (indices is null) error (SWT.ERROR_NULL_ARGUMENT);
     deselectAll ();
-    int length = indices.length;
+    int length = to!int(indices.length);
     if (length is 0 || ((style & SWT.SINGLE) !is 0 && length > 1)) return;
     selectFocusIndex (indices [0]);
     if ((style & SWT.MULTI) !is 0) {
@@ -1438,7 +1439,7 @@ public void setSelection (String [] items) {
     // SWT extension: allow null for zero length string
     //if (items is null) error (SWT.ERROR_NULL_ARGUMENT);
     deselectAll ();
-    int length = items.length;
+    int length = to!int(items.length);
     if (length is 0 || ((style & SWT.SINGLE) !is 0 && length > 1)) return;
     bool first = true;
     for (int i = 0; i < length; i++) {
