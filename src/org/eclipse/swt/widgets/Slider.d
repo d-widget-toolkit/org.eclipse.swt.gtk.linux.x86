@@ -184,7 +184,7 @@ override void createHandle (int index) {
     OS.gtk_container_add (fixedHandle, handle);
 }
 
-override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
+override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
     auto result = super.gtk_button_press_event (widget, event);
     if (result !is 0) return result;
     detail = OS.GTK_SCROLL_NONE;
@@ -192,12 +192,12 @@ override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton*
     return result;
 }
 
-override int /*long*/ gtk_change_value (GtkWidget* widget, int /*long*/ scroll, int /*long*/ value1, int /*long*/ value2) {
+override ptrdiff_t gtk_change_value (GtkWidget* widget, ptrdiff_t scroll, ptrdiff_t value1, ptrdiff_t value2) {
     detail = cast(int)/*64*/scroll;
     return 0;
 }
 
-override int /*long*/ gtk_value_changed (int /*long*/ adjustment) {
+override ptrdiff_t gtk_value_changed (ptrdiff_t adjustment) {
     Event event = new Event ();
     dragSent = detail is OS.GTK_SCROLL_JUMP;
     switch (detail) {
@@ -224,7 +224,7 @@ override int /*long*/ gtk_value_changed (int /*long*/ adjustment) {
     return 0;
 }
 
-override int /*long*/ gtk_event_after (GtkWidget* widget, GdkEvent* gdkEvent) {
+override ptrdiff_t gtk_event_after (GtkWidget* widget, GdkEvent* gdkEvent) {
     switch (gdkEvent.type) {
         case OS.GDK_BUTTON_RELEASE: {
             GdkEventButton* gdkEventButton = cast(GdkEventButton*)gdkEvent;

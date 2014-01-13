@@ -464,13 +464,13 @@ public bool getVisible () {
     return OS.GTK_WIDGET_VISIBLE (tipWindow);
 }
 
-override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
+override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
     notifyListeners (SWT.Selection, new Event ());
     setVisible (false);
     return 0;
 }
 
-override int /*long*/ gtk_expose_event (GtkWidget* widget, GdkEventExpose* event) {
+override ptrdiff_t gtk_expose_event (GtkWidget* widget, GdkEventExpose* event) {
     auto window = OS.GTK_WIDGET_WINDOW (handle);
     auto gdkGC = cast(GdkGC*)OS.gdk_gc_new (window);
     OS.gdk_draw_polygon (window, gdkGC, 0, cast(GdkPoint*)borderPolygon.ptr, to!int(borderPolygon.length / 2));
@@ -514,7 +514,7 @@ override int /*long*/ gtk_expose_event (GtkWidget* widget, GdkEventExpose* event
     return 0;
 }
 
-override int /*long*/ gtk_size_allocate (GtkWidget* widget, int /*long*/ allocation) {
+override ptrdiff_t gtk_size_allocate (GtkWidget* widget, ptrdiff_t allocation) {
     Point point = getLocation ();
     int x = point.x;
     int y = point.y;
@@ -798,7 +798,7 @@ public void setVisible (bool visible) {
     }
 }
 
-override int /*long*/ timerProc (GtkWidget* widget) {
+override ptrdiff_t timerProc (GtkWidget* widget) {
     if ((style & SWT.BALLOON) !is 0) {
         OS.gtk_widget_hide (handle);
     } else {

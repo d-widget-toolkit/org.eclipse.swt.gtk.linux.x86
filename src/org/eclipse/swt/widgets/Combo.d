@@ -1124,12 +1124,12 @@ public int getVisibleItemCount () {
     return visibleCount;
 }
 
-override int /*long*/ gtk_activate (GtkWidget* widget) {
+override ptrdiff_t gtk_activate (GtkWidget* widget) {
     postEvent (SWT.DefaultSelection);
     return 0;
 }
 
-override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
+override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
     /*
     * Feature in GTK. Depending on where the user clicks, GTK prevents
     * the left mouse button event from being propagated. The fix is to
@@ -1265,7 +1265,7 @@ override int gtk_delete_text (GtkWidget* widget, int start_pos, int end_pos) {
     return 0;
 }
 
-override int /*long*/ gtk_event_after (GtkWidget* widget, GdkEvent* event) {
+override ptrdiff_t gtk_event_after (GtkWidget* widget, GdkEvent* event) {
     /*
     * Feature in GTK. Depending on where the user clicks, GTK prevents
     * the left mouse button event from being propagated. The fix is to
@@ -1411,7 +1411,7 @@ override int gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
     return result;
 }
 
-override int /*long*/ gtk_populate_popup (GtkWidget* widget, GtkWidget* menu) {
+override ptrdiff_t gtk_populate_popup (GtkWidget* widget, GtkWidget* menu) {
     if ((style & SWT.RIGHT_TO_LEFT) !is 0) {
         OS.gtk_widget_set_direction (menu, OS.GTK_TEXT_DIR_RTL);
         display.doSetDirectionProc(menu, OS.GTK_TEXT_DIR_RTL);

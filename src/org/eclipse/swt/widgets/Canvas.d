@@ -159,7 +159,7 @@ public IME getIME () {
     return ime;
 }
 
-override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
+override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
     if (ime !is null) {
         auto result = ime.gtk_button_press_event (widget, event);
         if (result !is 0) return result;
@@ -167,7 +167,7 @@ override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton*
     return  super.gtk_button_press_event (widget, event);
 }
 
-override int /*long*/ gtk_commit (GtkIMContext* imcontext, char* text) {
+override ptrdiff_t gtk_commit (GtkIMContext* imcontext, char* text) {
     if (ime !is null) {
         auto result = ime.gtk_commit (imcontext, text);
         if (result !is 0) return result;
@@ -175,7 +175,7 @@ override int /*long*/ gtk_commit (GtkIMContext* imcontext, char* text) {
     return super.gtk_commit (imcontext, text);
 }
 
-override int /*long*/ gtk_expose_event (GtkWidget* widget, GdkEventExpose* event) {
+override ptrdiff_t gtk_expose_event (GtkWidget* widget, GdkEventExpose* event) {
     if ((state & OBSCURED) !is 0) return 0;
     bool isFocus = caret !is null && caret.isFocusCaret ();
     if (isFocus) caret.killFocus ();
@@ -184,19 +184,19 @@ override int /*long*/ gtk_expose_event (GtkWidget* widget, GdkEventExpose* event
     return result;
 }
 
-override int /*long*/ gtk_focus_in_event (GtkWidget* widget, GdkEventFocus* event) {
+override ptrdiff_t gtk_focus_in_event (GtkWidget* widget, GdkEventFocus* event) {
     auto result = super.gtk_focus_in_event (widget, event);
     if (caret !is null) caret.setFocus ();
     return result;
 }
 
-override int /*long*/ gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
+override ptrdiff_t gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
     auto result = super.gtk_focus_out_event (widget, event);
     if (caret !is null) caret.killFocus ();
     return result;
 }
 
-override int /*long*/ gtk_preedit_changed (GtkIMContext* imcontext) {
+override ptrdiff_t gtk_preedit_changed (GtkIMContext* imcontext) {
     if (ime !is null) {
         auto result = ime.gtk_preedit_changed (imcontext);
         if (result !is 0) return result;

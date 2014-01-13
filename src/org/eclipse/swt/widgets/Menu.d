@@ -610,7 +610,7 @@ public bool getVisible () {
     return OS.GTK_WIDGET_MAPPED (handle);
 }
 
-override int /*long*/ gtk_hide (GtkWidget* widget) {
+override ptrdiff_t gtk_hide (GtkWidget* widget) {
     if ((style & SWT.POP_UP) !is 0) {
         display.activeShell = getShell ();
     }
@@ -629,7 +629,7 @@ override int /*long*/ gtk_hide (GtkWidget* widget) {
     return 0;
 }
 
-override int /*long*/ gtk_show (GtkWidget* widget) {
+override ptrdiff_t gtk_show (GtkWidget* widget) {
     if ((style & SWT.POP_UP) !is 0) {
         display.activeShell = getShell ();
         return 0;
@@ -639,7 +639,7 @@ override int /*long*/ gtk_show (GtkWidget* widget) {
 }
 
 
-override int /*long*/ gtk_show_help (GtkWidget* widget, int /*long*/ helpType) {
+override ptrdiff_t gtk_show_help (GtkWidget* widget, ptrdiff_t helpType) {
     if (sendHelpEvent (helpType)) {
         OS.gtk_menu_shell_deactivate (cast(GtkMenuShell*)handle);
         return 1;
@@ -845,7 +845,7 @@ public void removeHelpListener (HelpListener listener) {
     eventTable.unhook (SWT.Help, listener);
 }
 
-bool sendHelpEvent (int /*long*/ helpType) {
+bool sendHelpEvent (ptrdiff_t helpType) {
     if (selectedItem !is null && !selectedItem.isDisposed()) {
         if (selectedItem.hooks (SWT.Help)) {
             selectedItem.postEvent (SWT.Help);

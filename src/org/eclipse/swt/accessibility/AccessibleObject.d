@@ -37,7 +37,7 @@ version(Tango){
 
 class AccessibleObject {
     AtkObject* handle;
-    int /*long*/ parentType;
+    ptrdiff_t parentType;
     int index = -1, id = ACC.CHILDID_SELF;
     Accessible accessible;
     AccessibleObject parent;
@@ -72,7 +72,7 @@ class AccessibleObject {
         static_this_completed = true;
     }
 
-    this (int /*long*/ type, GtkWidget* widget, Accessible accessible, int /*long*/ parentType, bool isLightweight) {
+    this (ptrdiff_t type, GtkWidget* widget, Accessible accessible, ptrdiff_t parentType, bool isLightweight) {
         children = new Hashtable(9);
         handle = cast(AtkObject*)ATK.g_object_new (type, null);
         this.parentType = parentType;
@@ -411,7 +411,7 @@ class AccessibleObject {
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkObject_get_n_children: {}", atkObject);
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return 0;
-        int /*long*/ parentResult = 0;
+        ptrdiff_t parentResult = 0;
         auto objectClass = cast(AtkObjectClass*)ATK.g_type_class_peek (object.parentType);
         if (objectClass.get_n_children !is null) {
             parentResult = objectClass.get_n_children( object.handle);
@@ -501,7 +501,7 @@ class AccessibleObject {
         return objectClass.get_role( object.handle);
     }
 
-    package static extern(C) AtkObject* atkObject_ref_child (AtkObject* atkObject, int /*long*/ index) {
+    package static extern(C) AtkObject* atkObject_ref_child (AtkObject* atkObject, ptrdiff_t index) {
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkObject_ref_child: {} of: {}", index, atkObject);
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return null;
@@ -562,7 +562,7 @@ class AccessibleObject {
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkSelection_is_child_selected");
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return 0;
-        int /*long*/ parentResult = 0;
+        ptrdiff_t parentResult = 0;
         if (ATK.g_type_is_a (object.parentType, ATK_SELECTION_TYPE)) {
             auto selectionIface = cast(AtkSelectionIface*)ATK.g_type_interface_peek_parent (ATK.ATK_SELECTION_GET_IFACE (object.handle));
             if (selectionIface.is_child_selected !is null) {
@@ -618,7 +618,7 @@ class AccessibleObject {
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkText_get_caret_offset");
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return 0;
-        int /*long*/ parentResult = 0;
+        ptrdiff_t parentResult = 0;
         if (ATK.g_type_is_a (object.parentType, ATK_TEXT_TYPE)) {
             auto textIface = cast(AtkTextIface*)ATK.g_type_interface_peek_parent (ATK.ATK_TEXT_GET_IFACE (object.handle));
             if (textIface.get_caret_offset !is null) {
@@ -674,7 +674,7 @@ class AccessibleObject {
         if (DEBUG) getDwtLogger().info( __FILE__, __LINE__, "-->atkText_get_n_selections");
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return 0;
-        int /*long*/ parentResult = 0;
+        ptrdiff_t parentResult = 0;
         if (ATK.g_type_is_a (object.parentType, ATK_TEXT_TYPE)) {
             auto textIface = cast(AtkTextIface*)ATK.g_type_interface_peek_parent (ATK.ATK_TEXT_GET_IFACE (object.handle));
             if (textIface.get_n_selections !is null) {
@@ -1206,7 +1206,7 @@ class AccessibleObject {
         String parentText = ""; //$NON-NLS-1$
         if (ATK.g_type_is_a (parentType, ATK_TEXT_TYPE)) {
             auto textIface = cast(AtkTextIface*)ATK.g_type_interface_peek_parent (ATK.ATK_TEXT_GET_IFACE (handle));
-            int /*long*/ characterCount = 0;
+            ptrdiff_t characterCount = 0;
             if (textIface.get_character_count !is null) {
                 characterCount = textIface.get_character_count( handle);
             }
@@ -1350,11 +1350,11 @@ class AccessibleObject {
             Vector idsToKeep = new Vector (to!int(children.size ()));
             if ( null !is cast(Integer)event.children [0]) {
                 /*  an array of child id's (Integers) was answered */
-                int /*long*/ parentType = AccessibleFactory.getDefaultParentType ();
+                ptrdiff_t parentType = AccessibleFactory.getDefaultParentType ();
                 for (int i = 0; i < event.children.length; i++) {
                     AccessibleObject object = getChildByIndex (i);
                     if (object is null) {
-                        int /*long*/ childType = AccessibleFactory.getChildType (accessible, i);
+                        ptrdiff_t childType = AccessibleFactory.getChildType (accessible, i);
                         object = new AccessibleObject (childType, null, accessible, parentType, true);
                         AccessibleObjects[object.handle] = object;
                         addChild (object);

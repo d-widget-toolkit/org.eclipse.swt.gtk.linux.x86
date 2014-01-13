@@ -697,7 +697,7 @@ override void createHandle (int index) {
     OS.gtk_widget_realize (shellHandle);
 }
 
-override int /*long*/ filterProc ( XEvent* xEvent, GdkEvent* gdkEvent, void* data2) {
+override ptrdiff_t filterProc ( XEvent* xEvent, GdkEvent* gdkEvent, void* data2) {
     int eventType = OS.X_EVENT_TYPE (xEvent);
     if (eventType !is OS.FocusOut && eventType !is OS.FocusIn) return 0;
     XFocusChangeEvent* xFocusEvent = cast(XFocusChangeEvent*)xEvent;
@@ -1053,7 +1053,7 @@ public Shell [] getShells () {
     return result;
 }
 
-override int /*long*/ gtk_configure_event (GtkWidget* widget, int /*long*/ event) {
+override ptrdiff_t gtk_configure_event (GtkWidget* widget, ptrdiff_t event) {
     int x, y;
     OS.gtk_window_get_position (cast(GtkWindow*)shellHandle, &x, &y);
     if (!moved || oldX !is x || oldY !is y) {
@@ -1066,19 +1066,19 @@ override int /*long*/ gtk_configure_event (GtkWidget* widget, int /*long*/ event
     return 0;
 }
 
-override int /*long*/ gtk_delete_event (GtkWidget* widget, int /*long*/ event) {
+override ptrdiff_t gtk_delete_event (GtkWidget* widget, ptrdiff_t event) {
     if (isEnabled()) closeWidget ();
     return 1;
 }
 
-override int /*long*/ gtk_enter_notify_event (GtkWidget* widget, GdkEventCrossing* event) {
+override ptrdiff_t gtk_enter_notify_event (GtkWidget* widget, GdkEventCrossing* event) {
     if (widget !is shellHandle) {
         return super.gtk_enter_notify_event (widget, event);
     }
     return 0;
 }
 
-override int /*long*/ gtk_focus (GtkWidget* widget, int directionType) {
+override ptrdiff_t gtk_focus (GtkWidget* widget, int directionType) {
     switch (cast(int)/*64*/directionType) {
         case OS.GTK_DIR_TAB_FORWARD:
         case OS.GTK_DIR_TAB_BACKWARD:
@@ -1096,7 +1096,7 @@ override int /*long*/ gtk_focus (GtkWidget* widget, int directionType) {
     return super.gtk_focus (widget, directionType);
 }
 
-override int /*long*/ gtk_move_focus (GtkWidget* widget, int directionType) {
+override ptrdiff_t gtk_move_focus (GtkWidget* widget, int directionType) {
     Control control = display.getFocusControl ();
     if (control !is null) {
         auto focusHandle = control.focusHandle ();
@@ -1106,7 +1106,7 @@ override int /*long*/ gtk_move_focus (GtkWidget* widget, int directionType) {
     return 1;
 }
 
-override int /*long*/ gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
+override ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
     /* Stop menu mnemonics when the shell is disabled */
     if (widget is shellHandle) {
         return (state & DISABLED) !is 0 ? 1 : 0;
@@ -1114,7 +1114,7 @@ override int /*long*/ gtk_key_press_event (GtkWidget* widget, GdkEventKey* event
     return super.gtk_key_press_event (widget, event);
 }
 
-override int /*long*/ gtk_size_allocate (GtkWidget* widget, int /*long*/ allocation) {
+override ptrdiff_t gtk_size_allocate (GtkWidget* widget, ptrdiff_t allocation) {
     int width = OS.GTK_WIDGET_WIDTH (shellHandle);
     int height = OS.GTK_WIDGET_HEIGHT (shellHandle);
     if (!resized || oldWidth !is width || oldHeight !is height) {
@@ -1125,7 +1125,7 @@ override int /*long*/ gtk_size_allocate (GtkWidget* widget, int /*long*/ allocat
     return 0;
 }
 
-override int /*long*/ gtk_realize (GtkWidget* widget) {
+override ptrdiff_t gtk_realize (GtkWidget* widget) {
     auto result = super.gtk_realize (widget);
     auto window = OS.GTK_WIDGET_WINDOW (shellHandle);
     if ((style & SWT.SHELL_TRIM) !is SWT.SHELL_TRIM) {
@@ -1153,7 +1153,7 @@ override int /*long*/ gtk_realize (GtkWidget* widget) {
     return result;
 }
 
-override int /*long*/ gtk_window_state_event (GtkWidget* widget, GdkEventWindowState* event) {
+override ptrdiff_t gtk_window_state_event (GtkWidget* widget, GdkEventWindowState* event) {
     minimized = (event.new_window_state & OS.GDK_WINDOW_STATE_ICONIFIED) !is 0;
     maximized = (event.new_window_state & OS.GDK_WINDOW_STATE_MAXIMIZED) !is 0;
     fullScreen = (event.new_window_state & OS.GDK_WINDOW_STATE_FULLSCREEN) !is 0;
@@ -1778,7 +1778,7 @@ override void setZOrder (Control sibling, bool above, bool fixRelations) {
     if (mapped) setZOrder (sibling, above, false, false);
 }
 
-override int /*long*/ shellMapProc (GtkWidget* handle, int /*long*/ arg0, int /*long*/ user_data) {
+override ptrdiff_t shellMapProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
     mapped = true;
     display.dispatchEvents = null;
     return 0;
@@ -1793,7 +1793,7 @@ void showWidget () {
     if (vboxHandle !is null) OS.gtk_widget_show (vboxHandle);
 }
 
-override int /*long*/ sizeAllocateProc (GtkWidget* handle, int /*long*/ arg0, int /*long*/ user_data) {
+override ptrdiff_t sizeAllocateProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
     int offset = 16;
     int x, y;
     OS.gdk_window_get_pointer (null, &x, &y, null);
@@ -1816,7 +1816,7 @@ override int /*long*/ sizeAllocateProc (GtkWidget* handle, int /*long*/ arg0, in
     return 0;
 }
 
-override int /*long*/ sizeRequestProc (GtkWidget* handle, int /*long*/ arg0, int /*long*/ user_data) {
+override ptrdiff_t sizeRequestProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
     OS.gtk_widget_hide (handle);
     return 0;
 }

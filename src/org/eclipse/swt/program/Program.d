@@ -210,7 +210,7 @@ public final class Program {
      */
     bool gnomeExpectUri;
 
-    static int /*long*/ cdeShell;
+    static ptrdiff_t cdeShell;
 
     static const String[] CDE_ICON_EXT = [ ".m.pm"[],   ".l.pm",   ".s.pm",   ".t.pm" ];
     static const String[] CDE_MASK_EXT = [ ".m_m.bm"[], ".l_m.bm", ".s_m.bm", ".t_m.bm" ];
@@ -261,7 +261,7 @@ static int getDesktop(Display display) {
      */
     if (desktop is DESKTOP_UNKNOWN) {
         String gnomeName = "_NET_SUPPORTING_WM_CHECK";
-        int /*long*/ gnome = OS.XInternAtom(xDisplay, gnomeName.ptr, true);
+        ptrdiff_t gnome = OS.XInternAtom(xDisplay, gnomeName.ptr, true);
         if (gnome !is OS.None && (OS.GTK_VERSION >= OS.buildVERSION (2, 2, 0)) && gnome_init()) {
             desktop = DESKTOP_GNOME;
             int icon_theme = cast(int)GNOME.gnome_icon_theme_new();
@@ -299,7 +299,7 @@ static int getDesktop(Display display) {
     */
     if (desktop is DESKTOP_UNKNOWN) {
         String cdeName = "_DT_SM_PREFERENCES";
-        int /*long*/ cde = OS.XInternAtom(xDisplay, cdeName.ptr, true);
+        ptrdiff_t cde = OS.XInternAtom(xDisplay, cdeName.ptr, true);
         for (int index = 0; desktop is DESKTOP_UNKNOWN && index < property.length; index++) {
             if (property[index] is OS.None) continue; /* do not match atoms that do not exist */
             if (property[index] is cde && cde_init(display)) desktop = DESKTOP_CDE;
@@ -347,7 +347,7 @@ static String cde_getAttribute(String dataType, String attrName) {
     byte[] dataTypeBuf = Converter.wcsToMbcs(null, dataType, true);
     byte[] attrNameBuf = Converter.wcsToMbcs(null, attrName, true);
     byte[] optNameBuf = null;
-    int /*long*/ attrValue = CDE.DtDtsDataTypeToAttributeValue(dataTypeBuf, attrNameBuf, optNameBuf);
+    ptrdiff_t attrValue = CDE.DtDtsDataTypeToAttributeValue(dataTypeBuf, attrNameBuf, optNameBuf);
     if (attrValue is 0) return null;
     int length = OS.strlen(attrValue);
     byte[] attrValueBuf = new byte[length];
@@ -360,11 +360,11 @@ static String cde_getAttribute(String dataType, String attrName) {
 static String[][ String ] cde_getDataTypeInfo() {
     String[][ String ] dataTypeInfo;
     int index;
-    int /*long*/ dataTypeList = CDE.DtDtsDataTypeNames();
+    ptrdiff_t dataTypeList = CDE.DtDtsDataTypeNames();
     if (dataTypeList !is 0) {
         /* For each data type name in the list */
         index = 0;
-        int /*long*/ [] dataType = new int /*long*/ [1];
+        ptrdiff_t [] dataType = new ptrdiff_t [1];
         OS.memmove(dataType, dataTypeList + (index++ * 4), 4);
         while (dataType[0] !is 0) {
             int length = OS.strlen(dataType[0]);
@@ -450,13 +450,13 @@ static bool cde_init(Display display) {
 
     /* Use the character encoding for the default locale */
     CDE.XtToolkitInitialize();
-    int /*long*/ xtContext = CDE.XtCreateApplicationContext ();
-    int /*long*/ xDisplay = OS.GDK_DISPLAY();
+    ptrdiff_t xtContext = CDE.XtCreateApplicationContext ();
+    ptrdiff_t xDisplay = OS.GDK_DISPLAY();
     byte[] appName = Converter.wcsToMbcs(null, "CDE", true);
     byte[] appClass = Converter.wcsToMbcs(null, "CDE", true);
-    int /*long*/ [] argc = [0];
+    ptrdiff_t [] argc = [0];
     CDE.XtDisplayInitialize(xtContext, xDisplay, appName, appClass, 0, 0, argc, 0);
-    int /*long*/ widgetClass = CDE.topLevelShellWidgetClass ();
+    ptrdiff_t widgetClass = CDE.topLevelShellWidgetClass ();
     cdeShell = CDE.XtAppCreateShell (appName, appClass, widgetClass, xDisplay, null, 0);
     CDE.XtSetMappedWhenManaged (cdeShell, false);
     CDE.XtResizeWidget (cdeShell, 10, 10, 0);

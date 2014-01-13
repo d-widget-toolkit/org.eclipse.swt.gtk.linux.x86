@@ -335,7 +335,7 @@ public String getText () {
 }
 
 override int gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
-    int /*long*/ result = super.gtk_button_press_event (widget, gdkEvent);
+    ptrdiff_t result = super.gtk_button_press_event (widget, gdkEvent);
     if (result !is 0) return result;
     if (gdkEvent.button is 1 && gdkEvent.type is OS.GDK_BUTTON_PRESS) {
         if (focusIndex !is -1) setFocus ();
@@ -371,8 +371,8 @@ override int gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent
     return result;
 }
 
-override int /*long*/ gtk_button_release_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
-    int /*long*/ result = super.gtk_button_release_event (widget, gdkEvent);
+override ptrdiff_t gtk_button_release_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
+    ptrdiff_t result = super.gtk_button_release_event (widget, gdkEvent);
     if (result !is 0) return result;
     if (focusIndex is -1) return result;
     if (gdkEvent.button is 1) {
@@ -393,8 +393,8 @@ override int /*long*/ gtk_button_release_event (GtkWidget* widget, GdkEventButto
     return result;
 }
 
-override int /*long*/ gtk_event_after (GtkWidget* widget, GdkEvent* event) {
-    int /*long*/ result = super.gtk_event_after (widget, event);
+override ptrdiff_t gtk_event_after (GtkWidget* widget, GdkEvent* event) {
+    ptrdiff_t result = super.gtk_event_after (widget, event);
     switch (event.type) {
         case OS.GDK_FOCUS_CHANGE:
             redraw ();
@@ -404,7 +404,7 @@ override int /*long*/ gtk_event_after (GtkWidget* widget, GdkEvent* event) {
     return result;
 }
 
-override int /*long*/ gtk_expose_event (GtkWidget* widget, GdkEventExpose* gdkEvent) {
+override ptrdiff_t gtk_expose_event (GtkWidget* widget, GdkEventExpose* gdkEvent) {
     if ((state & OBSCURED) !is 0) return 0;
     GCData data = new GCData ();
     data.damageRgn = gdkEvent.region;
@@ -443,8 +443,8 @@ override int /*long*/ gtk_expose_event (GtkWidget* widget, GdkEventExpose* gdkEv
     return 0;
 }
 
-override int /*long*/ gtk_key_press_event (GtkWidget* widget, GdkEventKey* gdkEvent) {
-    int /*long*/ result = super.gtk_key_press_event (widget, gdkEvent);
+override ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* gdkEvent) {
+    ptrdiff_t result = super.gtk_key_press_event (widget, gdkEvent);
     if (result !is 0) return result;
     if (focusIndex is -1) return result;
     switch (gdkEvent.keyval) {
@@ -472,8 +472,8 @@ override int /*long*/ gtk_key_press_event (GtkWidget* widget, GdkEventKey* gdkEv
     return result;
 }
 
-override int /*long*/ gtk_motion_notify_event (GtkWidget* widget, GdkEventMotion* gdkEvent) {
-    int /*long*/ result = super.gtk_motion_notify_event (widget, gdkEvent);
+override ptrdiff_t gtk_motion_notify_event (GtkWidget* widget, GdkEventMotion* gdkEvent) {
+    ptrdiff_t result = super.gtk_motion_notify_event (widget, gdkEvent);
     if (result !is 0) return result;
     int x = cast(int) gdkEvent.x;
     int y = cast(int) gdkEvent.y;

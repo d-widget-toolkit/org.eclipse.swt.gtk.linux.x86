@@ -1173,8 +1173,8 @@ public static int buildVERSION(int major, int minor, int micro) {
 }
 
 /++
-public static final native int /*long*/ localeconv_decimal_point();
-public static final native int /*long*/ realpath(byte[] path, byte[] realPath);
+public static final native ptrdiff_t localeconv_decimal_point();
+public static final native ptrdiff_t realpath(byte[] path, byte[] realPath);
 ++/
 
 /** X11 Native methods and constants */
@@ -1193,7 +1193,7 @@ public static const int FocusOut = 10;
 public static const int GraphicsExpose = 13;
 public static const int NoExpose = 14;
 public static const int ExposureMask = 1 << 15;
-public static const int /*long*/ NoEventMask = 0;
+public static const ptrdiff_t NoEventMask = 0;
 public static const int NotifyNormal = 0;
 public static const int NotifyGrab = 1;
 public static const int NotifyHint = 1;

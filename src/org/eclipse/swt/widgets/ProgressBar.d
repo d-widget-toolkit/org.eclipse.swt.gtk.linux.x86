@@ -282,7 +282,7 @@ public void setState (int state) {
     //NOT IMPLEMENTED
 }
 
-override int /*long*/ timerProc (GtkWidget* widget) {
+override ptrdiff_t timerProc (GtkWidget* widget) {
     if (isVisible ()) OS.gtk_progress_bar_pulse (handle);
     return 1;
 }

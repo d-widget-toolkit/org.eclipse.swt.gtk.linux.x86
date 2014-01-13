@@ -260,7 +260,7 @@ public String getToolTipText () {
     return toolTipText;
 }
 
-override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
+override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
     if (event.type is OS.GDK_3BUTTON_PRESS) return 0;
     if (event.button is 3 && event.type is OS.GDK_BUTTON_PRESS) {
         sendEvent (SWT.MenuDetect);
@@ -274,7 +274,7 @@ override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton*
     return 0;
 }
 
-override int /*long*/ gtk_size_allocate (GtkWidget* widget, int /*long*/ allocation) {
+override ptrdiff_t gtk_size_allocate (GtkWidget* widget, ptrdiff_t allocation) {
     if (image !is null && image.mask !is null) {
         if (OS.gdk_drawable_get_depth (image.mask) is 1) {
             int xoffset = cast(int) Math.floor (OS.GTK_WIDGET_X (widget) + ((OS.GTK_WIDGET_WIDTH (widget) - OS.GTK_WIDGET_REQUISITION_WIDTH (widget)) * 0.5) + 0.5);

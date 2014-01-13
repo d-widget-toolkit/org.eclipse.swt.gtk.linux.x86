@@ -39,7 +39,7 @@ class MozillaDelegate {
     bool hasFocus;
     Listener listener;
     //static Callback eventCallback;
-    // static int /*long*/ eventProc;
+    // static ptrdiff_t eventProc;
     static const gpointer STOP_PROPOGATE = cast(gpointer)1;
     static bool IsLinux;
 

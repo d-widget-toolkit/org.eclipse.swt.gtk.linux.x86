@@ -417,7 +417,7 @@ public bool getSelection () {
     return cast(bool)OS.gtk_check_menu_item_get_active(cast(GtkCheckMenuItem*)handle);
 }
 
-override int /*long*/ gtk_activate (GtkWidget* widget) {
+override ptrdiff_t gtk_activate (GtkWidget* widget) {
     if ((style & SWT.CASCADE) !is 0 && menu !is null) return 0;
     /*
     * Bug in GTK.  When an ancestor menu is disabled and
@@ -455,13 +455,13 @@ override int /*long*/ gtk_activate (GtkWidget* widget) {
     return 0;
 }
 
-override int /*long*/ gtk_select (int /*long*/ item) {
+override ptrdiff_t gtk_select (ptrdiff_t item) {
     parent.selectedItem = this;
     sendEvent (SWT.Arm);
     return 0;
 }
 
-override int /*long*/ gtk_show_help (GtkWidget* widget, int /*long*/ helpType) {
+override ptrdiff_t gtk_show_help (GtkWidget* widget, ptrdiff_t helpType) {
     bool handled = hooks (SWT.Help);
     if (handled) {
         postEvent (SWT.Help);

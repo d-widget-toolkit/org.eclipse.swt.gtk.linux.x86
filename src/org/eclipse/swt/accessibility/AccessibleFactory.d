@@ -95,7 +95,7 @@ class AccessibleFactory {
         }
     }
 
-    private this (int /*long*/ widgetType) {
+    private this (ptrdiff_t widgetType) {
         widgetTypeName = OS.g_type_name (widgetType);
         String factoryName = (FACTORY_TYPENAME ~ fromStringz( widgetTypeName ) ~ '\0')._idup();
         if (OS.g_type_from_name (factoryName.ptr) is 0) {
@@ -152,15 +152,15 @@ class AccessibleFactory {
         }
     }
 
-    static int /*long*/ getChildType (Accessible accessible, int childIndex) {
+    static ptrdiff_t getChildType (Accessible accessible, int childIndex) {
         return getType (CHILD_TYPENAME, accessible, DefaultParentType, childIndex);
     }
 
-    static int /*long*/ getDefaultParentType () {
+    static ptrdiff_t getDefaultParentType () {
         return DefaultParentType;
     }
 
-    static int /*long*/ getType (String widgetTypeName, Accessible accessible, int /*long*/ parentType, int childId) {
+    static ptrdiff_t getType (String widgetTypeName, Accessible accessible, ptrdiff_t parentType, int childId) {
         AccessibleControlEvent event = new AccessibleControlEvent (accessible);
         event.childID = childId;
         AccessibleControlListener[] listeners = accessible.getControlListeners ();
@@ -203,7 +203,7 @@ class AccessibleFactory {
         if (selection) swtTypeName ~= "Selection"; //$NON-NLS-1$
         if (text) swtTypeName ~= "Text"; //$NON-NLS-1$
 
-        int /*long*/ type = 0;
+        ptrdiff_t type = 0;
         if (swtTypeName in Types ) {
             type = cast(int) Types[swtTypeName];
         } else {

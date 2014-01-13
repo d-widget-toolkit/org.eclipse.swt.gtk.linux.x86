@@ -342,7 +342,7 @@ public PrinterData open() {
         Display display = getParent() !is null ? getParent().getDisplay (): Display.getCurrent ();
 
         int signalId = 0;
-        int /*long*/ hookId = 0;
+        ptrdiff_t hookId = 0;
         if ((getStyle () & SWT.RIGHT_TO_LEFT) !is 0) {
             signalId = OS.g_signal_lookup (OS.map.ptr, OS.GTK_TYPE_WIDGET());
             hookId = OS.g_signal_add_emission_hook (signalId, 0, cast(GSignalEmissionHook)cast(void*)(cast(LONG) display.getData (GET_EMISSION_PROC_KEY)).intValue, handle, null);

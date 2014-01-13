@@ -1091,12 +1091,12 @@ public int getTopPixel () {
     return lineTop;
 }
 
-override int /*long*/ gtk_activate (GtkWidget* widget) {
+override ptrdiff_t gtk_activate (GtkWidget* widget) {
     postEvent (SWT.DefaultSelection);
     return 0;
 }
 
-override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
+override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
     auto result = super.gtk_button_press_event (widget, gdkEvent);
     if (result !is 0) return result;
     if (!doubleClick) {
@@ -1111,7 +1111,7 @@ override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton*
 }
 
 
-override int /*long*/ gtk_changed (GtkWidget* widget) {
+override ptrdiff_t gtk_changed (GtkWidget* widget) {
     /*
     * Feature in GTK.  When the user types, GTK positions
     * the caret after sending the changed signal.  This
@@ -1139,7 +1139,7 @@ override int /*long*/ gtk_changed (GtkWidget* widget) {
     return 0;
 }
 
-override int /*long*/ gtk_commit (GtkIMContext* imcontext, char* text) {
+override ptrdiff_t gtk_commit (GtkIMContext* imcontext, char* text) {
     if (text is null) return 0;
     if ((style & SWT.SINGLE) !is 0) {
         if (!OS.gtk_editable_get_editable (cast(GtkEditable*)handle)) return 0;
@@ -1177,7 +1177,7 @@ override int /*long*/ gtk_commit (GtkIMContext* imcontext, char* text) {
     return 0;
 }
 
-override int /*long*/ gtk_delete_range (GtkWidget* widget, int /*long*/ iter1, int /*long*/ iter2) {
+override ptrdiff_t gtk_delete_range (GtkWidget* widget, ptrdiff_t iter1, ptrdiff_t iter2) {
     if (!hooks (SWT.Verify) && !filters (SWT.Verify)) return 0;
     GtkTextIter startIter = *cast(GtkTextIter*)iter1;
     GtkTextIter endIter = *cast(GtkTextIter*)iter2;
@@ -1210,7 +1210,7 @@ override int /*long*/ gtk_delete_range (GtkWidget* widget, int /*long*/ iter1, i
     return 0;
 }
 
-override int /*long*/ gtk_delete_text (GtkWidget* widget, int /*long*/ start_pos, int /*long*/ end_pos) {
+override ptrdiff_t gtk_delete_text (GtkWidget* widget, ptrdiff_t start_pos, ptrdiff_t end_pos) {
     if (!hooks (SWT.Verify) && !filters (SWT.Verify)) return 0;
     String newText = verifyText ("", cast(int)/*64*/start_pos, cast(int)/*64*/end_pos);
     if (newText is null) {
@@ -1237,7 +1237,7 @@ override int /*long*/ gtk_delete_text (GtkWidget* widget, int /*long*/ start_pos
     return 0;
 }
 
-override int /*long*/ gtk_event_after (GtkWidget* widget, GdkEvent* event) {
+override ptrdiff_t gtk_event_after (GtkWidget* widget, GdkEvent* event) {
     if (cursor !is null) gtk_setCursor (cursor.handle);
     /*
     * Feature in GTK.  The gtk-entry-select-on-focus property is a global
@@ -1260,12 +1260,12 @@ override int /*long*/ gtk_event_after (GtkWidget* widget, GdkEvent* event) {
     return super.gtk_event_after (widget, event);
 }
 
-override int /*long*/ gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
+override ptrdiff_t gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
     fixIM ();
     return super.gtk_focus_out_event (widget, event);
 }
 
-override int /*long*/ gtk_grab_focus (GtkWidget* widget) {
+override ptrdiff_t gtk_grab_focus (GtkWidget* widget) {
     auto result = super.gtk_grab_focus (widget);
     /*
     * Feature in GTK.  GtkEntry widgets select their text on focus in,
@@ -1281,7 +1281,7 @@ override int /*long*/ gtk_grab_focus (GtkWidget* widget) {
     return result;
 }
 
-override int /*long*/ gtk_insert_text (GtkEditable* widget, char* new_text, int new_text_length, int position) {
+override ptrdiff_t gtk_insert_text (GtkEditable* widget, char* new_text, int new_text_length, int position) {
     if (!hooks (SWT.Verify) && !filters (SWT.Verify)) return 0;
     if (new_text is null || new_text_length is 0) return 0;
     String oldText = (cast(char*)new_text)[ 0 .. new_text_length ]._idup();
@@ -1326,7 +1326,7 @@ override int /*long*/ gtk_insert_text (GtkEditable* widget, char* new_text, int 
     return 0;
 }
 
-override int /*long*/ gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
+override ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
     auto result = super.gtk_key_press_event (widget, event);
     if (result !is 0) fixIM ();
     if (gdkEventKey is cast(GdkEventKey*)-1) result = 1;
@@ -1334,7 +1334,7 @@ override int /*long*/ gtk_key_press_event (GtkWidget* widget, GdkEventKey* event
     return result;
 }
 
-override int /*long*/ gtk_populate_popup (GtkWidget* widget, GtkWidget* menu) {
+override ptrdiff_t gtk_populate_popup (GtkWidget* widget, GtkWidget* menu) {
     if ((style & SWT.RIGHT_TO_LEFT) !is 0) {
         OS.gtk_widget_set_direction (menu, OS.GTK_TEXT_DIR_RTL);
         display.doSetDirectionProc (menu, OS.GTK_TEXT_DIR_RTL);
@@ -1342,7 +1342,7 @@ override int /*long*/ gtk_populate_popup (GtkWidget* widget, GtkWidget* menu) {
     return 0;
 }
 
-override int /*long*/ gtk_text_buffer_insert_text (GtkTextBuffer *widget, GtkTextIter *iter, char *text, int len) {
+override ptrdiff_t gtk_text_buffer_insert_text (GtkTextBuffer *widget, GtkTextIter *iter, char *text, int len) {
     if (!hooks (SWT.Verify) && !filters (SWT.Verify)) return 0;
     GtkTextIter position = *iter;
     /* Use the selection when the text was deleted */

@@ -1220,7 +1220,7 @@ extern(D)
 public bool back () {
     if (awaitingNavigate) return false;
 
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIWebNavigation webNavigation;
     int rc = webBrowser.QueryInterface (&nsIWebNavigation.IID, cast(void**)&webNavigation);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -1237,7 +1237,7 @@ public bool execute (String script) {
     if (awaitingNavigate) return false;
 
     String url = PREFIX_JAVASCRIPT ~ script ~ ";void(0);";  //$NON-NLS-1$
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIWebNavigation webNavigation;
     int rc = webBrowser.QueryInterface (&nsIWebNavigation.IID, cast(void**)&webNavigation);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -1261,7 +1261,7 @@ extern(D)
 public bool forward () {
     if (awaitingNavigate) return false;
 
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIWebNavigation webNavigation;
     int rc = webBrowser.QueryInterface (&nsIWebNavigation.IID, cast(void**)&webNavigation);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -1278,7 +1278,7 @@ extern(D)
 public String getText () {
     if (awaitingNavigate) return ""; //$NON-NLS-1$
 
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIDOMWindow window;
     int rc = webBrowser.GetContentDOMWindow (&window);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -1292,7 +1292,7 @@ public String getText () {
     if (document is null) error (XPCOM.NS_NOINTERFACE, __FILE__, __LINE__);
     window.Release ();
 
-    //int /*long*/ document = result[0];
+    //ptrdiff_t document = result[0];
     //result[0] = 0;
     nsIComponentManager componentManager;
     rc = XPCOM.NS_GetComponentManager (&componentManager);
@@ -1315,7 +1315,7 @@ public String getText () {
         serializer_1_7.Release ();
 
         //int length = XPCOM.nsEmbedString_Length (string);
-        //int /*long*/ buffer = XPCOM.nsEmbedString_get (string);
+        //ptrdiff_t buffer = XPCOM.nsEmbedString_get (string);
         //chars = new char[length];
         //XPCOM.memmove (chars, buffer, length * 2);
         //XPCOM.nsEmbedString_delete (string);
@@ -1347,7 +1347,7 @@ extern(D)
 public String getUrl () {
     if (awaitingNavigate) return ""; //$NON-NLS-1$
 
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIWebNavigation webNavigation;
     int rc = webBrowser.QueryInterface (&nsIWebNavigation.IID, cast(void**)&webNavigation);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -1366,7 +1366,7 @@ public String getUrl () {
         rc = aCurrentURI.GetSpec (cast(nsACString*)aSpec);
         if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
         //int length = XPCOM.nsEmbedCString_Length (aSpec);
-        //int /*long*/ buffer = XPCOM.nsEmbedCString_get (aSpec);
+        //ptrdiff_t buffer = XPCOM.nsEmbedCString_get (aSpec);
         location = aSpec.toString;
         //XPCOM.memmove (dest, buffer, length);
         //XPCOM.nsEmbedCString_delete (aSpec);
@@ -1416,7 +1416,7 @@ extern(D)
 public bool isBackEnabled () {
     if (awaitingNavigate) return false;
 
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIWebNavigation webNavigation;
     int rc = webBrowser.QueryInterface (&nsIWebNavigation.IID, cast(void**)&webNavigation);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -1433,7 +1433,7 @@ extern(D)
 public bool isForwardEnabled () {
     if (awaitingNavigate) return false;
 
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIWebNavigation webNavigation;
     int rc = webBrowser.QueryInterface (&nsIWebNavigation.IID, cast(void**)&webNavigation);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -1482,7 +1482,7 @@ void onDispose (Display display) {
         listener = null;
     }
 
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIBaseWindow baseWindow;
     rc = webBrowser.QueryInterface (&nsIBaseWindow.IID, cast(void**)&baseWindow);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -1518,7 +1518,7 @@ void onDispose (Display display) {
 
 extern(D)
 void Activate () {
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIWebBrowserFocus webBrowserFocus;
     int rc = webBrowser.QueryInterface (&nsIWebBrowserFocus.IID, cast(void**)&webBrowserFocus);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -1532,7 +1532,7 @@ void Activate () {
 
 extern(D)
 void Deactivate () {
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIWebBrowserFocus webBrowserFocus;
     int rc = webBrowser.QueryInterface (&nsIWebBrowserFocus.IID, cast(void**)&webBrowserFocus);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -1550,7 +1550,7 @@ void onResize () {
     int width = Math.max (1, rect.width);
     int height = Math.max (1, rect.height);
 
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIBaseWindow baseWindow;
     int rc = webBrowser.QueryInterface (&nsIBaseWindow.IID, cast(void**)&baseWindow);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -1567,7 +1567,7 @@ extern(D)
 public void refresh () {
     if (awaitingNavigate) return;
 
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIWebNavigation webNavigation;
     int rc = webBrowser.QueryInterface (&nsIWebNavigation.IID, cast(void**)&webNavigation);
     if (rc !is XPCOM.NS_OK) error(rc);
@@ -1628,7 +1628,7 @@ public bool setText (String html) {
     //byte[] contentCharsetBuffer = MozillaDelegate.wcsToMbcs (null, "UTF-8", true);  //$NON-NLS-1$
     scope auto aContentCharset = new nsEmbedCString ("UTF-8");
 
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIServiceManager serviceManager;
     int rc = XPCOM.NS_GetServiceManager (&serviceManager);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -1735,7 +1735,7 @@ public void stop () {
     if (awaitingNavigate) return;
 
     nsIWebNavigation webNavigation;
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     int rc = webBrowser.QueryInterface (&nsIWebNavigation.IID, cast(void**)&webNavigation);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
     if (webNavigation is null) error (XPCOM.NS_ERROR_NO_INTERFACE, __FILE__, __LINE__);
@@ -1796,7 +1796,7 @@ void hookDOMListeners (nsIDOMEventTarget target, bool isTop) {
 
 extern(D)
 void unhookDOMListeners () {
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIDOMWindow window;
     int rc = webBrowser.GetContentDOMWindow (&window);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -1984,7 +1984,7 @@ nsresult GetInterface ( in nsID* riid, void** ppvObject) {
     //XPCOM.memmove (guid, riid, nsID.sizeof);
     if (*riid == nsIDOMWindow.IID) {
         nsIDOMWindow aContentDOMWindow;
-        //int /*long*/[] aContentDOMWindow = new int /*long*/[1];
+        //ptrdiff_t[] aContentDOMWindow = new ptrdiff_t[1];
         int rc = webBrowser.GetContentDOMWindow (&aContentDOMWindow);
         if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
         if (aContentDOMWindow is null) error (XPCOM.NS_ERROR_NO_INTERFACE, __FILE__, __LINE__);
@@ -1998,7 +1998,7 @@ nsresult GetInterface ( in nsID* riid, void** ppvObject) {
 extern(System)
 nsresult GetWeakReference (nsIWeakReference* ppvObject) {
     *ppvObject = cast(nsIWeakReference)this;
-    //XPCOM.memmove (ppvObject, new int /*long*/[] {weakReference.getAddress ()}, C.PTR_SIZEOF);
+    //XPCOM.memmove (ppvObject, new ptrdiff_t[] {weakReference.getAddress ()}, C.PTR_SIZEOF);
     AddRef ();
     return XPCOM.NS_OK;
 }
@@ -2018,7 +2018,7 @@ nsresult OnStateChange (nsIWebProgress aWebProgress, nsIRequest aRequest, PRUint
              * process.  These listeners cannot be added yet because the
              * nsIDOMWindow is not ready to take them at this stage.
              */
-            //int /*long*/[] result = new int /*long*/[1];
+            //ptrdiff_t[] result = new ptrdiff_t[1];
             nsIDOMWindow window;
             //nsIWebProgress progress = new nsIWebProgress (aWebProgress);
             int rc = aWebProgress.GetDOMWindow (&window);
@@ -2036,7 +2036,7 @@ nsresult OnStateChange (nsIWebProgress aWebProgress, nsIRequest aRequest, PRUint
         * received for every window in a page, which is when these listeners
         * are typically added.
         */
-        //int /*long*/[] result = new int /*long*/[1];
+        //ptrdiff_t[] result = new ptrdiff_t[1];
         //nsIWebProgress progress = new nsIWebProgress (aWebProgress);
         nsIDOMWindow domWindow;
         int rc = aWebProgress.GetDOMWindow (&domWindow);
@@ -2106,7 +2106,7 @@ nsresult OnStateChange (nsIWebProgress aWebProgress, nsIRequest aRequest, PRUint
         * Hook DOM listeners to the page's nsIDOMWindow here because this is
         * the earliest opportunity to do so.    
         */
-        //int /*long*/[] result = new int /*long*/[1];
+        //ptrdiff_t[] result = new ptrdiff_t[1];
        // nsIWebProgress progress = new nsIWebProgress (aWebProgress);
         nsIDOMWindow domWindow;
         int rc = aWebProgress.GetDOMWindow (&domWindow);
@@ -2179,13 +2179,13 @@ nsresult OnLocationChange (nsIWebProgress aWebProgress, nsIRequest aRequest, nsI
     //nsIWebProgress webProgress = new nsIWebProgress (aWebProgress);
     
     nsIDOMWindow domWindow;
-    //int /*long*/[] aDOMWindow = new int /*long*/[1];
+    //ptrdiff_t[] aDOMWindow = new ptrdiff_t[1];
     int rc = aWebProgress.GetDOMWindow (&domWindow);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
     if (domWindow is null) error (XPCOM.NS_ERROR_NO_INTERFACE, __FILE__, __LINE__);
     
     //nsIDOMWindow domWindow = new nsIDOMWindow (aDOMWindow[0]);
-    //int /*long*/[] aTop = new int /*long*/[1];
+    //ptrdiff_t[] aTop = new ptrdiff_t[1];
     nsIDOMWindow topWindow;
     rc = domWindow.GetTop (&topWindow);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -2199,7 +2199,7 @@ nsresult OnLocationChange (nsIWebProgress aWebProgress, nsIRequest aRequest, nsI
     scope auto aSpec = new nsEmbedCString;
     aLocation.GetSpec (cast(nsACString*)aSpec);
     //int length = XPCOM.nsEmbedCString_Length (aSpec);
-    //int /*long*/ buffer = XPCOM.nsEmbedCString_get (aSpec);
+    //ptrdiff_t buffer = XPCOM.nsEmbedCString_get (aSpec);
     //byte[] dest = new byte[length];
     //XPCOM.memmove (dest, buffer, length);
     //XPCOM.nsEmbedCString_delete (aSpec);
@@ -2271,7 +2271,7 @@ nsresult SetStatus (PRUint32 statusType, PRUnichar* status) {
 
 extern(System)
 nsresult GetWebBrowser (nsIWebBrowser* aWebBrowser) {
-    //int /*long*/[] ret = new int /*long*/[1];   
+    //ptrdiff_t[] ret = new ptrdiff_t[1];   
     if (webBrowser !is null) {
         webBrowser.AddRef ();
         *aWebBrowser = webBrowser;  
@@ -2332,7 +2332,7 @@ nsresult SizeBrowserTo (PRInt32 aCX, PRInt32 aCY) {
 
 extern(System)
 nsresult ShowAsModal () {
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIServiceManager serviceManager;
     int rc = XPCOM.NS_GetServiceManager (&serviceManager);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -2415,7 +2415,7 @@ nsresult GetDimensions (PRUint32 flags, PRInt32* x, PRInt32* y, PRInt32* cx, PRI
 
 extern(System)
 nsresult SetFocus () {
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIBaseWindow baseWindow;
     int rc = webBrowser.QueryInterface (&nsIBaseWindow.IID, cast(void**)&baseWindow);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -2566,7 +2566,7 @@ nsresult OnShowContextMenu (PRUint32 aContextFlags, nsIDOMEvent aEvent, nsIDOMNo
     if (awaitingNavigate) return XPCOM.NS_OK;
 
     //nsIDOMEvent domEvent = new nsIDOMEvent (aEvent);
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIDOMMouseEvent domMouseEvent;
     int rc = aEvent.QueryInterface (&nsIDOMMouseEvent.IID, cast(void**)&domMouseEvent);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -2608,7 +2608,7 @@ nsresult OnStartURIOpen (nsIURI aURI, PRBool* retval) {
     scope auto aSpec = new nsEmbedCString;
     aURI.GetSpec (cast(nsACString*)aSpec);
     //int length = XPCOM.nsEmbedCString_Length (aSpec);
-    //int /*long*/ buffer = XPCOM.nsEmbedCString_get (aSpec);
+    //ptrdiff_t buffer = XPCOM.nsEmbedCString_get (aSpec);
     //buffer = XPCOM.nsEmbedCString_get (aSpec);
     //byte[] dest = new byte[length];
     //XPCOM.memmove (dest, buffer, length);
@@ -2659,7 +2659,7 @@ nsresult IsPreferred (char* aContentType, char** aDesiredContentType, PRBool* re
         /* do not attempt to handle known problematic content types */
         if (!contentType.equals (XPCOM.CONTENT_MAYBETEXT) && !contentType.equals (XPCOM.CONTENT_MULTIPART)) {
             /* determine whether browser can handle the content type */
-            // int /*long*/[] result = new int /*long*/[1];
+            // ptrdiff_t[] result = new ptrdiff_t[1];
             nsIServiceManager serviceManager;
             int rc = XPCOM.NS_GetServiceManager (&serviceManager);
             if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -2787,14 +2787,14 @@ nsresult HandleEvent (nsIDOMEvent event) {
     int rc = event.GetType (cast(nsAString*)type);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
     //int length = XPCOM.nsEmbedString_Length (type);
-    //int /*long*/ buffer = XPCOM.nsEmbedString_get (type);
+    //ptrdiff_t buffer = XPCOM.nsEmbedString_get (type);
     //char[] chars = new char[length];
     //XPCOM.memmove (chars, buffer, length * 2);
     String typeString = type.toString;
     //XPCOM.nsEmbedString_delete (type);
 
     if (XPCOM.DOMEVENT_UNLOAD.equals (typeString)) {
-        //int /*long*/[] result = new int /*long*/[1];
+        //ptrdiff_t[] result = new ptrdiff_t[1];
         nsIDOMEventTarget target;
         rc = event.GetCurrentTarget (&target);
         if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -2812,7 +2812,7 @@ nsresult HandleEvent (nsIDOMEvent event) {
     }
 
     if (XPCOM.DOMEVENT_KEYDOWN.equals (typeString)) {
-        //int /*long*/[] result = new int /*long*/[1];
+        //ptrdiff_t[] result = new ptrdiff_t[1];
         nsIDOMKeyEvent domKeyEvent;
         rc = event.QueryInterface (&nsIDOMKeyEvent.IID, cast(void**)&domKeyEvent);
         if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -2922,7 +2922,7 @@ nsresult HandleEvent (nsIDOMEvent event) {
             default: break;
         }
 
-        //int /*long*/[] result = new int /*long*/[1];
+        //ptrdiff_t[] result = new ptrdiff_t[1];
         nsIDOMKeyEvent domKeyEvent;
         rc = event.QueryInterface (&nsIDOMKeyEvent.IID, cast(void**)&domKeyEvent);
         if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -2974,7 +2974,7 @@ nsresult HandleEvent (nsIDOMEvent event) {
     }
 
     if (XPCOM.DOMEVENT_KEYUP.equals (typeString)) {
-        //int /*long*/[] result = new int /*long*/[1];
+        //ptrdiff_t[] result = new ptrdiff_t[1];
         nsIDOMKeyEvent domKeyEvent;
         rc = event.QueryInterface (&nsIDOMKeyEvent.IID, cast(void**)&domKeyEvent);
         if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);
@@ -3033,7 +3033,7 @@ nsresult HandleEvent (nsIDOMEvent event) {
 
     /* mouse event */
 
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIDOMMouseEvent domMouseEvent;
     rc = event.QueryInterface (&nsIDOMMouseEvent.IID, cast(void**)&domMouseEvent);
     if (rc !is XPCOM.NS_OK) error (rc, __FILE__, __LINE__);

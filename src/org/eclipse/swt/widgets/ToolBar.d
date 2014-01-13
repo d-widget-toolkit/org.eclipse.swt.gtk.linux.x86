@@ -315,7 +315,7 @@ public int getRowCount () {
     return 1;
 }
 
-override int /*long*/ gtk_key_press_event (GtkWidget* widget, GdkEventKey* gdkEvent) {
+override ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* gdkEvent) {
     if (!hasFocus ()) return 0;
     auto result = super.gtk_key_press_event (widget, gdkEvent);
     if (result !is 0) return result;

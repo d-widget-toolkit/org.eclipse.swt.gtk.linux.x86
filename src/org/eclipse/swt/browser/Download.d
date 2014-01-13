@@ -114,7 +114,7 @@ nsresult Init (nsIURI aSource, nsIURI aTarget, nsAString* aDisplayName, nsIMIMEI
     int rc = aSource.GetHost (cast(nsACString*)aSpec);
     if (rc !is XPCOM.NS_OK) Mozilla.error (rc);
     //int length = XPCOM.nsEmbedCString_Length (aSpec);
-    //int /*long*/ buffer = XPCOM.nsEmbedCString_get (aSpec);
+    //ptrdiff_t buffer = XPCOM.nsEmbedCString_get (aSpec);
     //byte[] dest = new byte[length];
     //XPCOM.memmove (dest, buffer, length);
     //XPCOM.nsEmbedCString_delete (aSpec);
@@ -131,7 +131,7 @@ nsresult Init (nsIURI aSource, nsIURI aTarget, nsAString* aDisplayName, nsIMIMEI
     rc = supports.QueryInterface (&nsIURI.IID, cast(void**)&target);
     if (rc is 0) {  /* >= 1.7 */
         //result[0] = 0;
-        //int /*long*/ aPath = XPCOM.nsEmbedCString_new ();
+        //ptrdiff_t aPath = XPCOM.nsEmbedCString_new ();
         scope auto aPath = new nsEmbedCString;
         rc = target.GetPath (cast(nsACString*)aPath);
         if (rc !is XPCOM.NS_OK) Mozilla.error (rc,__FILE__,__LINE__);

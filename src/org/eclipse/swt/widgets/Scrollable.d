@@ -245,7 +245,7 @@ public ScrollBar getVerticalBar () {
     return verticalBar;
 }
 
-override int /*long*/ gtk_scroll_event (GtkWidget* widget, GdkEventScroll* eventPtr) {
+override ptrdiff_t gtk_scroll_event (GtkWidget* widget, GdkEventScroll* eventPtr) {
     auto result = super.gtk_scroll_event (widget, eventPtr);
 
     /*

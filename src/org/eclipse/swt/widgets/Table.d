@@ -1998,7 +1998,7 @@ override void gtk_row_activated (GtkTreeView* tree, GtkTreePath* path, GtkTreeVi
     postEvent (SWT.DefaultSelection, event);
 }
 
-override int gtk_toggled (int /*long*/ renderer, char* pathStr) {
+override int gtk_toggled (ptrdiff_t renderer, char* pathStr) {
     auto path = OS.gtk_tree_path_new_from_string (pathStr);
     if (path is null) return 0;
     auto indices = OS.gtk_tree_path_get_indices (path);
@@ -2602,7 +2602,7 @@ override void rendererRenderProc (
             }
         }
     }
-    int /*long*/ result = 0;
+    ptrdiff_t result = 0;
     if ((drawState & SWT.BACKGROUND) !is 0 && (drawState & SWT.SELECTED) is 0) {
         GC gc = new GC (this);
         gc.setBackground (item.getBackground (columnIndex));

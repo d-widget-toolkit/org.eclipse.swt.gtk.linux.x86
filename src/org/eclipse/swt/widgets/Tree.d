@@ -1943,7 +1943,7 @@ override int gtk_changed (GtkWidget* widget) {
     return 0;
 }
 
-override int gtk_expand_collapse_cursor_row (GtkWidget* widget, int /*long*/ logical, int /*long*/ expand, int /*long*/ open_all) {
+override int gtk_expand_collapse_cursor_row (GtkWidget* widget, ptrdiff_t logical, ptrdiff_t expand, ptrdiff_t open_all) {
     // FIXME - this flag is never cleared.  It should be cleared when the expand all operation completes.
     if (expand !is 0 && open_all !is 0) expandAll = true;
     return 0;
@@ -2096,7 +2096,7 @@ override int gtk_test_expand_row (
     return 0;
 }
 
-override int gtk_toggled (int /*long*/ renderer, char* pathStr) {
+override int gtk_toggled (ptrdiff_t renderer, char* pathStr) {
     auto path = OS.gtk_tree_path_new_from_string (pathStr);
     if (path is null) return 0;
     TreeItem item = null;
@@ -2609,7 +2609,7 @@ override void rendererRenderProc (
             }
         }
     }
-    int /*long*/ result = 0;
+    ptrdiff_t result = 0;
     if ((drawState & SWT.BACKGROUND) !is 0 && (drawState & SWT.SELECTED) is 0) {
         GC gc = new GC (this);
         gc.setBackground (item.getBackground (columnIndex));

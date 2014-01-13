@@ -167,7 +167,7 @@ nsresult CreateChromeWindow2 (nsIWebBrowserChrome parent, PRUint32 chromeFlags, 
             if (uri.GetSpec (cast(nsACString*)aSpec) is XPCOM.NS_OK) {
                 int span = aSpec.toString().length;
                 if (span > 0) {
-                    //int /*long*/ buffer = XPCOM.nsEmbedCString_get (aSpec);
+                    //ptrdiff_t buffer = XPCOM.nsEmbedCString_get (aSpec);
                     // byte[] dest = new byte[length];
                     //XPCOM.memmove (dest, buffer, length);
                     browser.setUrl (aSpec.toString);
@@ -209,7 +209,7 @@ nsresult CreateChromeWindow2 (nsIWebBrowserChrome parent, PRUint32 chromeFlags, 
         //nsIWebBrowserChrome webBrowserChrome = new nsIWebBrowserChrome (chromePtr);
         chrome.SetChromeFlags (chromeFlags);
         //chrome.AddRef ();
-        //XPCOM.memmove (_retval, new int /*long*/[] {chromePtr}, C.PTR_SIZEOF);
+        //XPCOM.memmove (_retval, new ptrdiff_t[] {chromePtr}, C.PTR_SIZEOF);
         *_retval = chrome;
     } else {
         if (cancel !is null) {

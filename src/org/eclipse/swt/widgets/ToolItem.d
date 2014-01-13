@@ -262,11 +262,11 @@ override void createHandle (int index) {
     }
     OS.GTK_WIDGET_UNSET_FLAGS (handle, OS.GTK_CAN_FOCUS);
 //  This code is intentionally commented.
-//  int /*long*/ fontHandle = parent.fontHandle ();
+//  ptrdiff_t fontHandle = parent.fontHandle ();
 //  GdkColor color = new GdkColor ();
-//  int /*long*/ style = OS.gtk_widget_get_style (fontHandle);
+//  ptrdiff_t style = OS.gtk_widget_get_style (fontHandle);
 //  OS.gtk_style_get_fg (style, OS.GTK_STATE_NORMAL, color);
-//  int /*long*/ font = OS.gtk_style_get_font_desc (style);
+//  ptrdiff_t font = OS.gtk_style_get_font_desc (style);
 //  setForegroundColor (color);
 //  setFontDescription (font);
     if ((parent.state & FOREGROUND) !is 0) {
@@ -491,7 +491,7 @@ public int getWidth () {
     return OS.GTK_WIDGET_WIDTH (topHandle);
 }
 
-override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
+override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
     double x = gdkEvent.x;
     gdkEvent.x += OS.GTK_WIDGET_X (handle);
     double y = gdkEvent.y;
@@ -502,7 +502,7 @@ override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton*
     return result;
 }
 
-override int /*long*/ gtk_button_release_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
+override ptrdiff_t gtk_button_release_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
     double x = gdkEvent.x;
     gdkEvent.x += OS.GTK_WIDGET_X (handle);
     double y = gdkEvent.y;
@@ -513,7 +513,7 @@ override int /*long*/ gtk_button_release_event (GtkWidget* widget, GdkEventButto
     return result;
 }
 
-override int /*long*/ gtk_clicked (GtkWidget* widget) {
+override ptrdiff_t gtk_clicked (GtkWidget* widget) {
     Event event = new Event ();
     if ((style & SWT.DROP_DOWN) !is 0) {
         auto eventPtr = OS.gtk_get_current_event ();
@@ -552,7 +552,7 @@ override int /*long*/ gtk_clicked (GtkWidget* widget) {
     return 0;
 }
 
-override int /*long*/ gtk_enter_notify_event (GtkWidget* widget, GdkEventCrossing* event) {
+override ptrdiff_t gtk_enter_notify_event (GtkWidget* widget, GdkEventCrossing* event) {
     parent.gtk_enter_notify_event (widget, event);
     drawHotImage = (parent.style & SWT.FLAT) !is 0 && hotImage !is null;
     if (drawHotImage && imageHandle !is null) {
@@ -568,7 +568,7 @@ override int /*long*/ gtk_enter_notify_event (GtkWidget* widget, GdkEventCrossin
     return 0;
 }
 
-override int /*long*/ gtk_event_after (GtkWidget* widget, GdkEvent* gdkEvent) {
+override ptrdiff_t gtk_event_after (GtkWidget* widget, GdkEvent* gdkEvent) {
     switch (gdkEvent.type) {
         case OS.GDK_BUTTON_PRESS: {
             GdkEventButton* gdkEventButton = cast(GdkEventButton*)gdkEvent;
@@ -582,13 +582,13 @@ override int /*long*/ gtk_event_after (GtkWidget* widget, GdkEvent* gdkEvent) {
     return 0;
 }
 
-override int /*long*/ gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
+override ptrdiff_t gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
     OS.GTK_WIDGET_UNSET_FLAGS (handle, OS.GTK_CAN_FOCUS);
     parent.lastFocus = this;
     return 0;
 }
 
-override int /*long*/ gtk_leave_notify_event (GtkWidget* widget, GdkEventCrossing* event) {
+override ptrdiff_t gtk_leave_notify_event (GtkWidget* widget, GdkEventCrossing* event) {
     parent.gtk_leave_notify_event (widget, event);
     if (drawHotImage) {
         drawHotImage = false;
@@ -606,12 +606,12 @@ override int /*long*/ gtk_leave_notify_event (GtkWidget* widget, GdkEventCrossin
     return 0;
 }
 
-override int /*long*/ gtk_map (GtkWidget* widget) {
+override ptrdiff_t gtk_map (GtkWidget* widget) {
     parent.fixZOrder ();
     return 0;
 }
 
-override int /*long*/ gtk_mnemonic_activate (GtkWidget* widget, int /*long*/ arg1) {
+override ptrdiff_t gtk_mnemonic_activate (GtkWidget* widget, ptrdiff_t arg1) {
     return parent.gtk_mnemonic_activate (widget, arg1);
 }
 

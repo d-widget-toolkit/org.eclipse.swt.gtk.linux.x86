@@ -249,14 +249,14 @@ public bool getWideCaret () {
     return false;
 }
 
-override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
+override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
     if (!isInlineEnabled ()) return 0;
     auto imHandle_ = imHandle ();
     if (imHandle_ !is null) OS.gtk_im_context_reset (imHandle_);
     return 0;
 }
 
-override int /*long*/ gtk_commit (GtkIMContext* imcontext, char* textPtr) {
+override ptrdiff_t gtk_commit (GtkIMContext* imcontext, char* textPtr) {
     if (!isInlineEnabled ()) return 0;
     bool doit = true;
     ranges = null;
@@ -283,7 +283,7 @@ override int /*long*/ gtk_commit (GtkIMContext* imcontext, char* textPtr) {
     return doit ? 0 : 1;
 }
 
-override int /*long*/ gtk_preedit_changed (GtkIMContext* imcontext) {
+override ptrdiff_t gtk_preedit_changed (GtkIMContext* imcontext) {
     if (!isInlineEnabled ()) return 0;
     ranges = null;
     styles = null;

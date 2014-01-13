@@ -375,7 +375,7 @@ String openChooserDialog () {
         display.setModalDialog (this);
     }
     uint signalId = 0;
-    uint /*long*/ hookId = 0;
+    uptrdiff_t hookId = 0;
     CallbackData emissionData;
     emissionData.display = display;
     if ((style & SWT.RIGHT_TO_LEFT) !is 0) {
@@ -419,7 +419,7 @@ String openClassicDialog () {
         display.setModalDialog (this);
     }
     int signalId = 0;
-    int /*long*/ hookId = 0;
+    ptrdiff_t hookId = 0;
     CallbackData emissionData;
     emissionData.display = display;
     if ((style & SWT.RIGHT_TO_LEFT) !is 0) {

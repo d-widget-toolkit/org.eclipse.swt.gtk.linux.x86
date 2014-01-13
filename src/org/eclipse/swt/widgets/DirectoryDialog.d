@@ -197,7 +197,7 @@ String openChooserDialog () {
         display.setModalDialog (this);
     }
     int signalId = 0;
-    int /*long*/ hookId = 0;
+    ptrdiff_t hookId = 0;
     CallbackData emissionData;
     emissionData.display = display;
     emissionData.data = handle;
@@ -273,7 +273,7 @@ String openClassicDialog () {
         display.setModalDialog (this);
     }
     int signalId = 0;
-    int /*long*/ hookId = 0;
+    ptrdiff_t hookId = 0;
     CallbackData emissionData;
     emissionData.display = display;
     emissionData.data = handle;

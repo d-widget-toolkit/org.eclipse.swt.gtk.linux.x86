@@ -65,7 +65,7 @@ public abstract class Device : Drawable {
     bool disposed;
 
     /* Warning and Error Handlers */
-    //int /*long*/ logProcFld;
+    //ptrdiff_t logProcFld;
     //GLogFunc logCallback;
     //NOT DONE - get list of valid names
     String [] log_domains = ["GLib-GObject"[], "GLib", "GObject", "Pango", "ATK", "GdkPixbuf", "Gdk", "Gtk", "GnomeVFS"];
@@ -77,7 +77,7 @@ public abstract class Device : Drawable {
     static extern(C) int function(void *, XErrorEvent *) mXErrorHandler;
     //static int mXErrorCallback, mXIOErrorCallback;
 
-    static int /*long*/ XErrorProc, XIOErrorProc, XNullErrorProc, XNullIOErrorProc;
+    static ptrdiff_t XErrorProc, XIOErrorProc, XNullErrorProc, XNullIOErrorProc;
     static Device[] Devices;
 
     /*
@@ -840,7 +840,7 @@ public void setWarnings (bool warnings) {
     }
 }
 
-private static extern(C) int /*long*/ XErrorProcFunc (void* xDisplay, org.eclipse.swt.internal.gtk.OS.XErrorEvent* xErrorEvent) {
+private static extern(C) ptrdiff_t XErrorProcFunc (void* xDisplay, org.eclipse.swt.internal.gtk.OS.XErrorEvent* xErrorEvent) {
     Device device = findDevice (xDisplay);
     if (device !is null) {
         if (device.warningLevel is 0) {
@@ -860,7 +860,7 @@ private static extern(C) int /*long*/ XErrorProcFunc (void* xDisplay, org.eclips
     return 0;
 }
 
-private static extern(C)  int /*long*/ XIOErrorProcFunc (void* xDisplay) {
+private static extern(C)  ptrdiff_t XIOErrorProcFunc (void* xDisplay) {
     Device device = findDevice (xDisplay);
     if (device !is null) {
         if (DEBUG || device.debugging) {

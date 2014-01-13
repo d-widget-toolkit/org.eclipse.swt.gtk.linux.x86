@@ -305,7 +305,7 @@ override void hookEvents () {
     OS.g_signal_connect_closure_by_id (topHandle_, display.signalIds [MAP], 0, display.closures [MAP], true);
 }
 
-override int /*long*/ hoverProc (GtkWidget* widget) {
+override ptrdiff_t hoverProc (GtkWidget* widget) {
     int x, y;
     int mask;
     OS.gdk_window_get_pointer (null, &x, &y, &mask);
@@ -2102,7 +2102,7 @@ void fixChildren (Shell newShell, Shell oldShell, Decorations newDecorations, De
     oldDecorations.fixDecorations (newDecorations, this, menus);
 }
 
-override int /*long*/ fixedMapProc (GtkWidget* widget) {
+override ptrdiff_t fixedMapProc (GtkWidget* widget) {
     OS.GTK_WIDGET_SET_FLAGS (widget, OS.GTK_MAPPED);
     auto widgetList = OS.gtk_container_get_children (cast(GtkContainer*)widget);
     if (widgetList !is null) {
@@ -2548,11 +2548,11 @@ public bool getVisible () {
     return (state & HIDDEN) is 0;
 }
 
-override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
+override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
     return gtk_button_press_event (widget, event, true);
 }
 
-int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent, bool sendMouseDown) {
+ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent, bool sendMouseDown) {
     if (gdkEvent.type is OS.GDK_3BUTTON_PRESS) return 0;
 
     /*
@@ -2565,7 +2565,7 @@ int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent
     if (((shell.style & SWT.ON_TOP) !is 0) && (((shell.style & SWT.NO_FOCUS) is 0) || ((style & SWT.NO_FOCUS) is 0))) {
         shell.forceActive();
     }
-    int /*long*/ result = 0;
+    ptrdiff_t result = 0;
     if (gdkEvent.type is OS.GDK_BUTTON_PRESS) {
         display.clickCount = 1;
         auto nextEvent = OS.gdk_event_peek ();
@@ -2615,7 +2615,7 @@ int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent
     return result;
 }
 
-override int /*long*/ gtk_button_release_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
+override ptrdiff_t gtk_button_release_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
     /*
     * Feature in GTK.  When button 4, 5, 6, or 7 is released, GTK
     * does not deliver a corresponding GTK event.  Button 6 and 7
@@ -2633,14 +2633,14 @@ override int /*long*/ gtk_button_release_event (GtkWidget* widget, GdkEventButto
     return sendMouseEvent (SWT.MouseUp, button, display.clickCount, 0, false, gdkEvent.time, gdkEvent.x_root, gdkEvent.y_root, false, gdkEvent.state) ? 0 : 1;
 }
 
-override int /*long*/ gtk_commit (GtkIMContext* imcontext, char* text) {
+override ptrdiff_t gtk_commit (GtkIMContext* imcontext, char* text) {
     char [] chars = fromStringz( text );
     if (chars.length is 0) return 0;
     sendIMKeyEvent (SWT.KeyDown, null, chars);
     return 0;
 }
 
-override int /*long*/ gtk_enter_notify_event (GtkWidget*  widget, GdkEventCrossing* gdkEvent) {
+override ptrdiff_t gtk_enter_notify_event (GtkWidget*  widget, GdkEventCrossing* gdkEvent) {
     if (OS.GTK_VERSION >= OS.buildVERSION (2, 12, 0)) {
         /*
          * Feature in GTK. Children of a shell will inherit and display the shell's
@@ -2670,7 +2670,7 @@ override int /*long*/ gtk_enter_notify_event (GtkWidget*  widget, GdkEventCrossi
     return 0;
 }
 
-override int /*long*/ gtk_event_after (GtkWidget*  widget, GdkEvent* gdkEvent) {
+override ptrdiff_t gtk_event_after (GtkWidget*  widget, GdkEvent* gdkEvent) {
     switch (cast(int)gdkEvent.type) {
         case OS.GDK_BUTTON_PRESS: {
             if (widget !is eventHandle ()) break;
@@ -2723,7 +2723,7 @@ override int /*long*/ gtk_event_after (GtkWidget*  widget, GdkEvent* gdkEvent) {
     return 0;
 }
 
-override int /*long*/ gtk_expose_event (GtkWidget*  widget, GdkEventExpose* gdkEvent) {
+override ptrdiff_t gtk_expose_event (GtkWidget*  widget, GdkEventExpose* gdkEvent) {
     if ((state & OBSCURED) !is 0) return 0;
     if (!hooks (SWT.Paint) && !filters (SWT.Paint)) return 0;
     Event event = new Event ();
@@ -2743,12 +2743,12 @@ override int /*long*/ gtk_expose_event (GtkWidget*  widget, GdkEventExpose* gdkE
     return 0;
 }
 
-override int /*long*/ gtk_focus (GtkWidget* widget, int directionType) {
+override ptrdiff_t gtk_focus (GtkWidget* widget, int directionType) {
     /* Stop GTK traversal for every widget */
     return 1;
 }
 
-override int /*long*/ gtk_focus_in_event (GtkWidget*  widget, GdkEventFocus* event) {
+override ptrdiff_t gtk_focus_in_event (GtkWidget*  widget, GdkEventFocus* event) {
     // widget could be disposed at this point
     if (handle !is null) {
         Control oldControl = display.imControl;
@@ -2766,7 +2766,7 @@ override int /*long*/ gtk_focus_in_event (GtkWidget*  widget, GdkEventFocus* eve
     return 0;
 }
 
-override int /*long*/ gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
+override ptrdiff_t gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
     // widget could be disposed at this point
     if (handle !is null) {
         if (hooks (SWT.KeyDown) || hooks (SWT.KeyUp)) {
@@ -2779,7 +2779,7 @@ override int /*long*/ gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* eve
     return 0;
 }
 
-override int /*long*/ gtk_key_press_event (GtkWidget*  widget, GdkEventKey* gdkEvent) {
+override ptrdiff_t gtk_key_press_event (GtkWidget*  widget, GdkEventKey* gdkEvent) {
     if (!hasFocus ()) return 0;
 
     if (translateMnemonic (gdkEvent.keyval, gdkEvent)) return 1;
@@ -2796,7 +2796,7 @@ override int /*long*/ gtk_key_press_event (GtkWidget*  widget, GdkEventKey* gdkE
     return super.gtk_key_press_event (widget, gdkEvent);
 }
 
-override int /*long*/ gtk_key_release_event (GtkWidget*  widget, GdkEventKey* event) {
+override ptrdiff_t gtk_key_release_event (GtkWidget*  widget, GdkEventKey* event) {
     if (!hasFocus ()) return 0;
     auto imHandle = imHandle ();
     if (imHandle !is null) {
@@ -2805,7 +2805,7 @@ override int /*long*/ gtk_key_release_event (GtkWidget*  widget, GdkEventKey* ev
     return super.gtk_key_release_event (widget, event);
 }
 
-override int /*long*/ gtk_leave_notify_event (GtkWidget* widget, GdkEventCrossing* gdkEvent) {
+override ptrdiff_t gtk_leave_notify_event (GtkWidget* widget, GdkEventCrossing* gdkEvent) {
     if (display.currentControl !is this) return 0;
     display.removeMouseHoverTimeout (handle);
     int result = 0;
@@ -2818,7 +2818,7 @@ override int /*long*/ gtk_leave_notify_event (GtkWidget* widget, GdkEventCrossin
     return result;
 }
 
-override int /*long*/ gtk_mnemonic_activate (GtkWidget* widget, int /*long*/ arg1) {
+override ptrdiff_t gtk_mnemonic_activate (GtkWidget* widget, ptrdiff_t arg1) {
     int result = 0;
     auto eventPtr = OS.gtk_get_current_event ();
     if (eventPtr !is null) {
@@ -2838,7 +2838,7 @@ override int /*long*/ gtk_mnemonic_activate (GtkWidget* widget, int /*long*/ arg
     return result;
 }
 
-override int /*long*/ gtk_motion_notify_event (GtkWidget* widget, GdkEventMotion* gdkEvent) {
+override ptrdiff_t gtk_motion_notify_event (GtkWidget* widget, GdkEventMotion* gdkEvent) {
     if (this is display.currentControl && (hooks (SWT.MouseHover) || filters (SWT.MouseHover))) {
         display.addMouseHoverTimeout (handle);
     }
@@ -2857,19 +2857,19 @@ override int /*long*/ gtk_motion_notify_event (GtkWidget* widget, GdkEventMotion
     return result;
 }
 
-override int /*long*/ gtk_popup_menu (GtkWidget* widget) {
+override ptrdiff_t gtk_popup_menu (GtkWidget* widget) {
     if (!hasFocus()) return 0;
     int x, y ;
     OS.gdk_window_get_pointer (null, &x, &y, null);
     return showMenu (x, y) ? 1 : 0;
 }
 
-override int /*long*/ gtk_preedit_changed (GtkIMContext* imcontext) {
+override ptrdiff_t gtk_preedit_changed (GtkIMContext* imcontext) {
     display.showIMWindow (this);
     return 0;
 }
 
-override int /*long*/ gtk_realize (GtkWidget* widget) {
+override ptrdiff_t gtk_realize (GtkWidget* widget) {
     auto imHandle = imHandle ();
     if (imHandle !is null) {
         auto window = OS.GTK_WIDGET_WINDOW (paintHandle ());
@@ -2882,7 +2882,7 @@ override int /*long*/ gtk_realize (GtkWidget* widget) {
     return 0;
 }
 
-override int /*long*/ gtk_scroll_event (GtkWidget* widget, GdkEventScroll* gdkEvent) {
+override ptrdiff_t gtk_scroll_event (GtkWidget* widget, GdkEventScroll* gdkEvent) {
     switch (cast(int)gdkEvent.direction) {
         case OS.GDK_SCROLL_UP:
             return sendMouseEvent (SWT.MouseWheel, 0, 3, SWT.SCROLL_LINE, true, gdkEvent.time, gdkEvent.x_root, gdkEvent.y_root, false, gdkEvent.state) ? 0 : 1;
@@ -2897,25 +2897,25 @@ override int /*long*/ gtk_scroll_event (GtkWidget* widget, GdkEventScroll* gdkEv
     return 0;
 }
 
-override int /*long*/ gtk_show_help (GtkWidget* widget, int /*long*/ helpType) {
+override ptrdiff_t gtk_show_help (GtkWidget* widget, ptrdiff_t helpType) {
     if (!hasFocus ()) return 0;
     return sendHelpEvent (helpType) ? 1 : 0;
 }
 
-override int /*long*/ gtk_style_set (GtkWidget* widget, int /*long*/ previousStyle) {
+override ptrdiff_t gtk_style_set (GtkWidget* widget, ptrdiff_t previousStyle) {
     if (backgroundImage !is null) {
         setBackgroundPixmap (backgroundImage.pixmap);
     }
     return 0;
 }
 
-override int /*long*/ gtk_unrealize (GtkWidget* widget) {
+override ptrdiff_t gtk_unrealize (GtkWidget* widget) {
     auto imHandle = imHandle ();
     if (imHandle !is null) OS.gtk_im_context_set_client_window (imHandle, null);
     return 0;
 }
 
-override int /*long*/ gtk_visibility_notify_event (GtkWidget* widget, GdkEventVisibility* gdkEvent) {
+override ptrdiff_t gtk_visibility_notify_event (GtkWidget* widget, GdkEventVisibility* gdkEvent) {
     auto paintWindow = paintWindow();
     auto window = gdkEvent.window;
     if (window is paintWindow) {
@@ -3329,7 +3329,7 @@ void sendFocusEvent (int type) {
     }
 }
 
-bool sendHelpEvent (int /*long*/ helpType) {
+bool sendHelpEvent (ptrdiff_t helpType) {
     Control control = this;
     while (control !is null) {
         if (control.hooks (SWT.Help)) {
@@ -4504,7 +4504,7 @@ void updateLayout (bool all) {
     /* Do nothing */
 }
 
-override int /*long*/ windowProc (GtkWidget* handle, int /*long*/ arg0, int /*long*/ user_data) {
+override ptrdiff_t windowProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
     switch (cast(int)/*64*/user_data) {
         case EXPOSE_EVENT_INVERSE: {
             if ((OS.GTK_VERSION <  OS.buildVERSION (2, 8, 0)) && ((state & OBSCURED) is 0)) {

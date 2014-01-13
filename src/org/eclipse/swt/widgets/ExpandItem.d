@@ -335,7 +335,7 @@ int getPreferredWidth (GC gc) {
     return width;
 }
 
-override int /*long*/ gtk_activate (GtkWidget* widget) {
+override ptrdiff_t gtk_activate (GtkWidget* widget) {
     Event event = new Event ();
     event.item = this;
     int type = OS.gtk_expander_get_expanded (handle) ? SWT.Collapse : SWT.Expand;
@@ -343,23 +343,23 @@ override int /*long*/ gtk_activate (GtkWidget* widget) {
     return 0;
 }
 
-override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
+override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
     setFocus ();
     return 0;
 }
 
-override int /*long*/ gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
+override ptrdiff_t gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
     OS.GTK_WIDGET_UNSET_FLAGS (handle, OS.GTK_CAN_FOCUS);
     parent.lastFocus = this;
     return 0;
 }
 
-override int /*long*/ gtk_size_allocate (GtkWidget* widget, int /*long*/ allocation) {
+override ptrdiff_t gtk_size_allocate (GtkWidget* widget, ptrdiff_t allocation) {
     parent.layoutItems (0, false);
     return 0;
 }
 
-override int /*long*/ gtk_enter_notify_event (GtkWidget* widget, GdkEventCrossing* event) {
+override ptrdiff_t gtk_enter_notify_event (GtkWidget* widget, GdkEventCrossing* event) {
     parent.gtk_enter_notify_event(widget, event);
     return 0;
 }
@@ -623,7 +623,7 @@ void showWidget (int index) {
     }
 }
 
-override int /*long*/ windowProc (GtkWidget* handle, int /*long*/ user_data) {
+override ptrdiff_t windowProc (GtkWidget* handle, ptrdiff_t user_data) {
     switch (cast(int)/*64*/user_data) {
         case ACTIVATE_INVERSE: {
             expanded = cast(bool)OS.gtk_expander_get_expanded (handle);

@@ -377,7 +377,7 @@ public int getSpacing () {
     return spacing;
 }
 
-override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
+override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
     if (OS.GTK_VERSION < OS.buildVERSION (2, 4, 0)) {
         int x = cast(int)gdkEvent.x;
         int y = cast(int)gdkEvent.y;
@@ -396,7 +396,7 @@ override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton*
     return super.gtk_button_press_event (widget, gdkEvent);
 }
 
-override int /*long*/ gtk_button_release_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
+override ptrdiff_t gtk_button_release_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
     if (OS.GTK_VERSION < OS.buildVERSION (2, 4, 0)) {
         if (lastFocus !is null) {
             int x = cast(int)gdkEvent.x;
@@ -414,7 +414,7 @@ override int /*long*/ gtk_button_release_event (GtkWidget* widget, GdkEventButto
     return super.gtk_button_release_event (widget, gdkEvent);
 }
 
-override int /*long*/ gtk_expose_event (GtkWidget* widget, GdkEventExpose* gdkEvent) {
+override ptrdiff_t gtk_expose_event (GtkWidget* widget, GdkEventExpose* gdkEvent) {
     if (OS.GTK_VERSION < OS.buildVERSION (2, 4, 0)) {
         GCData data = new GCData ();
         data.damageRgn = gdkEvent.region;
@@ -430,21 +430,21 @@ override int /*long*/ gtk_expose_event (GtkWidget* widget, GdkEventExpose* gdkEv
     return super.gtk_expose_event (widget, gdkEvent);
 }
 
-override int /*long*/ gtk_focus_in_event (GtkWidget* widget, GdkEventFocus* event) {
+override ptrdiff_t gtk_focus_in_event (GtkWidget* widget, GdkEventFocus* event) {
     if (OS.GTK_VERSION < OS.buildVERSION (2, 4, 0)) {
         if (lastFocus !is null) lastFocus.redraw ();
     }
     return super.gtk_focus_in_event(widget, event);
 }
 
-override int /*long*/ gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
+override ptrdiff_t gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
     if (OS.GTK_VERSION < OS.buildVERSION (2, 4, 0)) {
         if (lastFocus !is null) lastFocus.redraw ();
     }
     return super.gtk_focus_out_event (widget, event);
 }
 
-override int /*long*/ gtk_key_press_event (GtkWidget* widget, GdkEventKey* gdkEvent) {
+override ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* gdkEvent) {
     if (OS.GTK_VERSION >= OS.buildVERSION (2, 4, 0)) {
         if (!hasFocus ()) return 0;
         auto result = super.gtk_key_press_event (widget, gdkEvent);

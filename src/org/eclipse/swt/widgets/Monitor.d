@@ -26,7 +26,7 @@ import org.eclipse.swt.graphics.Rectangle;
  * @since 3.0
  */
 public final class Monitor {
-    int /*long*/ handle;
+    ptrdiff_t handle;
     int x, y, width, height;
     int clientX, clientY, clientWidth, clientHeight;
 

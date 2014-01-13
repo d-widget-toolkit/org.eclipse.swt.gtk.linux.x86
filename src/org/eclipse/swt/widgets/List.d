@@ -715,12 +715,12 @@ public int getTopIndex () {
     return index;
 }
 
-override int /*long*/ gtk_changed (GtkWidget* widget) {
+override ptrdiff_t gtk_changed (GtkWidget* widget) {
     postEvent (SWT.Selection);
     return 0;
 }
 
-override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
+override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
     auto result = super.gtk_button_press_event (widget, gdkEvent);
     if (result !is 0) return result;
     /*
@@ -774,7 +774,7 @@ override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton*
     return result;
 }
 
-override int /*long*/ gtk_key_press_event (GtkWidget* widget, GdkEventKey* keyEvent) {
+override ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* keyEvent) {
     auto result = super.gtk_key_press_event (widget, keyEvent);
     if (result !is 0) return result;
     if (OS.GTK_VERSION < OS.buildVERSION (2, 2 ,0)) {
@@ -796,7 +796,7 @@ override int /*long*/ gtk_key_press_event (GtkWidget* widget, GdkEventKey* keyEv
     return result;
 }
 
-override int /*long*/ gtk_popup_menu (GtkWidget* widget) {
+override ptrdiff_t gtk_popup_menu (GtkWidget* widget) {
     auto result = super.gtk_popup_menu (widget);
     /*
     * Bug in GTK.  The context menu for the typeahead in GtkTreeViewer
