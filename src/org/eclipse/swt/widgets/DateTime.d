@@ -305,7 +305,7 @@ private class Calendar{
 
 
 private class DateFormatSymbols {
-    private const String[] ampm = [ "AM"[], "PM" ];
+    private enum String[] ampm = [ "AM"[], "PM" ];
     TryConst!(String[]) getAmPmStrings(){
         return ampm;
     }
