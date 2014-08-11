@@ -1327,14 +1327,14 @@ private static extern(C) void fixedClassInitProcFunc (void* g_class, void* class
     klass.size_allocate = &fixedSizeAllocateProc;
 }
 
-private static extern(C)  void fixedMapProcFunc (GtkWidget * handle) {
+private static extern(C) void fixedMapProcFunc (GtkWidget * handle) {
     version(LOG) getDwtLogger().error( __FILE__, __LINE__,  "Display {}:", __LINE__ ).flush;
     Display display = getCurrent ();
     Widget widget = display.getWidget (handle);
     if (widget !is null) widget.fixedMapProc (handle);
 }
 
-private static extern(C) static void fixedSizeAllocateProc (GtkWidget* handle, GtkAllocation* allocation) {
+private static extern(C) void fixedSizeAllocateProc (GtkWidget* handle, GtkAllocation* allocation) {
     Display display = getCurrent ();
     Widget widget = display.getWidget (handle);
     if (widget !is null) return widget.fixedSizeAllocateProc (handle, allocation);
