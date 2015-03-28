@@ -105,7 +105,7 @@ public static PrinterData[] getPrinterList() {
 }
 
 private static extern(C) int GtkPrinterFunc_List (GtkPrinter* printer, void* user_data) {
-    int length_ = to!int(printerList.length);
+    size_t length_ = printerList.length;
     PrinterData [] newList = new PrinterData [length_ + 1];
     System.arraycopy (printerList, 0, newList, 0, length_);
     printerList = newList;
@@ -564,7 +564,7 @@ public bool startPage() {
     if (printJob is null) return false;
     double width = OS.gtk_page_setup_get_paper_width (pageSetup, OS.GTK_UNIT_POINTS);
     double height = OS.gtk_page_setup_get_paper_height (pageSetup, OS.GTK_UNIT_POINTS);
-    int type = Cairo.cairo_surface_get_type (surface);
+    ptrdiff_t type = Cairo.cairo_surface_get_type (surface);
     switch (type) {
         case Cairo.CAIRO_SURFACE_TYPE_PS:
             Cairo.cairo_ps_surface_set_size (surface, width, height);

@@ -105,12 +105,11 @@ public override void javaToNative(Object object, TransferData transferData) {
         buffer = newBuffer;
     }
     if (buffer.length is 0) return;
-    import std.conv;
-    char* ptr = cast(char*)OS.g_malloc(to!uint(buffer.length+1));
+    char* ptr = cast(char*)OS.g_malloc(buffer.length+1);
     ptr[ 0 .. buffer.length ] = buffer;
     ptr[ buffer.length ] = '\0';
     transferData.pValue = ptr;
-    transferData.length = to!uint(buffer.length);
+    transferData.length = cast(int)/*64bit*/buffer.length;
     transferData.format = 8;
     transferData.result = 1;
 }
@@ -141,9 +140,8 @@ public override Object nativeToJava(TransferData transferData) {
         }
     }
     if (offset < temp.length - 2) {
-        import std.conv;
         auto size =  temp.length - offset;
-        char* file = cast(char*)OS.g_malloc(to!uint(size + 1));
+        char* file = cast(char*)OS.g_malloc(size + 1);
         file[ 0 .. size ] = temp[ offset .. offset+size ];
         file[ size ] = '\0';
         files ~= file;

@@ -93,14 +93,13 @@ override public void javaToNative (Object object, TransferData transferData) {
         transferData.result = 1;
     }
     if (transferData.type is cast(void*)UTF8_STRING_ID) {
-        import std.conv;
-        char* pValue = cast(char*)OS.g_malloc(to!uint(str.length+1));
+        char* pValue = cast(char*)OS.g_malloc(str.length+1);
         if (pValue is  null) return;
         pValue[ 0 .. str.length ] = str;
         pValue[ str.length ] = '\0';
         transferData.type = cast(void*)UTF8_STRING_ID;
         transferData.format = 8;
-        transferData.length = to!uint(str.length);
+        transferData.length = cast(int)/*64bit*/str.length;
         transferData.pValue = pValue;
         transferData.result = 1;
     }
@@ -127,7 +126,7 @@ override public void javaToNative (Object object, TransferData transferData) {
 override public Object nativeToJava(TransferData transferData){
     if (!isSupportedType(transferData) ||  transferData.pValue is null) return null;
     char** list;
-    int count = OS.gdk_text_property_to_utf8_list(transferData.type, transferData.format, transferData.pValue, transferData.length, &list);
+    ptrdiff_t count = OS.gdk_text_property_to_utf8_list(transferData.type, transferData.format, transferData.pValue, transferData.length, &list);
     if (count is 0) return null;
     String utf8 = fromStringz( list[0] )._idup();
     OS.g_strfreev(list);

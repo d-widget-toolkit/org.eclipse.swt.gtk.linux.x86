@@ -30,8 +30,6 @@ import org.eclipse.swt.widgets.Menu;
 import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swt.widgets.Event;
 
-import std.conv;
-
 /**
  * Instances of this class support the layout of selectable
  * tool bar items.
@@ -315,13 +313,13 @@ public int getRowCount () {
     return 1;
 }
 
-override ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* gdkEvent) {
+override int gtk_key_press_event (GtkWidget* widget, GdkEventKey* gdkEvent) {
     if (!hasFocus ()) return 0;
     auto result = super.gtk_key_press_event (widget, gdkEvent);
     if (result !is 0) return result;
     ToolItem [] items = getItems ();
-    int length = to!int(items.length);
-    int index = 0;
+    ptrdiff_t length = items.length;
+    ptrdiff_t index = 0;
     while (index < length) {
         if (items [index].hasFocus ()) break;
         index++;
@@ -338,7 +336,7 @@ override ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* gdkEvent
                     event.detail = SWT.ARROW;
                     auto topHandle = item.topHandle ();
                     event.x = OS.GTK_WIDGET_X (topHandle);
-                    event.y = OS.GTK_WIDGET_Y (topHandle) + OS.GTK_WIDGET_HEIGHT (topHandle);
+                    event.y = (OS.GTK_WIDGET_Y (topHandle) + OS.GTK_WIDGET_HEIGHT (topHandle));
                     if ((style & SWT.MIRRORED) !is 0) event.x = getClientWidth() - OS.GTK_WIDGET_WIDTH(topHandle) - event.x;
                     item.postEvent (SWT.Selection, event);
                     return result;
@@ -350,7 +348,7 @@ override ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* gdkEvent
         default: return result;
     }
     if ((style & SWT.MIRRORED) !is 0) next= !next;
-    int start = index, offset = next ? 1 : -1;
+    ptrdiff_t start = index, offset = next ? 1 : -1;
     while ((index = (index + offset + length) % length) !is start) {
         ToolItem item = items [index];
         if (item.setFocus ()) return result;

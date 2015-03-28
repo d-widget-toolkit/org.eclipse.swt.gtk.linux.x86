@@ -942,9 +942,9 @@ void onVerify(Event event) {
         if (s !is -1) value = value.substring(s + 1);
         newText = value ~ newText;
     }
-    int newTextLength = to!int(newText.length);
+    ptrdiff_t newTextLength = newText.length;
     bool first = characterCount is 0;
-    characterCount = (newTextLength < length_) ? newTextLength : 0;
+    characterCount = (newTextLength < length_) ? cast(int)/*64bit*/newTextLength : 0;
     int max = calendar.getActualMaximum(fieldName);
     int min = calendar.getActualMinimum(fieldName);
     int newValue = unformattedIntValue(fieldName, newText, characterCount is 0, max);
@@ -958,7 +958,7 @@ void onVerify(Event event) {
         setTextField(fieldName, newValue, characterCount is 0, characterCount is 0);
     } else {
         if (newTextLength >= length_) {
-            newText = newText.substring(newTextLength - length_ + 1);
+            newText = newText.substring(cast(int)/*64bit*/(newTextLength - length_ + 1));
             newValue = unformattedIntValue(fieldName, newText, characterCount is 0, max);
             if (newValue !is -1) {
                 characterCount = length_ - 1;

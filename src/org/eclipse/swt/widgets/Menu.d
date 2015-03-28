@@ -28,8 +28,6 @@ import org.eclipse.swt.widgets.Decorations;
 import org.eclipse.swt.widgets.Shell;
 import java.lang.all;
 
-import std.conv;
-
 /**
  * Instances of this class are user interface objects that contain
  * menu items.
@@ -500,7 +498,7 @@ public MenuItem [] getItems () {
 override String getNameText () {
     String result = "";
     MenuItem [] items = getItems ();
-    int length_ = to!int(items.length);
+    ptrdiff_t length_ = items.length;
     if (length_ > 0) {
         for (int i=0; i<length_-1; i++) {
             result = result ~ items [i].getNameText() ~ ", ";
@@ -610,7 +608,7 @@ public bool getVisible () {
     return OS.GTK_WIDGET_MAPPED (handle);
 }
 
-override ptrdiff_t gtk_hide (GtkWidget* widget) {
+override int gtk_hide (GtkWidget* widget) {
     if ((style & SWT.POP_UP) !is 0) {
         display.activeShell = getShell ();
     }
@@ -629,7 +627,7 @@ override ptrdiff_t gtk_hide (GtkWidget* widget) {
     return 0;
 }
 
-override ptrdiff_t gtk_show (GtkWidget* widget) {
+override int gtk_show (GtkWidget* widget) {
     if ((style & SWT.POP_UP) !is 0) {
         display.activeShell = getShell ();
         return 0;
@@ -639,7 +637,7 @@ override ptrdiff_t gtk_show (GtkWidget* widget) {
 }
 
 
-override ptrdiff_t gtk_show_help (GtkWidget* widget, ptrdiff_t helpType) {
+override int gtk_show_help (GtkWidget* widget, ptrdiff_t helpType) {
     if (sendHelpEvent (helpType)) {
         OS.gtk_menu_shell_deactivate (cast(GtkMenuShell*)handle);
         return 1;

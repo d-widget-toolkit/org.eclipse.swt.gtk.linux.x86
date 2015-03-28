@@ -4,25 +4,19 @@
 ******************************************************************************/
 module org.eclipse.swt.internal.c.cairo_ps;
 
+private import org.eclipse.swt.internal.c.X;
+
 import java.lang.all;
 public import org.eclipse.swt.internal.c.glib_object;
 public import org.eclipse.swt.internal.c.cairo;
 
-alias int function(void *, char *, uint) _BCD_func__879;
-alias int function(void *) _BCD_func__133;
-alias int function(void *, long *, int) _BCD_func__135;
-alias int function(void *, char *, uint) _BCD_func__137;
-alias int function(void *, char *, uint) _BCD_func__139;
-alias void function(void *) _BCD_func__734;
-alias int function(void * *, char *) _BCD_func__735;
-alias int function(char *, char * * *, uint *) _BCD_func__736;
-alias int function(void *, char *, char *, char *, char *) _BCD_func__737;
-alias int function(__gconv_step *, __gconv_step_data *, void *, char *, char * *, char *, char * *, uint *) _BCD_func__738;
-alias void function(__gconv_step *) _BCD_func__739;
-alias int function(__gconv_step *) _BCD_func__740;
-alias uint function(__gconv_step *, char) _BCD_func__741;
-alias int function(__gconv_step *, __gconv_step_data *, char * *, char *, char * *, uint *, int, int) _BCD_func__742;
-alias int function(void *, char *, uint) _BCD_func__878;
+version(Tango){
+    import tango.stdc.stdint;
+} else { // Phobos
+    import std.stdint;
+}
+
+alias cairo_status_t function(void *, char *, c_uint) _BCD_func__879;
 version(DYNLINK){
 mixin(gshared!(
 "extern (C) void function(void *)cairo_ps_surface_dsc_begin_page_setup;
@@ -53,3 +47,4 @@ extern (C) void cairo_ps_surface_set_size(void *, double, double);
 extern (C) void * cairo_ps_surface_create_for_stream(_BCD_func__879, void *, double, double);
 extern (C) void * cairo_ps_surface_create(char *, double, double);
 } // version(DYNLINK)
+

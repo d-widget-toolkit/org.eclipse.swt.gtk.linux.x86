@@ -840,7 +840,7 @@ public void setWarnings (bool warnings) {
     }
 }
 
-private static extern(C) ptrdiff_t XErrorProcFunc (void* xDisplay, org.eclipse.swt.internal.gtk.OS.XErrorEvent* xErrorEvent) {
+private static extern(C) int XErrorProcFunc (void* xDisplay, org.eclipse.swt.internal.gtk.OS.XErrorEvent* xErrorEvent) {
     Device device = findDevice (xDisplay);
     if (device !is null) {
         if (device.warningLevel is 0) {
@@ -860,7 +860,7 @@ private static extern(C) ptrdiff_t XErrorProcFunc (void* xDisplay, org.eclipse.s
     return 0;
 }
 
-private static extern(C)  ptrdiff_t XIOErrorProcFunc (void* xDisplay) {
+private static extern(C)  int XIOErrorProcFunc (void* xDisplay) {
     Device device = findDevice (xDisplay);
     if (device !is null) {
         if (DEBUG || device.debugging) {

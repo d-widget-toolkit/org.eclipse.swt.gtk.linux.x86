@@ -33,8 +33,6 @@ import java.lang.all;
 
 import java.io.BufferedInputStream;
 
-import std.conv;
-
 final class PNGFileFormat : FileFormat {
     static const int SIGNATURE_LENGTH = 8;
     static const int PRIME = 65521;
@@ -190,7 +188,7 @@ byte[] validateBitDepth(byte[] data) {
     if (headerChunk.getBitDepth() > 8) {
         byte[] result = new byte[data.length / 2];
         compress16BitDepthTo8BitDepth
-            (data, 0, result, 0, to!int(result.length));
+            (data, 0, result, 0, cast(int)/*64bit*/result.length);
         return result;
     } else {
         return data;

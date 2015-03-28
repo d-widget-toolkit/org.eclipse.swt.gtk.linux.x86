@@ -27,17 +27,17 @@ import org.eclipse.swt.SWT;
 
 class AccessibleFactory {
     AtkObjectFactory * handle;
-    uint objectParentType;
+    ptrdiff_t objectParentType;
     char* widgetTypeName;
 
     //Callback atkObjectFactoryCB_create_accessible;
     //Callback gTypeInfo_base_init_factory;
     Accessible[GtkWidget*] accessibles;
 
-    static long[String] Types;
-    static AccessibleFactory[long] Factories;
+    static size_t[String] Types;
+    static AccessibleFactory[size_t] Factories;
 
-    static uint DefaultParentType; //$NON-NLS-1$
+    static ptrdiff_t DefaultParentType; //$NON-NLS-1$
     static const String FACTORY_PARENTTYPENAME = "AtkObjectFactory";
     static const String SWT_TYPE_PREFIX = "SWT";
     static const String CHILD_TYPENAME = "Child";
@@ -95,7 +95,7 @@ class AccessibleFactory {
         }
     }
 
-    private this (ptrdiff_t widgetType) {
+    private this (int widgetType) {
         widgetTypeName = OS.g_type_name (widgetType);
         String factoryName = (FACTORY_TYPENAME ~ fromStringz( widgetTypeName ) ~ '\0')._idup();
         if (OS.g_type_from_name (factoryName.ptr) is 0) {
@@ -140,8 +140,8 @@ class AccessibleFactory {
                     return accessible.accessibleObject.handle;
                 }
                 String buffer = fromStringz( widgetTypeName )._idup();
-                auto type = getType (buffer, accessible, objectParentType, ACC.CHILDID_SELF);
-                AccessibleObject object = new AccessibleObject (type, cast(GtkWidget*)widget, accessible, objectParentType, false);
+                int type = getType (buffer, accessible, cast(uint)/*64bit*/objectParentType, ACC.CHILDID_SELF);
+                AccessibleObject object = new AccessibleObject (type, cast(GtkWidget*)widget, accessible, cast(uint)/*64bit*/objectParentType, false);
                 accessible.accessibleObject = object;
                 return object.handle;
             }
@@ -152,15 +152,15 @@ class AccessibleFactory {
         }
     }
 
-    static ptrdiff_t getChildType (Accessible accessible, int childIndex) {
-        return getType (CHILD_TYPENAME, accessible, DefaultParentType, childIndex);
+    static int getChildType (Accessible accessible, int childIndex) {
+        return getType (CHILD_TYPENAME, accessible, cast(int)/*64bit*/DefaultParentType, childIndex);
     }
 
-    static ptrdiff_t getDefaultParentType () {
-        return DefaultParentType;
+    static int getDefaultParentType () {
+        return cast(int)/*64bit*/DefaultParentType;
     }
 
-    static ptrdiff_t getType (String widgetTypeName, Accessible accessible, ptrdiff_t parentType, int childId) {
+    static int getType (String widgetTypeName, Accessible accessible, int parentType, int childId) {
         AccessibleControlEvent event = new AccessibleControlEvent (accessible);
         event.childID = childId;
         AccessibleControlListener[] listeners = accessible.getControlListeners ();
@@ -203,9 +203,9 @@ class AccessibleFactory {
         if (selection) swtTypeName ~= "Selection"; //$NON-NLS-1$
         if (text) swtTypeName ~= "Text"; //$NON-NLS-1$
 
-        ptrdiff_t type = 0;
+        size_t type = 0;
         if (swtTypeName in Types ) {
-            type = cast(int) Types[swtTypeName];
+            type = Types[swtTypeName];
         } else {
             /* define the type */
             GTypeQuery* query = new GTypeQuery ();
@@ -225,7 +225,7 @@ class AccessibleFactory {
             if (text) OS.g_type_add_interface_static (type, AccessibleObject.ATK_TEXT_TYPE, TextIfaceDefinition);
             Types[swtTypeName] = type;
         }
-        return type;
+        return cast(int)/*64bit*/type;
     }
 
     private static extern(C) void gTypeInfo_base_init_factory (void* klass) {
@@ -296,7 +296,7 @@ class AccessibleFactory {
         auto widgetType = OS.G_OBJECT_TYPE ( cast(GTypeInstance*)controlHandle);
         AccessibleFactory factory = Factories[widgetType];
         if (factory is null) {
-            factory = new AccessibleFactory (widgetType);
+            factory = new AccessibleFactory (cast(int)/*64bit*/widgetType);
             Factories[widgetType] = factory;
         }
         factory.addAccessible (accessible);

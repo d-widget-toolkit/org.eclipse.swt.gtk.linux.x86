@@ -28,8 +28,6 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swt.widgets.Button;
 import java.lang.all;
 
-import std.conv;
-
 /**
  * Instances of this class provide the appearance and
  * behavior of <code>Shells</code>, but are not top
@@ -726,15 +724,15 @@ public void setText (String string) {
 
 void sort (Image [] images) {
     /* Shell Sort from K&R, pg 108 */
-    int length = to!int(images.length);
+    ptrdiff_t length = images.length;
     if (length <= 1) return;
     ImageData [] datas = new ImageData [length];
     for (int i = 0; i < length; i++) {
         datas [i] = images [i].getImageData ();
     }
-    for (int gap=length/2; gap>0; gap/=2) {
-        for (int i=gap; i<length; i++) {
-            for (int j=i-gap; j>=0; j-=gap) {
+    for (ptrdiff_t gap=length/2; gap>0; gap/=2) {
+        for (ptrdiff_t i=gap; i<length; i++) {
+            for (ptrdiff_t j=i-gap; j>=0; j-=gap) {
                 if (compare (datas [j], datas [j + gap]) >= 0) {
                     Image swap = images [j];
                     images [j] = images [j + gap];

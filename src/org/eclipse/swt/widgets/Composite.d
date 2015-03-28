@@ -33,8 +33,6 @@ import org.eclipse.swt.internal.gtk.OS;
 import org.eclipse.swt.graphics.Rectangle;
 import java.lang.all;
 
-import std.conv;
-
 /**
  * Instances of this class are controls which are capable
  * of containing other controls.
@@ -78,7 +76,7 @@ public class Composite : Scrollable {
     alias Scrollable.translateMnemonic translateMnemonic;
     alias Scrollable.translateTraversal translateTraversal;
 
-    public int  embeddedHandle;
+    public size_t  embeddedHandle;
     GtkIMContext* imHandle_;
     GtkWidget* socketHandle;
     Layout layout_;
@@ -480,7 +478,7 @@ void fixTabList (Control control) {
     }
     if (count is 0) return;
     Control [] newList = null;
-    int length = to!int(tabList.length - count);
+    ptrdiff_t length = tabList.length - count;
     if (length !is 0) {
         newList = new Control [length];
         int index = 0;
@@ -678,7 +676,7 @@ public Control [] getTabList () {
     return tabList;
 }
 
-override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
+override int gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
     auto result = super.gtk_button_press_event (widget, event);
     if (result !is 0) return result;
     if ((state & CANVAS) !is 0) {
@@ -691,7 +689,7 @@ override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* ev
     return result;
 }
 
-override ptrdiff_t gtk_expose_event (GtkWidget* widget, GdkEventExpose* eventPtr) {
+override int gtk_expose_event (GtkWidget* widget, GdkEventExpose* eventPtr) {
     if ((state & OBSCURED) !is 0) return 0;
     if ((state & CANVAS) is 0) {
         return super.gtk_expose_event (widget, eventPtr);
@@ -726,7 +724,7 @@ override ptrdiff_t gtk_expose_event (GtkWidget* widget, GdkEventExpose* eventPtr
     return 0;
 }
 
-override ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
+override int gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
     auto result = super.gtk_key_press_event (widget, event);
     if (result !is 0) return result;
     /*
@@ -747,27 +745,27 @@ override ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
     return result;
 }
 
-override ptrdiff_t gtk_focus (GtkWidget* widget, int directionType) {
+override int gtk_focus (GtkWidget* widget, ptrdiff_t directionType) {
     if (widget is socketHandle) return 0;
     return super.gtk_focus (widget, directionType);
 }
 
-override ptrdiff_t gtk_focus_in_event (GtkWidget* widget, GdkEventFocus* event) {
-    ptrdiff_t result = super.gtk_focus_in_event (widget, event);
+override int gtk_focus_in_event (GtkWidget* widget, GdkEventFocus* event) {
+    int result = super.gtk_focus_in_event (widget, event);
     return (state & CANVAS) !is 0 ? 1 : result;
 }
 
-override ptrdiff_t gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
+override int gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
     auto result = super.gtk_focus_out_event (widget, event);
     return (state & CANVAS) !is 0 ? 1 : result;
 }
 
-override ptrdiff_t gtk_map (GtkWidget* widget) {
+override int gtk_map (GtkWidget* widget) {
     fixZOrder ();
     return 0;
 }
 
-override ptrdiff_t gtk_realize (GtkWidget* widget) {
+override int gtk_realize (GtkWidget* widget) {
     auto result = super.gtk_realize (widget);
     if ((style & SWT.NO_BACKGROUND) !is 0) {
         auto window = OS.GTK_WIDGET_WINDOW (paintHandle ());
@@ -779,13 +777,13 @@ override ptrdiff_t gtk_realize (GtkWidget* widget) {
     return result;
 }
 
-override ptrdiff_t gtk_scroll_child (GtkWidget* widget, ptrdiff_t scrollType, ptrdiff_t horizontal) {
+override int gtk_scroll_child (GtkWidget* widget, ptrdiff_t scrollType, ptrdiff_t horizontal) {
     /* Stop GTK scroll child signal for canvas */
     OS.g_signal_stop_emission_by_name (widget, OS.scroll_child.ptr);
     return 1;
 }
 
-override ptrdiff_t gtk_style_set (GtkWidget* widget, ptrdiff_t previousStyle) {
+override int gtk_style_set (GtkWidget* widget, ptrdiff_t previousStyle) {
     auto result = super.gtk_style_set (widget, previousStyle);
     if ((style & SWT.NO_BACKGROUND) !is 0) {
         auto window = OS.GTK_WIDGET_WINDOW (paintHandle ());

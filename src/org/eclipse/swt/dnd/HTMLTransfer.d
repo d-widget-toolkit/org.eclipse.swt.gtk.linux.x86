@@ -78,11 +78,10 @@ public override void javaToNative (Object object, TransferData transferData){
         DND.error(DND.ERROR_INVALID_DATA);
     }
     String str = stringcast(object);
-    import std.conv;
-    char* pValue = cast(char*)OS.g_malloc(to!uint(str.length));
+    char* pValue = cast(char*)OS.g_malloc(str.length);
     if (pValue is null) return;
     pValue[0 .. str.length ] = str;
-    transferData.length = to!uint(str.length);
+    transferData.length = cast(int)/*64bit*/str.length;
     transferData.format = 8;
     transferData.pValue = pValue;
     transferData.result = 1;

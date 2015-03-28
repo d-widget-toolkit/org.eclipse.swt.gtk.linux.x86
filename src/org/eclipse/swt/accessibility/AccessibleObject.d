@@ -32,12 +32,11 @@ import java.util.Enumeration;
 version(Tango){
     //import tango.text.Util;
 } else { // Phobos
-    import std.conv;
 }
 
 class AccessibleObject {
     AtkObject* handle;
-    ptrdiff_t parentType;
+    int parentType;
     int index = -1, id = ACC.CHILDID_SELF;
     Accessible accessible;
     AccessibleObject parent;
@@ -53,11 +52,11 @@ class AccessibleObject {
     static String keybindingPtr;
     static String namePtr;
     static AccessibleObject[AtkObject*] AccessibleObjects;
-    static /*const*/ uint ATK_ACTION_TYPE;
-    static /*const*/ uint ATK_COMPONENT_TYPE;
-    static /*const*/ uint ATK_HYPERTEXT_TYPE;
-    static /*const*/ uint ATK_SELECTION_TYPE;
-    static /*const*/ uint ATK_TEXT_TYPE;
+    static /*const*/ ptrdiff_t ATK_ACTION_TYPE;
+    static /*const*/ ptrdiff_t ATK_COMPONENT_TYPE;
+    static /*const*/ ptrdiff_t ATK_HYPERTEXT_TYPE;
+    static /*const*/ ptrdiff_t ATK_SELECTION_TYPE;
+    static /*const*/ ptrdiff_t ATK_TEXT_TYPE;
     static /*const*/ bool DEBUG;
     static bool static_this_completed = false;
 
@@ -72,7 +71,7 @@ class AccessibleObject {
         static_this_completed = true;
     }
 
-    this (ptrdiff_t type, GtkWidget* widget, Accessible accessible, ptrdiff_t parentType, bool isLightweight) {
+    this (int type, GtkWidget* widget, Accessible accessible, int parentType, bool isLightweight) {
         children = new Hashtable(9);
         handle = cast(AtkObject*)ATK.g_object_new (type, null);
         this.parentType = parentType;
@@ -116,7 +115,7 @@ class AccessibleObject {
         if (event.result is null) return parentResult;
         if (keybindingPtr !is null ) OS.g_free (keybindingPtr.ptr);
         String name = event.result._idup() ~ '\0';
-        char* p = cast(char*) OS.g_malloc (to!int(name.length));
+        char* p = cast(char*) OS.g_malloc (name.length);
         keybindingPtr =  p ? cast(String)p[ 0 .. name.length ] : null;
         return cast(char*)keybindingPtr.ptr;
     }
@@ -149,7 +148,7 @@ class AccessibleObject {
         if (actionNamePtr !is null) OS.g_free (actionNamePtr.ptr);
 
         String name = event.result._idup() ~ '\0';
-        auto p = cast(char*)OS.g_malloc (to!int(name.length));
+        auto p = cast(char*)OS.g_malloc (name.length);
         actionNamePtr =  p ? cast(String)p[ 0 .. name.length ] : null;
         return cast(char*)actionNamePtr.ptr;
     }
@@ -374,7 +373,7 @@ class AccessibleObject {
         if (descriptionPtr !is null) OS.g_free (descriptionPtr.ptr);
 
         String name = event.result._idup() ~ '\0';
-        char* p = cast(char*)OS.g_malloc (to!int(name.length));
+        char* p = cast(char*)OS.g_malloc (name.length);
         descriptionPtr =  p ? cast(String)p[ 0 .. name.length ] : null;
         return cast(char*)descriptionPtr.ptr;
     }
@@ -402,7 +401,7 @@ class AccessibleObject {
         if (event.result is null) return parentResult;
         if (namePtr !is null) OS.g_free (namePtr.ptr);
         String name = event.result._idup() ~ '\0';
-        char* p = cast(char*)OS.g_malloc (to!int(name.length));
+        char* p = cast(char*)OS.g_malloc (name.length);
         namePtr =  p ? cast(String)p[ 0 .. name.length ] : null;
         return cast(char*)namePtr.ptr;
     }
@@ -411,7 +410,7 @@ class AccessibleObject {
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkObject_get_n_children: {}", atkObject);
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return 0;
-        ptrdiff_t parentResult = 0;
+        int parentResult = 0;
         auto objectClass = cast(AtkObjectClass*)ATK.g_type_class_peek (object.parentType);
         if (objectClass.get_n_children !is null) {
             parentResult = objectClass.get_n_children( object.handle);
@@ -421,7 +420,7 @@ class AccessibleObject {
 
         AccessibleControlEvent event = new AccessibleControlEvent (object);
         event.childID = object.id;
-        event.detail = cast(int)/*64*/parentResult;
+        event.detail = parentResult;
         for (int i = 0; i < listeners.length; i++) {
             listeners [i].getChildCount (event);
         }
@@ -501,12 +500,12 @@ class AccessibleObject {
         return objectClass.get_role( object.handle);
     }
 
-    package static extern(C) AtkObject* atkObject_ref_child (AtkObject* atkObject, ptrdiff_t index) {
+    package static extern(C) AtkObject* atkObject_ref_child (AtkObject* atkObject, int index) {
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkObject_ref_child: {} of: {}", index, atkObject);
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return null;
         object.updateChildren ();
-        AccessibleObject accObject = object.getChildByIndex (cast(int)/*64*/index);
+        AccessibleObject accObject = object.getChildByIndex (index);
         if (accObject !is null) {
             OS.g_object_ref (accObject.handle);
             return accObject.handle;
@@ -562,7 +561,7 @@ class AccessibleObject {
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkSelection_is_child_selected");
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return 0;
-        ptrdiff_t parentResult = 0;
+        int parentResult = 0;
         if (ATK.g_type_is_a (object.parentType, ATK_SELECTION_TYPE)) {
             auto selectionIface = cast(AtkSelectionIface*)ATK.g_type_interface_peek_parent (ATK.ATK_SELECTION_GET_IFACE (object.handle));
             if (selectionIface.is_child_selected !is null) {
@@ -618,7 +617,7 @@ class AccessibleObject {
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkText_get_caret_offset");
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return 0;
-        ptrdiff_t parentResult = 0;
+        int parentResult = 0;
         if (ATK.g_type_is_a (object.parentType, ATK_TEXT_TYPE)) {
             auto textIface = cast(AtkTextIface*)ATK.g_type_interface_peek_parent (ATK.ATK_TEXT_GET_IFACE (object.handle));
             if (textIface.get_caret_offset !is null) {
@@ -630,7 +629,7 @@ class AccessibleObject {
 
         AccessibleTextEvent event = new AccessibleTextEvent (object);
         event.childID = object.id;
-        event.offset = cast(int)/*64*/parentResult;
+        event.offset = parentResult;
         for (int i = 0; i < listeners.length; i++) {
             listeners [i].getCaretOffset (event);
         }
@@ -643,7 +642,7 @@ class AccessibleObject {
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return 0;
         String text = object.getText ();
-        if (text !is null) return text[cast(int)/*64*/offset ]; // TODO
+        if (text !is null) return text[ offset ]; // TODO
         if (ATK.g_type_is_a (object.parentType, ATK_TEXT_TYPE)) {
             auto textIface = cast(AtkTextIface*)ATK.g_type_class_peek (object.parentType);
             if (textIface.get_character_at_offset !is null) {
@@ -659,7 +658,7 @@ class AccessibleObject {
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return 0;
         String text = object.getText ();
-        if (text !is null) return to!int(text.length);
+        if (text !is null) return cast(int)/*64bit*/text.length;
         if (ATK.g_type_is_a (object.parentType, ATK_TEXT_TYPE)) {
             auto textIface = cast(AtkTextIface*)ATK.g_type_class_peek (object.parentType);
             if (textIface.get_character_count !is null) {
@@ -674,7 +673,7 @@ class AccessibleObject {
         if (DEBUG) getDwtLogger().info( __FILE__, __LINE__, "-->atkText_get_n_selections");
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return 0;
-        ptrdiff_t parentResult = 0;
+        int parentResult = 0;
         if (ATK.g_type_is_a (object.parentType, ATK_TEXT_TYPE)) {
             auto textIface = cast(AtkTextIface*)ATK.g_type_interface_peek_parent (ATK.ATK_TEXT_GET_IFACE (object.handle));
             if (textIface.get_n_selections !is null) {
@@ -715,7 +714,7 @@ class AccessibleObject {
         parentStart= *start_offset;
         parentEnd= *end_offset;
         event.offset = parentStart;
-        event.length = parentEnd - parentStart;
+        event.length = (parentEnd - parentStart);
         for (int i = 0; i < listeners.length; i++) {
             listeners [i].getSelectionRange (event);
         }
@@ -732,13 +731,13 @@ class AccessibleObject {
         String text = object.getText ();
         if (text.length > 0) {
             if (end_offset is -1) {
-                end_offset = to!int(text.length);
+                end_offset = cast(int)/*64bit*/text.length;
             } else {
-                end_offset = to!int(Math.min (end_offset, text.length ));
+                end_offset = cast(int)/*64bit*/Math.min (end_offset, text.length );
             }
             start_offset = Math.min (start_offset, end_offset);
             text = text[ start_offset .. end_offset ];
-            auto result = cast(char*)OS.g_malloc (to!int(text.length+1));
+            auto result = cast(char*)OS.g_malloc (text.length+1);
             result[ 0 .. text.length ] = text;
             result[ text.length ] = '\0';
             return result;
@@ -754,11 +753,11 @@ class AccessibleObject {
         auto offset = offset_value;
         String text = object.getText ();
         if (text.length > 0) {
-            auto length = text.length ;
-            offset = to!int(Math.min (offset, length - 1));
-            ptrdiff_t startBounds = offset;
-            ptrdiff_t endBounds = offset;
-            switch (cast(int)/*64*/boundary_type) {
+            int length = cast(int)/*64bit*/text.length ;
+            offset = Math.min (offset, length - 1);
+            int startBounds = offset;
+            int endBounds = offset;
+            switch (boundary_type) {
                 case ATK.ATK_TEXT_BOUNDARY_CHAR: {
                     if (length > offset) endBounds++;
                     break;
@@ -792,7 +791,7 @@ class AccessibleObject {
                         startBounds = endBounds = length;
                         break;
                     }
-                    auto wordEnd1 = nextIndexOfChar (text, " !?.\n", cast(int)/*64*/offset);
+                    auto wordEnd1 = nextIndexOfChar (text, " !?.\n", offset);
                     if (wordEnd1 is -1) {
                         startBounds = endBounds = length;
                         break;
@@ -910,10 +909,10 @@ class AccessibleObject {
                 }
                 default:
             }
-            *start_offset=to!int(startBounds);
-            *end_offset=to!int(endBounds);
+            *start_offset=startBounds;
+            *end_offset=endBounds;
             text = text[startBounds .. endBounds ];
-            auto result = cast(char*)OS.g_malloc (to!int(text.length+1));
+            auto result = cast(char*)OS.g_malloc (text.length+1);
             result[ 0 .. text.length ] = text;
             result[ text.length ] = '\0';
             return result;
@@ -930,7 +929,7 @@ class AccessibleObject {
         String text = object.getText ();
         if (text.length > 0) {
             auto length = text.length;
-            offset = to!int(Math.min (offset, length - 1));
+            offset = cast(int)/*64bit*/Math.min (offset, length - 1);
             auto startBounds = offset;
             auto endBounds = offset;
             switch (boundary_type) {
@@ -1028,10 +1027,10 @@ class AccessibleObject {
                 }
                 default:
             }
-            *start_offset=to!int(startBounds);
-            *end_offset=to!int(endBounds);
+            *start_offset=startBounds;
+            *end_offset=endBounds;
             text = text[startBounds .. endBounds];
-            auto result = cast(char*) OS.g_malloc (to!int(text.length+1));
+            auto result = cast(char*) OS.g_malloc (text.length+1);
             result[ 0 .. text.length ] = text;
             result[ text.length ] = '\0';
             return result;
@@ -1048,7 +1047,7 @@ class AccessibleObject {
         String text = object.getText ();
         if (text.length > 0) {
             auto length = text.length;
-            offset = to!int(Math.min (offset, length - 1));
+            offset = cast(int)/*64bit*/Math.min (offset, length - 1);
             auto startBounds = offset;
             auto endBounds = offset;
             switch (boundary_type) {
@@ -1151,10 +1150,10 @@ class AccessibleObject {
                 }
                 default:
             }
-            *start_offset=to!int(startBounds);
-            *end_offset=to!int(endBounds);
+            *start_offset=startBounds;
+            *end_offset=endBounds;
             text = text[startBounds .. endBounds];
-            auto result = cast(char*)OS.g_malloc (to!int(text.length+1));
+            auto result = cast(char*)OS.g_malloc (text.length+1);
             result[ 0 .. text.length ] = text;
             result[ text.length ] = '\0';
             return result;
@@ -1206,7 +1205,7 @@ class AccessibleObject {
         String parentText = ""; //$NON-NLS-1$
         if (ATK.g_type_is_a (parentType, ATK_TEXT_TYPE)) {
             auto textIface = cast(AtkTextIface*)ATK.g_type_interface_peek_parent (ATK.ATK_TEXT_GET_IFACE (handle));
-            ptrdiff_t characterCount = 0;
+            int characterCount = 0;
             if (textIface.get_character_count !is null) {
                 characterCount = textIface.get_character_count( handle);
             }
@@ -1246,13 +1245,13 @@ class AccessibleObject {
     }
 
     static int nextIndexOfChar (String str, String searchChars, int startIndex) {
-        auto result = str.length;
-        for (ptrdiff_t i = 0; i < searchChars.length; i++) {
+        auto result = cast(int)/*64bit*/str.length;
+        for (int i = 0; i < searchChars.length; i++) {
             char current = searchChars[i];
             auto index = str.indexOf( current, startIndex );
             if (index !is -1 ) result = Math.min (result, index);
         }
-        return to!int(result);
+        return result;
     }
 
     static int nextIndexOfNotChar (String str, String searchChars, int startIndex) {
@@ -1267,26 +1266,26 @@ class AccessibleObject {
     }
 
     static int previousIndexOfChar (String str, String searchChars, int startIndex) {
-        ptrdiff_t result = -1;
-        if (startIndex < 0) return to!int(result);
+        int result = -1;
+        if (startIndex < 0) return result;
         str = str[0 .. startIndex];
         for (int i = 0; i < searchChars.length ; i++) {
             char current = searchChars[i];
             auto index = str.lastIndexOf( current);
             if (index !is -1 ) result = Math.max (result, index);
         }
-        return to!int(result);
+        return result;
     }
 
     static int previousIndexOfNotChar (String str, String searchChars, int startIndex) {
         if (startIndex < 0) return -1;
-        ptrdiff_t index = startIndex - 1;
+        int index = startIndex - 1;
         while (index >= 0) {
             char current = str[index];
             if ( searchChars.indexOf( current) is -1 ) break;
             index--;
         }
-        return to!int(index);
+        return index;
     }
 
     void release () {
@@ -1347,14 +1346,14 @@ class AccessibleObject {
             listeners [i].getChildren (event);
         }
         if (event.children !is null && event.children.length > 0) {
-            Vector idsToKeep = new Vector (to!int(children.size ()));
+            Vector idsToKeep = new Vector (children.size ());
             if ( null !is cast(Integer)event.children [0]) {
                 /*  an array of child id's (Integers) was answered */
-                ptrdiff_t parentType = AccessibleFactory.getDefaultParentType ();
+                int parentType = AccessibleFactory.getDefaultParentType ();
                 for (int i = 0; i < event.children.length; i++) {
                     AccessibleObject object = getChildByIndex (i);
                     if (object is null) {
-                        ptrdiff_t childType = AccessibleFactory.getChildType (accessible, i);
+                        int childType = AccessibleFactory.getChildType (accessible, i);
                         object = new AccessibleObject (childType, null, accessible, parentType, true);
                         AccessibleObjects[object.handle] = object;
                         addChild (object);

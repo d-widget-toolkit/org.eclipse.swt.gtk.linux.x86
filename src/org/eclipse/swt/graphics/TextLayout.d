@@ -37,7 +37,6 @@ version(Tango){
     import tango.text.convert.Utf;
 } else { // Phobos
     import std.c.string : memmove;
-    import std.conv;
 }
 
 /**
@@ -139,7 +138,7 @@ void computeRuns () {
     if (attrList !is null) return;
     String segmentsText = getSegmentsText();
     OS.pango_layout_set_text (layout, segmentsText.ptr,
-                              to!int(segmentsText.length));
+                              cast(int)/*64bit*/segmentsText.length);
     if (styles.length is 2 && styles[0].style is null && ascent is -1 && descent is -1 && segments is null) return;
     auto ptr = OS.pango_layout_get_text(layout);
     attrList = OS.pango_attr_list_new();
@@ -176,10 +175,10 @@ void computeRuns () {
             oldPos = pos;
             lineIndex++;
         }
-        segmentsText.getChars(oldPos, segementsLength, chars,  oldPos + lineIndex * 6);
+        segmentsText.getChars(oldPos, cast(int)/*64bit*/segementsLength, chars,  oldPos + lineIndex * 6);
         auto buffer = chars;// Converter.wcsToMbcs(null, chars, false);
 
-        OS.pango_layout_set_text (layout, buffer.ptr, to!int(buffer.length));
+        OS.pango_layout_set_text (layout, buffer.ptr, cast(int)/*64bit*/buffer.length);
         ptr = OS.pango_layout_get_text(layout);
     } else {
         chars = segmentsText.dup;
@@ -438,7 +437,7 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                 int bytePos = OS.pango_layout_iter_get_index(iter);
                 lineEnd = bytePos;//OS.g_utf8_pointer_to_offset(ptr, ptr + bytePos);
             } else {
-                lineEnd = OS.g_utf8_strlen(ptr, -1);
+                lineEnd = cast(int)/*64bit*/OS.g_utf8_strlen(ptr, -1);
             }
             bool extent = false;
             if (lineIndex is lineCount - 1 && (flags & SWT.LAST_LINE_SELECTION) !is 0) {
@@ -498,9 +497,9 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
             drawBorder(gc, x, y, null);
         }
     } else {
-        selectionStart = to!int(Math.min(Math.max
+        selectionStart = cast(int)/*64bit*/(Math.min(Math.max
                                          (0, selectionStart), length_ - 1));
-        selectionEnd = to!int(Math.min(Math.max
+        selectionEnd = cast(int)/*64bit*/(Math.min(Math.max
                                 (0, selectionEnd), length_ - 1));
         length_ = OS.g_utf8_strlen(OS.pango_layout_get_text(layout), -1);
         selectionStart = translateOffset(selectionStart);
@@ -548,7 +547,7 @@ public void draw(GC gc, int x, int y, int selectionStart, int selectionEnd, Colo
                 drawBorder(gc, x, y, null);
                 int[] ranges = [byteSelStart, byteSelEnd];
                 auto rgn = OS.gdk_pango_layout_get_clip_region(layout, x, y,
-                              ranges.ptr, to!int(ranges.length / 2));
+                              ranges.ptr, cast(int)/*64bit*/ranges.length / 2);
                 if (rgn !is null) {
                     OS.gdk_gc_set_clip_region(gc.handle, rgn);
                     OS.gdk_region_destroy(rgn);
@@ -571,9 +570,9 @@ void drawWithCairo(GC gc, int x, int y, int start, int end, bool fullSelection, 
         OS.pango_cairo_show_layout(cairo, layout);
         drawBorder(gc, x, y, null);
     }
-    auto ranges = [start, end];
+    int[] ranges = [start, end];
     auto rgn = OS.gdk_pango_layout_get_clip_region(layout, x, y, ranges.ptr,
-                                                   to!int(ranges.length / 2));
+                                                   cast(int)/*64bit*/ranges.length / 2);
     if (rgn !is null) {
         OS.gdk_cairo_region(cairo, rgn);
         Cairo.cairo_clip(cairo);
@@ -609,11 +608,11 @@ void drawBorder(GC gc, int x, int y, GdkColor* selectionColor) {
             }
             start = translateOffset(start);
             int end = translateOffset(styles[i+1].start - 1);
-            int byteStart = cast(int)/*64*/(OS.g_utf8_offset_to_pointer(ptr, start) - ptr);
-            int byteEnd = cast(int)/*64*/(OS.g_utf8_offset_to_pointer(ptr, end + 1) - ptr);
-            auto ranges = [byteStart, byteEnd];
+            int byteStart = cast(int)/*64bit*/(OS.g_utf8_offset_to_pointer(ptr, start) - ptr);
+            int byteEnd = cast(int)/*64bit*/(OS.g_utf8_offset_to_pointer(ptr, end + 1) - ptr);
+            int[] ranges = [byteStart, byteEnd];
             auto rgn = OS.gdk_pango_layout_get_clip_region(layout, x, y,
-                          ranges.ptr, to!int(ranges.length / 2));
+                          ranges.ptr, cast(int)/*64bit*/ranges.length / 2);
             if (rgn !is null) {
                 int nRects;
                 GdkRectangle* rects;
@@ -641,7 +640,7 @@ void drawBorder(GC gc, int x, int y, GdkColor* selectionColor) {
                             cairoDashes[j] = width is 0 || data.lineStyle is SWT.LINE_CUSTOM ? dashes[j] : dashes[j] * width;
                         }
                         Cairo.cairo_set_dash(cairo, cairoDashes.ptr,
-                                             to!int(cairoDashes.length), 0);
+                                             cast(int)/*64bit*/cairoDashes.length, 0);
                     } else {
                         Cairo.cairo_set_dash(cairo, null, 0, 0);
                     }
@@ -664,7 +663,7 @@ void drawBorder(GC gc, int x, int y, GdkColor* selectionColor) {
                         for (int j = 0; j < dash_list.length; j++) {
                             dash_list[j] = cast(byte)(width is 0 || data.lineStyle is SWT.LINE_CUSTOM ? dashes[j] : dashes[j] * width);
                         }
-                        OS.gdk_gc_set_dashes(gdkGC, 0, cast(char*)dash_list.ptr, to!int(dash_list.length));
+                        OS.gdk_gc_set_dashes(gdkGC, 0, cast(char*)dash_list.ptr, cast(int)/*64bit*/dash_list.length);
                         line_style = OS.GDK_LINE_ON_OFF_DASH;
                     } else {
                         line_style = OS.GDK_LINE_SOLID;
@@ -690,10 +689,10 @@ void drawBorder(GC gc, int x, int y, GdkColor* selectionColor) {
             }
             start = translateOffset(start);
             int end = translateOffset(styles[i+1].start - 1);
-            int byteStart = cast(int)/*64*/(OS.g_utf8_offset_to_pointer(ptr, start) - ptr);
-            int byteEnd = cast(int)/*64*/(OS.g_utf8_offset_to_pointer(ptr, end + 1) - ptr);
+            int byteStart = cast(int)/*64bit*/(OS.g_utf8_offset_to_pointer(ptr, start) - ptr);
+            int byteEnd = cast(int)/*64bit*/(OS.g_utf8_offset_to_pointer(ptr, end + 1) - ptr);
             int[] ranges = [byteStart, byteEnd];
-            auto rgn = OS.gdk_pango_layout_get_clip_region(layout, x, y, ranges.ptr, to!int(ranges.length / 2));
+            auto rgn = OS.gdk_pango_layout_get_clip_region(layout, x, y, ranges.ptr, cast(int)/*64bit*/ranges.length / 2);
             if (rgn !is null) {
                 int nRects;
                 GdkRectangle* rects;
@@ -737,7 +736,7 @@ void drawBorder(GC gc, int x, int y, GdkColor* selectionColor) {
                             int squigglyThickness = underlineThickness;
                             int squigglyHeight = 2 * squigglyThickness;
                             int squigglyY = Math.min(underlineY, rect.y + rect.height - squigglyHeight - 1);
-                            int[] points = computePolyline(rect.x, squigglyY, rect.x + rect.width, squigglyY + squigglyHeight);
+                            int[] points = computePolyline(rect.x, squigglyY, (rect.x + rect.width), squigglyY + squigglyHeight);
                             if (cairo !is null && OS.GTK_VERSION >= OS.buildVERSION(2, 8, 0)) {
                                 Cairo.cairo_set_line_width(cairo, squigglyThickness);
                                 Cairo.cairo_set_line_cap(cairo, Cairo.CAIRO_LINE_CAP_BUTT);
@@ -752,7 +751,7 @@ void drawBorder(GC gc, int x, int y, GdkColor* selectionColor) {
                                 }
                             } else {
                                 OS.gdk_gc_set_line_attributes(gdkGC, squigglyThickness, OS.GDK_LINE_SOLID, OS.GDK_CAP_BUTT, OS.GDK_JOIN_MITER);
-                                OS.gdk_draw_lines(data.drawable, gdkGC, cast(GdkPoint*)points.ptr, to!int(points.length / 2));
+                                OS.gdk_draw_lines(data.drawable, gdkGC, cast(GdkPoint*)points.ptr, cast(int)/*64bit*/points.length / 2);
                             }
                             break;
                         }
@@ -789,10 +788,10 @@ void drawBorder(GC gc, int x, int y, GdkColor* selectionColor) {
             }
             start = translateOffset(start);
             int end = translateOffset(styles[i+1].start - 1);
-            int byteStart = cast(int)/*64*/(OS.g_utf8_offset_to_pointer(ptr, start) - ptr);
-            int byteEnd = cast(int)/*64*/(OS.g_utf8_offset_to_pointer(ptr, end + 1) - ptr);
+            int byteStart = cast(int)/*64bit*/(OS.g_utf8_offset_to_pointer(ptr, start) - ptr);
+            int byteEnd = cast(int)/*64bit*/(OS.g_utf8_offset_to_pointer(ptr, end + 1) - ptr);
             int[] ranges = [byteStart, byteEnd];
-            auto rgn = OS.gdk_pango_layout_get_clip_region(layout, x, y, ranges.ptr, to!int(ranges.length / 2));
+            auto rgn = OS.gdk_pango_layout_get_clip_region(layout, x, y, ranges.ptr, cast(int)/*64bit*/ranges.length / 2);
             if (rgn !is null) {
                 int nRects;
                 GdkRectangle* rects;
@@ -954,8 +953,8 @@ public Rectangle getBounds(int start, int end) {
     auto length_ = text.length;
     if (length_ is 0) return new Rectangle(0, 0, 0, 0);
     if (start > end) return new Rectangle(0, 0, 0, 0);
-    start = to!int(Math.min(Math.max(0, start), length_ - 1));
-    end = to!int(Math.min(Math.max(0, end), length_ - 1));
+    start = cast(int)/*64bit*/Math.min(Math.max(0, start), length_ - 1);
+    end = cast(int)/*64bit*/Math.min(Math.max(0, end), length_ - 1);
     start = translateOffset(start);
     end = translateOffset(end);
     auto ptr = OS.pango_layout_get_text(layout);
@@ -964,18 +963,18 @@ public Rectangle getBounds(int start, int end) {
     UTF8index longEnd = end;
     cont.adjustUTF8index( longStart );
     cont.adjustUTF8index( longEnd );
-    start = to!int(longStart);
-    end = to!int(longEnd);
-    ptrdiff_t incr = 1;
+    start = cast(int)/*64bit*/longStart;
+    end = cast(int)/*64bit*/longEnd;
+    int incr = 1;
     if( end < cont.length ){
-        incr = cont.UTF8strideAt(end);
+        incr = cast(int)cont.UTF8strideAt(end);
     }
     auto byteStart = start;//(OS.g_utf8_offset_to_pointer (ptr, start) - ptr);
     auto byteEnd = end + incr;//(OS.g_utf8_offset_to_pointer (ptr, end + 1) - ptr);
     auto slen = OS.strlen(ptr);
     byteStart = Math.min(byteStart, slen);
     byteEnd = Math.min(byteEnd, slen);
-    int[] ranges = [to!int(byteStart), to!int(byteEnd)];
+    int[] ranges = [byteStart, byteEnd];
     auto clipRegion = OS.gdk_pango_layout_get_clip_region(layout, 0, 0, ranges.ptr, 1);
     if (clipRegion is null) return new Rectangle(0, 0, 0, 0);
     GdkRectangle rect;
@@ -1273,10 +1272,10 @@ public int[] getLineOffsets() {
     auto ptr = OS.pango_layout_get_text(layout);
     for (int i = 0; i < lineCount; i++) {
         auto line = OS.pango_layout_get_line(layout, i);
-        int pos = cast(int)/*64*/OS.g_utf8_pointer_to_offset(ptr, ptr + line.start_index);
+        int pos = cast(int)/*64bit*/OS.g_utf8_pointer_to_offset(ptr, ptr + line.start_index);
         offsets[i] = untranslateOffset(pos);
     }
-    offsets[lineCount] = to!int(text.length);
+    offsets[lineCount] = cast(int)/*64bit*/text.length;
     return offsets;
 }
 
@@ -1307,8 +1306,8 @@ public Point getLocation(int offset, bool trailing) {
     ptrdiff_t longOffset = offset;
     cont.adjustUTF8index(longOffset);
     // leading ZWS+ZWNBS are 2 codepoints in 6 bytes, so we miss 4 bytes here
-    int byteOffset = to!int(longOffset);//(OS.g_utf8_offset_to_pointer(ptr, offset) - ptr);
-    int slen = to!int(cont.length);
+    int byteOffset = cast(int)/*64bit*/longOffset;//(OS.g_utf8_offset_to_pointer(ptr, offset) - ptr);
+    int slen = cast(int)/*64bit*/cont.length;
     byteOffset = Math.min(byteOffset, slen);
     PangoRectangle* pos = new PangoRectangle();
     OS.pango_layout_index_to_pos(layout, byteOffset, pos);
@@ -1350,7 +1349,7 @@ int _getOffset (int offset, int movement, bool forward) {
     auto length_ = text.length;
     if (!(0 <= offset && offset <= length_)) SWT.error(SWT.ERROR_INVALID_RANGE);
     if (forward) {
-        if (offset is length_) return to!int(length_);
+        if (offset is length_) return cast(int)/*64bit*/length_;
     } else {
         if (offset is 0) return 0;
     }
@@ -1362,7 +1361,7 @@ int _getOffset (int offset, int movement, bool forward) {
         //PORTING take care of utf8
         ptrdiff_t toffset = translateOffset(offset);
         dcont.adjustUTF8index( toffset );
-        int incr = to!int(dcont.toUTF8shift(toffset, step));
+        int incr = cast(int)/*64bit*/dcont.toUTF8shift(toffset, step);
         return offset + incr;
     }
     PangoLogAttr* attrs;
@@ -1374,7 +1373,7 @@ int _getOffset (int offset, int movement, bool forward) {
     offset = translateOffset(offset);
     ptrdiff_t longOffset = offset;
     dcont.adjustUTF8index( longOffset );
-    offset = to!int(longOffset);
+    offset = cast(int)/*64bit*/longOffset;
 
     PangoLogAttr* logAttr;
     offset = validateOffset( dcont, offset, step);
@@ -1398,8 +1397,8 @@ int _getOffset (int offset, int movement, bool forward) {
         offset = validateOffset( dcont, offset, step);
     }
     OS.g_free(attrs);
-    return to!int(Math.min(Math.max
-                           (0,untranslateOffset(offset)), text.length));
+    return cast(int)/*64bit*/Math.min(Math.max
+                           (0, untranslateOffset(offset)), text.length);
 }
 
 /**
@@ -1506,7 +1505,7 @@ public int getOffset(int x, int y, int[] trailing) {
  */
 public int getOrientation() {
     checkLayout();
-    int baseDir = OS.pango_context_get_base_dir(context);
+    ptrdiff_t baseDir = OS.pango_context_get_base_dir(context);
     return baseDir is OS.PANGO_DIRECTION_RTL ? SWT.RIGHT_TO_LEFT : SWT.LEFT_TO_RIGHT;
 }
 
@@ -1989,14 +1988,14 @@ public void setStyle (TextStyle style, int start, int end) {
     auto length_ = text.length;
     if (length_ is 0) return;
     if (start > end) return;
-    start = to!int(Math.min(Math.max(0, start), length_ - 1));
-    end = to!int(Math.min(Math.max(0, end), length_ - 1));
+    start = cast(int)/*64bit*/Math.min(Math.max(0, start), length_ - 1);
+    end = cast(int)/*64bit*/Math.min(Math.max(0, end), length_ - 1);
     ptrdiff_t longStart = start;
     ptrdiff_t longEnd = end;
     text.adjustUTF8index( longStart );
     text.adjustUTF8index( longEnd );
-    start = to!int(longStart);
-    end = to!int(longEnd);
+    start = cast(int)/*64bit*/longStart;
+    end = cast(int)/*64bit*/longEnd;
 
 
     /*
@@ -2010,11 +2009,11 @@ public void setStyle (TextStyle style, int start, int end) {
         start += text.offsetBefore(start);
     }
     if ((end < length_ - 1) && isLam(text.dcharAt(end)) && isAlef(text.dcharAfter(end))) {
-        end = to!int(text.offsetAfter(end));
+        end = cast(int)/*64bit*/text.offsetAfter(end);
     }
 
     int low = -1;
-    int high = to!int(styles.length);
+    int high = cast(int)/*64bit*/styles.length;
     while (high - low > 1) {
         auto index = (high + low) / 2;
         if (styles[index + 1].start > start) {
@@ -2104,7 +2103,7 @@ public void setTabs(int[] tabs) {
     if (tabs is null) {
         OS.pango_layout_set_tabs(layout, device.emptyTab);
     } else {
-        auto tabArray = OS.pango_tab_array_new(to!int(tabs.length), true);
+        auto tabArray = OS.pango_tab_array_new(cast(int)/*64bit*/tabs.length, true);
         if (tabArray !is null) {
             for (int i = 0; i < tabs.length; i++) {
                 OS.pango_tab_array_set_tab(tabArray, i, OS.PANGO_TAB_LEFT, tabs[i]);
@@ -2138,7 +2137,7 @@ public void setText (String text) {
     styles = new StyleItem[2];
     styles[0] = new StyleItem();
     styles[1] = new StyleItem();
-    styles[styles.length - 1].start = to!int(text.length);
+    styles[styles.length - 1].start = cast(int)/*64bit*/text.length;
 }
 
 /**
@@ -2233,7 +2232,7 @@ int untranslateOffset(int offset) {
             return offset - i;
         }
     }
-    return to!int(offset - invalidOffsets.length);
+    return cast(int)/*64bit*/(offset - invalidOffsets.length);
 }
 
 int validateOffset( in char[] cont, int offset, int step) {

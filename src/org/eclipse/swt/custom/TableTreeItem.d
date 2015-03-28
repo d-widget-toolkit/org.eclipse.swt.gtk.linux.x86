@@ -29,8 +29,6 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swt.custom.TableTree;
 import java.lang.all;
 
-import std.conv;
-
 
 /**
  * A TableTreeItem is a selectable user interface object
@@ -438,7 +436,7 @@ public TableTreeItem getItem (int index) {
  */
 public int getItemCount () {
     //checkWidget();
-    return to!int(items.length);
+    return cast(int)/*64bit*/items.length;
 }
 
 /**

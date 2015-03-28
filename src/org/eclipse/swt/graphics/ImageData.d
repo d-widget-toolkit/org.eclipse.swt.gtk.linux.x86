@@ -23,8 +23,6 @@ import org.eclipse.swt.SWT;
 import org.eclipse.swt.internal.CloneableCompatibility;
 import java.lang.all;
 
-import std.conv;
-
 public import java.io.InputStream;
 
 
@@ -2333,7 +2331,7 @@ static void blit(int op,
     int ap = apr;
     int destPaletteSize = 1 << destDepth;
     if ((destReds !is null) && (destReds.length < destPaletteSize))
-        destPaletteSize = to!int(destReds.length);
+        destPaletteSize = cast(int)/*64bit*/destReds.length;
     byte[] paletteMapping = null;
     bool isExactPaletteMapping = true;
     switch (alphaMode) {
@@ -2362,7 +2360,7 @@ static void blit(int op,
             int srcPaletteSize = 1 << srcDepth;
             paletteMapping = new byte[srcPaletteSize];
             if ((srcReds !is null) && (srcReds.length < srcPaletteSize))
-                srcPaletteSize = to!int(srcReds.length);
+                srcPaletteSize = cast(int)/*64bit*/srcReds.length;
             for (int i = 0, r, g, b, index; i < srcPaletteSize; ++i) {
                 r = srcReds[i] & 0xff;
                 g = srcGreens[i] & 0xff;
@@ -3237,7 +3235,7 @@ static void blit(int op,
     int[] rerr, gerr, berr;
     int destPaletteSize = 1 << destDepth;
     if ((destReds !is null) && (destReds.length < destPaletteSize))
-        destPaletteSize = to!int(destReds.length);
+        destPaletteSize = cast(int)/*64bit*/destReds.length;
     if (ditherEnabled) {
         rerr = new int[destWidth + 2];
         gerr = new int[destWidth + 2];

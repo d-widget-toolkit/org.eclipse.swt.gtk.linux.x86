@@ -40,8 +40,6 @@ import java.lang.all;
 
 import java.lang.Thread;
 
-import std.conv;
-
 /**
  *
  * <code>DragSource</code> defines the source object for a drag and drop transfer.
@@ -263,7 +261,7 @@ private static extern(C) void DragGetData(
 {
     DragSource source = FindDragSource(widget);
     if (source is null) return;
-    source.dragGetData(widget, context, selection_data, cast(int)/*64*/info, cast(int)/*64*/time);
+    source.dragGetData(widget, context, selection_data, info, time);
     return;
 }
 
@@ -525,7 +523,7 @@ int opToOsOp(int operation){
     return osOperation;
 }
 
-int osOpToOp(int osOperation){
+int osOpToOp(ptrdiff_t osOperation){
     int operation = DND.DROP_NONE;
 
     if ((osOperation & OS.GDK_ACTION_COPY) is OS.GDK_ACTION_COPY)
@@ -600,25 +598,24 @@ public void setTransfer(Transfer[] transferAgents){
             for (int j = 0; j < typeIds.length; j++) {
                 GtkTargetEntry* entry = new GtkTargetEntry();
                 String type = typeNames[j];
-                entry.target = cast(char*)OS.g_malloc(to!uint(type.length+1));
+                entry.target = cast(char*)OS.g_malloc(type.length+1);
                 entry.target[ 0 .. type.length ] = type[];
                 entry.target[ type.length ] = '\0';
                 entry.info = typeIds[j];
                 GtkTargetEntry*[] newTargets = new GtkTargetEntry*[targets.length + 1];
                 SimpleType!(GtkTargetEntry*).arraycopy(targets, 0, newTargets,
-                                             0, to!uint(targets.length));
+                                             0, targets.length);
                 newTargets[targets.length] = entry;
                 targets = newTargets;
             }
         }
     }
 
-    void* pTargets = OS.g_malloc(to!uint(
-                                 targets.length * GtkTargetEntry.sizeof));
+    void* pTargets = OS.g_malloc(targets.length * GtkTargetEntry.sizeof);
     for (int i = 0; i < targets.length; i++) {
         OS.memmove(pTargets + i*GtkTargetEntry.sizeof, targets[i], GtkTargetEntry.sizeof);
     }
-    targetList = OS.gtk_target_list_new(pTargets, to!uint(targets.length));
+    targetList = OS.gtk_target_list_new(pTargets, cast(int)/*64bit*/targets.length);
 
     for (int i = 0; i < targets.length; i++) {
         OS.g_free(targets[i].target);
@@ -638,10 +635,10 @@ static GdkDrawable* createPixbuf(Image image) {
         auto maskPixbuf = OS.gdk_pixbuf_new(OS.GDK_COLORSPACE_RGB, false, 8, w , h );
         if (maskPixbuf is null) SWT.error (SWT.ERROR_NO_HANDLES);
         OS.gdk_pixbuf_get_from_drawable(maskPixbuf, image.mask, null, 0, 0, 0, 0, w , h );
-        int stride = OS.gdk_pixbuf_get_rowstride(pixbuf);
+        ptrdiff_t stride = OS.gdk_pixbuf_get_rowstride(pixbuf);
         auto pixels = OS.gdk_pixbuf_get_pixels(pixbuf);
         byte[] line = new byte[stride];
-        int maskStride = OS.gdk_pixbuf_get_rowstride(maskPixbuf);
+        ptrdiff_t maskStride = OS.gdk_pixbuf_get_rowstride(maskPixbuf);
         auto maskPixels = OS.gdk_pixbuf_get_pixels(maskPixbuf);
         byte[] maskLine = new byte[maskStride];
         for (int y=0; y<h; y++) {
@@ -665,7 +662,7 @@ static GdkDrawable* createPixbuf(Image image) {
         OS.gdk_pixbuf_get_from_drawable (pixbuf, image.pixmap, colormap, 0, 0, 0, 0, w , h );
         if (hasAlpha) {
             byte [] alpha = data.alphaData;
-            int stride = OS.gdk_pixbuf_get_rowstride (pixbuf);
+            ptrdiff_t stride = OS.gdk_pixbuf_get_rowstride (pixbuf);
             auto pixels = OS.gdk_pixbuf_get_pixels (pixbuf);
             byte [] line = new byte [stride];
             for (int y = 0; y < h ; y++) {

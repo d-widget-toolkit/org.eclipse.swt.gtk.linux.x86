@@ -18,8 +18,6 @@ import org.eclipse.swt.internal.image.WinBMPFileFormat;
 import org.eclipse.swt.SWT;
 import java.lang.all;
 
-import std.conv;
-
 public final class WinICOFileFormat : FileFormat {
 
 byte[] bitInvertData(byte[] data, int startIndex, int endIndex) {
@@ -53,7 +51,7 @@ int iconSize(ImageData i) {
     int maskDataStride = (i.width + 31) / 32 * 4;
     int dataSize = (shapeDataStride + maskDataStride) * i.height;
     int paletteSize = i.palette.colors !is null
-        ? to!int(i.palette.colors.length * 4) : 0;
+        ? cast(int)/*64bit*/i.palette.colors.length * 4 : 0;
     return WinBMPFileFormat.BMPHeaderFixedSize + paletteSize + dataSize;
 }
 override bool isFileFormat(LEDataInputStream stream) {
@@ -72,7 +70,7 @@ bool isValidIcon(ImageData i) {
         case 4:
         case 8:
             if (i.palette.isDirect) return false;
-            int size = to!int(i.palette.colors.length);
+            int size = cast(int)/*64bit*/i.palette.colors.length;
             return size is 2 || size is 16 || size is 32 || size is 256;
         case 24:
         case 32:
@@ -144,7 +142,7 @@ ImageData loadIcon(int[] iconHeader) {
     infoHeader[15] = 0;
     byte[] maskData = bmpFormat.loadData(infoHeader);
     maskData = convertPad(maskData, width, height, 1, 4, 2);
-    bitInvertData(maskData, 0, to!int(maskData.length));
+    bitInvertData(maskData, 0, cast(int)/*64bit*/maskData.length);
     return ImageData.internal_new(
         width,
         height,
@@ -167,8 +165,8 @@ int[][] loadIconHeaders(int numIcons) {
     int[][] headers = new int[][]( numIcons, 7 );
     try {
         for (int i = 0; i < numIcons; i++) {
-            headers[i][0] = to!int(inputStream.read());
-            headers[i][1] = to!int(inputStream.read());
+            headers[i][0] = cast(int)/*64bit*/inputStream.read();
+            headers[i][1] = cast(int)/*64bit*/inputStream.read();
             headers[i][2] = inputStream.readShort();
             headers[i][3] = inputStream.readShort();
             headers[i][4] = inputStream.readShort();
@@ -235,7 +233,7 @@ void unloadIcon(ImageData icon) {
         outputStream.writeInt(0);
         outputStream.writeInt(0);
         outputStream.writeInt(icon.palette.colors !is null
-                              ? to!int(icon.palette.colors.length) : 0);
+                              ? cast(int)/*64bit*/icon.palette.colors.length : 0);
         outputStream.writeInt(0);
     } catch (IOException e) {
         SWT.error(SWT.ERROR_IO, e);
@@ -261,7 +259,7 @@ void unloadIconHeader(ImageData i) {
         outputStream.write(i.width);
         outputStream.write(i.height);
         outputStream.writeShort(i.palette.colors !is null
-                                ? to!int(i.palette.colors.length) : 0);
+                                ? cast(int)/*64bit*/i.palette.colors.length : 0);
         outputStream.writeShort(0);
         outputStream.writeShort(0);
         outputStream.writeInt(iconSize);

@@ -142,7 +142,7 @@ abstract public Object nativeToJava(TransferData transferData);
 public static int registerType(String formatName){
     if (formatName is null) return OS.GDK_NONE;
     char* buffer = toStringz( formatName );
-    return cast(int)/*64*/OS.gdk_atom_intern(buffer, false);
+    return cast(int)/*64bit*/OS.gdk_atom_intern(buffer, false);
 }
 
 /**

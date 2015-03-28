@@ -45,7 +45,6 @@ import org.eclipse.swt.widgets.Widget;
 version(Tango){
 import Unicode = tango.text.Unicode;
 } else { // Phobos
-    import std.conv;
 }
 
 /**
@@ -636,7 +635,7 @@ override void createHandle (int index) {
             if ((style & SWT.ON_TOP) !is 0) type = OS.GTK_WINDOW_POPUP;
             shellHandle = cast(GtkWidget*)OS.gtk_window_new (type);
         } else {
-            shellHandle = cast(GtkWidget*) OS.gtk_plug_new (cast(uint)handle);
+            shellHandle = cast(GtkWidget*) OS.gtk_plug_new (handle);
         }
         if (shellHandle is null) error (SWT.ERROR_NO_HANDLES);
         if (parent !is null) {
@@ -697,7 +696,7 @@ override void createHandle (int index) {
     OS.gtk_widget_realize (shellHandle);
 }
 
-override ptrdiff_t filterProc ( XEvent* xEvent, GdkEvent* gdkEvent, void* data2) {
+override int filterProc ( XEvent* xEvent, GdkEvent* gdkEvent, void* data2) {
     int eventType = OS.X_EVENT_TYPE (xEvent);
     if (eventType !is OS.FocusOut && eventType !is OS.FocusIn) return 0;
     XFocusChangeEvent* xFocusEvent = cast(XFocusChangeEvent*)xEvent;
@@ -932,7 +931,7 @@ Shell getModalShell () {
     Shell [] modalShells = display.modalShells;
     if (modalShells !is null) {
         int bits = SWT.APPLICATION_MODAL | SWT.SYSTEM_MODAL;
-        int index = to!int(modalShells.length);
+        ptrdiff_t index = modalShells.length;
         while (--index >= 0) {
             Shell modal = modalShells [index];
             if (modal !is null) {
@@ -1053,7 +1052,7 @@ public Shell [] getShells () {
     return result;
 }
 
-override ptrdiff_t gtk_configure_event (GtkWidget* widget, ptrdiff_t event) {
+override int gtk_configure_event (GtkWidget* widget, ptrdiff_t event) {
     int x, y;
     OS.gtk_window_get_position (cast(GtkWindow*)shellHandle, &x, &y);
     if (!moved || oldX !is x || oldY !is y) {
@@ -1066,20 +1065,20 @@ override ptrdiff_t gtk_configure_event (GtkWidget* widget, ptrdiff_t event) {
     return 0;
 }
 
-override ptrdiff_t gtk_delete_event (GtkWidget* widget, ptrdiff_t event) {
+override int gtk_delete_event (GtkWidget* widget, ptrdiff_t event) {
     if (isEnabled()) closeWidget ();
     return 1;
 }
 
-override ptrdiff_t gtk_enter_notify_event (GtkWidget* widget, GdkEventCrossing* event) {
+override int gtk_enter_notify_event (GtkWidget* widget, GdkEventCrossing* event) {
     if (widget !is shellHandle) {
         return super.gtk_enter_notify_event (widget, event);
     }
     return 0;
 }
 
-override ptrdiff_t gtk_focus (GtkWidget* widget, int directionType) {
-    switch (cast(int)/*64*/directionType) {
+override int gtk_focus (GtkWidget* widget, ptrdiff_t directionType) {
+    switch (directionType) {
         case OS.GTK_DIR_TAB_FORWARD:
         case OS.GTK_DIR_TAB_BACKWARD:
             Control control = display.getFocusControl ();
@@ -1096,17 +1095,17 @@ override ptrdiff_t gtk_focus (GtkWidget* widget, int directionType) {
     return super.gtk_focus (widget, directionType);
 }
 
-override ptrdiff_t gtk_move_focus (GtkWidget* widget, int directionType) {
+override int gtk_move_focus (GtkWidget* widget, ptrdiff_t directionType) {
     Control control = display.getFocusControl ();
     if (control !is null) {
         auto focusHandle = control.focusHandle ();
-        OS.gtk_widget_child_focus (focusHandle, directionType);
+        OS.gtk_widget_child_focus (focusHandle, cast(int)/*64bit*/directionType);
     }
     OS.g_signal_stop_emission_by_name (shellHandle, OS.move_focus.ptr );
     return 1;
 }
 
-override ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
+override int gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
     /* Stop menu mnemonics when the shell is disabled */
     if (widget is shellHandle) {
         return (state & DISABLED) !is 0 ? 1 : 0;
@@ -1114,7 +1113,7 @@ override ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
     return super.gtk_key_press_event (widget, event);
 }
 
-override ptrdiff_t gtk_size_allocate (GtkWidget* widget, ptrdiff_t allocation) {
+override int gtk_size_allocate (GtkWidget* widget, ptrdiff_t allocation) {
     int width = OS.GTK_WIDGET_WIDTH (shellHandle);
     int height = OS.GTK_WIDGET_HEIGHT (shellHandle);
     if (!resized || oldWidth !is width || oldHeight !is height) {
@@ -1125,7 +1124,7 @@ override ptrdiff_t gtk_size_allocate (GtkWidget* widget, ptrdiff_t allocation) {
     return 0;
 }
 
-override ptrdiff_t gtk_realize (GtkWidget* widget) {
+override int gtk_realize (GtkWidget* widget) {
     auto result = super.gtk_realize (widget);
     auto window = OS.GTK_WIDGET_WINDOW (shellHandle);
     if ((style & SWT.SHELL_TRIM) !is SWT.SHELL_TRIM) {
@@ -1153,7 +1152,7 @@ override ptrdiff_t gtk_realize (GtkWidget* widget) {
     return result;
 }
 
-override ptrdiff_t gtk_window_state_event (GtkWidget* widget, GdkEventWindowState* event) {
+override int gtk_window_state_event (GtkWidget* widget, GdkEventWindowState* event) {
     minimized = (event.new_window_state & OS.GDK_WINDOW_STATE_ICONIFIED) !is 0;
     maximized = (event.new_window_state & OS.GDK_WINDOW_STATE_MAXIMIZED) !is 0;
     fullScreen = (event.new_window_state & OS.GDK_WINDOW_STATE_FULLSCREEN) !is 0;
@@ -1272,7 +1271,7 @@ void setActiveControl (Control control) {
     Control [] activate = (control is null) ? new Control[0] : control.getPath ();
     Control [] deactivate = (lastActive is null) ? new Control[0] : lastActive.getPath ();
     lastActive = control;
-    int index = 0, length = to!int(Math.min (activate.length, deactivate.length));
+    ptrdiff_t index = 0, length = Math.min (activate.length, deactivate.length);
     while (index < length) {
         if (activate [index] !is deactivate [index]) break;
         index++;
@@ -1284,12 +1283,12 @@ void setActiveControl (Control control) {
     * this happens, keep processing those widgets that
     * are not disposed.
     */
-    for (int i=to!int(deactivate.length-1); i>=index; --i) {
+    for (ptrdiff_t i=deactivate.length-1; i>=index; --i) {
         if (!deactivate [i].isDisposed ()) {
             deactivate [i].sendEvent (SWT.Deactivate);
         }
     }
-    for (int i=to!int(activate.length-1); i>=index; --i) {
+    for (ptrdiff_t i=activate.length-1; i>=index; --i) {
         if (!activate [i].isDisposed ()) {
             activate [i].sendEvent (SWT.Activate);
         }
@@ -1665,10 +1664,10 @@ public override void setText (String string) {
     * garbage after the last character in  the title.
     * The fix is to pad the title.
     */
-    int length_ = to!int(string.length);
+    ptrdiff_t length_ = string.length;
     char [] chars = new char [Math.max (6, length_) + 1];
     chars[ 0 .. length_ ] = string[ 0 .. length_];
-    for (int i=length_; i<chars.length; i++)  chars [i] = ' ';
+    for (ptrdiff_t i=length_; i<chars.length; i++)  chars [i] = ' ';
     OS.gtk_window_set_title (cast(GtkWindow*)shellHandle, toStringz( chars ) );
 }
 
@@ -1778,7 +1777,7 @@ override void setZOrder (Control sibling, bool above, bool fixRelations) {
     if (mapped) setZOrder (sibling, above, false, false);
 }
 
-override ptrdiff_t shellMapProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
+override int shellMapProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
     mapped = true;
     display.dispatchEvents = null;
     return 0;
@@ -1793,7 +1792,7 @@ void showWidget () {
     if (vboxHandle !is null) OS.gtk_widget_show (vboxHandle);
 }
 
-override ptrdiff_t sizeAllocateProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
+override int sizeAllocateProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
     int offset = 16;
     int x, y;
     OS.gdk_window_get_pointer (null, &x, &y, null);
@@ -1816,7 +1815,7 @@ override ptrdiff_t sizeAllocateProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_
     return 0;
 }
 
-override ptrdiff_t sizeRequestProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
+override int sizeRequestProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
     OS.gtk_widget_hide (handle);
     return 0;
 }
@@ -2111,7 +2110,7 @@ void setToolTipText (GtkWidget* rootWidget, GtkWidget* tipWidget, String string)
                         * and before the new tooltip is forced to be active.
                         */
                         set = false;
-                        int handler_id = display.doSizeRequestConnect( &sizeRequestProcCallbackData, tipWindow, shellHandle );
+                        auto handler_id = display.doSizeRequestConnect( &sizeRequestProcCallbackData, tipWindow, shellHandle );
                         OS.gtk_tooltips_set_tip (cast(GtkTooltips*)tooltipsHandle, tipWidget, buffer, null);
                         OS.gtk_widget_hide (tipWindow);
                         auto data = OS.gtk_tooltips_data_get (tipWidget);

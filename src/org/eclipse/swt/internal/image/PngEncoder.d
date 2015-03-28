@@ -25,8 +25,6 @@ import org.eclipse.swt.graphics.RGB;
 import org.eclipse.swt.internal.Compatibility;
 import org.eclipse.swt.internal.image.PngChunk;
 
-import std.conv;
-
 final class PngEncoder {
 
     static const byte SIGNATURE[] = [cast(byte) '\211', cast(byte) 'P', cast(byte) 'N', cast(byte) 'G', cast(byte) '\r', cast(byte) '\n', cast(byte) '\032', cast(byte) '\n'];
@@ -97,7 +95,7 @@ void writeInt(ByteArrayOutputStream baos, int theInt) {
 
 void writeChunk(in byte[] tag, in byte[] buffer) {
 
-    int bufferLength = (buffer !is null) ? to!int(buffer.length) : 0;
+    int bufferLength = (buffer !is null) ? cast(int)/*64bit*/buffer.length : 0;
 
     chunk = new PngChunk(bufferLength);
 
@@ -143,7 +141,7 @@ void writePalette() {
 
     if (RGBs.length > 256) SWT.error(SWT.ERROR_INVALID_IMAGE);
 
-    ByteArrayOutputStream baos = new ByteArrayOutputStream(to!int(RGBs.length));
+    ByteArrayOutputStream baos = new ByteArrayOutputStream(cast(int)/*64bit*/RGBs.length);
 
     for (int i = 0; i < RGBs.length; i++) {
 

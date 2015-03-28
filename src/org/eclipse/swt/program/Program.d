@@ -239,10 +239,10 @@ static int getDesktop(Display display) {
 
     /* Get the list of properties on the root window. */
     void* xDisplay = OS.GDK_DISPLAY();
-    uint rootWindow = OS.XDefaultRootWindow(xDisplay);
+    size_t rootWindow = OS.XDefaultRootWindow(xDisplay);
     int numProp;
-    uint* propList = OS.XListProperties(xDisplay, rootWindow, &numProp);
-    uint[] property = new uint[numProp];
+    size_t* propList = OS.XListProperties(xDisplay, rootWindow, &numProp);
+    size_t[] property = new size_t[numProp];
     if (propList !is null) {
         property[ 0 .. numProp ] = propList[ 0 .. numProp ];
         OS.XFree(propList);

@@ -38,8 +38,6 @@ import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.swt.custom.TableTreeItem;
 import java.lang.all;
 
-import std.conv;
-
 /**
  * A TableTree is a selectable user interface object
  * that displays a hierarchy of items, and issues
@@ -303,7 +301,7 @@ public override Font getFont () {
  */
 public int getItemCount () {
     //checkWidget();
-    return to!int(items.length);
+    return cast(int)/*64bit*/items.length;
 }
 
 /**
@@ -521,7 +519,7 @@ void onSelection(Event e) {
  */
 public TableTreeItem getItem (int index) {
     checkWidget();
-    int count = to!int(items.length);
+    int count = cast(int)/*64bit*/items.length;
     if (!(0 <= index && index < count)) SWT.error (SWT.ERROR_INVALID_RANGE);
     return items [index];
 }
@@ -779,7 +777,7 @@ public void setSelection (TableTreeItem[] items) {
     checkWidget ();
     // SWT extension: allow null for zero length string
     //if (items is null) SWT.error (SWT.ERROR_NULL_ARGUMENT);
-    int length = to!int(items.length);
+    int length = cast(int)/*64bit*/items.length;
     if (length is 0 || ((table.getStyle() & SWT.SINGLE) !is 0 && length > 1)) {
         deselectAll();
         return;

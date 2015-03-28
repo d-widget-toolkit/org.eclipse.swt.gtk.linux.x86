@@ -23,8 +23,6 @@ import org.eclipse.swt.widgets.Widget;
 import org.eclipse.swt.widgets.Canvas;
 import org.eclipse.swt.widgets.Event;
 
-import std.conv;
-
 /**
  * Instances of this class represent input method editors.
  * These are typically in-line pre-edit text areas that allow
@@ -249,14 +247,14 @@ public bool getWideCaret () {
     return false;
 }
 
-override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
+override int gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
     if (!isInlineEnabled ()) return 0;
     auto imHandle_ = imHandle ();
     if (imHandle_ !is null) OS.gtk_im_context_reset (imHandle_);
     return 0;
 }
 
-override ptrdiff_t gtk_commit (GtkIMContext* imcontext, char* textPtr) {
+override int gtk_commit (GtkIMContext* imcontext, char* textPtr) {
     if (!isInlineEnabled ()) return 0;
     bool doit = true;
     ranges = null;
@@ -269,9 +267,9 @@ override ptrdiff_t gtk_commit (GtkIMContext* imcontext, char* textPtr) {
             Event event = new Event();
             event.detail = SWT.COMPOSITION_CHANGED;
             event.start = startOffset;
-            event.end = to!int(startOffset + text.length);
+            event.end = cast(int)/*64bit*/(startOffset + text.length);
             event.text = text = chars !is null ? chars : "";
-            commitCount = to!int(text.length);
+            commitCount = cast(int)/*64bit*/text.length;
             sendEvent (SWT.ImeComposition, event);
             doit = event.doit;
             text = "";
@@ -283,7 +281,7 @@ override ptrdiff_t gtk_commit (GtkIMContext* imcontext, char* textPtr) {
     return doit ? 0 : 1;
 }
 
-override ptrdiff_t gtk_preedit_changed (GtkIMContext* imcontext) {
+override int gtk_preedit_changed (GtkIMContext* imcontext) {
     if (!isInlineEnabled ()) return 0;
     ranges = null;
     styles = null;
@@ -312,8 +310,8 @@ override ptrdiff_t gtk_preedit_changed (GtkIMContext* imcontext) {
             int end;
             for (int i = 0; i < count; i++) {
                 OS.pango_attr_iterator_range (iterator, &start, &end);
-                ranges [i * 2] = cast(int)/*64*/OS.g_utf8_pointer_to_offset (preeditString, preeditString + start);
-                ranges [i * 2 + 1] = cast(int)/*64*/OS.g_utf8_pointer_to_offset (preeditString, preeditString + end) - 1;
+                ranges [i * 2] = cast(int)/*64bit*/OS.g_utf8_pointer_to_offset (preeditString, preeditString + start);
+                ranges [i * 2 + 1] = cast(int)/*64bit*/OS.g_utf8_pointer_to_offset (preeditString, preeditString + end) - 1;
                 styles [i] = new TextStyle (null, null, null);
                 auto attr = OS.pango_attr_iterator_get (iterator, OS.PANGO_ATTR_FOREGROUND);
                 if (attr !is null) {
@@ -368,7 +366,7 @@ override ptrdiff_t gtk_preedit_changed (GtkIMContext* imcontext) {
     }
     if (chars !is null) {
         if (text.length is 0) startOffset = -1;
-        int end = to!int(startOffset + text.length);
+        ptrdiff_t end = startOffset + text.length;
         if (startOffset is -1) {
             Event event = new Event ();
             event.detail = SWT.COMPOSITION_SELECTION;
@@ -380,7 +378,7 @@ override ptrdiff_t gtk_preedit_changed (GtkIMContext* imcontext) {
         Event event = new Event ();
         event.detail = SWT.COMPOSITION_CHANGED;
         event.start = startOffset;
-        event.end = end;
+        event.end = cast(int)/*64bit*/end;
         event.text = text = chars !is null ? chars : "";
         sendEvent (SWT.ImeComposition, event);
     }

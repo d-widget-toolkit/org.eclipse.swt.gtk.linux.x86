@@ -20,8 +20,6 @@ import java.io.ByteArrayOutputStream;
 import org.eclipse.swt.SWT;
 import java.lang.all;
 
-import std.conv;
-
 final class WinBMPFileFormat : FileFormat {
 
     static const int BMPFileHeaderSize = 14;
@@ -195,12 +193,12 @@ int compressRLE8Data(byte[] src, int srcOffset, int numBytes, byte[] dest, bool 
 }
 void decompressData(byte[] src, byte[] dest, int stride, int cmp) {
     if (cmp is 1) { // BMP_RLE8_COMPRESSION
-        if (decompressRLE8Data(src, to!int(src.length), stride, dest, to!int(dest.length)) <= 0)
+        if (decompressRLE8Data(src, cast(int)/*64bit*/src.length, stride, dest, cast(int)/*64bit*/dest.length) <= 0)
             SWT.error(SWT.ERROR_INVALID_IMAGE);
         return;
     }
     if (cmp is 2) { // BMP_RLE4_COMPRESSION
-        if (decompressRLE4Data(src, to!int(src.length), stride, dest, to!int(dest.length)) <= 0)
+        if (decompressRLE4Data(src, cast(int)/*64bit*/src.length, stride, dest, cast(int)/*64bit*/dest.length) <= 0)
             SWT.error(SWT.ERROR_INVALID_IMAGE);
         return;
     }
@@ -214,7 +212,7 @@ bool putRLE4Byte(byte[] dest, bool odd, int len, int i, int dp, bool dph, byte t
             dest[dp] |= cast(byte)(theByte >>> 4);
             dp++;
         } else {
-            dest[dp] = cast(byte) (theByte & 0xF0);
+            dest[dp] = cast(byte)(theByte & 0xF0);
         }
         return !dph;
     } else {
@@ -545,7 +543,7 @@ PaletteData paletteFromBytes(byte[] bytes, int numColors) {
  * the given device independent palette.
  */
 static byte[] paletteToBytes(PaletteData pal) {
-    int n = pal.colors is null ? 0 : to!int(pal.colors.length < 256 ? pal.colors.length : 256);
+    int n = pal.colors is null ? 0 : cast(int)/*64bit*/(pal.colors.length < 256 ? pal.colors.length : 256);
     byte[] bytes = new byte[n * 4];
     int offset = 0;
     for (int i = 0; i < n; i++) {
@@ -667,7 +665,7 @@ override void unloadIntoByteStream(ImageLoader loader) {
     } else {
         if (pal.isDirect)
             SWT.error(SWT.ERROR_INVALID_IMAGE);
-        numCols = to!int(pal.colors.length);
+        numCols = cast(int)/*64bit*/pal.colors.length;
         rgbs = paletteToBytes(pal);
     }
     // Fill in file header, except for bfsize, which is done later.
@@ -689,7 +687,7 @@ override void unloadIntoByteStream(ImageLoader loader) {
     byte[] data = ostr.toByteArray();
 
     // Calculate file size
-    fileHeader[1] = fileHeader[4] + to!int(data.length);
+    fileHeader[1] = fileHeader[4] + cast(int)/*64bit*/data.length;
 
     // Write the headers
     try {
@@ -708,7 +706,7 @@ override void unloadIntoByteStream(ImageLoader loader) {
         outputStream.writeShort(1);
         outputStream.writeShort(cast(short)image.depth);
         outputStream.writeInt(comp);
-        outputStream.writeInt(to!int(data.length));
+        outputStream.writeInt(cast(int)/*64bit*/data.length);
         outputStream.writeInt(pelsPerMeter.x);
         outputStream.writeInt(pelsPerMeter.y);
         outputStream.writeInt(numCols);

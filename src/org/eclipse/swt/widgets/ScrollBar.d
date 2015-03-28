@@ -353,7 +353,7 @@ public bool getVisible () {
     }
 }
 
-override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* eventPtr) {
+override int gtk_button_press_event (GtkWidget* widget, GdkEventButton* eventPtr) {
     auto result = super.gtk_button_press_event (widget, eventPtr);
     if (result !is 0) return result;
     detail = OS.GTK_SCROLL_NONE;
@@ -361,12 +361,12 @@ override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* ev
     return result;
 }
 
-override ptrdiff_t gtk_change_value (GtkWidget* widget, ptrdiff_t scroll, ptrdiff_t value1, ptrdiff_t value2) {
+override int gtk_change_value (GtkWidget* widget, int scroll, double value1, void* user_data) {
     detail = scroll;
     return 0;
 }
 
-override ptrdiff_t gtk_value_changed (ptrdiff_t adjustment) {
+override int gtk_value_changed (int adjustment) {
     Event event = new Event ();
     dragSent = detail is OS.GTK_SCROLL_JUMP;
     switch (detail) {
@@ -395,7 +395,7 @@ override ptrdiff_t gtk_value_changed (ptrdiff_t adjustment) {
     return 0;
 }
 
-override ptrdiff_t gtk_event_after (GtkWidget* widget, GdkEvent* gdkEvent) {
+override int gtk_event_after (GtkWidget* widget, GdkEvent* gdkEvent) {
     switch (gdkEvent.type) {
         case OS.GDK_BUTTON_RELEASE: {
             GdkEventButton* gdkEventButton = cast(GdkEventButton*)gdkEvent;

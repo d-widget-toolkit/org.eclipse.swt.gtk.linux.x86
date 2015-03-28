@@ -45,7 +45,7 @@ import org.eclipse.swt.opengl.GLData;
 
 public class GLCanvas : Canvas {
     void* context;
-    uint   xWindow;
+    size_t   xWindow;
     GdkDrawable* glWindow;
     XVisualInfo vinfo;
     static const int MAX_ATTRIBUTES = 32;

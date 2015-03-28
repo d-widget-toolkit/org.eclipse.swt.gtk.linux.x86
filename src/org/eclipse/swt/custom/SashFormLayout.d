@@ -24,8 +24,6 @@ import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.custom.SashFormData;
 import java.lang.all;
 
-import std.conv;
-
 /**
  * This class provides the layout for SashForm
  *

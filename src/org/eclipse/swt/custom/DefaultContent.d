@@ -30,7 +30,6 @@ version(Tango){
 } else { // Phobos
     static import std.string;
     static import std.ascii;
-    import std.conv;
 }
 
 
@@ -75,7 +74,7 @@ void addLineIndex(int start, int length) {
     if (lineCount_ is size) {
         // expand the lines by powers of 2
         auto newLines = new int[][]( size+Compatibility.pow2(expandExp), 2 );
-        System.arraycopy(lines, 0, to!(int[][])(newLines), 0, size);
+        System.arraycopy(lines, 0, newLines, 0, size);
         lines = newLines;
         expandExp++;
     }
@@ -165,14 +164,14 @@ void indexLines(){
                     i++;
                 }
             }
-            addLineIndex(start, to!int(i - start + 1));
-            start = to!int(i + 1);
+            addLineIndex(start, cast(int)/*64bit*/(i - start + 1));
+            start = cast(int)/*64bit*/(i + 1);
         } else if (ch is SWT.LF) {
-            addLineIndex(start, to!int(i - start + 1));
-            start = to!int(i + 1);
+            addLineIndex(start, cast(int)/*64bit*/(i - start + 1));
+            start = cast(int)/*64bit*/(i + 1);
         }
     }
-    addLineIndex(start, to!int(i - start));
+    addLineIndex(start, cast(int)/*64bit*/(i - start));
 }
 /**
  * Returns whether or not the given character is a line delimiter.  Both CR and LF
@@ -286,7 +285,7 @@ void insert(int position, String text) {
     if (text.length is 0) return;
 
     int startLine = getLineAtOffset(position);
-    int change = to!int(text.length);
+    int change = cast(int)/*64bit*/text.length;
     bool endInsert = position is getCharCount();
     adjustGap(position, change, startLine);
 
@@ -296,7 +295,7 @@ void insert(int position, String text) {
     int startLineOffset = getOffsetAtLine(startLine);
     // at this point, startLineLength will include the start line
     // and all of the newly inserted text
-    int startLineLength = to!int(getPhysicalLine(startLine).length);
+    int startLineLength = cast(int)/*64bit*/getPhysicalLine(startLine).length;
 
     if (change > 0) {
         // shrink gap
@@ -309,7 +308,7 @@ void insert(int position, String text) {
     // figure out the number of new lines that have been inserted
     auto newLines = indexLines(startLineOffset, startLineLength, 10);
     // only insert an empty line if it is the last line in the text
-    int numNewLines = to!int(newLines.length - 1);
+    int numNewLines = cast(int)/*64bit*/newLines.length - 1;
     if (newLines[numNewLines][1] is 0) {
         // last inserted line is a new line
         if (endInsert) {
@@ -485,7 +484,7 @@ int lineCount(String text){
  */
 public int getCharCount() {
     int length = gapEnd - gapStart;
-    return to!int(textStore.length - length);
+    return cast(int)/*64bit*/textStore.length - length;
 }
 /**
  * Returns the line at <code>index</code> without delimiters.
@@ -514,7 +513,7 @@ public String getLine(int index) {
         int gapLength = gapEnd - gapStart;
         buf.append(textStore[ start .. gapStart ] );
         buf.append(textStore[ gapEnd .. gapEnd + length_ - gapLength - (gapStart - start) ]);
-        length_ = to!int(buf.length);
+        length_ = cast(int)/*64bit*/buf.length;
         while ((length_ - 1 >=0) && isDelimiter(buf.slice[length_ - 1])) {
             length_--;
         }
@@ -563,15 +562,15 @@ String getFullLine(int index) {
  * @return the physical line
  */
 String getPhysicalLine(int index) {
-    int start = to!int(lines[index][0]);
-    int length_ = to!int(lines[index][1]);
+    int start = lines[index][0];
+    int length_ = lines[index][1];
     return getPhysicalText(start, length_);
 }
 /**
  * @return the number of lines in the text store
  */
 public int getLineCount(){
-    return to!int(lineCount_);
+    return lineCount_;
 }
 /**
  * Returns the line at the given offset.
@@ -599,14 +598,14 @@ public int getLineAtOffset(int charPosition){
     // a position that doesn't exist (the one to the right of the
     // last character) - for inserting
     if (lineCount_ > 0) {
-        int lastLine = to!int(lineCount_ - 1);
+        int lastLine = lineCount_ - 1;
         if (position is lines[lastLine][0] + lines[lastLine][1])
             return lastLine;
     }
 
-    int high = to!int(lineCount_);
+    int high = lineCount_;
     int low = -1;
-    int index = to!int(lineCount_);
+    int index = lineCount_;
     while (high - low > 1) {
         index = (high + low) / 2;
         int lineStart = lines[index][0];
@@ -676,7 +675,7 @@ public int getOffsetAtLine(int lineIndex) {
  * @param numLines the number to increase the array by
  */
 void expandLinesBy(int numLines) {
-    int size = to!int(lines.length);
+    int size = cast(int)/*64bit*/lines.length;
     if (size - lineCount_ >= numLines) {
         return;
     }
@@ -799,7 +798,7 @@ public void replaceTextRange(int start, int replaceLength, String newText){
     event.text = newText;
     event.newLineCount = lineCount(newText);
     event.replaceCharCount = replaceLength;
-    event.newCharCount = to!int(newText.length);
+    event.newCharCount = cast(int)/*64bit*/newText.length;
     sendTextEvent(event);
 
     // first delete the text to be replaced
@@ -892,7 +891,7 @@ void delete_(int position, int length_, int numLines) {
     // update the line where the deletion started
     lines[startLine][1] = (position - startLineOffset) + (j - position);
     // figure out the number of lines that have been deleted
-    int numOldLines = to!int(oldLines.length - 1);
+    int numOldLines = cast(int)/*64bit*/oldLines.length - 1;
     if (splittingDelimiter) numOldLines -= 1;
     // shift up the lines after the last deleted line, no need to update
     // the offset or length of the lines

@@ -49,7 +49,6 @@ import java.lang.Thread;
 version(Tango){
 import tango.stdc.string;
 } else { // Phobos
-    import std.conv;
 }
 
 /**
@@ -154,8 +153,8 @@ public class Display : Device {
     int [] signalIds;
 
     /* Widget Table */
-    int [] indexTable;
-    int freeSlot;
+    ptrdiff_t [] indexTable;
+    ptrdiff_t freeSlot;
     GtkWidget* lastHandle;
     Widget lastWidget;
     Widget [] widgetTable;
@@ -220,7 +219,7 @@ public class Display : Device {
 
     /* Idle proc callback */
     CallbackData idleProcCallbackData;
-    int idleHandle;
+    uint idleHandle;
     static const String ADD_IDLE_PROC_KEY = "org.eclipse.swt.internal.gtk.addIdleProc";
     static const String REMOVE_IDLE_PROC_KEY = "org.eclipse.swt.internal.gtk.removeIdleProc";
     Object idleLock;
@@ -256,14 +255,14 @@ public class Display : Device {
     Control currentControl;
 
     /* Flush exposes */
-    ptrdiff_t checkIfEventProc;
+    int checkIfEventProc;
     void*/*Callback*/ checkIfEventCallback;
     GdkWindow* flushWindow;
     bool flushAll;
     GdkRectangle* flushRect;
     XExposeEvent* exposeEvent;
     XVisibilityEvent* visibilityEvent;
-    //ptrdiff_t [] flushData = new ptrdiff_t [1];
+    //int [] flushData = new int [1];
 
     /* System Resources */
     Font systemFont;
@@ -640,7 +639,7 @@ void addMouseHoverTimeout (GtkWidget* handle) {
 
 void addPopup (Menu menu) {
     if (popups is null) popups = new Menu [4];
-    int length = to!int(popups.length);
+    ptrdiff_t length = popups.length;
     for (int i=0; i<length; i++) {
         if (popups [i] is menu) return;
     }
@@ -660,21 +659,21 @@ void addPopup (Menu menu) {
 void addWidget (GtkWidget* handle, Widget widget) {
     if (handle is null) return;
     if (freeSlot is -1) {
-        int len = freeSlot = to!int(indexTable.length) + GROW_SIZE;
-        int[] newIndexTable = new int[len];
+        ptrdiff_t len = freeSlot = indexTable.length + GROW_SIZE;
+        ptrdiff_t[] newIndexTable = new ptrdiff_t[len];
         Widget[] newWidgetTable = new Widget [len];
         System.arraycopy (indexTable, 0, newIndexTable, 0, freeSlot);
         System.arraycopy (widgetTable, 0, newWidgetTable, 0, freeSlot);
-        for (int i = freeSlot; i < len - 1; i++) {
+        for (ptrdiff_t i = freeSlot; i < len - 1; i++) {
             newIndexTable[i] = i + 1;
         }
         newIndexTable[len - 1] = -1;
         indexTable = newIndexTable;
         widgetTable = newWidgetTable;
     }
-    int index = freeSlot + 1;
+    ptrdiff_t index = freeSlot + 1;
     OS.g_object_set_qdata (cast(GObject*)handle, SWT_OBJECT_INDEX, cast(void*)index);
-    int oldSlot = freeSlot;
+    ptrdiff_t oldSlot = freeSlot;
     freeSlot = indexTable[oldSlot];
     indexTable [oldSlot] = -2;
     widgetTable [oldSlot] = widget;
@@ -789,7 +788,7 @@ private static extern(C) int checkIfEventProcFunc (void* display, XEvent* xEvent
 }
 
 int checkIfEventProcMeth (void* display, XEvent* xEvent) {
-    int type = xEvent.type;
+    ptrdiff_t type = xEvent.type;
     switch (type) {
         case OS.VisibilityNotify:
         case OS.Expose:
@@ -798,7 +797,7 @@ int checkIfEventProcMeth (void* display, XEvent* xEvent) {
         default:
             return 0;
     }
-    GdkWindow* window = OS.gdk_window_lookup ( xEvent.xany.window );
+    GdkWindow* window = OS.gdk_window_lookup ( cast(void*)xEvent.xany.window );
     if (window is null) return 0;
     if (flushWindow !is null) {
         if (flushAll) {
@@ -863,7 +862,7 @@ protected void checkSubclass () {
 
 void clearModal (Shell shell) {
     if (modalShells is null) return;
-    int index = 0, length_ = to!int(modalShells.length);
+    ptrdiff_t index = 0, length_ = modalShells.length;
     while (index < length_) {
         if (modalShells [index] is shell) break;
         if (modalShells [index] is null) return;
@@ -944,7 +943,7 @@ void createDisplay (DeviceData data) {
         char [] buffer = fromStringz(ptr);
         getDwtLogger().warn (__FILE__, __LINE__,"***WARNING: {}", buffer );
         getDwtLogger().warn (__FILE__, __LINE__,"***WARNING: SWT requires GTK {}.{}.{}", MAJOR, MINOR, MICRO );
-        int major = OS.gtk_major_version (), minor = OS.gtk_minor_version (), micro = OS.gtk_micro_version ();
+        ptrdiff_t major = OS.gtk_major_version (), minor = OS.gtk_minor_version (), micro = OS.gtk_micro_version ();
         getDwtLogger().warn (__FILE__, __LINE__,"***WARNING: Detected: {}.{}.{}", major, minor, micro);
     }
     if (fixed_type is 0) {
@@ -1026,7 +1025,7 @@ Image createImage (String name) {
     bool hasAlpha = cast(bool)OS.gdk_pixbuf_get_has_alpha (pixbuf);
     char* pixels = OS.gdk_pixbuf_get_pixels (pixbuf);
     byte [] data = new byte [stride * height];
-    OS.memmove (data.ptr, pixels, to!int(data.length));
+    OS.memmove (data.ptr, pixels, data.length);
     OS.g_object_unref (pixbuf);
     ImageData imageData = null;
     if (hasAlpha) {
@@ -1132,12 +1131,12 @@ protected override void destroy () {
 void destroyDisplay () {
 }
 
-static extern(C) ptrdiff_t emissionFunc (GSignalInvocationHint* ihint, uint n_param_values, GValue* param_values, void* data) {
+static extern(C) int emissionFunc (GSignalInvocationHint* ihint, uint n_param_values, GValue* param_values, void* data) {
     auto cb = cast(CallbackData*)data;
     return cb.display.emissionProc( ihint, n_param_values, param_values, cb.data );
 }
 
-ptrdiff_t emissionProc (GSignalInvocationHint* ihint, uint n_param_values, GValue* param_values, void* data) {
+int emissionProc (GSignalInvocationHint* ihint, size_t n_param_values, GValue* param_values, void* data) {
     if (OS.gtk_widget_get_toplevel (OS.g_value_peek_pointer(param_values)) is data) {
         OS.gtk_widget_set_direction (OS.g_value_peek_pointer(param_values), OS.GTK_TEXT_DIR_RTL);
     }
@@ -1189,7 +1188,7 @@ public void disposeExec (Runnable runnable) {
         }
     }
     Runnable [] newDisposeList = new Runnable [disposeList.length + 4];
-    SimpleType!(Runnable).arraycopy (disposeList, 0, newDisposeList, 0, to!int(disposeList.length));
+    SimpleType!(Runnable).arraycopy (disposeList, 0, newDisposeList, 0, disposeList.length);
     newDisposeList [disposeList.length] = runnable;
     disposeList = newDisposeList;
 }
@@ -1476,9 +1475,9 @@ public Control getCursorControl () {
         OS.gdk_error_trap_push ();
         int unusedInt;
         uint unusedUInt;
-        uint unusedPtr;
-        uint buffer;
-        uint xWindow, xParent = OS.XDefaultRootWindow (xDisplay);
+        size_t unusedPtr;
+        size_t buffer;
+        size_t xWindow, xParent = OS.XDefaultRootWindow (xDisplay);
         do {
             if (OS.XQueryPointer (xDisplay, xParent, &unusedPtr, &buffer, &unusedInt, &unusedInt, &unusedInt, &unusedInt, &unusedUInt) is 0) {
                 handle = null;
@@ -1486,7 +1485,7 @@ public Control getCursorControl () {
             }
             if ((xWindow = buffer) !is 0) {
                 xParent = xWindow;
-                auto gdkWindow = OS.gdk_window_lookup (xWindow);
+                auto gdkWindow = OS.gdk_window_lookup (cast(void*)xWindow);
                 if (gdkWindow !is null) {
                     OS.gdk_window_get_user_data (gdkWindow, cast(void**)&user_data);
                     if (user_data !is null) handle = user_data;
@@ -2347,10 +2346,10 @@ public Thread getThread () {
 Widget getWidget (GtkWidget* handle) {
     if (handle is null) return null;
     if (lastWidget !is null && lastHandle is handle) return lastWidget;
-    auto index = cast(int) OS.g_object_get_qdata ( cast(GObject*)handle, SWT_OBJECT_INDEX) - 1;
+    auto index = cast(ptrdiff_t)OS.g_object_get_qdata ( cast(GObject*)handle, SWT_OBJECT_INDEX) - 1;
     if (0 <= index && index < widgetTable.length) {
         lastHandle = handle;
-        return lastWidget = widgetTable [cast(int)/*64*/index];
+        return lastWidget = widgetTable [index];
     }
     return null;
 }
@@ -2427,7 +2426,7 @@ void initializeCallbacks () {
     signalIds [Widget.VISIBILITY_NOTIFY_EVENT] = OS.g_signal_lookup (OS.visibility_notify_event.ptr, OS.GTK_TYPE_WIDGET ());
     signalIds [Widget.WINDOW_STATE_EVENT] = OS.g_signal_lookup (OS.window_state_event.ptr, OS.GTK_TYPE_WIDGET ());
 
-    GClosure* do_cclosure_new( GCallback cb, int value, int notify ){
+    GClosure* do_cclosure_new( GCallback cb, int value, ptrdiff_t notify ){
         CallbackData* res= new CallbackData;
         res.display = this;
         res.data = cast(void*)value;
@@ -2500,10 +2499,12 @@ void initializeCallbacks () {
     closures [Widget.TEST_EXPAND_ROW] = do_cclosure_new (windowProc4, Widget.TEST_EXPAND_ROW, 0);
 
     GCallback windowProc5 = cast(GCallback)&windowProcFunc5;
-    closures [Widget.CHANGE_VALUE] = do_cclosure_new (windowProc5, Widget.CHANGE_VALUE, 0);
     closures [Widget.EXPAND_COLLAPSE_CURSOR_ROW] = do_cclosure_new (windowProc5, Widget.EXPAND_COLLAPSE_CURSOR_ROW, 0);
     closures [Widget.INSERT_TEXT] = do_cclosure_new (windowProc5, Widget.INSERT_TEXT, 0);
     closures [Widget.TEXT_BUFFER_INSERT_TEXT] = do_cclosure_new (windowProc5, Widget.TEXT_BUFFER_INSERT_TEXT, 0);
+
+    GCallback windowChangeValueProc = cast(GCallback)&windowProcChangeValueFunc;
+    closures [Widget.CHANGE_VALUE] = do_cclosure_new (windowChangeValueProc, Widget.CHANGE_VALUE, 0);
 
     for (int i = 0; i < Widget.LAST_SIGNAL; i++) {
         if (closures [i] !is null) OS.g_closure_ref (closures [i]);
@@ -2542,7 +2543,7 @@ void initializeSystemSettings () {
 }
 
 void initializeWidgetTable () {
-    indexTable = new int [GROW_SIZE];
+    indexTable = new ptrdiff_t [GROW_SIZE];
     widgetTable = new Widget [GROW_SIZE];
     for (int i=0; i<GROW_SIZE-1; i++) indexTable [i] = i + 1;
     indexTable [GROW_SIZE - 1] = -1;
@@ -2876,12 +2877,12 @@ public Rectangle map (Control from, Control to, int x, int y, int width, int hei
     return rect;
 }
 
-private static extern(C) ptrdiff_t mouseHoverProcFunc ( void* user_data) {
+private static extern(C) int mouseHoverProcFunc ( void* user_data) {
     version(LOG) getDwtLogger().error( __FILE__, __LINE__,  "Display {}:", __LINE__ ).flush;
     CallbackData* cbdata = cast(CallbackData*)user_data;
     return cbdata.display.mouseHoverProc( cast(GtkWidget*)cbdata.data );
 }
-ptrdiff_t mouseHoverProc (GtkWidget* handle) {
+int mouseHoverProc (GtkWidget* handle) {
     Widget widget = getWidget (handle);
     if (widget is null) return 0;
     return widget.hoverProc (handle);
@@ -3014,8 +3015,8 @@ void postEvent (Event event) {
     * need to be synchronized.
     */
     if (eventQueue is null) eventQueue = new Event [4];
-    int index = 0;
-    int length = to!int(eventQueue.length);
+    ptrdiff_t index = 0;
+    ptrdiff_t length = eventQueue.length;
     while (index < length) {
         if (eventQueue [index] is null) break;
         index++;
@@ -3249,7 +3250,9 @@ void releaseDisplay () {
     lastWidget = activeShell = null;
     //flushData = null;
     closures = null;
-    indexTable = signalIds = treeSelection = null;
+    indexTable = null;
+    signalIds = null;
+    treeSelection = null;
     widgetTable = null;
     modalShells = null;
     data = null;
@@ -3367,7 +3370,7 @@ Widget removeWidget (GtkWidget* handle) {
     if (handle is null) return null;
     lastWidget = null;
     Widget widget = null;
-    int index = cast(int)/*64*/ OS.g_object_get_qdata (cast(GObject*)handle, SWT_OBJECT_INDEX) - 1;
+    auto index = cast(ptrdiff_t)OS.g_object_get_qdata (cast(GObject*)handle, SWT_OBJECT_INDEX) - 1;
     if (0 <= index && index < widgetTable.length) {
         widget = widgetTable [index];
         widgetTable [index] = null;
@@ -3393,7 +3396,7 @@ bool runDeferredEvents () {
         /* Take an event off the queue */
         Event event = eventQueue [0];
         if (event is null) break;
-        int len = to!int(eventQueue.length);
+        ptrdiff_t len = eventQueue.length;
         System.arraycopy (eventQueue, 1, eventQueue, 0, --len);
         eventQueue [len] = null;
 
@@ -3424,7 +3427,7 @@ bool runPopups () {
     while (popups !is null) {
         Menu menu = popups [0];
         if (menu is null) break;
-        int len = to!int(popups.length);
+        ptrdiff_t len = popups.length;
         System.arraycopy (popups, 1, popups, 0, --len);
         popups [len] = null;
         runDeferredEvents ();
@@ -3660,12 +3663,12 @@ package static extern(C) ptrdiff_t setDirectionProcFunc (GtkWidget* widget, void
     CallbackData* cbdata = cast(CallbackData*)data;
     return cbdata.display.setDirectionProc( widget, cast(int)cbdata.data );
 }
-ptrdiff_t setDirectionProc (GtkWidget* widget, ptrdiff_t direction) {
+ptrdiff_t setDirectionProc (GtkWidget* widget, int direction) {
     OS.gtk_widget_set_direction (widget,  direction);
     if (OS.GTK_IS_MENU_ITEM (widget)) {
         auto submenu = OS.gtk_menu_item_get_submenu (widget);
         if (submenu !is null) {
-            OS.gtk_widget_set_direction (submenu, cast(int)/*64*/ direction);
+            OS.gtk_widget_set_direction (submenu, direction);
             OS.gtk_container_forall (cast(GtkContainer*)submenu, cast(GtkCallback)&setDirectionProcFunc, cast(void*)direction);
         }
     }
@@ -3683,7 +3686,7 @@ void setModalDialog (Dialog modalDailog) {
 
 void setModalShell (Shell shell) {
     if (modalShells is null) modalShells = new Shell [4];
-    int index = 0, length = to!int(modalShells.length);
+    ptrdiff_t index = 0, length = modalShells.length;
     while (index < length) {
         if (modalShells [index] is shell) return;
         if (modalShells [index] is null) break;
@@ -3791,7 +3794,7 @@ public bool sleep () {
     if (getMessageCount () !is 0) return true;
     if (fds is null) {
         allocated_nfds = 2;
-        GPollFD* ptr = cast(GPollFD*) OS.g_malloc( to!int(GPollFD.sizeof * allocated_nfds ));
+        GPollFD* ptr = cast(GPollFD*) OS.g_malloc( GPollFD.sizeof * allocated_nfds );
         fds = ptr[ 0 .. allocated_nfds ];
     }
     max_priority = timeout = 0;
@@ -3804,7 +3807,7 @@ public bool sleep () {
             while ((nfds = OS.g_main_context_query (context, max_priority, &timeout, fds.ptr, allocated_nfds)) > allocated_nfds) {
                 OS.g_free (fds.ptr);
                 allocated_nfds = nfds;
-                GPollFD* ptr = cast(GPollFD*) OS.g_malloc( to!int(GPollFD.sizeof * allocated_nfds ));
+                GPollFD* ptr = cast(GPollFD*) OS.g_malloc( GPollFD.sizeof * allocated_nfds );
                 fds = ptr[ 0 .. allocated_nfds ];
             }
             GPollFunc poll = OS.g_main_context_get_poll_func (context);
@@ -3887,7 +3890,7 @@ public void timerExec (int milliseconds, Runnable runnable) {
         }
         if (index is timerList.length) {
             Runnable [] newTimerList = new Runnable [timerList.length + 4];
-            SimpleType!(Runnable).arraycopy (timerList, 0, newTimerList, 0, to!int(timerList.length));
+            SimpleType!(Runnable).arraycopy (timerList, 0, newTimerList, 0, timerList.length);
             timerList = newTimerList;
             int [] newTimerIds = new int [timerIds.length + 4];
             System.arraycopy (timerIds, 0, newTimerIds, 0, timerIds.length);
@@ -3910,9 +3913,9 @@ private static extern(C) int timerProcFunc ( void * data ) {
     return cbdata.display.timerProc( cast(int) cbdata.data );
 }
 
-ptrdiff_t timerProc (ptrdiff_t i) {
+int timerProc (int i) {
     if (timerList is null) return 0;
-    int index = cast(int)/*64*/i;
+    int index = i;
     if (0 <= index && index < timerList.length) {
         Runnable runnable = timerList [index];
         timerList [index] = null;
@@ -3927,7 +3930,7 @@ private static extern(C) int caretProcFunc ( void * data ) {
     CallbackData* cbdata = cast( CallbackData* ) data;
     return cbdata.display.caretProc( cast(int) cbdata.data );
 }
-ptrdiff_t caretProc (ptrdiff_t clientData) {
+int caretProc (ptrdiff_t clientData) {
     caretId = 0;
     if (currentCaret is null) {
         return 0;
@@ -3945,7 +3948,7 @@ ptrdiff_t caretProc (ptrdiff_t clientData) {
 }
 
 
-package int doSizeAllocateConnect( CallbackData* cbdata, GtkWidget* window, GtkWidget* widget ){
+package ptrdiff_t doSizeAllocateConnect( CallbackData* cbdata, GtkWidget* window, GtkWidget* widget ){
     cbdata.display = this;
     cbdata.data = cast(void*)widget;
     return OS.g_signal_connect (cast(void*)window, OS.size_allocate.ptr, cast(GCallback)&sizeAllocateProcFunc, cast(void*)&cbdata);
@@ -3964,7 +3967,7 @@ void sizeAllocateProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
 }
 
 
-package int doSizeRequestConnect( CallbackData* cbdata, GtkWidget* window, GtkWidget* widget ){
+package ptrdiff_t doSizeRequestConnect( CallbackData* cbdata, GtkWidget* window, GtkWidget* widget ){
     cbdata.display = this;
     cbdata.data = cast(void*)widget;
     return OS.g_signal_connect (cast(void*)window, OS.size_request.ptr, cast(GCallback)&sizeRequestProcFunc, cast(void*)&cbdata );
@@ -4001,11 +4004,11 @@ void treeSelectionProcMeth (GtkTreeModel *model, GtkTreePath *path, GtkTreeIter 
 }
 
 void saveResources () {
-    int resourceCount = 0;
+    ptrdiff_t resourceCount = 0;
     if (resources is null) {
         resources = new Resource [RESOURCE_SIZE];
     } else {
-        resourceCount = to!int(resources.length);
+        resourceCount = resources.length;
         Resource [] newResources = new Resource [resourceCount + RESOURCE_SIZE];
         System.arraycopy (resources, 0, newResources, 0, resourceCount);
         resources = newResources;
@@ -4054,24 +4057,24 @@ void setCurrentCaret (Caret caret) {
     caretId = OS.gtk_timeout_add (blinkRate, &caretProcFunc, &caretProcCallbackData);
 }
 
-private static extern(C) ptrdiff_t shellMapProcFunc (ptrdiff_t handle, ptrdiff_t arg0, ptrdiff_t user_data) {
+private static extern(C) int shellMapProcFunc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
     version(LOG) getDwtLogger().error( __FILE__, __LINE__,  "Display {}:", __LINE__ ).flush;
     auto cbdata = cast(CallbackData*)user_data;
     return cbdata.display.shellMapProc( cast(GtkWidget*)handle, arg0, cast(int)cbdata.data );
 }
 
-ptrdiff_t shellMapProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
+int shellMapProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
     Widget widget = getWidget (cast(GtkWidget*)handle);
     if (widget is null) return 0;
     return widget.shellMapProc (handle, arg0, user_data);
 }
 
-private static extern(C) ptrdiff_t styleSetProcFunc (ptrdiff_t gobject, ptrdiff_t arg1, ptrdiff_t user_data) {
+private static extern(C) int styleSetProcFunc (ptrdiff_t gobject, ptrdiff_t arg1, ptrdiff_t user_data) {
     version(LOG) getDwtLogger().error( __FILE__, __LINE__,  "Display {}:", __LINE__ ).flush;
     auto cbdata = cast(CallbackData*)user_data;
     return cbdata.display.styleSetProcMeth( gobject, arg1, cast(int)cbdata.data );
 }
-ptrdiff_t styleSetProcMeth (ptrdiff_t gobject, ptrdiff_t arg1, ptrdiff_t user_data) {
+int styleSetProcMeth (ptrdiff_t gobject, ptrdiff_t arg1, ptrdiff_t user_data) {
     settingsChanged = true;
     return 0;
 }
@@ -4183,61 +4186,69 @@ static dchar wcsToMbcs (char ch) {
     return '\0';
 }
 
-private static extern(C) ptrdiff_t windowProcFunc2 (GtkWidget* handle, ptrdiff_t user_data) {
+private static extern(C) int windowProcFunc2 (GtkWidget* handle, ptrdiff_t user_data) {
     version(LOG) getDwtLogger().error( __FILE__, __LINE__,  "Display {}:", __LINE__ ).flush;
     CallbackData* cbdata = cast(CallbackData*)user_data;
-    return cbdata.display.windowProc( handle, cast(int)cbdata.data );
+    return cbdata.display.windowProc( handle, cast(ptrdiff_t)cbdata.data );
 }
-ptrdiff_t windowProc (GtkWidget* handle, ptrdiff_t user_data) {
+int windowProc (GtkWidget* handle, ptrdiff_t user_data) {
     Widget widget = getWidget (handle);
     if (widget is null) return 0;
     return widget.windowProc (handle, user_data);
 }
 
-private static extern(C) ptrdiff_t windowProcFunc3 (ptrdiff_t handle, ptrdiff_t arg0, ptrdiff_t user_data) {
+private static extern(C) int windowProcFunc3 (ptrdiff_t handle, ptrdiff_t arg0, ptrdiff_t user_data) {
     version(LOG) getDwtLogger().error( __FILE__, __LINE__,  "Display {}:", __LINE__ ).flush;
     CallbackData* cbdata = cast(CallbackData*)user_data;
-    return cbdata.display.windowProc( cast(GtkWidget*)handle, arg0, cast(int)cbdata.data );
+    return cbdata.display.windowProc( cast(GtkWidget*)handle, arg0, cast(ptrdiff_t)cbdata.data );
 }
-ptrdiff_t windowProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
+int windowProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
     Widget widget = getWidget (handle);
     if (widget is null) return 0;
     return widget.windowProc (handle, arg0, user_data);
 }
 
-private static extern(C) ptrdiff_t windowProcFunc4 (ptrdiff_t handle, ptrdiff_t arg0, ptrdiff_t arg1, ptrdiff_t user_data) {
+private static extern(C) int windowProcFunc4 (ptrdiff_t handle, ptrdiff_t arg0, ptrdiff_t arg1, ptrdiff_t user_data) {
     version(LOG) getDwtLogger().error( __FILE__, __LINE__,  "Display {}:", __LINE__ ).flush;
     CallbackData* cbdata = cast(CallbackData*)user_data;
-    return cbdata.display.windowProc( cast(GtkWidget*)handle, arg0, arg1, cast(int)cbdata.data );
+    return cbdata.display.windowProc( cast(GtkWidget*)handle, arg0, arg1, cast(ptrdiff_t)cbdata.data );
 }
-ptrdiff_t windowProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t arg1, ptrdiff_t user_data) {
+int windowProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t arg1, ptrdiff_t user_data) {
     Widget widget = getWidget (handle);
     if (widget is null) return 0;
     return widget.windowProc (handle, arg0, arg1, user_data);
 }
 
-private static extern(C) ptrdiff_t windowProcFunc5 (ptrdiff_t handle, ptrdiff_t arg0, ptrdiff_t arg1, ptrdiff_t arg2, ptrdiff_t user_data) {
+private static extern(C) int windowProcFunc5 (ptrdiff_t handle, ptrdiff_t arg0, ptrdiff_t arg1, ptrdiff_t arg2, ptrdiff_t user_data) {
     version(LOG) getDwtLogger().error( __FILE__, __LINE__,  "Display {}:", __LINE__ ).flush;
     CallbackData* cbdata = cast(CallbackData*)user_data;
-    return cbdata.display.windowProc( cast(GtkWidget*)handle, arg0, arg1, arg2, cast(int)cbdata.data );
+    return cbdata.display.windowProc( cast(GtkWidget*)handle, arg0, arg1, arg2, cast(ptrdiff_t)cbdata.data );
 }
-ptrdiff_t windowProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t arg1, ptrdiff_t arg2, ptrdiff_t user_data) {
+int windowProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t arg1, ptrdiff_t arg2, ptrdiff_t user_data) {
     Widget widget = getWidget (handle);
     if (widget is null) return 0;
     return widget.windowProc (handle, arg0, arg1, arg2, user_data);
+}
+
+private static extern(C) int windowProcChangeValueFunc(GtkWidget* handle, int scroll, double value1, void* user_data) {
+    version(LOG) getDwtLogger().error( __FILE__, __LINE__,  "Display {}:", __LINE__ ).flush;
+    CallbackData* cbdata = cast(CallbackData*)user_data;
+    Widget widget = cbdata.display.getWidget (handle);
+    if (widget is null) return 0;
+    return widget.gtk_change_value(handle, scroll, value1, user_data);
 }
 
 package int doWindowTimerAdd( CallbackData* cbdata, int delay, GtkWidget* widget ){
     OS.g_object_set_data(cast(GObject*)widget, Display.classinfo.name.ptr, cast(void*)this);
     return OS.gtk_timeout_add (delay, &windowTimerProcFunc, widget);
 }
-private static extern(C) ptrdiff_t windowTimerProcFunc (void* user_data) {
+private static extern(C) int windowTimerProcFunc (void* user_data) {
     version(LOG) getDwtLogger().error( __FILE__, __LINE__,  "Display {}:", __LINE__ ).flush;
     Display d = cast(Display) OS.g_object_get_data(cast(GObject*)user_data, Display.classinfo.name.ptr );
     return d.windowTimerProc( cast(GtkWidget*)user_data );
 }
 
-ptrdiff_t windowTimerProc (GtkWidget* handle) {
+int windowTimerProc (GtkWidget* handle) {
     Widget widget = getWidget (handle);
     if (widget is null) return 0;
     return widget.timerProc (handle);

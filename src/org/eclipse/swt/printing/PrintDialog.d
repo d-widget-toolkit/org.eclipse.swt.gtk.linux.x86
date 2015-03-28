@@ -353,7 +353,7 @@ public PrinterData open() {
             oldModal = display.getData (GET_MODAL_DIALOG);
             display.setData (SET_MODAL_DIALOG, this);
         }
-        int response = OS.gtk_dialog_run (handle);
+        ptrdiff_t response = OS.gtk_dialog_run (handle);
         if (OS.gtk_window_get_modal (handle)) {
             display.setData (SET_MODAL_DIALOG, oldModal);
         }
@@ -368,7 +368,7 @@ public PrinterData open() {
                 settings = OS.gtk_print_unix_dialog_get_settings(handle); // must unref
                 page_setup = OS.gtk_print_unix_dialog_get_page_setup(handle); // do not unref
                 data = Printer.printerDataFromGtkPrinter(printer);
-                int print_pages = OS.gtk_print_settings_get_print_pages(settings);
+                ptrdiff_t print_pages = OS.gtk_print_settings_get_print_pages(settings);
                 switch (print_pages) {
                     case OS.GTK_PRINT_PAGES_ALL:
                         scope_ = PrinterData.ALL_PAGES;
@@ -377,7 +377,7 @@ public PrinterData open() {
                         scope_ = PrinterData.PAGE_RANGE;
                         int num_ranges;
                         auto page_ranges = OS.gtk_print_settings_get_page_ranges(settings, &num_ranges);
-                        int length = num_ranges;
+                        ptrdiff_t length = num_ranges;
                         int min = int.max, max = 0;
                         for (int i = 0; i < length; i++) {
                             min = Math.min(min, page_ranges[i].start + 1);
@@ -465,7 +465,7 @@ void storeBytes(String key, char* value) {
 }
 
 void store(String key, String value) {
-    int length = to!int(key.length + 1 + value.length + 1);
+    ptrdiff_t length = key.length + 1 + value.length + 1;
     if (index + length + 1 > settingsData.length) {
         char [] newData = new char[settingsData.length + Math.max(length + 1, 1024)];
         newData[] = '\0';

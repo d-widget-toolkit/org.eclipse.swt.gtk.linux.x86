@@ -25,11 +25,6 @@ import org.eclipse.swt.widgets.TypedListener;
 import org.eclipse.swt.widgets.Display;
 import java.lang.all;
 
-version(Tango){
-} else { // Phobos
-    import std.conv;
-}
-
 /**
  * Instances of this class represent a selectable user interface
  * object that displays a list of strings and issues notification
@@ -209,8 +204,8 @@ override void createHandle (int index) {
     * Columns:
     * 0 - text
     */
-    auto types = [OS.G_TYPE_STRING ()];
-    modelHandle = cast(GtkWidget*)OS.gtk_list_store_newv (to!int(types.length), cast(uint*)types.ptr);
+    size_t[] types = [OS.G_TYPE_STRING ()];
+    modelHandle = cast(GtkWidget*)OS.gtk_list_store_newv (cast(int)/*64bit*/types.length, types.ptr);
     if (modelHandle is null) error (SWT.ERROR_NO_HANDLES);
     handle = OS.gtk_tree_view_new_with_model (modelHandle);
     if (handle is null) error (SWT.ERROR_NO_HANDLES);
@@ -658,9 +653,10 @@ public int [] getSelectionIndices () {
         display.treeSelectionLength  = 0;
         display.treeSelection = new int [itemCount];
         display.doTreeSelectionProcConnect( &treeSelectionProcCallbackData, handle, selection );
-        if (display.treeSelectionLength is display.treeSelection.length) return display.treeSelection;
         int [] result = new int [display.treeSelectionLength];
-        System.arraycopy (display.treeSelection, 0, result, 0, display.treeSelectionLength);
+        for (int i = 0; i < display.treeSelectionLength; i++) {
+            result[i] = display.treeSelection[i];
+        }
         return result;
     }
     /*
@@ -715,12 +711,12 @@ public int getTopIndex () {
     return index;
 }
 
-override ptrdiff_t gtk_changed (GtkWidget* widget) {
+override int gtk_changed (GtkWidget* widget) {
     postEvent (SWT.Selection);
     return 0;
 }
 
-override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
+override int gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
     auto result = super.gtk_button_press_event (widget, gdkEvent);
     if (result !is 0) return result;
     /*
@@ -774,7 +770,7 @@ override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* gd
     return result;
 }
 
-override ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* keyEvent) {
+override int gtk_key_press_event (GtkWidget* widget, GdkEventKey* keyEvent) {
     auto result = super.gtk_key_press_event (widget, keyEvent);
     if (result !is 0) return result;
     if (OS.GTK_VERSION < OS.buildVERSION (2, 2 ,0)) {
@@ -796,7 +792,7 @@ override ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* keyEvent
     return result;
 }
 
-override ptrdiff_t gtk_popup_menu (GtkWidget* widget) {
+override int gtk_popup_menu (GtkWidget* widget) {
     auto result = super.gtk_popup_menu (widget);
     /*
     * Bug in GTK.  The context menu for the typeahead in GtkTreeViewer
@@ -1170,7 +1166,7 @@ public void select (int [] indices) {
     checkWidget ();
     // SWT extension: allow null for zero length string
     //if (indices is null) error (SWT.ERROR_NULL_ARGUMENT);
-    int length = to!int(indices.length);
+    ptrdiff_t length = indices.length;
     if (length is 0 || ((style & SWT.SINGLE) !is 0 && length > 1)) return;
     GtkTreeIter iter;
     int count = OS.gtk_tree_model_iter_n_children (cast(GtkTreeStore*)modelHandle, null);
@@ -1406,7 +1402,7 @@ public void setSelection(int[] indices) {
     // SWT extension: allow null for zero length string
     //if (indices is null) error (SWT.ERROR_NULL_ARGUMENT);
     deselectAll ();
-    int length = to!int(indices.length);
+    ptrdiff_t length = indices.length;
     if (length is 0 || ((style & SWT.SINGLE) !is 0 && length > 1)) return;
     selectFocusIndex (indices [0]);
     if ((style & SWT.MULTI) !is 0) {
@@ -1439,7 +1435,7 @@ public void setSelection (String [] items) {
     // SWT extension: allow null for zero length string
     //if (items is null) error (SWT.ERROR_NULL_ARGUMENT);
     deselectAll ();
-    int length = to!int(items.length);
+    ptrdiff_t length = items.length;
     if (length is 0 || ((style & SWT.SINGLE) !is 0 && length > 1)) return;
     bool first = true;
     for (int i = 0; i < length; i++) {

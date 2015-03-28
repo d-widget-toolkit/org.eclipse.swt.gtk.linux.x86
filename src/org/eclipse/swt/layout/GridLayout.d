@@ -25,8 +25,6 @@ import java.lang.System;
 
 import java.lang.all;
 
-import std.conv;
-
 
 /**
  * Instances of this class lay out the control children of a
@@ -260,7 +258,7 @@ Point layout (Composite composite, bool move, int x, int y, int width, int heigh
             int lastRow = row + vSpan;
             if (lastRow >= grid.length) {
                 Control [][] newGrid = new Control[][]( lastRow + 4, columnCount );
-                SimpleType!(Control[]).arraycopy (grid, 0, newGrid, 0, to!int(grid.length));
+                SimpleType!(Control[]).arraycopy (grid, 0, newGrid, 0, cast(int)/*64bit*/grid.length);
                 grid = newGrid;
             }
             if (grid [row] is null) {

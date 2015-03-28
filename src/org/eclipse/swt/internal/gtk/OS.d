@@ -30,7 +30,6 @@ version(Tango){
     import core.sys.posix.stdlib : realpath;
     import std.c.locale;
     static import std.c.string;
-    import std.conv;
 }
 
 import  org.eclipse.swt.internal.c.gtk,
@@ -539,15 +538,15 @@ public alias org.eclipse.swt.internal.c.Xrender.XTransform XTransform;
 
 
 // function with variadic argument list
-private void gtk_widget_style_get1( GtkWidget* widget, in char* firstPropertyName, int* res ){
+private void gtk_widget_style_get1( GtkWidget* widget, in char* firstPropertyName, gint* res ){
     gtk_widget_style_get( widget, firstPropertyName, res, null );
 }
 // function with variadic argument list
-private void g_object_get1( void* obj, in char* firstPropertyName, int* res ){
+private void g_object_get1( void* obj, in char* firstPropertyName, gint* res ){
     g_object_get( obj, firstPropertyName, res, null );
 }
 
-private void g_object_set1( void* obj, in char* firstPropertyName, int value ){
+private void g_object_set1( void* obj, in char* firstPropertyName, ptrdiff_t value ){
     g_object_set( obj, firstPropertyName, value, null );
 }
 
@@ -571,20 +570,20 @@ private void g_signal_emit_by_name3( void* instance, in char* detailed_signal, i
     g_signal_emit_by_name( instance, detailed_signal, value1, value2, value3 );
 }
 
-private void gdk_pixbuf_save_to_buffer0(GdkPixbuf *pixbuf, char **buffer, uint *buffer_size,
+private void gdk_pixbuf_save_to_buffer0(GdkPixbuf *pixbuf, char **buffer, gsize *buffer_size,
    in char *type, GError **error ){
-    gdk_pixbuf_save_to_buffer( pixbuf, buffer, buffer_size, type, error );
+    gdk_pixbuf_save_to_bufferv( pixbuf, buffer, buffer_size, type, null, null, error );
 }
 
-private void gtk_list_store_set1(void* store , void* iter, int column, void* value ){
+private void gtk_list_store_set1(void* store , void* iter, gint column, void* value ){
     gtk_list_store_set( cast(GtkListStore *)store, cast(GtkTreeIter *)iter, column, value, -1 );
 }
 
-private void gtk_tree_model_get1(void* store , void* iter, int column, void** value ){
+private void gtk_tree_model_get1(void* store , void* iter, gint column, void** value ){
     gtk_tree_model_get( cast(GtkTreeModel*) store, cast(GtkTreeIter *)iter, column, value, -1 );
 }
 
-private void gtk_tree_store_set1(void* tree_store, GtkTreeIter *iter, int column, void* value ){
+private void gtk_tree_store_set1(void* tree_store, GtkTreeIter *iter, gint column, void* value ){
     gtk_tree_store_set( tree_store, iter, column, value, -1 );
 }
 private void gtk_cell_layout_set_attributes1( void *cell_layout, void* cell, in void* key, void* value ){
@@ -598,12 +597,12 @@ private bool GDK_WINDOWING_X11(){
     return true;
 }
 
-private uint GDK_PIXMAP_XID(GdkDrawable* win){
+private guint GDK_PIXMAP_XID(GdkDrawable* win){
     return gdk_x11_drawable_get_xid(win);
 }
 
 // macro
-int g_signal_connect( void* instance, in char* sig, GCallback handle, void* ptr ){
+glong g_signal_connect( void* instance, in char* sig, GCallback handle, void* ptr ){
     return g_signal_connect_data( instance, sig, handle, ptr, cast(GClosureNotify) 0, cast(GConnectFlags)0 );
 }
 // macro
@@ -611,7 +610,7 @@ void gdk_cursor_destroy( GdkCursor* cursor ){
     gdk_cursor_unref(cursor);
 }
 
-int g_thread_supported(){
+gint g_thread_supported(){
     return g_threads_got_initialized;
 }
 
@@ -676,10 +675,10 @@ template ForwardGtkOsCFunc(char[] name) {
 //import org.eclipse.swt.internal.*;
 
 // for ctfe, save static ctor
-private int buildVERSION(int major, int minor, int micro) {
+private gint buildVERSION(gint major, gint minor, gint micro) {
     return (major << 16) + (minor << 8) + micro;
 }
-private int GTK_VERSION(){
+private gint GTK_VERSION(){
     version( GTK_DYN_LINK ) return buildVERSION(*gtk_major_version, *gtk_minor_version, *gtk_micro_version);
     else                    return buildVERSION( gtk_major_version,  gtk_minor_version,  gtk_micro_version);
 }
@@ -1162,19 +1161,19 @@ public class OS : Platform {
     public static const char[] ypad = "ypad";
     public static const char[] GTK_PRINT_SETTINGS_OUTPUT_URI = "output-uri";
 
-    public static int GTK_VERSION(){
+    public static gint GTK_VERSION(){
         return .GTK_VERSION();
     }
 //     = buildVERSION(gtk_major_version(), gtk_minor_version(), gtk_micro_version());
 
 
-public static int buildVERSION(int major, int minor, int micro) {
+public static gint buildVERSION(gint major, gint minor, gint micro) {
     return .buildVERSION( major, minor, micro );
 }
 
 /++
-public static final native ptrdiff_t localeconv_decimal_point();
-public static final native ptrdiff_t realpath(byte[] path, byte[] realPath);
+public static final native gint localeconv_decimal_point();
+public static final native gint realpath(byte[] path, byte[] realPath);
 ++/
 
 /** X11 Native methods and constants */
@@ -1193,7 +1192,7 @@ public static const int FocusOut = 10;
 public static const int GraphicsExpose = 13;
 public static const int NoExpose = 14;
 public static const int ExposureMask = 1 << 15;
-public static const ptrdiff_t NoEventMask = 0;
+public static const gint NoEventMask = 0;
 public static const int NotifyNormal = 0;
 public static const int NotifyGrab = 1;
 public static const int NotifyHint = 1;
@@ -1219,15 +1218,15 @@ public static const int PictStandardA1 = 4;
 public static const int PictOpSrc = 1;
 public static const int PictOpOver = 3;
 
-    public static int gtk_major_version(){
+    public static gint gtk_major_version(){
         version(GTK_DYN_LINK) return *.gtk_minor_version;
         else                  return .gtk_minor_version;
     }
-    public static int gtk_minor_version(){
+    public static gint gtk_minor_version(){
         version(GTK_DYN_LINK) return *.gtk_minor_version;
         else                  return .gtk_minor_version;
     }
-    public static int gtk_micro_version(){
+    public static gint gtk_micro_version(){
         version(GTK_DYN_LINK) return *.gtk_micro_version;
         else                  return .gtk_micro_version;
     }
@@ -1553,6 +1552,7 @@ public static const int PictOpOver = 3;
     mixin ForwardGtkOsCFunc!(.gtk_accel_group_new);
     mixin ForwardGtkOsCFunc!(.gtk_accel_groups_activate);
     mixin ForwardGtkOsCFunc!(.gtk_accel_label_set_accel_widget);
+    mixin ForwardGtkOsCFunc!(.gtk_accel_label_get_accel_widget);
     mixin ForwardGtkOsCFunc!(.gtk_adjustment_changed);
     mixin ForwardGtkOsCFunc!(.gtk_adjustment_new);
     mixin ForwardGtkOsCFunc!(.gtk_adjustment_set_value);
@@ -2190,6 +2190,12 @@ public static const int PictOpOver = 3;
     mixin ForwardGtkOsCFunc!(.gtk_window_set_type_hint);
     mixin ForwardGtkOsCFunc!(.gtk_window_set_transient_for);
     mixin ForwardGtkOsCFunc!(.gtk_window_unmaximize);
+    mixin ForwardGtkOsCFunc!(.gtk_widget_get_window);
+    mixin ForwardGtkOsCFunc!(.gtk_widget_get_allocation);
+    mixin ForwardGtkOsCFunc!(.gtk_widget_set_allocation);
+    mixin ForwardGtkOsCFunc!(.gtk_scrolled_window_get_hscrollbar);
+    mixin ForwardGtkOsCFunc!(.gtk_scrolled_window_get_vscrollbar);
+    mixin ForwardGtkOsCFunc!(.gtk_widget_set_tooltip_window);
     mixin ForwardGtkOsCFunc!(.pango_attr_background_new );
     mixin ForwardGtkOsCFunc!(.pango_attr_font_desc_new);
     mixin ForwardGtkOsCFunc!(.pango_attr_foreground_new );
@@ -2299,7 +2305,7 @@ public static const int PictOpOver = 3;
 
     /* Field accessors */
 
-    public static uint pango_layout_line_get_resolved_dir( PangoLayoutLine* line ){
+    public static guint pango_layout_line_get_resolved_dir( PangoLayoutLine* line ){
         return line.resolved_dir();
     }
 
@@ -2313,33 +2319,33 @@ public static const int PictOpOver = 3;
     static GtkWidget* GTK_SCROLLED_WINDOW_VSCROLLBAR( void* arg0 )
             { return (cast(GtkScrolledWindow*)arg0).vscrollbar; }
 
-    static int GTK_SCROLLED_WINDOW_SCROLLBAR_SPACING( void* arg0)
+    static gint GTK_SCROLLED_WINDOW_SCROLLBAR_SPACING( void* arg0)
     {
         return   ((cast(GtkScrolledWindowClass*) ((cast(GTypeInstance*) arg0).g_class) ).scrollbar_spacing >= 0 ?
                   (cast(GtkScrolledWindowClass*) ((cast(GTypeInstance*) arg0).g_class)).scrollbar_spacing : 3) ;
     }
 
-    static int  GTK_WIDGET_HEIGHT( void* arg0 )
+    static gint GTK_WIDGET_HEIGHT( void* arg0 )
          { return (cast(GtkWidget*)arg0).allocation.height; }
-    static void GTK_WIDGET_SET_HEIGHT( void* arg0, int arg1)
+    static void GTK_WIDGET_SET_HEIGHT( void* arg0, gint arg1)
          { (cast(GtkWidget*)arg0).allocation.height = arg1; }
-    static int  GTK_WIDGET_WIDTH( void* arg0)
+    static gint GTK_WIDGET_WIDTH( void* arg0)
          { return (cast(GtkWidget*)arg0).allocation.width; }
-    static void GTK_WIDGET_SET_WIDTH( void* arg0, int arg1)
+    static void GTK_WIDGET_SET_WIDTH( void* arg0, gint arg1)
          { (cast(GtkWidget*)arg0).allocation.width = arg1; }
     static GdkWindow* GTK_WIDGET_WINDOW( void* arg0)
          { return (cast(GtkWidget*)arg0).window; }
-    static int  GTK_WIDGET_X( void* arg0 )
+    static gint GTK_WIDGET_X( void* arg0 )
          { return (cast(GtkWidget*)arg0).allocation.x; }
-    static void GTK_WIDGET_SET_X( void* arg0, int arg1)
+    static void GTK_WIDGET_SET_X( void* arg0, gint arg1)
          { (cast(GtkWidget*)arg0).allocation.x = arg1; }
-    static int  GTK_WIDGET_Y( void* arg0 )
+    static gint GTK_WIDGET_Y( void* arg0 )
          { return (cast(GtkWidget*)arg0).allocation.y; }
-    static void GTK_WIDGET_SET_Y( void* arg0, int arg1)
+    static void GTK_WIDGET_SET_Y( void* arg0, gint arg1)
          { (cast(GtkWidget*)arg0).allocation.y = arg1; }
-    static int  GTK_WIDGET_REQUISITION_WIDTH( void* arg0 )
-         { return (cast(GtkWidget*)arg0).requisition.width;  }
-    static int  GTK_WIDGET_REQUISITION_HEIGHT( void* arg0 )
+    static gint GTK_WIDGET_REQUISITION_WIDTH( void* arg0 )
+         { return (cast(GtkWidget*)arg0).requisition.width; }
+    static gint GTK_WIDGET_REQUISITION_HEIGHT( void* arg0 )
          { return (cast(GtkWidget*)arg0).requisition.height; }
 
     static GtkIMContext* GTK_ENTRY_IM_CONTEXT( void* arg0 )
@@ -2353,11 +2359,11 @@ public static const int PictOpOver = 3;
     static void GTK_TOOLTIPS_SET_ACTIVE( void* arg0, void*  arg1 )
          { (cast(GtkTooltips*)arg0).active_tips_data = cast(GtkTooltipsData*)arg1; }
 
-    static int  GDK_EVENT_TYPE( void* arg0 )
+    static gint  GDK_EVENT_TYPE( void* arg0 )
          { return (cast(GdkEvent*)arg0).type; }
     static GdkWindow* GDK_EVENT_WINDOW( void* arg0 )
          { return (cast(GdkEventAny*)arg0).window; }
-    static int  X_EVENT_TYPE( void* arg0 )
+    static gint  X_EVENT_TYPE( void* arg0 )
          { return (cast(XEvent*)arg0).type; }
     //Window X_EVENT_WINDOW( XAnyEvent* arg0 )
     //     { return arg0.window; }
@@ -2642,7 +2648,7 @@ public static const int PictOpOver = 3;
         return gtk_widget_get_type ();
     }
 
-    static uint GTK_WIDGET_FLAGS( void* arg0 )
+    static guint GTK_WIDGET_FLAGS( void* arg0 )
     {
         lock.lock();
         scope(exit) lock.unlock();
@@ -2762,7 +2768,7 @@ public static const int PictOpOver = 3;
     }
 
 
-    static int PANGO_PIXELS( int arg0 )
+    static gint PANGO_PIXELS( gint arg0 )
     {
         lock.lock();
         scope(exit) lock.unlock();
@@ -2810,21 +2816,21 @@ public static const int PictOpOver = 3;
         arg0.prev = arg1;
     }
 
-    static char* gtk_rc_style_get_bg_pixmap_name( GtkRcStyle* arg0, int arg1 )
+    static char* gtk_rc_style_get_bg_pixmap_name( GtkRcStyle* arg0, gint arg1 )
     {
         lock.lock();
         scope(exit) lock.unlock();
         return arg0.bg_pixmap_name[arg1];
     }
 
-    static int  gtk_rc_style_get_color_flags( GtkRcStyle* arg0, int arg1)
+    static gint  gtk_rc_style_get_color_flags( GtkRcStyle* arg0, gint arg1)
     {
         lock.lock();
         scope(exit) lock.unlock();
         return arg0.color_flags[arg1];
     }
 
-    static void gtk_rc_style_set_bg( GtkRcStyle* arg0, int arg1, GdkColor* arg2)
+    static void gtk_rc_style_set_bg( GtkRcStyle* arg0, gint arg1, GdkColor* arg2)
     {
         lock.lock();
         scope(exit) lock.unlock();
@@ -2833,21 +2839,21 @@ public static const int PictOpOver = 3;
         }
     }
 
-    static void gtk_rc_style_set_bg_pixmap_name( GtkRcStyle* arg0, int arg1, char* arg2)
+    static void gtk_rc_style_set_bg_pixmap_name( GtkRcStyle* arg0, gint arg1, char* arg2)
     {
         lock.lock();
         scope(exit) lock.unlock();
         arg0.bg_pixmap_name[arg1] = arg2;
     }
 
-    static void gtk_rc_style_set_color_flags( GtkRcStyle* arg0, int arg1, int arg2)
+    static void gtk_rc_style_set_color_flags( GtkRcStyle* arg0, gint arg1, gint arg2)
     {
         lock.lock();
         scope(exit) lock.unlock();
         arg0.color_flags[arg1] = arg2;
     }
 
-    static void gtk_rc_style_set_fg( GtkRcStyle* arg0, int arg1, GdkColor* arg2)
+    static void gtk_rc_style_set_fg( GtkRcStyle* arg0, gint arg1, GdkColor* arg2)
     {
         lock.lock();
         scope(exit) lock.unlock();
@@ -2856,7 +2862,7 @@ public static const int PictOpOver = 3;
         }
     }
 
-    static void gtk_rc_style_set_text( GtkRcStyle* arg0, int arg1, GdkColor* arg2)
+    static void gtk_rc_style_set_text( GtkRcStyle* arg0, gint arg1, GdkColor* arg2)
     {
         lock.lock();
         scope(exit) lock.unlock();
@@ -2872,14 +2878,14 @@ public static const int PictOpOver = 3;
         return arg0.font_desc;
     }
 
-    static void gtk_style_get_base( GtkStyle* arg0, int arg1, GdkColor* arg2 )
+    static void gtk_style_get_base( GtkStyle* arg0, gint arg1, GdkColor* arg2 )
     {
         lock.lock();
         scope(exit) lock.unlock();
         *arg2 = arg0.base[arg1];
     }
 
-    static void gtk_style_get_bg( GtkStyle* arg0, int arg1, GdkColor* arg2 )
+    static void gtk_style_get_bg( GtkStyle* arg0, gint arg1, GdkColor* arg2 )
     {
         lock.lock();
         scope(exit) lock.unlock();
@@ -2893,91 +2899,91 @@ public static const int PictOpOver = 3;
         *arg1 = arg0.black;
     }
 
-    static void gtk_style_get_dark( GtkStyle* arg0, int arg1, GdkColor* arg2 )
+    static void gtk_style_get_dark( GtkStyle* arg0, gint arg1, GdkColor* arg2 )
     {
         lock.lock();
         scope(exit) lock.unlock();
         *arg2 = arg0.dark[arg1];
     }
 
-    static void gtk_style_get_fg( GtkStyle* arg0, int arg1, GdkColor* arg2 )
+    static void gtk_style_get_fg( GtkStyle* arg0, gint arg1, GdkColor* arg2 )
     {
         lock.lock();
         scope(exit) lock.unlock();
         *arg2 = arg0.fg[arg1];
     }
 
-    static void gtk_style_get_light( GtkStyle* arg0, int arg1, GdkColor* arg2)
+    static void gtk_style_get_light( GtkStyle* arg0, gint arg1, GdkColor* arg2)
     {
         lock.lock();
         scope(exit) lock.unlock();
         *arg2 = arg0.light[arg1];
     }
 
-    static void gtk_style_get_text( GtkStyle* arg0, int arg1, GdkColor* arg2)
+    static void gtk_style_get_text( GtkStyle* arg0, gint arg1, GdkColor* arg2)
     {
         lock.lock();
         scope(exit) lock.unlock();
         *arg2 = arg0.text[arg1];
     }
 
-    static int  gtk_style_get_xthickness( GtkStyle* arg0 )
+    static gint  gtk_style_get_xthickness( GtkStyle* arg0 )
     {
         lock.lock();
         scope(exit) lock.unlock();
         return arg0.xthickness;
     }
 
-    static int gtk_style_get_ythickness( GtkStyle* arg0 )
+    static gint gtk_style_get_ythickness( GtkStyle* arg0 )
     {
         lock.lock();
         scope(exit) lock.unlock();
         return arg0.ythickness;
     }
 
-    static void gtk_style_get_fg_gc( GtkStyle* arg0, int arg1, GdkGC** arg2 )
+    static void gtk_style_get_fg_gc( GtkStyle* arg0, gint arg1, GdkGC** arg2 )
     {
         lock.lock();
         scope(exit) lock.unlock();
         *arg2 = arg0.fg_gc[arg1];
     }
 
-    static void gtk_style_get_bg_gc( GtkStyle* arg0, int arg1, GdkGC** arg2 )
+    static void gtk_style_get_bg_gc( GtkStyle* arg0, gint arg1, GdkGC** arg2 )
     {
         lock.lock();
         scope(exit) lock.unlock();
         *arg2 = arg0.bg_gc[arg1];
     }
 
-    static void gtk_style_get_light_gc( GtkStyle* arg0, int arg1, GdkGC** arg2 )
+    static void gtk_style_get_light_gc( GtkStyle* arg0, gint arg1, GdkGC** arg2 )
     {
         lock.lock();
         scope(exit) lock.unlock();
         *arg2 = arg0.light_gc[arg1];
     }
 
-    static void gtk_style_get_dark_gc( GtkStyle* arg0, int arg1, GdkGC** arg2 )
+    static void gtk_style_get_dark_gc( GtkStyle* arg0, gint arg1, GdkGC** arg2 )
     {
         lock.lock();
         scope(exit) lock.unlock();
         *arg2 = arg0.dark_gc[arg1];
     }
 
-    static void gtk_style_get_mid_gc( GtkStyle* arg0, int arg1, GdkGC** arg2 )
+    static void gtk_style_get_mid_gc( GtkStyle* arg0, gint arg1, GdkGC** arg2 )
     {
         lock.lock();
         scope(exit) lock.unlock();
         *arg2 = arg0.mid_gc[arg1];
     }
 
-    static void gtk_style_get_text_gc( GtkStyle* arg0, int arg1, GdkGC** arg2 )
+    static void gtk_style_get_text_gc( GtkStyle* arg0, gint arg1, GdkGC** arg2 )
     {
         lock.lock();
         scope(exit) lock.unlock();
         *arg2 = arg0.text_gc[arg1];
     }
 
-    static void gtk_style_get_text_aa_gc( GtkStyle* arg0, int arg1, GdkGC** arg2 )
+    static void gtk_style_get_text_aa_gc( GtkStyle* arg0, gint arg1, GdkGC** arg2 )
     {
         lock.lock();
         scope(exit) lock.unlock();
@@ -3002,11 +3008,11 @@ public static const int PictOpOver = 3;
         version(Tango){
             return tango.stdc.string.strlen( ptr );
         } else { // Phobos
-            return to!int(std.c.string.strlen( ptr ));
+            return cast(int)/*64bit*/std.c.string.strlen( ptr );
         }
     }
     //localeconv_decimal_point() localeconv()->decimal_point
-    static void* memmove( void* trg, in void* src, int len ){
+    static void* memmove( void* trg, in void* src, size_t len ){
         version(Tango){
             return tango.stdc.string.memmove( trg, src, len );
         } else { // Phobos

@@ -394,14 +394,14 @@ public String getText () {
     return text;
 }
 
-override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
+override int gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
     auto result = super.gtk_button_press_event (widget, event);
     if (result !is 0) return result;
     if ((style & SWT.RADIO) !is 0) selected  = getSelection ();
     return result;
 }
 
-override ptrdiff_t gtk_clicked (GtkWidget* widget) {
+override int gtk_clicked (GtkWidget* widget) {
     if ((style & SWT.RADIO) !is 0) {
         if ((parent.getStyle () & SWT.NO_RADIO_GROUP) !is 0) {
             setSelection (!selected);
@@ -423,7 +423,7 @@ override ptrdiff_t gtk_clicked (GtkWidget* widget) {
     return 0;
 }
 
-override ptrdiff_t gtk_focus_in_event (GtkWidget* widget, GdkEventFocus* event) {
+override int gtk_focus_in_event (GtkWidget* widget, GdkEventFocus* event) {
     auto result = super.gtk_focus_in_event (widget, event);
     // widget could be disposed at this point
     if (handle is null) return 0;
@@ -434,7 +434,7 @@ override ptrdiff_t gtk_focus_in_event (GtkWidget* widget, GdkEventFocus* event) 
     return result;
 }
 
-override ptrdiff_t gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
+override int gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
     auto result = super.gtk_focus_out_event (widget, event);
     // widget could be disposed at this point
     if (handle is null) return 0;
@@ -447,7 +447,7 @@ override ptrdiff_t gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event)
     return result;
 }
 
-override ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
+override int gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
     auto result = super.gtk_key_press_event (widget, event);
     if (result !is 0) return result;
     if ((style & SWT.RADIO) !is 0) selected  = getSelection ();

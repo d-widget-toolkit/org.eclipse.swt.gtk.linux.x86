@@ -50,8 +50,6 @@ import org.eclipse.swt.widgets.Widget;
 import java.lang.all;
 import java.nonstandard.UnsafeUtf;
 
-import std.conv;
-
 /**
  * The CCombo class represents a selectable user interface object
  * that combines a text field and a list and issues notification
@@ -1613,7 +1611,7 @@ public void setVisibleItemCount (int count) {
 }
 String stripMnemonic (String string) {
     int index = 0;
-    int length_ = to!int(string.length);
+    int length_ = cast(int)/*64bit*/string.length;
     do {
         while ((index < length_) && (string[index] !is '&')) index++;
         if (++index >= length_) return string;

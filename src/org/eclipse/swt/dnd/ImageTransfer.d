@@ -134,13 +134,13 @@ public void javaToNative(Object object, TransferData transferData) {
     if (transferData.type is  cast(void*)XV_ID) typeStr = "xv";
     auto type = typeStr.ptr;
     char* buffer;
-    uint len;
+    size_t len;
     if (type is null) return;
     OS.gdk_pixbuf_save_to_buffer0(pixbuf, &buffer, &len, type, null);
     OS.g_object_unref(pixbuf);
     image.dispose();
     transferData.pValue = buffer;
-    transferData.length = (len + 3) / 4 * 4;
+    transferData.length = cast(int)/*64bit*/((len + 3) / 4 * 4);
     transferData.result = 1;
     transferData.format = 32;
 }

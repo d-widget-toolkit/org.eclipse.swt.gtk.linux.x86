@@ -47,7 +47,6 @@ version(Tango){
     import tango.stdc.string;
 } else {
     import std.c.string;
-    import std.conv;
 }
 
 
@@ -331,7 +330,7 @@ void checkGC (int mask) {
                 for (int i = 0; i < cairoDashes.length; i++) {
                     cairoDashes[i] = width is 0 || data.lineStyle is SWT.LINE_CUSTOM ? dashes[i] : dashes[i] * width;
                 }
-                Cairo.cairo_set_dash(cairo, cairoDashes.ptr, to!int(cairoDashes.length), dashesOffset);
+                Cairo.cairo_set_dash(cairo, cairoDashes.ptr, cast(int)/*64bit*/cairoDashes.length, dashesOffset);
             } else {
                 Cairo.cairo_set_dash(cairo, null, 0, 0);
             }
@@ -415,7 +414,7 @@ void checkGC (int mask) {
                 for (int i = 0; i < dash_list.length; i++) {
                     dash_list[i] = cast(char)(width is 0 || data.lineStyle is SWT.LINE_CUSTOM ? dashes[i] : dashes[i] * width);
                 }
-                OS.gdk_gc_set_dashes(handle, 0, dash_list.ptr, to!int(dash_list.length));
+                OS.gdk_gc_set_dashes(handle, 0, dash_list.ptr, cast(int)/*64bit*/dash_list.length);
             }
             line_style = OS.GDK_LINE_ON_OFF_DASH;
         } else {
@@ -1089,7 +1088,7 @@ void drawImageXRender(Image srcImage, int srcX, int srcY, int srcWidth, int srcH
         translateY = -y;
     }
     auto xDisplay = OS.GDK_DISPLAY();
-    int maskPict = 0;
+    size_t maskPict = 0;
     if (maskPixmap !is null) {
         int attribCount = 0;
         XRenderPictureAttributes* attrib;
@@ -1104,7 +1103,7 @@ void drawImageXRender(Image srcImage, int srcX, int srcY, int srcWidth, int srcH
     auto format = OS.XRenderFindVisualFormat(cast(void*)xDisplay, OS.gdk_x11_visual_get_xvisual(OS.gdk_visual_get_system()));
     auto destPict = OS.XRenderCreatePicture(cast(void*)xDisplay, OS.gdk_x11_drawable_get_xid(drawable), format, 0, null);
     if (destPict is 0) SWT.error(SWT.ERROR_NO_HANDLES);
-    int srcPict = OS.XRenderCreatePicture(xDisplay, OS.gdk_x11_drawable_get_xid(srcImage.pixmap), format, 0, null);
+    size_t srcPict = OS.XRenderCreatePicture(xDisplay, OS.gdk_x11_drawable_get_xid(srcImage.pixmap), format, 0, null);
     if (srcPict is 0) SWT.error(SWT.ERROR_NO_HANDLES);
     if (srcWidth !is destWidth || srcHeight !is destHeight) {
         int[] transform = [cast(int)((cast(float)srcWidth / destWidth) * 65536), 0, 0, 0, cast(int)((cast(float)srcHeight / destHeight) * 65536), 0, 0, 0, 65536];
@@ -1330,7 +1329,7 @@ public void drawPolygon(int[] pointArray) {
         Cairo.cairo_stroke(cairo);
         return;
     }
-    OS.gdk_draw_polygon(data.drawable, handle, 0, cast(GdkPoint*)pointArray.ptr, to!int(pointArray.length / 2));
+    OS.gdk_draw_polygon(data.drawable, handle, 0, cast(GdkPoint*)pointArray.ptr, cast(int)/*64bit*/pointArray.length / 2);
 }
 
 /**
@@ -1358,7 +1357,7 @@ public void drawPolyline(int[] pointArray) {
         Cairo.cairo_stroke(cairo);
         return;
     }
-    OS.gdk_draw_lines(data.drawable, handle, cast(GdkPoint*)pointArray.ptr, to!int(pointArray.length / 2));
+    OS.gdk_draw_lines(data.drawable, handle, cast(GdkPoint*)pointArray.ptr, cast(int)/*64bit*/pointArray.length / 2);
 }
 
 void drawPolyline(org.eclipse.swt.internal.gtk.OS.cairo_t* cairo, int[] pointArray, bool close) {
@@ -1979,7 +1978,7 @@ public void fillPolygon(int[] pointArray) {
         Cairo.cairo_fill(cairo);
         return;
     }
-    OS.gdk_draw_polygon(data.drawable, handle, 1, cast(GdkPoint*)pointArray.ptr, to!int(pointArray.length / 2));
+    OS.gdk_draw_polygon(data.drawable, handle, 1, cast(GdkPoint*)pointArray.ptr, cast(int)/*64bit*/pointArray.length / 2);
 }
 
 /**
@@ -2227,7 +2226,7 @@ public int getAlpha() {
 public int getAntialias() {
     if (handle is null) SWT.error(SWT.ERROR_GRAPHIC_DISPOSED);
     if (data.cairo is null) return SWT.DEFAULT;
-    int antialias = Cairo.cairo_get_antialias(data.cairo);
+    ptrdiff_t antialias = Cairo.cairo_get_antialias(data.cairo);
     switch (antialias) {
         case Cairo.CAIRO_ANTIALIAS_DEFAULT: return SWT.DEFAULT;
         case Cairo.CAIRO_ANTIALIAS_NONE: return SWT.OFF;
@@ -2713,7 +2712,7 @@ public int getStyle () {
 public int getTextAntialias() {
     if (handle is null) SWT.error(SWT.ERROR_GRAPHIC_DISPOSED);
     if (data.cairo is null) return SWT.DEFAULT;
-    int antialias = Cairo.CAIRO_ANTIALIAS_DEFAULT;
+    ptrdiff_t antialias = Cairo.CAIRO_ANTIALIAS_DEFAULT;
     if (OS.GTK_VERSION < OS.buildVERSION(2, 8, 0)) {
         auto options = Cairo.cairo_font_options_create();
         Cairo.cairo_get_font_options(data.cairo, options);
@@ -2802,7 +2801,7 @@ public bool getXORMode() {
  * @see #equals
  */
 public override hash_t toHash() {
-    return cast(hash_t)/*64*/handle;
+    return cast(hash_t)handle;
 }
 
 double[] identity() {
@@ -2848,7 +2847,7 @@ void initCairo() {
     if (cairo !is null) return;
     auto xDisplay = OS.GDK_DISPLAY();
     auto xVisual = OS.gdk_x11_visual_get_xvisual(OS.gdk_visual_get_system());
-    uint xDrawable;
+    size_t xDrawable;
     int translateX = 0, translateY = 0;
     auto drawable = data.drawable;
     if (data.image !is null) {
@@ -3129,7 +3128,7 @@ static void setCairoFont(org.eclipse.swt.internal.gtk.OS.cairo_t* cairo, PangoFo
     auto family = OS.pango_font_description_get_family(font);
     auto len = /*OS.*/strlen(family);
     auto buffer = new char[len + 1];
-    OS.memmove(buffer.ptr, family, to!int(len));
+    OS.memmove(buffer.ptr, family, len);
     //TODO - convert font height from pango to cairo
     double height = OS.PANGO_PIXELS(OS.pango_font_description_get_size(font)) * 96 / 72;
     int pangoStyle = OS.pango_font_description_get_style(font);
@@ -3781,8 +3780,8 @@ void setString(String str, int flags) {
         System.arraycopy(buffer2, 0, buffer, buffer1.length, buffer2.length);
         auto attr_list = OS.pango_attr_list_new();
         auto attr = OS.pango_attr_underline_new(OS.PANGO_UNDERLINE_LOW);
-        attr.start_index = to!int(buffer1.length);
-        attr.end_index = to!int(buffer1.length + 1);
+        attr.start_index = cast(int)/*64bit*/buffer1.length;
+        attr.end_index = cast(int)/*64bit*/buffer1.length + 1;
         OS.pango_attr_list_insert(attr_list, attr);
         OS.pango_layout_set_attributes(layout, attr_list);
         OS.pango_attr_list_unref(attr_list);
@@ -3790,7 +3789,7 @@ void setString(String str, int flags) {
         buffer = text.dup;
         OS.pango_layout_set_attributes(layout, null);
     }
-    OS.pango_layout_set_text(layout, buffer.ptr, to!int(buffer.length));
+    OS.pango_layout_set_text(layout, buffer.ptr, cast(int)/*64bit*/buffer.length);
     OS.pango_layout_set_single_paragraph_mode(layout, (flags & SWT.DRAW_DELIMITER) is 0);
     OS.pango_layout_set_tabs(layout, (flags & SWT.DRAW_TAB) !is 0 ? null : data.device.emptyTab);
     data.str = str;

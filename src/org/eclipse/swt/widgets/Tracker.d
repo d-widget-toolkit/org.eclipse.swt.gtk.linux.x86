@@ -32,8 +32,6 @@ import org.eclipse.swt.widgets.Event;
 
 import java.lang.Thread;
 
-import std.conv;
-
 /**
  *  Instances of this class implement rubber banding rectangles that are
  *  drawn onto a parent <code>Composite</code> or <code>Display</code>.
@@ -451,7 +449,7 @@ override int gtk_key_press_event (GtkWidget* widget, GdkEventKey* keyEvent) {
              * values have changed.
              */
             if (rectangles !is oldRectangles) {
-                int length = to!int(rectangles.length);
+                ptrdiff_t length = rectangles.length;
                 if (length !is rectsToErase.length) {
                     draw = true;
                 } else {
@@ -496,7 +494,7 @@ override int gtk_key_press_event (GtkWidget* widget, GdkEventKey* keyEvent) {
              * values have changed.
              */
             if (rectangles !is oldRectangles) {
-                int length = to!int(rectangles.length);
+                ptrdiff_t length = rectangles.length;
                 if (length !is rectsToErase.length) {
                     draw = true;
                 } else {
@@ -575,7 +573,7 @@ private int gtk_mouse (int eventType, GtkWidget* widget, void* eventPtr) {
              * values have changed.
              */
             if (rectangles !is oldRectangles) {
-                int length = to!int(rectangles.length);
+                ptrdiff_t length = rectangles.length;
                 if (length !is rectsToErase.length) {
                     draw = true;
                 } else {
@@ -620,7 +618,7 @@ private int gtk_mouse (int eventType, GtkWidget* widget, void* eventPtr) {
              * values have changed.
              */
             if (rectangles !is oldRectangles) {
-                int length = to!int(rectangles.length);
+                ptrdiff_t length = rectangles.length;
                 if (length !is rectsToErase.length) {
                     draw = true;
                 } else {
@@ -972,7 +970,7 @@ public void setRectangles (Rectangle [] rectangles) {
     checkWidget();
     // SWT extension: allow null for zero length string
     //if (rectangles is null) error (SWT.ERROR_NULL_ARGUMENT);
-    int length = to!int(rectangles.length);
+    ptrdiff_t length = rectangles.length;
     this.rectangles = new Rectangle [length];
     for (int i = 0; i < length; i++) {
         Rectangle current = rectangles [i];

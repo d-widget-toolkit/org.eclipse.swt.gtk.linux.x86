@@ -31,8 +31,6 @@ import org.eclipse.swt.widgets.Display;
 
 import java.lang.all;
 
-import std.conv;
-
 /**
  * Instances of this class represent a selectable user interface object
  * that issues notification when pressed and released.
@@ -417,7 +415,7 @@ public bool getSelection () {
     return cast(bool)OS.gtk_check_menu_item_get_active(cast(GtkCheckMenuItem*)handle);
 }
 
-override ptrdiff_t gtk_activate (GtkWidget* widget) {
+override int gtk_activate (GtkWidget* widget) {
     if ((style & SWT.CASCADE) !is 0 && menu !is null) return 0;
     /*
     * Bug in GTK.  When an ancestor menu is disabled and
@@ -455,13 +453,13 @@ override ptrdiff_t gtk_activate (GtkWidget* widget) {
     return 0;
 }
 
-override ptrdiff_t gtk_select (ptrdiff_t item) {
+override int gtk_select (int item) {
     parent.selectedItem = this;
     sendEvent (SWT.Arm);
     return 0;
 }
 
-override ptrdiff_t gtk_show_help (GtkWidget* widget, ptrdiff_t helpType) {
+override int gtk_show_help (GtkWidget* widget, ptrdiff_t helpType) {
     bool handled = hooks (SWT.Help);
     if (handled) {
         postEvent (SWT.Help);
@@ -850,14 +848,14 @@ public override void setText (String string) {
     int index = string.indexOf ('\t');
     if (index !is -1) {
         bool isRTL = (parent.style & SWT.RIGHT_TO_LEFT) !is 0;
-        accelString = (isRTL? "" : "  ") ~ string.substring (index+1, string.length) ~ (isRTL? "  " : "");
+        accelString = (isRTL? "" : "  ") ~ string.substring (index+1, cast(int)/*64bit*/string.length) ~ (isRTL? "  " : "");
         string = string.substring (0, index);
     }
     char [] chars = fixMnemonic (string);
     auto label = OS.gtk_bin_get_child (cast(GtkBin*)handle);
     OS.gtk_label_set_text_with_mnemonic (cast(GtkLabel*)label, chars.toStringzValidPtr() );
 
-    auto ptr = cast(char*)OS.g_malloc (to!int(accelString.length + 1));
+    auto ptr = cast(char*)OS.g_malloc (accelString.length + 1);
     ptr[ 0 .. accelString.length ] = accelString;
     ptr[ accelString.length ] = '\0';
 

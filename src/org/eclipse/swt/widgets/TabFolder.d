@@ -458,7 +458,7 @@ override int gtk_switch_page (GtkWidget* widget, ptrdiff_t page, ptrdiff_t page_
             control.setVisible (false);
         }
     }
-    TabItem item = items [cast(int)/*64*/page_num];
+    TabItem item = items [page_num];
     Control control = item.getControl ();
     if (control !is null && !control.isDisposed ()) {
         control.setBounds(getClientArea());

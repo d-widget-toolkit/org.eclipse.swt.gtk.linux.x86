@@ -27,8 +27,6 @@ import org.eclipse.swt.widgets.TypedListener;
 
 import java.lang.all;
 
-import std.conv;
-
 /**
  * Instances of this class are controls that allow the user
  * to choose an item from a list of items, or optionally
@@ -153,7 +151,7 @@ public void add (String string) {
     checkWidget();
     // SWT extension: allow null for zero length string
     //if (string is null) error (SWT.ERROR_NULL_ARGUMENT);
-    add (string, to!int(items.length));
+    add (string, cast(int)/*64bit*/items.length);
 }
 
 /**
@@ -413,7 +411,7 @@ public override Point computeSize (int wHint, int hHint, bool changed) {
     auto listParent = OS.gtk_widget_get_parent (listHandle);
     OS.gtk_widget_size_request (listParent !is null ? listParent : listHandle, &listRequesition);
 
-    width = Math.max (listRequesition.width, width) + arrowRequesition.width + 4;
+    width = (Math.max (listRequesition.width, width) + arrowRequesition.width + 4);
     width = wHint is SWT.DEFAULT ? width : wHint;
     height = hHint is SWT.DEFAULT ? height : hHint;
     return new Point (width, height);
@@ -803,7 +801,7 @@ override bool dragDetect(int x, int y, bool filter, bool* consume) {
         auto layout = OS.gtk_entry_get_layout (entryHandle);
         OS.pango_layout_xy_to_index (layout, x * OS.PANGO_SCALE, y * OS.PANGO_SCALE, &index, &trailing);
         auto ptr = OS.pango_layout_get_text (layout);
-        int position = cast(int)/*64*/OS.g_utf8_pointer_to_offset (ptr, ptr + index) + trailing;
+        auto position = OS.g_utf8_pointer_to_offset (ptr, ptr + index) + trailing;
         Point selection = getSelection ();
         if (selection.x <= position && position < selection.y) {
             if (super.dragDetect (x, y, filter, consume)) {
@@ -868,7 +866,7 @@ public String getItem (int index) {
  */
 public int getItemCount () {
     checkWidget();
-    return to!int(items.length);
+    return cast(int)/*64bit*/items.length;
 }
 
 /**
@@ -989,7 +987,7 @@ public Point getSelection () {
             auto str = OS.gtk_entry_get_text (entryHandle);
             if (str !is null) length = OS.g_utf8_strlen (str, -1);
         }
-        return new Point (0, to!int(length));
+        return new Point (0, cast(int)/*64bit*/length);
     }
     int start;
     int end;
@@ -1124,12 +1122,12 @@ public int getVisibleItemCount () {
     return visibleCount;
 }
 
-override ptrdiff_t gtk_activate (GtkWidget* widget) {
+override int gtk_activate (GtkWidget* widget) {
     postEvent (SWT.DefaultSelection);
     return 0;
 }
 
-override ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
+override int gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
     /*
     * Feature in GTK. Depending on where the user clicks, GTK prevents
     * the left mouse button event from being propagated. The fix is to
@@ -1240,23 +1238,23 @@ override int gtk_commit (GtkIMContext* imContext, char* text) {
     return 0;
 }
 
-override int gtk_delete_text (GtkWidget* widget, int start_pos, int end_pos) {
+override int gtk_delete_text (GtkWidget* widget, ptrdiff_t start_pos, ptrdiff_t end_pos) {
     if (lockText) {
         OS.gtk_list_unselect_item (listHandle, 0);
         OS.g_signal_stop_emission_by_name (entryHandle, OS.delete_text.ptr);
         return 0;
     }
     if (!hooks (SWT.Verify) && !filters (SWT.Verify)) return 0;
-    String newText = verifyText ("", cast(int)/*64*/start_pos, cast(int)/*64*/end_pos);
+    String newText = verifyText ("", cast(int)/*64bit*/start_pos, cast(int)/*64bit*/end_pos);
     if (newText is null) {
         OS.g_signal_stop_emission_by_name (entryHandle, OS.delete_text.ptr);
     } else {
         if (newText.length > 0) {
             int pos;
-            pos = cast(int)/*64*/end_pos;
+            pos = cast(int)/*64bit*/end_pos;
             OS.g_signal_handlers_block_matched (entryHandle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udCHANGED);
             OS.g_signal_handlers_block_matched (entryHandle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udINSERT_TEXT);
-            OS.gtk_editable_insert_text (entryHandle, newText.ptr, to!int(newText.length), &pos);
+            OS.gtk_editable_insert_text (entryHandle, newText.ptr, cast(int)/*64bit*/newText.length, &pos);
             OS.g_signal_handlers_unblock_matched (entryHandle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udINSERT_TEXT);
             OS.g_signal_handlers_unblock_matched (entryHandle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udCHANGED);
             OS.gtk_editable_set_position (entryHandle, pos );
@@ -1265,7 +1263,7 @@ override int gtk_delete_text (GtkWidget* widget, int start_pos, int end_pos) {
     return 0;
 }
 
-override ptrdiff_t gtk_event_after (GtkWidget* widget, GdkEvent* event) {
+override int gtk_event_after (GtkWidget* widget, GdkEvent* event) {
     /*
     * Feature in GTK. Depending on where the user clicks, GTK prevents
     * the left mouse button event from being propagated. The fix is to
@@ -1319,7 +1317,7 @@ override int gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
     return super.gtk_focus_out_event (widget, event);
 }
 
-override int gtk_insert_text (GtkEditable* widget, char* new_text, int new_text_length, int position) {
+override int gtk_insert_text (GtkEditable* widget, char* new_text, ptrdiff_t new_text_length, ptrdiff_t position) {
     if (lockText) {
         OS.gtk_list_unselect_item (listHandle, 0);
         OS.g_signal_stop_emission_by_name (entryHandle, OS.insert_text.ptr);
@@ -1329,10 +1327,10 @@ override int gtk_insert_text (GtkEditable* widget, char* new_text, int new_text_
     if (new_text is null || new_text_length is 0) return 0;
     String oldText = new_text[0..new_text_length]._idup();
     int pos;
-    pos = position;
+    pos = cast(int)/*64bit*/position;
     if (pos is -1) {
         auto ptr = OS.gtk_entry_get_text (entryHandle);
-        pos = to!int(fromStringz(ptr).length);
+        pos = cast(int)/*64bit*/fromStringz(ptr).length;
     }
     String newText = verifyText (oldText, pos, pos);
     if (newText !is oldText) {
@@ -1347,7 +1345,7 @@ override int gtk_insert_text (GtkEditable* widget, char* new_text, int new_text_
                 OS.g_signal_handlers_unblock_matched (entryHandle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udCHANGED);
             }
             OS.g_signal_handlers_block_matched (entryHandle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udINSERT_TEXT);
-            OS.gtk_editable_insert_text (entryHandle, newText.ptr, to!int(newText.length), &pos);
+            OS.gtk_editable_insert_text (entryHandle, newText.ptr, cast(int)/*64bit*/newText.length, &pos);
             OS.g_signal_handlers_unblock_matched (entryHandle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udINSERT_TEXT);
             newStart = newEnd = pos;
         }
@@ -1397,7 +1395,7 @@ override int gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
                 break;
             case OS.GDK_Page_Down:
             case OS.GDK_KP_Page_Down:
-                newIndex = to!int(items.length - 1);
+                newIndex = cast(int)/*64bit*/items.length - 1;
                 break;
             default:
         }
@@ -1411,7 +1409,7 @@ override int gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
     return result;
 }
 
-override ptrdiff_t gtk_populate_popup (GtkWidget* widget, GtkWidget* menu) {
+override int gtk_populate_popup (GtkWidget* widget, GtkWidget* menu) {
     if ((style & SWT.RIGHT_TO_LEFT) !is 0) {
         OS.gtk_widget_set_direction (menu, OS.GTK_TEXT_DIR_RTL);
         display.doSetDirectionProc(menu, OS.GTK_TEXT_DIR_RTL);
@@ -1664,8 +1662,8 @@ public void removeAll () {
     items = null;
     if (OS.GTK_VERSION >= OS.buildVERSION (2, 4, 0)) {
         clearText ();
-        for (int i = to!int(count) - 1; i >= 0; i--) {
-            OS.gtk_combo_box_remove_text (handle, i);
+        for (ptrdiff_t i = count - 1; i >= 0; i--) {
+            OS.gtk_combo_box_remove_text (handle, cast(int)/*64bit*/i);
         }
     } else {
         ignoreSelect = true;
@@ -1923,13 +1921,13 @@ public void setItems (String [] items) {
     System.arraycopy (items, 0, this.items, 0, items.length);
     if (OS.GTK_VERSION >= OS.buildVERSION (2, 4, 0)) {
         clearText ();
-        for (int i = to!int(count) - 1; i >= 0; i--) {
-            OS.gtk_combo_box_remove_text (handle, i);
+        for (ptrdiff_t i = count - 1; i >= 0; i--) {
+            OS.gtk_combo_box_remove_text (handle, cast(int)/*64bit*/i);
         }
-        for (size_t i = 0; i < items.length; i++) {
+        for (ptrdiff_t i = 0; i < items.length; i++) {
             String string = items [i];
             char* buffer = string.toStringzValidPtr();
-            OS.gtk_combo_box_insert_text (handle, to!int(i), buffer);
+            OS.gtk_combo_box_insert_text (handle, cast(int)/*64bit*/i, buffer);
             if ((style & SWT.RIGHT_TO_LEFT) !is 0 && popupHandle !is null) {
                 display.doSetDirectionProc(popupHandle, OS.GTK_TEXT_DIR_RTL);
             }
@@ -2109,7 +2107,7 @@ public void setText (String string) {
     */
     if (hooks (SWT.Verify) || filters (SWT.Verify)) {
         auto ptr = OS.gtk_entry_get_text (entryHandle);
-        string = verifyText (string, 0, cast(int)/*64*/OS.g_utf8_strlen (ptr, -1));
+        string = verifyText (string, 0, cast(int)/*64bit*/OS.g_utf8_strlen (ptr, -1));
         if (string is null) return;
     }
     auto buffer = string.toStringzValidPtr();

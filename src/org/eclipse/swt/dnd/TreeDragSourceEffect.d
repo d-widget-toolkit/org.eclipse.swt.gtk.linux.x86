@@ -98,11 +98,11 @@ public class TreeDragSourceEffect : DragSourceEffect {
         */
         auto handle = tree.handle;
         auto selection = OS.gtk_tree_view_get_selection (handle);
-        int dummy;
+        ptrdiff_t dummy;
         void* model = OS.GTK_VERSION < OS.buildVERSION (2, 2, 4) ? &dummy : null;
         auto list = OS.gtk_tree_selection_get_selected_rows (selection, &model);
         if (list is null) return null;
-        int count = Math.min(10, OS.g_list_length (list));
+        ptrdiff_t count = Math.min(10, OS.g_list_length (list));
 
         Display display = tree.getDisplay();
         if (count is 1) {

@@ -28,8 +28,6 @@ import org.eclipse.swt.widgets.TypedListener;
 
 import java.lang.Thread;
 
-import std.conv;
-
 /**
  * This class is the abstract superclass of all user interface objects.
  * Widgets are created, disposed and issue notification to listeners
@@ -689,190 +687,190 @@ public int getStyle () {
 }
 
 
-ptrdiff_t gtk_activate (GtkWidget* widget) {
+int gtk_activate (GtkWidget* widget) {
     return 0;
 }
 
-ptrdiff_t gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
+int gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
     return 0;
 }
 
-ptrdiff_t gtk_button_release_event (GtkWidget* widget, GdkEventButton* event) {
+int gtk_button_release_event (GtkWidget* widget, GdkEventButton* event) {
     return 0;
 }
 
-ptrdiff_t gtk_changed (GtkWidget* widget) {
+int gtk_changed (GtkWidget* widget) {
     return 0;
 }
 
-ptrdiff_t gtk_change_value (GtkWidget* widget, ptrdiff_t scroll, ptrdiff_t value1, ptrdiff_t value2) {
+int gtk_change_value (GtkWidget* widget, int scroll, double value1, void* user_data) {
     return 0;
 }
 
-ptrdiff_t gtk_clicked (GtkWidget* widget) {
+int gtk_clicked (GtkWidget* widget) {
     return 0;
 }
 
-ptrdiff_t gtk_commit (GtkIMContext* imcontext, char* text) {
+int gtk_commit (GtkIMContext* imcontext, char* text) {
     return 0;
 }
 
-ptrdiff_t gtk_configure_event (GtkWidget* widget, ptrdiff_t event) {
+int gtk_configure_event (GtkWidget* widget, ptrdiff_t event) {
     return 0;
 }
 
-ptrdiff_t gtk_day_selected (GtkWidget* widget) {
+int gtk_day_selected (GtkWidget* widget) {
     return 0;
 }
 
-ptrdiff_t gtk_delete_event (GtkWidget* widget, ptrdiff_t event) {
+int gtk_delete_event (GtkWidget* widget, ptrdiff_t event) {
     return 0;
 }
 
-ptrdiff_t gtk_delete_range (GtkWidget* widget, ptrdiff_t iter1, ptrdiff_t iter2) {
+int gtk_delete_range (GtkWidget* widget, ptrdiff_t iter1, ptrdiff_t iter2) {
     return 0;
 }
 
-ptrdiff_t gtk_delete_text (GtkWidget* widget, ptrdiff_t start_pos, ptrdiff_t end_pos) {
+int gtk_delete_text (GtkWidget* widget, ptrdiff_t start_pos, ptrdiff_t end_pos) {
     return 0;
 }
 
-ptrdiff_t gtk_enter_notify_event (GtkWidget* widget, GdkEventCrossing* event) {
+int gtk_enter_notify_event (GtkWidget* widget, GdkEventCrossing* event) {
     return 0;
 }
 
-ptrdiff_t gtk_event (GtkWidget* widget, GdkEvent* event) {
+int gtk_event (GtkWidget* widget, GdkEvent* event) {
     return 0;
 }
 
-ptrdiff_t gtk_event_after (GtkWidget* widget, GdkEvent* event) {
+int gtk_event_after (GtkWidget* widget, GdkEvent* event) {
     return 0;
 }
 
-ptrdiff_t gtk_expand_collapse_cursor_row (GtkWidget* widget, ptrdiff_t logical, ptrdiff_t expand, ptrdiff_t open_all) {
+int gtk_expand_collapse_cursor_row (GtkWidget* widget, ptrdiff_t logical, ptrdiff_t expand, ptrdiff_t open_all) {
     return 0;
 }
 
-ptrdiff_t gtk_expose_event (GtkWidget* widget, GdkEventExpose* event) {
+int gtk_expose_event (GtkWidget* widget, GdkEventExpose* event) {
     return 0;
 }
 
-ptrdiff_t gtk_focus (GtkWidget* widget, int directionType) {
+int gtk_focus (GtkWidget* widget, ptrdiff_t directionType) {
     return 0;
 }
 
-ptrdiff_t gtk_focus_in_event (GtkWidget* widget, GdkEventFocus* event) {
+int gtk_focus_in_event (GtkWidget* widget, GdkEventFocus* event) {
     return 0;
 }
 
-ptrdiff_t gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
+int gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
     return 0;
 }
 
-ptrdiff_t gtk_grab_focus (GtkWidget* widget) {
+int gtk_grab_focus (GtkWidget* widget) {
     return 0;
 }
 
-ptrdiff_t gtk_hide (GtkWidget* widget) {
+int gtk_hide (GtkWidget* widget) {
     return 0;
 }
 
-ptrdiff_t gtk_input (GtkWidget* widget, ptrdiff_t arg1) {
+int gtk_input (GtkWidget* widget, ptrdiff_t arg1) {
     return 0;
 }
 
-ptrdiff_t gtk_insert_text (GtkEditable* widget, char* new_text, int new_text_length, int position) {
+int gtk_insert_text (GtkEditable* widget, char* new_text, ptrdiff_t new_text_length, ptrdiff_t position) {
     return 0;
 }
 
-ptrdiff_t gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
+int gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
     return sendKeyEvent (SWT.KeyDown, event) ? 0 : 1;
 }
 
-ptrdiff_t gtk_key_release_event (GtkWidget* widget, GdkEventKey* event) {
+int gtk_key_release_event (GtkWidget* widget, GdkEventKey* event) {
     return sendKeyEvent (SWT.KeyUp, event) ? 0 : 1;
 }
 
-ptrdiff_t gtk_leave_notify_event (GtkWidget* widget, GdkEventCrossing* event) {
+int gtk_leave_notify_event (GtkWidget* widget, GdkEventCrossing* event) {
     return 0;
 }
 
-ptrdiff_t gtk_map (GtkWidget* widget) {
+int gtk_map (GtkWidget* widget) {
     return 0;
 }
 
-ptrdiff_t gtk_map_event (GtkWidget* widget, ptrdiff_t event) {
+int gtk_map_event (GtkWidget* widget, ptrdiff_t event) {
     return 0;
 }
 
-ptrdiff_t gtk_mnemonic_activate (GtkWidget* widget, ptrdiff_t arg1) {
+int gtk_mnemonic_activate (GtkWidget* widget, ptrdiff_t arg1) {
     return 0;
 }
 
-ptrdiff_t gtk_month_changed (GtkWidget* widget) {
+int gtk_month_changed (GtkWidget* widget) {
     return 0;
 }
 
-ptrdiff_t gtk_motion_notify_event (GtkWidget* widget, GdkEventMotion* event) {
+int gtk_motion_notify_event (GtkWidget* widget, GdkEventMotion* event) {
     return 0;
 }
 
-ptrdiff_t gtk_move_focus (GtkWidget* widget, int directionType) {
+int gtk_move_focus (GtkWidget* widget, ptrdiff_t directionType) {
     return 0;
 }
 
-ptrdiff_t gtk_output (GtkWidget* widget) {
+int gtk_output (GtkWidget* widget) {
     return 0;
 }
 
-ptrdiff_t gtk_populate_popup (GtkWidget* widget, GtkWidget* menu) {
+int gtk_populate_popup (GtkWidget* widget, GtkWidget* menu) {
     return 0;
 }
 
-ptrdiff_t gtk_popup_menu (GtkWidget* widget) {
+int gtk_popup_menu (GtkWidget* widget) {
     return 0;
 }
 
-ptrdiff_t gtk_preedit_changed (GtkIMContext* imcontext) {
+int gtk_preedit_changed (GtkIMContext* imcontext) {
     return 0;
 }
 
-ptrdiff_t gtk_realize (GtkWidget* widget) {
+int gtk_realize (GtkWidget* widget) {
     return 0;
 }
 
 void gtk_row_activated (GtkTreeView* tree, GtkTreePath* path, GtkTreeViewColumn* column) {
 }
 
-ptrdiff_t gtk_scroll_child (GtkWidget* widget, ptrdiff_t scrollType, ptrdiff_t horizontal) {
+int gtk_scroll_child (GtkWidget* widget, ptrdiff_t scrollType, ptrdiff_t horizontal) {
     return 0;
 }
 
-ptrdiff_t gtk_scroll_event (GtkWidget* widget, GdkEventScroll*  event) {
+int gtk_scroll_event (GtkWidget* widget, GdkEventScroll*  event) {
     return 0;
 }
 
-ptrdiff_t gtk_select (ptrdiff_t item) {
+int gtk_select (int item) {
     return 0;
 }
 
-ptrdiff_t gtk_show (GtkWidget* widget) {
+int gtk_show (GtkWidget* widget) {
     return 0;
 }
 
-ptrdiff_t gtk_show_help (GtkWidget* widget, ptrdiff_t helpType) {
+int gtk_show_help (GtkWidget* widget, ptrdiff_t helpType) {
     return 0;
 }
 
-ptrdiff_t gtk_size_allocate (GtkWidget* widget, ptrdiff_t allocation) {
+int gtk_size_allocate (GtkWidget* widget, ptrdiff_t allocation) {
     return 0;
 }
 
-ptrdiff_t gtk_style_set (GtkWidget* widget, ptrdiff_t previousStyle) {
+int gtk_style_set (GtkWidget* widget, ptrdiff_t previousStyle) {
     return 0;
 }
 
-ptrdiff_t gtk_switch_page (GtkWidget* widget, ptrdiff_t page, ptrdiff_t page_num) {
+int gtk_switch_page (GtkWidget* widget, ptrdiff_t page, ptrdiff_t page_num) {
     return 0;
 }
 
@@ -884,7 +882,7 @@ int gtk_test_collapse_row (
     return 0;
 }
 
-ptrdiff_t gtk_test_expand_row (
+int gtk_test_expand_row (
     GtkTreeView *tree_view,
     GtkTreeIter *iter,
     GtkTreePath *path)
@@ -892,39 +890,39 @@ ptrdiff_t gtk_test_expand_row (
     return 0;
 }
 
-ptrdiff_t gtk_text_buffer_insert_text (GtkTextBuffer *buffer, GtkTextIter *iter, char *text, int len) {
+int gtk_text_buffer_insert_text (GtkTextBuffer *buffer, GtkTextIter *iter, char *text, ptrdiff_t len) {
     return 0;
 }
 
-ptrdiff_t gtk_timer () {
+int gtk_timer () {
     return 0;
 }
 
-ptrdiff_t gtk_toggled (ptrdiff_t renderer, char* pathStr) {
+int gtk_toggled (int renderer, char* pathStr) {
     return 0;
 }
 
-ptrdiff_t gtk_unmap (GtkWidget* widget) {
+int gtk_unmap (GtkWidget* widget) {
     return 0;
 }
 
-ptrdiff_t gtk_unmap_event (GtkWidget* widget, ptrdiff_t event) {
+int gtk_unmap_event (GtkWidget* widget, ptrdiff_t event) {
     return 0;
 }
 
-ptrdiff_t gtk_unrealize (GtkWidget* widget) {
+int gtk_unrealize (GtkWidget* widget) {
     return 0;
 }
 
-ptrdiff_t gtk_value_changed (ptrdiff_t adjustment) {
+int gtk_value_changed (int adjustment) {
     return 0;
 }
 
-ptrdiff_t gtk_visibility_notify_event (GtkWidget* widget, GdkEventVisibility* event) {
+int gtk_visibility_notify_event (GtkWidget* widget, GdkEventVisibility* event) {
     return 0;
 }
 
-ptrdiff_t gtk_window_state_event (GtkWidget* widget, GdkEventWindowState* event) {
+int gtk_window_state_event (GtkWidget* widget, GdkEventWindowState* event) {
     return 0;
 }
 
@@ -946,7 +944,7 @@ bool filters (int eventType) {
     return display.filters (eventType);
 }
 
-ptrdiff_t fixedMapProc (GtkWidget* widget) {
+int fixedMapProc (GtkWidget* widget) {
     return 0;
 }
 
@@ -1048,7 +1046,7 @@ bool hooks (int eventType) {
     return eventTable.hooks (eventType);
 }
 
-ptrdiff_t hoverProc (GtkWidget* widget) {
+int hoverProc (GtkWidget* widget) {
     return 0;
 }
 
@@ -1293,7 +1291,7 @@ void sendEvent (int eventType, Event event, bool send) {
 }
 
 bool sendKeyEvent (int type, GdkEventKey* keyEvent) {
-    int len = keyEvent.length;
+    size_t len = keyEvent.length;
     if (keyEvent.string is null || OS.g_utf8_strlen (keyEvent.string, len) <= 1) {
         Event event = new Event ();
         event.time = keyEvent.time;
@@ -1321,7 +1319,7 @@ char [] sendIMKeyEvent (int type, GdkEventKey* keyEvent, char [] chars) {
         ptr = OS.gtk_get_current_event ();
         if (ptr !is null) {
             keyEvent = cast(GdkEventKey*)ptr;
-            switch (cast(int)keyEvent.type) {
+            switch (keyEvent.type) {
                 case OS.GDK_KEY_PRESS:
                 case OS.GDK_KEY_RELEASE:
                     state = keyEvent.state;
@@ -1468,7 +1466,7 @@ public void setData (String key, Object value) {
     } else {
         if ((state & KEYED_DATA) !is 0) {
             if (index !is table.length) {
-                int len = to!int(table.length - 2);
+                ptrdiff_t len = table.length - 2;
                 if (len is 1) {
                     data = table [0];
                     state &= ~KEYED_DATA;
@@ -1569,15 +1567,15 @@ bool setKeyState (Event event, GdkEventKey* keyEvent) {
 void setOrientation () {
 }
 
-ptrdiff_t shellMapProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
+int shellMapProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
     return 0;
 }
 
-ptrdiff_t sizeAllocateProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
+int sizeAllocateProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
     return 0;
 }
 
-ptrdiff_t sizeRequestProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
+int sizeRequestProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
     return 0;
 }
 
@@ -1600,7 +1598,7 @@ GtkWidget* topHandle () {
     return handle;
 }
 
-ptrdiff_t timerProc (GtkWidget* widget) {
+int timerProc (GtkWidget* widget) {
     return 0;
 }
 
@@ -1617,12 +1615,12 @@ bool translateTraversal (int event) {
     return false;
 }
 
-ptrdiff_t windowProc (GtkWidget* handle, ptrdiff_t user_data) {
+int windowProc (GtkWidget* handle, ptrdiff_t user_data) {
     void trace( String str ){
         version(LOG) getDwtLogger().error( __FILE__, __LINE__,  "Widget windowProc {}", str ).flush;
     }
 
-    switch (cast(int)/*64*/user_data) {
+    switch (user_data) {
         case ACTIVATE:
             trace( "ACTIVATE" );
             return gtk_activate (handle);
@@ -1680,12 +1678,12 @@ ptrdiff_t windowProc (GtkWidget* handle, ptrdiff_t user_data) {
     }
 }
 
-ptrdiff_t windowProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
+int windowProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
     void trace( String str ){
         version(LOG) getDwtLogger().error( __FILE__, __LINE__,  "Widget windowProc1 {}", str ).flush;
     }
 
-    switch (cast(int)/*64*/user_data) {
+    switch (user_data) {
         case EXPOSE_EVENT_INVERSE: {
             trace( "EXPOSE_EVENT_INVERSE" );
             GdkEventExpose* gdkEvent = cast(GdkEventExpose*) arg0;
@@ -1793,12 +1791,12 @@ ptrdiff_t windowProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t user_data) {
     }
 }
 
-ptrdiff_t windowProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t arg1, ptrdiff_t user_data) {
+int windowProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t arg1, ptrdiff_t user_data) {
     void trace( String str ){
         version(LOG) getDwtLogger().error( __FILE__, __LINE__,  "Widget windowProc2 {}", str ).flush;
     }
 
-    switch (cast(int)/*64*/user_data) {
+    switch (user_data) {
         case DELETE_RANGE:
             trace( "DELETE_RANGE" );
             return gtk_delete_range (handle, arg0, arg1);
@@ -1827,15 +1825,12 @@ ptrdiff_t windowProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t arg1, ptrdiff
     }
 }
 
-ptrdiff_t windowProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t arg1, ptrdiff_t arg2, ptrdiff_t user_data) {
+int windowProc (GtkWidget* handle, ptrdiff_t arg0, ptrdiff_t arg1, ptrdiff_t arg2, ptrdiff_t user_data) {
     void trace( String str ){
         version(LOG) getDwtLogger().error( __FILE__, __LINE__,  "Widget windowProc3 {}", str ).flush;
     }
 
-    switch (cast(int)/*64*/user_data) {
-        case CHANGE_VALUE:
-            trace( "CHANGE_VALUE" );
-            return gtk_change_value (handle, arg0, arg1, arg2);
+    switch (user_data) {
         case EXPAND_COLLAPSE_CURSOR_ROW:
             trace( "EXPAND_COLLAPSE_CURSOR_ROW" );
             return gtk_expand_collapse_cursor_row (handle, arg0, arg1, arg2);
