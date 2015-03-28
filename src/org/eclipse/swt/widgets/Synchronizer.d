@@ -23,7 +23,7 @@ import org.eclipse.swt.graphics.Device;
 version(Tango){
     import tango.core.Exception;
 } else { // Phobos
-    import core.sync.exception: SyncException;
+    import java.nonstandard.sync.exception: SyncException;
 }
 
 /**
