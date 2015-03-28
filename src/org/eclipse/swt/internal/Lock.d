@@ -19,8 +19,8 @@ version(Tango){
     import tango.core.sync.Mutex;
     import tango.core.sync.Condition;
 } else { 
-    import core.sync.mutex;
-    import core.sync.condition;
+    import java.nonstandard.sync.mutex;
+    import java.nonstandard.sync.condition;
 }
 
 /**
