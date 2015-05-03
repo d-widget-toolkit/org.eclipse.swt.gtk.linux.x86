@@ -1,5 +1,6 @@
 language: d
 script: ./travis.sh
+sudo: required
 
 d:
   - dmd-2.067.0
