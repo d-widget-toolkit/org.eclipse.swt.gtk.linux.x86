@@ -176,7 +176,7 @@ public class TableDropTargetEffect : DropTargetEffect {
             }
         }
         if (path !is null) {
-            int position = 0;
+            ptrdiff_t position = 0;
             if ((effect & DND.FEEDBACK_SELECT) !is 0) position = OS.GTK_TREE_VIEW_DROP_INTO_OR_BEFORE;
             //if ((effect & DND.FEEDBACK_INSERT_BEFORE) !is 0) position = OS.GTK_TREE_VIEW_DROP_BEFORE;
             //if ((effect & DND.FEEDBACK_INSERT_AFTER) !is 0) position = OS.GTK_TREE_VIEW_DROP_AFTER;

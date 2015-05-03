@@ -565,7 +565,8 @@ void createColumn (TableColumn column, int index) {
         if (modelIndex is modelLength) {
             auto oldModel = modelHandle;
             auto types = getColumnTypes (columnCount + 4); // grow by 4 rows at a time
-            auto newModel = OS.gtk_list_store_newv (types.length, types.ptr);
+            auto newModel = OS.gtk_list_store_newv
+                (cast(int)/*64bit*/types.length, types.ptr);
             if (newModel is null) error (SWT.ERROR_NO_HANDLES);
             void* ptr;
             for (int i=0; i<itemCount; i++) {
@@ -650,7 +651,8 @@ override void createHandle (int index) {
     scrolledHandle = cast(GtkWidget*)OS.gtk_scrolled_window_new (null, null);
     if (scrolledHandle is null) error (SWT.ERROR_NO_HANDLES);
     auto types = getColumnTypes (1);
-    modelHandle = cast(GtkWidget*)OS.gtk_list_store_newv (types.length, types.ptr);
+    modelHandle = cast(GtkWidget*)OS.gtk_list_store_newv
+        (cast(int)/*64bit*/types.length, types.ptr);
     if (modelHandle is null) error (SWT.ERROR_NO_HANDLES);
     handle = cast(GtkWidget*)OS.gtk_tree_view_new_with_model (modelHandle);
     if (handle is null) error (SWT.ERROR_NO_HANDLES);
@@ -757,8 +759,9 @@ void createItem (TableColumn column, int index) {
 
 void createItem (TableItem item, int index) {
     if (!(0 <= index && index <= itemCount)) error (SWT.ERROR_INVALID_RANGE);
-    if (itemCount is items.length) {
-        int length = drawCount is 0 ? items.length + 4 : Math.max (4, items.length * 3 / 2);
+    if (itemCount == items.length) {
+        ptrdiff_t length = drawCount == 0 ? items.length + 4
+                           : Math.max (4, items.length * 3 / 2);
         TableItem [] newItems = new TableItem [length];
         System.arraycopy (items, 0, newItems, 0, items.length);
         items = newItems;
@@ -1006,7 +1009,7 @@ void destroyItem (TableColumn column) {
     if (columnCount is 0) {
         auto oldModel = modelHandle;
         auto types = getColumnTypes (1);
-        auto newModel = OS.gtk_list_store_newv (types.length, types.ptr);
+        auto newModel = OS.gtk_list_store_newv(cast(int)/*64bit*/types.length, types.ptr);
         if (newModel is null) error (SWT.ERROR_NO_HANDLES);
         void* ptr;
         for (int i=0; i<itemCount; i++) {
@@ -1226,8 +1229,8 @@ public int getColumnCount () {
     return columnCount;
 }
 
-uint[] getColumnTypes (int columnCount) {
-    uint[] types = new uint [FIRST_COLUMN + (columnCount * CELL_TYPES)];
+size_t[] getColumnTypes (int columnCount) {
+    size_t[] types = new size_t [FIRST_COLUMN + (columnCount * CELL_TYPES)];
     // per row data
     types [CHECKED_COLUMN] = OS.G_TYPE_BOOLEAN ();
     types [GRAYED_COLUMN] = OS.G_TYPE_BOOLEAN ();
@@ -1750,9 +1753,10 @@ public int [] getSelectionIndices () {
         display.treeSelectionLength  = 0;
         display.treeSelection = new int [itemCount];
         display.doTreeSelectionProcConnect( &treeSelectionCallbackData, handle, selection );
-        if (display.treeSelectionLength is display.treeSelection.length) return display.treeSelection;
         int [] result = new int [display.treeSelectionLength];
-        System.arraycopy (display.treeSelection, 0, result, 0, display.treeSelectionLength);
+        for (int i=0; i<display.treeSelectionLength; i++) {
+            result[i] = display.treeSelection[i];
+        }
         return result;
     }
     /*
@@ -1994,7 +1998,7 @@ override void gtk_row_activated (GtkTreeView* tree, GtkTreePath* path, GtkTreeVi
     postEvent (SWT.DefaultSelection, event);
 }
 
-override int gtk_toggled (int /*long*/ renderer, char* pathStr) {
+override int gtk_toggled (int renderer, char* pathStr) {
     auto path = OS.gtk_tree_path_new_from_string (pathStr);
     if (path is null) return 0;
     auto indices = OS.gtk_tree_path_get_indices (path);
@@ -2531,7 +2535,7 @@ override void rendererRenderProc (
     }
     if (item !is null) {
         if (OS.GTK_IS_CELL_RENDERER_TOGGLE (cell) || (OS.GTK_IS_CELL_RENDERER_PIXBUF (cell) && (columnIndex !is 0 || (style & SWT.CHECK) is 0))) {
-            drawFlags = cast(int)/*64*/flags;
+            drawFlags = flags;
             drawState = SWT.FOREGROUND;
             void* ptr;
             OS.gtk_tree_model_get1 (modelHandle, item.handle, Table.BACKGROUND_COLUMN, &ptr);
@@ -2598,7 +2602,7 @@ override void rendererRenderProc (
             }
         }
     }
-    int /*long*/ result = 0;
+    int result = 0;
     if ((drawState & SWT.BACKGROUND) !is 0 && (drawState & SWT.SELECTED) is 0) {
         GC gc = new GC (this);
         gc.setBackground (item.getBackground (columnIndex));
@@ -2774,7 +2778,7 @@ public void select (int [] indices) {
     checkWidget ();
     // SWT extension: allow null for zero length string
     //if (indices is null) error (SWT.ERROR_NULL_ARGUMENT);
-    int length = indices.length;
+    ptrdiff_t length = indices.length;
     if (length is 0 || ((style & SWT.SINGLE) !is 0 && length > 1)) return;
     bool fixColumn = showFirstColumn ();
     auto selection = OS.gtk_tree_view_get_selection (handle);
@@ -3188,7 +3192,7 @@ public void setSelection (int [] indices) {
     // SWT extension: allow null for zero length string
     //if (indices is null) error (SWT.ERROR_NULL_ARGUMENT);
     deselectAll ();
-    int length = indices.length;
+    ptrdiff_t length = indices.length;
     if (length is 0 || ((style & SWT.SINGLE) !is 0 && length > 1)) return;
     bool fixColumn = showFirstColumn ();
     selectFocusIndex (indices [0]);
@@ -3254,7 +3258,7 @@ public void setSelection (TableItem [] items) {
     //if (items is null) error (SWT.ERROR_NULL_ARGUMENT);
     bool fixColumn = showFirstColumn ();
     deselectAll ();
-    int length = items.length;
+    ptrdiff_t length = items.length;
     if (!(length is 0 || ((style & SWT.SINGLE) !is 0 && length > 1))) {
         bool first = true;
         for (int i = 0; i < length; i++) {

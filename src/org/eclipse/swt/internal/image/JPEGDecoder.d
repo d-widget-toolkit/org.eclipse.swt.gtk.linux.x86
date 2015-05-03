@@ -22,7 +22,6 @@ import org.eclipse.swt.graphics.PaletteData;
 import org.eclipse.swt.graphics.RGB;
 import java.lang.all;
 
-
 public class JPEGDecoder {
 
     static const int DCTSIZE = 8;
@@ -5577,7 +5576,7 @@ static int consume_input (jpeg_decompress_struct cinfo) {
 static bool fill_input_buffer(jpeg_decompress_struct cinfo) {
     try {
         InputStream inputStream = cinfo.inputStream;
-        int nbytes = inputStream.read(cinfo.buffer);
+        int nbytes = cast(int)/*64bit*/inputStream.read(cinfo.buffer);
         if (nbytes <= 0) {
             if (cinfo.start_of_file)    /* Treat empty input file as fatal error */
                 error();

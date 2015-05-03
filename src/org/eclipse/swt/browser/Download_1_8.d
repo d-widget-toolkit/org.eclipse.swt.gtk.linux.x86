@@ -119,7 +119,7 @@ nsresult Init (nsIURI aSource, nsIURI aTarget, nsAString* aDisplayName, nsIMIMEI
     int rc = aSource.GetHost (cast(nsACString*)aSpec);
     if (rc !is XPCOM.NS_OK) Mozilla.error(rc,__FILE__,__LINE__);
     //int length = XPCOM.nsEmbedCString_Length (aSpec);
-    //int /*long*/ buffer = XPCOM.nsEmbedCString_get (aSpec);
+    //ptrdiff_t buffer = XPCOM.nsEmbedCString_get (aSpec);
     //byte[] dest = new byte[length];
     //XPCOM.memmove (dest, buffer, length);
     //XPCOM.nsEmbedCString_delete (aSpec);
@@ -287,7 +287,7 @@ nsresult OnProgressChange (nsIWebProgress aWebProgress, nsIRequest aRequest, PRI
 }
 /++
 /* Note. The last 4 args in the original interface are defined as PRInt64. These each translate into two java ints. */
-nsresult OnProgressChange64_32 (int /*long*/ aWebProgress, int /*long*/ aRequest, int /*long*/ aCurSelfProgress1, int /*long*/ aCurSelfProgress2, int /*long*/ aMaxSelfProgress1, int /*long*/ aMaxSelfProgress2, int /*long*/ aCurTotalProgress1, int /*long*/ aCurTotalProgress2, int /*long*/ aMaxTotalProgress1, int /*long*/ aMaxTotalProgress2) {
+nsresult OnProgressChange64_32 (ptrdiff_t aWebProgress, ptrdiff_t aRequest, ptrdiff_t aCurSelfProgress1, ptrdiff_t aCurSelfProgress2, ptrdiff_t aMaxSelfProgress1, ptrdiff_t aMaxSelfProgress2, ptrdiff_t aCurTotalProgress1, ptrdiff_t aCurTotalProgress2, ptrdiff_t aMaxTotalProgress1, ptrdiff_t aMaxTotalProgress2) {
     long aCurSelfProgress = (aCurSelfProgress2 << 32) + aCurSelfProgress1;
     long aMaxSelfProgress = (aMaxSelfProgress2 << 32) + aMaxSelfProgress1;
     long aCurTotalProgress = (aCurTotalProgress2 << 32) + aCurTotalProgress1;

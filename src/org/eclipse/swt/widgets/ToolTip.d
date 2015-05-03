@@ -56,7 +56,8 @@ public class ToolTip : Widget {
     Shell parent;
     String text, message;
     TrayItem item;
-    int x, y, timerId;
+    int x, y;
+    int timerId;
     void* layoutText, layoutMessage;
     int [] borderPolygon;
     bool spikeAbove, autohide;
@@ -258,7 +259,7 @@ void configure () {
             OS.gtk_window_move (cast(GtkWindow*)handle, Math.min(dest.width - w, x - w + 17), y - h - TIP_HEIGHT);
         }
     }
-    auto rgn = OS.gdk_region_polygon ( cast(GdkPoint*)polyline.ptr, polyline.length / 2, OS.GDK_EVEN_ODD_RULE);
+    auto rgn = OS.gdk_region_polygon ( cast(GdkPoint*)polyline.ptr, cast(int)/*64bit*/polyline.length / 2, OS.GDK_EVEN_ODD_RULE);
     OS.gtk_widget_realize (handle);
     auto window = OS.GTK_WIDGET_WINDOW (handle);
     OS.gdk_window_shape_combine_region (window, rgn, 0, 0);
@@ -462,16 +463,16 @@ public bool getVisible () {
     return OS.GTK_WIDGET_VISIBLE (tipWindow);
 }
 
-override int /*long*/ gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
+override int gtk_button_press_event (GtkWidget* widget, GdkEventButton* event) {
     notifyListeners (SWT.Selection, new Event ());
     setVisible (false);
     return 0;
 }
 
-override int /*long*/ gtk_expose_event (GtkWidget* widget, GdkEventExpose* event) {
+override int gtk_expose_event (GtkWidget* widget, GdkEventExpose* event) {
     auto window = OS.GTK_WIDGET_WINDOW (handle);
     auto gdkGC = cast(GdkGC*)OS.gdk_gc_new (window);
-    OS.gdk_draw_polygon (window, gdkGC, 0, cast(GdkPoint*)borderPolygon.ptr, borderPolygon.length / 2);
+    OS.gdk_draw_polygon (window, gdkGC, 0, cast(GdkPoint*)borderPolygon.ptr, cast(int)/*64bit*/borderPolygon.length / 2);
     int x = BORDER + PADDING;
     int y = BORDER + PADDING;
     if (spikeAbove) y += TIP_HEIGHT;
@@ -512,7 +513,7 @@ override int /*long*/ gtk_expose_event (GtkWidget* widget, GdkEventExpose* event
     return 0;
 }
 
-override int /*long*/ gtk_size_allocate (GtkWidget* widget, int /*long*/ allocation) {
+override int gtk_size_allocate (GtkWidget* widget, ptrdiff_t allocation) {
     Point point = getLocation ();
     int x = point.x;
     int y = point.y;
@@ -741,7 +742,7 @@ public void setText (String string) {
         }
         auto boldAttr = OS.pango_attr_weight_new (OS.PANGO_WEIGHT_BOLD);
         boldAttr.start_index = 0;
-        boldAttr.end_index = text.length+1;
+        boldAttr.end_index = cast(int)/*64bit*/text.length+1;
         auto attrList = OS.pango_attr_list_new ();
         OS.pango_attr_list_insert (attrList, boldAttr);
         OS.pango_layout_set_attributes (layoutText, attrList);
@@ -796,7 +797,7 @@ public void setVisible (bool visible) {
     }
 }
 
-override int /*long*/ timerProc (GtkWidget* widget) {
+override int timerProc (GtkWidget* widget) {
     if ((style & SWT.BALLOON) !is 0) {
         OS.gtk_widget_hide (handle);
     } else {

@@ -42,7 +42,6 @@ import org.eclipse.swt.widgets.Event;
 import java.lang.all;
 import java.nonstandard.UnsafeUtf;
 
-
 /**
  * Instances of this class represent a selectable
  * user interface object that displays a text with
@@ -334,7 +333,7 @@ public String getText () {
 }
 
 override int gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
-    int /*long*/ result = super.gtk_button_press_event (widget, gdkEvent);
+    int result = super.gtk_button_press_event (widget, gdkEvent);
     if (result !is 0) return result;
     if (gdkEvent.button is 1 && gdkEvent.type is OS.GDK_BUTTON_PRESS) {
         if (focusIndex !is -1) setFocus ();
@@ -370,8 +369,8 @@ override int gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent
     return result;
 }
 
-override int /*long*/ gtk_button_release_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
-    int /*long*/ result = super.gtk_button_release_event (widget, gdkEvent);
+override int gtk_button_release_event (GtkWidget* widget, GdkEventButton* gdkEvent) {
+    int result = super.gtk_button_release_event (widget, gdkEvent);
     if (result !is 0) return result;
     if (focusIndex is -1) return result;
     if (gdkEvent.button is 1) {
@@ -392,8 +391,8 @@ override int /*long*/ gtk_button_release_event (GtkWidget* widget, GdkEventButto
     return result;
 }
 
-override int /*long*/ gtk_event_after (GtkWidget* widget, GdkEvent* event) {
-    int /*long*/ result = super.gtk_event_after (widget, event);
+override int gtk_event_after (GtkWidget* widget, GdkEvent* event) {
+    int result = super.gtk_event_after (widget, event);
     switch (event.type) {
         case OS.GDK_FOCUS_CHANGE:
             redraw ();
@@ -403,7 +402,7 @@ override int /*long*/ gtk_event_after (GtkWidget* widget, GdkEvent* event) {
     return result;
 }
 
-override int /*long*/ gtk_expose_event (GtkWidget* widget, GdkEventExpose* gdkEvent) {
+override int gtk_expose_event (GtkWidget* widget, GdkEventExpose* gdkEvent) {
     if ((state & OBSCURED) !is 0) return 0;
     GCData data = new GCData ();
     data.damageRgn = gdkEvent.region;
@@ -442,8 +441,8 @@ override int /*long*/ gtk_expose_event (GtkWidget* widget, GdkEventExpose* gdkEv
     return 0;
 }
 
-override int /*long*/ gtk_key_press_event (GtkWidget* widget, GdkEventKey* gdkEvent) {
-    int /*long*/ result = super.gtk_key_press_event (widget, gdkEvent);
+override int gtk_key_press_event (GtkWidget* widget, GdkEventKey* gdkEvent) {
+    int result = super.gtk_key_press_event (widget, gdkEvent);
     if (result !is 0) return result;
     if (focusIndex is -1) return result;
     switch (gdkEvent.keyval) {
@@ -471,8 +470,8 @@ override int /*long*/ gtk_key_press_event (GtkWidget* widget, GdkEventKey* gdkEv
     return result;
 }
 
-override int /*long*/ gtk_motion_notify_event (GtkWidget* widget, GdkEventMotion* gdkEvent) {
-    int /*long*/ result = super.gtk_motion_notify_event (widget, gdkEvent);
+override int gtk_motion_notify_event (GtkWidget* widget, GdkEventMotion* gdkEvent) {
+    int result = super.gtk_motion_notify_event (widget, gdkEvent);
     if (result !is 0) return result;
     int x = cast(int) gdkEvent.x;
     int y = cast(int) gdkEvent.y;
@@ -546,7 +545,7 @@ public void removeSelectionListener (SelectionListener listener) {
 }
 
 String parse (String string) {
-    int length_ = string.length;
+    ptrdiff_t length_ = string.length;
     offsets = new Point[]( length_ / 4 );
     ids = new String[]( length_ / 4 );
     mnemonics = new int[] ( length_ / 4 + 1 );
@@ -556,7 +555,7 @@ String parse (String string) {
     int index = 0, state = 0, linkIndex = 0;
     int start = 0, tagStart = 0, linkStart = 0, endtagStart = 0, refStart = 0;
     while (index < length_) {
-        int increment;
+        ptrdiff_t increment;
         dchar c = Character.toLowerCase (buffer.dcharAt (index, increment));
 
         switch (state) {
@@ -658,7 +657,7 @@ String parse (String string) {
     }
     if (start < length_) {
         int tmp = parseMnemonics (buffer, start, tagStart, result);
-        int mnemonic = parseMnemonics (buffer, Math.max (tagStart, linkStart), length_, result);
+        int mnemonic = parseMnemonics (buffer, Math.max (tagStart, linkStart), cast(int)/*64bit*/length_, result);
         if (mnemonic is -1) mnemonic = tmp;
         mnemonics [linkIndex] = mnemonic;
     } else {
@@ -681,7 +680,7 @@ String parse (String string) {
 int parseMnemonics (char[] buffer, int start, int end, StringBuffer result) {
     int mnemonic = -1, index = start;
     while (index < end) {
-        int incr = 1;
+        ptrdiff_t incr = 1;
         if ( buffer[index] is '&') {
             if (index + 1 < end && buffer [index + 1] is '&') {
                 result.append (buffer [index]);

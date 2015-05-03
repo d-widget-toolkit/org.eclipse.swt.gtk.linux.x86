@@ -54,7 +54,8 @@ public static String defaultCodePage () {
 
 public static wchar [] mbcsToWcs (String codePage, char [] buffer) {
     int items_written;
-    wchar* ptr = g_utf8_to_utf16 (toStringz(buffer), buffer.length, null, &items_written, null);
+    wchar* ptr = g_utf8_to_utf16 (toStringz(buffer), cast(int)/*64bit*/buffer.length,
+                                  null, &items_written, null);
     if (!ptr){
         return cast(wchar[])EmptyCharArray;
     }
@@ -78,7 +79,8 @@ public static char [] wcsToMbcs (String codePage, wchar [] buffer, bool terminat
     * Note that g_utf16_to_utf8()  stops converting
     * when it finds the first NULL.
     */
-    char* ptr = g_utf16_to_utf8 (toString16z(buffer), buffer.length, & items_read, & items_written, null);
+    char* ptr = g_utf16_to_utf8 (toString16z(buffer), cast(int)/*64bit*/buffer.length,
+                                 & items_read, & items_written, null);
     if (!ptr) {
         return terminate ?cast(char[]) NullByteArray : cast(char[])EmptyByteArray;
     }

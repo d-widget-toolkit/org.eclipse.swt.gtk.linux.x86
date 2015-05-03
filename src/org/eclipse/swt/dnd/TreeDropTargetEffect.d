@@ -159,7 +159,7 @@ public class TreeDropTargetEffect : DropTargetEffect {
         if (path !is null) {
             auto indices = OS.gtk_tree_path_get_indices(path);
             if (indices !is null) {
-                int depth = OS.gtk_tree_path_get_depth(path);
+                ptrdiff_t depth = OS.gtk_tree_path_get_depth(path);
                 index = indices[depth - 1];
             }
         }

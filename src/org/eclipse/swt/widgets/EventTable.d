@@ -55,7 +55,7 @@ public Listener [] getListeners (int eventType) {
 public void hook (int eventType, Listener listener) {
     if (types is null) types = new int [GROW_SIZE];
     if (listeners is null) listeners = new Listener [GROW_SIZE];
-    int length = types.length, index = length - 1;
+    ptrdiff_t length = types.length, index = length - 1;
     while (index >= 0) {
         if (types [index] !is 0) break;
         --index;
@@ -123,10 +123,10 @@ public int size () {
 
 void remove (int index) {
     if (level is 0) {
-        int end = types.length - 1;
+        ptrdiff_t end = types.length - 1;
         System.arraycopy (types, index + 1, types, index, end - index);
         SimpleType!(Listener).arraycopy (listeners, index + 1, listeners, index, end - index);
-        index = end;
+        index = cast(int)/*64bit*/end;
     } else {
         if (level > 0) level = -level;
     }

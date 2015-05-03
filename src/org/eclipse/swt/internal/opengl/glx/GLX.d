@@ -14,8 +14,15 @@ module org.eclipse.swt.internal.opengl.glx.GLX;
 
 import java.lang.all;
 
+version(Tango){
+    import tango.stdc.stdint;
+} else { // Phobos
+    import std.stdint;
+}
+
 import org.eclipse.swt.internal.Library;
 import org.eclipse.swt.internal.Platform;
+import org.eclipse.swt.internal.c.X;
 import org.eclipse.swt.internal.c.Xutil;
 import org.eclipse.swt.internal.c.glx;
 
@@ -212,42 +219,42 @@ public class GLX : Platform {
         org.eclipse.swt.internal.c.glx.loadLib();
     }
     
-    static void glGetIntegerv( uint pname, int[] params ) 
+    static void glGetIntegerv( GLenum pname, GLint[] params ) 
     {
         lock.lock();
         scope(exit) lock.unlock();
         return dwt_glGetIntegerv (pname, params.ptr );
     }
 
-    static void glViewport( int x, int y, int width, int height ) 
+    static void glViewport( GLint x, GLint y, GLsizei width, GLsizei height ) 
     {
         lock.lock();
         scope(exit) lock.unlock();
         return dwt_glViewport( x, y, width, height );
     }
 
-    static XVisualInfo* glXChooseVisual( void* dpy, int screen, int* attribList ) 
+    static XVisualInfo* glXChooseVisual( void* dpy, GLint screen, GLint* attribList ) 
     {
         lock.lock();
         scope(exit) lock.unlock();
         return dwt_glXChooseVisual( dpy, screen, attribList );
     }
 
-    static void glXCopyContext( void* dpy, void* src, void* dst, uint mask ) 
+    static void glXCopyContext( void* dpy, void* src, void* dst, GLulong mask ) 
     {
         lock.lock();
         scope(exit) lock.unlock();
         dwt_glXCopyContext(dpy, src, dst, mask);
     }
 
-    static void* glXCreateContext( void* dpy, XVisualInfo* vis, void* shareList, int direct ) 
+    static void* glXCreateContext( void* dpy, XVisualInfo* vis, void* shareList, Bool direct ) 
     {
         lock.lock();
         scope(exit) lock.unlock();        
         return dwt_glXCreateContext(dpy, vis, shareList, direct);
     }
 
-    final uint glXCreateGLXPixmap( void* dpy, XVisualInfo* vis , uint pixmap ) 
+    final GLXPixmap glXCreateGLXPixmap( void* dpy, XVisualInfo* vis , Pixmap pixmap ) 
     {
         lock.lock();
         scope(exit) lock.unlock();
@@ -261,21 +268,21 @@ public class GLX : Platform {
         dwt_glXDestroyContext(dpy, ctx);
     }
 
-    static void glXDestroyGLXPixmap( void* dpy, uint pix ) 
+    static void glXDestroyGLXPixmap( void* dpy, GLXPixmap pix ) 
     {
         lock.lock();
         scope(exit) lock.unlock();
         dwt_glXDestroyGLXPixmap(dpy, pix);
     }
 
-    static char* glXGetClientString( void* dpy, int name ) 
+    static char* glXGetClientString( void* dpy, GLint name ) 
     {
         lock.lock();
         scope(exit) lock.unlock();
         return dwt_glXGetClientString(dpy, name);
     }
 
-    static int glXGetConfig( void* dpy, XVisualInfo* vis, int attrib, int[] value ) 
+    static GLint glXGetConfig( void* dpy, XVisualInfo* vis, GLint attrib, GLint[] value ) 
     {
         lock.lock();
         scope(exit) lock.unlock();
@@ -289,56 +296,56 @@ public class GLX : Platform {
         return dwt_glXGetCurrentContext();
     }
 
-    static uint glXGetCurrentDrawable() 
+    static GLXDrawable glXGetCurrentDrawable() 
     {
         lock.lock();
         scope(exit) lock.unlock();
         return dwt_glXGetCurrentDrawable();
     }
 
-    static int glXIsDirect( void* dpy, void* ctx ) 
+    static Bool glXIsDirect( void* dpy, void* ctx ) 
     {
         lock.lock();
         scope(exit) lock.unlock();    
         return dwt_glXIsDirect(dpy, ctx);
     }
 
-    static int glXMakeCurrent( void* dpy, uint drawable, void* ctx) 
+    static Bool glXMakeCurrent( void* dpy, GLXDrawable drawable, void* ctx) 
     {
         lock.lock();
         scope(exit) lock.unlock();
         return dwt_glXMakeCurrent(dpy, drawable, ctx);
     }
 
-    static int glXQueryExtension( void* dpy, int[] errorBase, int[] eventBase) 
+    static Bool glXQueryExtension( void* dpy, GLint[] errorBase, GLint[] eventBase) 
     {
         lock.lock();
         scope(exit) lock.unlock(); 
         return dwt_glXQueryExtension(dpy, errorBase.ptr, eventBase.ptr);
     }
 
-    static char* glXQueryExtensionsString( void* dpy, int screen) 
+    static char* glXQueryExtensionsString( void* dpy, GLint screen) 
     {
         lock.lock();
         scope(exit) lock.unlock();
         return dwt_glXQueryExtensionsString(dpy, screen);
     }
 
-    static char* glXQueryServerString( void* dpy, int screen, int name ) 
+    static char* glXQueryServerString( void* dpy, GLint screen, GLint name ) 
     {
         lock.lock();
         scope(exit) lock.unlock();
         return dwt_glXQueryServerString(dpy, screen, name);
     }
 
-    static int glXQueryVersion( void* dpy, int[] major, int[] minor ) 
+    static Bool glXQueryVersion( void* dpy, GLint[] major, GLint[] minor ) 
     {
         lock.lock();
         scope(exit) lock.unlock();
         return dwt_glXQueryVersion(dpy, major.ptr, minor.ptr);
     }
 
-    static void glXSwapBuffers( void* dpy, uint drawable ) 
+    static void glXSwapBuffers( void* dpy, GLXDrawable drawable ) 
     {
         lock.lock();
         scope(exit) lock.unlock();

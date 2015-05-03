@@ -119,7 +119,7 @@ String computeResultChooserDialog () {
         int writePos = 0;
         for (int i = 0; i < listLength; i++) {
             auto name = cast(char*)OS.g_slist_data (current);
-            uint items_written;
+            size_t items_written;
             char* utf8Ptr = OS.g_filename_to_utf8 (name, -1, null, &items_written, null);
             OS.g_free (name);
             if (utf8Ptr !is null) {
@@ -139,7 +139,7 @@ String computeResultChooserDialog () {
     } else {
         auto path = OS.gtk_file_chooser_get_filename (handle);
         if (path !is null) {
-            uint items_written;
+            size_t items_written;
             auto utf8Ptr = OS.g_filename_to_utf8 (path, -1, null, &items_written, null);
             OS.g_free (path);
             if (utf8Ptr !is null) {
@@ -213,7 +213,7 @@ String computeResultClassicDialog () {
     }
 
     auto fileNamePtr = OS.gtk_file_selection_get_filename (handle);
-    uint items_written;
+    size_t items_written;
     auto utf8Ptr = OS.g_filename_to_utf8 (fileNamePtr, -1, null, &items_written, null);
     String osAnswer = utf8Ptr[ 0 .. items_written ]._idup();
     OS.g_free (utf8Ptr);
@@ -374,8 +374,8 @@ String openChooserDialog () {
         oldModal = display.getModalDialog ();
         display.setModalDialog (this);
     }
-    uint signalId = 0;
-    uint /*long*/ hookId = 0;
+    int signalId = 0;
+    ptrdiff_t hookId = 0;
     CallbackData emissionData;
     emissionData.display = display;
     if ((style & SWT.RIGHT_TO_LEFT) !is 0) {
@@ -419,7 +419,7 @@ String openClassicDialog () {
         display.setModalDialog (this);
     }
     int signalId = 0;
-    int /*long*/ hookId = 0;
+    ptrdiff_t hookId = 0;
     CallbackData emissionData;
     emissionData.display = display;
     if ((style & SWT.RIGHT_TO_LEFT) !is 0) {

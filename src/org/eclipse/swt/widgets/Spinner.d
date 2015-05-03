@@ -225,7 +225,7 @@ public override Point computeSize (int wHint, int hHint, bool changed) {
     if (digits > 0) {
         //PROTING_TODO: Efficiency
         String buffer = string ~ getDecimalSeparator ();
-        int count = digits - string.length;
+        ptrdiff_t count = digits - string.length;
         while (count >= 0) {
             buffer ~= "0";
             count--;
@@ -235,9 +235,9 @@ public override Point computeSize (int wHint, int hHint, bool changed) {
     auto buffer1 = string;
     auto ptr = OS.pango_layout_get_text (layout);
     String buffer2 = fromStringz( ptr )._idup();
-    OS.pango_layout_set_text (layout, buffer1.ptr, buffer1.length);
+    OS.pango_layout_set_text (layout, buffer1.ptr, cast(int)/*64bit*/buffer1.length);
     OS.pango_layout_get_size (layout, w.ptr, h.ptr);
-    OS.pango_layout_set_text (layout, buffer2.ptr, buffer2.length);
+    OS.pango_layout_set_text (layout, buffer2.ptr, cast(int)/*64bit*/buffer2.length);
     int width = OS.PANGO_PIXELS (w [0]);
     int height = OS.PANGO_PIXELS (h [0]);
     width = wHint is SWT.DEFAULT ? width : wHint;
@@ -548,12 +548,12 @@ String getDecimalSeparator () {
     return fromStringz( ptr )._idup();
 }
 
-override int /*long*/ gtk_activate (GtkWidget* widget) {
+override int gtk_activate (GtkWidget* widget) {
     postEvent (SWT.DefaultSelection);
     return 0;
 }
 
-override int /*long*/ gtk_changed (GtkWidget* widget) {
+override int gtk_changed (GtkWidget* widget) {
     auto str = OS.gtk_entry_get_text (cast(GtkEntry*)handle);
     int length = OS.strlen (str);
     if (length > 0) {
@@ -595,7 +595,7 @@ override int /*long*/ gtk_changed (GtkWidget* widget) {
 }
 
 override
-int /*long*/ gtk_commit (GtkIMContext* imContext, char* text) {
+int gtk_commit (GtkIMContext* imContext, char* text) {
     if (text is null) return 0;
     if (!OS.gtk_editable_get_editable (cast(GtkEditable*)handle)) return 0;
     char [] chars = fromStringz( text ).dup;
@@ -629,18 +629,18 @@ int /*long*/ gtk_commit (GtkIMContext* imContext, char* text) {
     return 0;
 }
 
-override int /*long*/ gtk_delete_text (GtkWidget* widget, int start_pos, int end_pos) {
+override int gtk_delete_text (GtkWidget* widget, ptrdiff_t start_pos, ptrdiff_t end_pos) {
     if (!hooks (SWT.Verify) && !filters (SWT.Verify)) return 0;
-    String newText = verifyText ("", cast(int)/*64*/start_pos, cast(int)/*64*/end_pos);
+    String newText = verifyText ("", cast(int)/*64bit*/start_pos, cast(int)/*64bit*/end_pos);
     if (newText is null) {
         OS.g_signal_stop_emission_by_name (handle, OS.delete_text.ptr);
     } else {
         if (newText.length > 0) {
             int pos;
-            pos = cast(int)/*64*/end_pos;
+            pos = cast(int)/*64bit*/end_pos;
             OS.g_signal_handlers_block_matched (handle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udCHANGED);
             OS.g_signal_handlers_block_matched (handle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udINSERT_TEXT);
-            OS.gtk_editable_insert_text (cast(GtkEditable*)handle, newText.ptr, newText.length, &pos);
+            OS.gtk_editable_insert_text (cast(GtkEditable*)handle, newText.ptr, cast(int)/*64bit*/newText.length, &pos);
             OS.g_signal_handlers_unblock_matched (handle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udINSERT_TEXT);
             OS.g_signal_handlers_unblock_matched (handle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udCHANGED);
             OS.gtk_editable_set_position (cast(GtkEditable*)handle, pos);
@@ -649,25 +649,25 @@ override int /*long*/ gtk_delete_text (GtkWidget* widget, int start_pos, int end
     return 0;
 }
 
-override int /*long*/ gtk_event_after (GtkWidget* widget, GdkEvent* gdkEvent) {
+override int gtk_event_after (GtkWidget* widget, GdkEvent* gdkEvent) {
     if (cursor !is null) gtk_setCursor (cursor.handle);
     return super.gtk_event_after (widget, gdkEvent);
 }
 
-override int /*long*/ gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
+override int gtk_focus_out_event (GtkWidget* widget, GdkEventFocus* event) {
     fixIM ();
     return super.gtk_focus_out_event (widget, event);
 }
 
-override int /*long*/ gtk_insert_text (GtkEditable* widget, char* new_text, int new_text_length, int position) {
+override int gtk_insert_text (GtkEditable* widget, char* new_text, ptrdiff_t new_text_length, ptrdiff_t position) {
 //  if (!hooks (SWT.Verify) && !filters (SWT.Verify)) return 0;
     if (new_text is null || new_text_length is 0) return 0;
     String oldText = new_text[ 0 .. new_text_length ]._idup();
     int pos;
-    pos = position;
+    pos = *(cast(int*)position);
     if (pos is -1) {
         auto ptr = OS.gtk_entry_get_text (cast(GtkEntry*)handle);
-        pos = cast(int)/*64*/OS.g_utf8_strlen (ptr, -1);
+        pos = cast(int)/*64bit*/OS.g_utf8_strlen (ptr, -1);
     }
     String newText = verifyText (oldText, pos, pos);
     if (newText !is oldText) {
@@ -682,7 +682,7 @@ override int /*long*/ gtk_insert_text (GtkEditable* widget, char* new_text, int 
                 OS.g_signal_handlers_unblock_matched (handle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udCHANGED);
             }
             OS.g_signal_handlers_block_matched (handle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udINSERT_TEXT);
-            OS.gtk_editable_insert_text (cast(GtkEditable*)handle, newText.ptr, newText.length, &pos);
+            OS.gtk_editable_insert_text (cast(GtkEditable*)handle, newText.ptr, cast(int)/*64bit*/newText.length, &pos);
             OS.g_signal_handlers_unblock_matched (handle, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udINSERT_TEXT);
             newStart = newEnd = pos;
         }
@@ -691,13 +691,13 @@ override int /*long*/ gtk_insert_text (GtkEditable* widget, char* new_text, int 
             fixStart = newStart ;
             fixEnd = newEnd ;
         }
-        position = pos;
+        *(cast(int*)position) = pos;
         OS.g_signal_stop_emission_by_name (handle, OS.insert_text.ptr);
     }
     return 0;
 }
 
-override int /*long*/ gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
+override int gtk_key_press_event (GtkWidget* widget, GdkEventKey* event) {
     auto result = super.gtk_key_press_event (widget, event);
     if (result !is 0) fixIM ();
     if (gdkEventKey is cast(GdkEventKey*)-1) result = 1;
@@ -705,7 +705,7 @@ override int /*long*/ gtk_key_press_event (GtkWidget* widget, GdkEventKey* event
     return result;
 }
 
-override int /*long*/ gtk_populate_popup (GtkWidget* widget, GtkWidget* menu) {
+override int gtk_populate_popup (GtkWidget* widget, GtkWidget* menu) {
     if ((style & SWT.RIGHT_TO_LEFT) !is 0) {
         OS.gtk_widget_set_direction (menu, OS.GTK_TEXT_DIR_RTL);
         display.doSetDirectionProc( menu, OS.GTK_TEXT_DIR_RTL);
@@ -713,7 +713,7 @@ override int /*long*/ gtk_populate_popup (GtkWidget* widget, GtkWidget* menu) {
     return 0;
 }
 
-override int /*long*/ gtk_value_changed (int  adjustment) {
+override int gtk_value_changed (int  adjustment) {
     postEvent (SWT.Selection);
     return 0;
 }

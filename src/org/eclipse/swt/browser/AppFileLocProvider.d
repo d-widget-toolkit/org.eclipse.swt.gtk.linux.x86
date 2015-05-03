@@ -163,7 +163,7 @@ nsresult GetFiles (char* prop, nsISimpleEnumerator* _retval) {
     }
 
     *_retval = null;
-    //XPCOM.memmove(_retval, new int /*long*/[] {0}, C.PTR_SIZEOF);
+    //XPCOM.memmove(_retval, new ptrdiff_t[] {0}, C.PTR_SIZEOF);
     if (propertyValues !is null) {
         nsILocalFile localFile;
         nsIFile file;

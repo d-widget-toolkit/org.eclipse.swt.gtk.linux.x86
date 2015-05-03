@@ -328,7 +328,7 @@ public bool hasListeners() {
  */
 public void notifyListeners(ImageLoaderEvent event) {
     if (!hasListeners()) return;
-    int size = imageLoaderListeners.size();
+    auto size = imageLoaderListeners.size();
     for (int i = 0; i < size; i++) {
         ImageLoaderListener listener = cast(ImageLoaderListener) imageLoaderListeners.elementAt(i);
         listener.imageDataLoaded(event);

@@ -7,25 +7,36 @@ module org.eclipse.swt.internal.c.XInput;
 import java.lang.all;
 
 public import org.eclipse.swt.internal.c.Xlib;
+private import org.eclipse.swt.internal.c.X;
+
+version(Tango){
+    import tango.stdc.stdint;
+} else { // Phobos
+    import std.stdint;
+}
 
 extern(C):
 
-struct XExtensionVersion{ int a; int b; };
+struct XExtensionVersion{
+    c_int present;
+    short major_version;
+    short minor_version;
+};
 
 
 
-const int _deviceKeyPress = 0;
-const int _deviceKeyRelease = 1;
-const int _deviceButtonPress = 0;
-const int _deviceButtonRelease = 1;
-const int _deviceMotionNotify = 0;
-const int _deviceFocusIn = 0;
-const int _deviceFocusOut = 1;
-const int _proximityIn = 0;
-const int _proximityOut = 1;
-const int _deviceStateNotify = 0;
-const int _deviceMappingNotify = 1;
-const int _changeDeviceNotify = 2;
+const c_int _deviceKeyPress = 0;
+const c_int _deviceKeyRelease = 1;
+const c_int _deviceButtonPress = 0;
+const c_int _deviceButtonRelease = 1;
+const c_int _deviceMotionNotify = 0;
+const c_int _deviceFocusIn = 0;
+const c_int _deviceFocusOut = 1;
+const c_int _proximityIn = 0;
+const c_int _proximityOut = 1;
+const c_int _deviceStateNotify = 0;
+const c_int _deviceMappingNotify = 1;
+const c_int _changeDeviceNotify = 2;
 alias _XValuatorInfo XValuatorInfo;
 alias _XValuatorInfo * XValuatorInfoPtr;
 alias _XAxisInfo * XAxisInfoPtr;
@@ -49,12 +60,6 @@ alias XDeviceButtonEvent XDeviceButtonReleasedEvent;
 alias XDeviceButtonEvent XDeviceButtonPressedEvent;
 alias XDeviceKeyEvent XDeviceKeyReleasedEvent;
 alias XDeviceKeyEvent XDeviceKeyPressedEvent;
-alias void function(void *, char *, int, int, char * *) _BCD_func__1398;
-alias int function(void *) _BCD_func__1440;
-alias int function(void *, XErrorEvent *) _BCD_func__1441;
-alias void function(void *, char *, char *) _BCD_func__1515;
-alias int function(void *, char *, char *) _BCD_func__1516;
-alias void function(void *, char *, char *) _BCD_func__1517;
 struct XButtonState {
 char c_class;
 char length;
@@ -72,24 +77,24 @@ char c_class;
 char length;
 char num_valuators;
 char mode;
-int * valuators;
+c_int * valuators;
 }
 struct XDeviceState {
-uint device_id;
-int num_classes;
+XID device_id;
+c_int num_classes;
 XInputClass * data;
 }
 struct XDeviceTimeCoord {
-uint time;
-int * data;
+Time time;
+c_int * data;
 }
 struct XEventList {
-uint event_type;
-uint device;
+XEventClass event_type;
+XID device;
 }
 struct XDevice {
-uint device_id;
-int num_classes;
+XID device_id;
+c_int num_classes;
 XInputClassInfo * classes;
 }
 struct XInputClassInfo {
@@ -97,241 +102,241 @@ char input_class;
 char event_type_base;
 }
 struct _XValuatorInfo {
-uint c_class;
-int length;
+XID c_class;
+c_int length;
 char num_axes;
 char mode;
-uint motion_buffer;
+c_ulong motion_buffer;
 _XAxisInfo * axes;
 }
 struct _XAxisInfo {
-int resolution;
-int min_value;
-int max_value;
+c_int resolution;
+c_int min_value;
+c_int max_value;
 }
 struct _XButtonInfo {
-uint c_class;
-int length;
+XID c_class;
+c_int length;
 short num_buttons;
 }
 struct _XKeyInfo {
-uint c_class;
-int length;
+XID c_class;
+c_int length;
 ushort min_keycode;
 ushort max_keycode;
 ushort num_keys;
 }
 struct _XDeviceInfo {
-uint id;
-uint type;
+XID id;
+Atom type;
 char * name;
-int num_classes;
-int use;
+c_int num_classes;
+c_int use;
 _XAnyClassinfo * inputclassinfo;
 }
 struct _XAnyClassinfo {
-uint c_class;
-int length;
+XID c_class;
+c_int length;
 }
 struct XDeviceEnableControl {
-uint control;
-int length;
-int enable;
+XID control;
+c_int length;
+c_int enable;
 }
 struct XDeviceCoreState {
-uint control;
-int length;
-int status;
-int iscore;
+XID control;
+c_int length;
+c_int status;
+c_int iscore;
 }
 struct XDeviceCoreControl {
-uint control;
-int length;
-int status;
+XID control;
+c_int length;
+c_int status;
 }
 struct XDeviceAbsAreaControl {
-uint control;
-int length;
-int offset_x;
-int offset_y;
-int width;
-int height;
-int screen;
-uint following;
+XID control;
+c_int length;
+c_int offset_x;
+c_int offset_y;
+c_int width;
+c_int height;
+c_int screen;
+XID following;
 }
 struct XDeviceAbsCalibControl {
-uint control;
-int length;
-int min_x;
-int max_x;
-int min_y;
-int max_y;
-int flip_x;
-int flip_y;
-int rotation;
-int button_threshold;
+XID control;
+c_int length;
+c_int min_x;
+c_int max_x;
+c_int min_y;
+c_int max_y;
+c_int flip_x;
+c_int flip_y;
+c_int rotation;
+c_int button_threshold;
 }
 struct XDeviceResolutionState {
-uint control;
-int length;
-int num_valuators;
-int * resolutions;
-int * min_resolutions;
-int * max_resolutions;
+XID control;
+c_int length;
+c_int num_valuators;
+c_int * resolutions;
+c_int * min_resolutions;
+c_int * max_resolutions;
 }
 struct XDeviceResolutionControl {
-uint control;
-int length;
-int first_valuator;
-int num_valuators;
-int * resolutions;
+XID control;
+c_int length;
+c_int first_valuator;
+c_int num_valuators;
+c_int * resolutions;
 }
 struct XDeviceControl {
-uint control;
-int length;
+XID control;
+c_int length;
 }
 struct XLedFeedbackControl {
-uint c_class;
-int length;
-uint id;
-int led_mask;
-int led_values;
+XID c_class;
+c_int length;
+XID id;
+c_int led_mask;
+c_int led_values;
 }
 struct XBellFeedbackControl {
-uint c_class;
-int length;
-uint id;
-int percent;
-int pitch;
-int duration;
+XID c_class;
+c_int length;
+XID id;
+c_int percent;
+c_int pitch;
+c_int duration;
 }
 struct XIntegerFeedbackControl {
-uint c_class;
-int length;
-uint id;
-int int_to_display;
+XID c_class;
+c_int length;
+XID id;
+c_int int_to_display;
 }
 struct XStringFeedbackControl {
-uint c_class;
-int length;
-uint id;
-int num_keysyms;
-uint * syms_to_display;
+XID c_class;
+c_int length;
+XID id;
+c_int num_keysyms;
+KeySym * syms_to_display;
 }
 struct XKbdFeedbackControl {
-uint c_class;
-int length;
-uint id;
-int click;
-int percent;
-int pitch;
-int duration;
-int led_mask;
-int led_value;
-int key;
-int auto_repeat_mode;
+XID c_class;
+c_int length;
+XID id;
+c_int click;
+c_int percent;
+c_int pitch;
+c_int duration;
+c_int led_mask;
+c_int led_value;
+c_int key;
+c_int auto_repeat_mode;
 }
 struct XPtrFeedbackControl {
-uint c_class;
-int length;
-uint id;
-int accelNum;
-int accelDenom;
-int threshold;
+XID c_class;
+c_int length;
+XID id;
+c_int accelNum;
+c_int accelDenom;
+c_int threshold;
 }
 struct XFeedbackControl {
-uint c_class;
-int length;
-uint id;
+XID c_class;
+c_int length;
+XID id;
 }
 struct XLedFeedbackState {
-uint c_class;
-int length;
-uint id;
-int led_values;
-int led_mask;
+XID c_class;
+c_int length;
+XID id;
+c_int led_values;
+c_int led_mask;
 }
 struct XBellFeedbackState {
-uint c_class;
-int length;
-uint id;
-int percent;
-int pitch;
-int duration;
+XID c_class;
+c_int length;
+XID id;
+c_int percent;
+c_int pitch;
+c_int duration;
 }
 struct XStringFeedbackState {
-uint c_class;
-int length;
-uint id;
-int max_symbols;
-int num_syms_supported;
-uint * syms_supported;
+XID c_class;
+c_int length;
+XID id;
+c_int max_symbols;
+c_int num_syms_supported;
+KeySym * syms_supported;
 }
 struct XIntegerFeedbackState {
-uint c_class;
-int length;
-uint id;
-int resolution;
-int minVal;
-int maxVal;
+XID c_class;
+c_int length;
+XID id;
+c_int resolution;
+c_int minVal;
+c_int maxVal;
 }
 struct XPtrFeedbackState {
-uint c_class;
-int length;
-uint id;
-int accelNum;
-int accelDenom;
-int threshold;
+XID c_class;
+c_int length;
+XID id;
+c_int accelNum;
+c_int accelDenom;
+c_int threshold;
 }
 struct XKbdFeedbackState {
-uint c_class;
-int length;
-uint id;
-int click;
-int percent;
-int pitch;
-int duration;
-int led_mask;
-int global_auto_repeat;
+XID c_class;
+c_int length;
+XID id;
+c_int click;
+c_int percent;
+c_int pitch;
+c_int duration;
+c_int led_mask;
+c_int global_auto_repeat;
 char [32] auto_repeats;
 }
 struct XFeedbackState {
-uint c_class;
-int length;
-uint id;
+XID c_class;
+c_int length;
+XID id;
 }
 struct XDevicePresenceNotifyEvent {
-int type;
-uint serial;
-int send_event;
-void * display;
-uint window;
-uint time;
-int devchange;
-uint deviceid;
-uint control;
+c_int type;
+c_ulong serial;
+Bool send_event;
+Display * display;
+Window window;
+Time time;
+Bool devchange;
+XID deviceid;
+XID control;
 }
 struct XChangeDeviceNotifyEvent {
-int type;
-uint serial;
-int send_event;
-void * display;
-uint window;
-uint deviceid;
-uint time;
-int request;
+c_int type;
+c_ulong serial;
+Bool send_event;
+Display * display;
+Window window;
+XID deviceid;
+Time time;
+c_int request;
 }
 struct XDeviceMappingEvent {
-int type;
-uint serial;
-int send_event;
-void * display;
-uint window;
-uint deviceid;
-uint time;
-int request;
-int first_keycode;
-int count;
+c_int type;
+c_ulong serial;
+Bool send_event;
+Display * display;
+Window window;
+XID deviceid;
+Time time;
+c_int request;
+c_int first_keycode;
+c_int count;
 }
 struct XButtonStatus {
 char c_class;
@@ -350,17 +355,17 @@ char c_class;
 char length;
 char num_valuators;
 char mode;
-int [6] valuators;
+c_int [6] valuators;
 }
 struct XDeviceStateNotifyEvent {
-int type;
-uint serial;
-int send_event;
-void * display;
-uint window;
-uint deviceid;
-uint time;
-int num_classes;
+c_int type;
+c_ulong serial;
+Bool send_event;
+Display * display;
+Window window;
+XID deviceid;
+Time time;
+c_int num_classes;
 char [64] data;
 }
 struct XInputClass {
@@ -368,145 +373,149 @@ char c_class;
 char length;
 }
 struct XProximityNotifyEvent {
-int type;
-uint serial;
-int send_event;
-void * display;
-uint window;
-uint deviceid;
-uint root;
-uint subwindow;
-uint time;
-int x;
-int y;
-int x_root;
-int y_root;
-uint state;
-int same_screen;
-uint device_state;
+c_int type;
+c_ulong serial;
+Bool send_event;
+Display * display;
+Window window;
+XID deviceid;
+Window root;
+Window subwindow;
+Time time;
+c_int x;
+c_int y;
+c_int x_root;
+c_int y_root;
+c_uint state;
+Bool same_screen;
+c_uint device_state;
 char axes_count;
 char first_axis;
-int [6] axis_data;
+c_int [6] axis_data;
 }
 struct XDeviceFocusChangeEvent {
-int type;
-uint serial;
-int send_event;
-void * display;
-uint window;
-uint deviceid;
-int mode;
-int detail;
-uint time;
+c_int type;
+c_ulong serial;
+Bool send_event;
+Display * display;
+Window window;
+XID deviceid;
+c_int mode;
+c_int detail;
+Time time;
 }
 struct XDeviceMotionEvent {
-int type;
-uint serial;
-int send_event;
-void * display;
-uint window;
-uint deviceid;
-uint root;
-uint subwindow;
-uint time;
-int x;
-int y;
-int x_root;
-int y_root;
-uint state;
+c_int type;
+c_ulong serial;
+Bool send_event;
+Display * display;
+Window window;
+XID deviceid;
+Window root;
+Window subwindow;
+Time time;
+c_int x;
+c_int y;
+c_int x_root;
+c_int y_root;
+c_uint state;
 char is_hint;
-int same_screen;
-uint device_state;
+Bool same_screen;
+c_uint device_state;
 char axes_count;
 char first_axis;
-int [6] axis_data;
+c_int [6] axis_data;
 }
 struct XDeviceButtonEvent {
-int type;
-uint serial;
-int send_event;
-void * display;
-uint window;
-uint deviceid;
-uint root;
-uint subwindow;
-uint time;
-int x;
-int y;
-int x_root;
-int y_root;
-uint state;
-uint button;
-int same_screen;
-uint device_state;
+c_int type;
+c_ulong serial;
+Bool send_event;
+Display * display;
+Window window;
+XID deviceid;
+Window root;
+Window subwindow;
+Time time;
+c_int x;
+c_int y;
+c_int x_root;
+c_int y_root;
+c_uint state;
+c_uint button;
+Bool same_screen;
+c_uint device_state;
 char axes_count;
 char first_axis;
-int [6] axis_data;
+c_int [6] axis_data;
 }
 struct XDeviceKeyEvent {
-int type;
-uint serial;
-int send_event;
-void * display;
-uint window;
-uint deviceid;
-uint root;
-uint subwindow;
-uint time;
-int x;
-int y;
-int x_root;
-int y_root;
-uint state;
-uint keycode;
-int same_screen;
-uint device_state;
+c_int type;
+c_ulong serial;
+Bool send_event;
+Display * display;
+Window window;
+XID deviceid;
+Window root;
+Window subwindow;
+Time time;
+c_int x;
+c_int y;
+c_int x_root;
+c_int y_root;
+c_uint state;
+c_uint keycode;
+Bool same_screen;
+c_uint device_state;
 char axes_count;
 char first_axis;
-int [6] axis_data;
+c_int [6] axis_data;
 }
 version(DYNLINK){
 mixin(gshared!(
-"extern (C) void function(XDeviceControl *)XFreeDeviceControl;
-extern (C) void function(XDeviceTimeCoord *)XFreeDeviceMotionEvents;
-extern (C) XDeviceTimeCoord * function(void *, XDevice *, uint, uint, int *, int *, int *)XGetDeviceMotionEvents;
-extern (C) int function(void *, XDevice *, uint, int, int, uint *, _XEvent *)XSendExtensionEvent;
-extern (C) uint * function(void *, uint, int *)XGetDeviceDontPropagateList;
-extern (C) int function(void *, uint, int, uint *, int)XChangeDeviceDontPropagateList;
-extern (C) int function(void *, uint, int *, uint * *, int *, uint * *)XGetSelectedExtensionEvents;
-extern (C) int function(void *, uint, uint *, int)XSelectExtensionEvent;
-extern (C) int function(void *, XDevice *, int, XDeviceControl *)XChangeDeviceControl;
-extern (C) XDeviceControl * function(void *, XDevice *, int)XGetDeviceControl;
-extern (C) int function(void *, XDevice *, int *, int, int)XSetDeviceValuators;
-extern (C) int function(void *, XDevice *, int)XSetDeviceMode;
-extern (C) int function(void *, XDevice *)XCloseDevice;
-extern (C) XDevice * function(void *, uint)XOpenDevice;
-extern (C) void function(_XDeviceInfo *)XFreeDeviceList;
-extern (C) _XDeviceInfo * function(void *, int *)XListInputDevices;
-extern (C) XExtensionVersion * function(void *, char *)XGetExtensionVersion;
-extern (C) void function(XDeviceState *)XFreeDeviceState;
-extern (C) XDeviceState * function(void *, XDevice *)XQueryDeviceState;
-extern (C) int function(void *, XDevice *, char *, uint)XGetDeviceButtonMapping;
-extern (C) int function(void *, XDevice *, char *, int)XSetDeviceButtonMapping;
-extern (C) int function(void *, XDevice *, XModifierKeymap *)XSetDeviceModifierMapping;
-extern (C) XModifierKeymap * function(void *, XDevice *)XGetDeviceModifierMapping;
-extern (C) int function(void *, XDevice *, int, int, uint *, int)XChangeDeviceKeyMapping;
-extern (C) uint * function(void *, XDevice *, char, int, int *)XGetDeviceKeyMapping;
-extern (C) int function(void *, XDevice *, uint, uint, int)XDeviceBell;
-extern (C) int function(void *, XDevice *, uint, XFeedbackControl *)XChangeFeedbackControl;
-extern (C) void function(XFeedbackState *)XFreeFeedbackList;
-extern (C) XFeedbackState * function(void *, XDevice *, int *)XGetFeedbackControl;
-extern (C) int function(void *, XDevice *, uint, int, uint)XSetDeviceFocus;
-extern (C) int function(void *, XDevice *, uint *, int *, uint *)XGetDeviceFocus;
-extern (C) int function(void *, XDevice *, int, uint)XAllowDeviceEvents;
-extern (C) int function(void *, XDevice *, uint, uint, XDevice *, uint)XUngrabDeviceButton;
-extern (C) int function(void *, XDevice *, uint, uint, XDevice *, uint, int, uint, uint *, int, int)XGrabDeviceButton;
-extern (C) int function(void *, XDevice *, uint, uint, XDevice *, uint)XUngrabDeviceKey;
-extern (C) int function(void *, XDevice *, uint, uint, XDevice *, uint, int, uint, uint *, int, int)XGrabDeviceKey;
-extern (C) int function(void *, XDevice *, uint)XUngrabDevice;
-extern (C) int function(void *, XDevice *, uint, int, int, uint *, int, int, uint)XGrabDevice;
-extern (C) int function(void *, XDevice *, int, int)XChangePointerDevice;
-extern (C) int function(void *, XDevice *)XChangeKeyboardDevice;"
+"extern(C) Status function(Display*, XDevice*, Atom, c_long, c_long, Bool, Atom, Atom*, c_int*, c_ulong*, c_ulong*, char**) XGetDeviceProperty;
+extern(C) void function(Display*, XDevice*, Atom) XDeleteDeviceProperty;
+extern(C) void function(Display*, XDevice*, Atom, Atom, c_int, c_int, const char *, c_int) XChangeDeviceProperty;
+extern(C) Atom* function(Display*, XDevice*, c_int*) XListDeviceProperties;
+extern(C) void function(XDeviceControl*) XFreeDeviceControl;
+extern(C) void function(XDeviceTimeCoord*) XFreeDeviceMotionEvents;
+extern(C) XDeviceTimeCoord function(Display*, XDevice*, Time, Time, c_int*, c_int*, c_int*) *XGetDeviceMotionEvents;
+extern(C) Status function(Display*, XDevice*, Window, Bool, c_int, XEventClass*, XEvent*) XSendExtensionEvent;
+extern(C) XEventClass function(Display*, Window, c_int*) *XGetDeviceDontPropagateList;
+extern(C) c_int function(Display*, Window, c_int, XEventClass*, c_int) XChangeDeviceDontPropagateList;
+extern(C) c_int function(Display*, Window, c_int*, XEventClass**, c_int*, XEventClass**) XGetSelectedExtensionEvents;
+extern(C) c_int function(Display*, Window, XEventClass*, c_int) XSelectExtensionEvent;
+extern(C) c_int function(Display*, XDevice*, c_int, XDeviceControl*) XChangeDeviceControl;
+extern(C) XDeviceControl function(Display*, XDevice*, c_int) *XGetDeviceControl;
+extern(C) c_int function(Display*, XDevice*, c_int*, c_int, c_int) XSetDeviceValuators;
+extern(C) c_int function(Display*, XDevice*, c_int) XSetDeviceMode;
+extern(C) c_int function(Display*, XDevice*) XCloseDevice;
+extern(C) XDevice function(Display*, XID) *XOpenDevice;
+extern(C) void function(XDeviceInfo*) XFreeDeviceList;
+extern(C) XDeviceInfo function(Display*, c_int*) *XListInputDevices;
+extern(C) XExtensionVersion function(Display*, const char*) *XGetExtensionVersion;
+extern(C) void function(XDeviceState*) XFreeDeviceState;
+extern(C) XDeviceState function(Display*, XDevice*) *XQueryDeviceState;
+extern(C) c_int function(Display*, XDevice*, char*, c_uint) XGetDeviceButtonMapping;
+extern(C) c_int function(Display*, XDevice*, char*, c_int) XSetDeviceButtonMapping;
+extern(C) c_int function(Display*, XDevice*, XModifierKeymap*) XSetDeviceModifierMapping;
+extern(C) XModifierKeymap function(Display*, XDevice*) *XGetDeviceModifierMapping;
+extern(C) c_int function(Display*, XDevice*, c_int, c_int, KeySym*, c_int) XChangeDeviceKeyMapping;
+extern(C) KeySym function(Display*, XDevice*, KeyCode, c_int, c_int*) *XGetDeviceKeyMapping;
+extern(C) c_int function(Display*, XDevice*, XID, XID, c_int) XDeviceBell;
+extern(C) c_int function(Display*, XDevice*, c_ulong, XFeedbackControl*) XChangeFeedbackControl;
+extern(C) void function(XFeedbackState*) XFreeFeedbackList;
+extern(C) XFeedbackState function(Display*, XDevice*, c_int*) *XGetFeedbackControl;
+extern(C) c_int function(Display*, XDevice*, Window, c_int, Time) XSetDeviceFocus;
+extern(C) c_int function(Display*, XDevice*, Window*, c_int*, Time*) XGetDeviceFocus;
+extern(C) c_int function(Display*, XDevice*, c_int, Time) XAllowDeviceEvents;
+extern(C) c_int function(Display*, XDevice*, c_uint, c_uint, XDevice*, Window) XUngrabDeviceButton;
+extern(C) c_int function(Display*, XDevice*, c_uint, c_uint, XDevice*, Window, Bool, c_uint, XEventClass*, c_int, c_int) XGrabDeviceButton;
+extern(C) c_int function(Display*, XDevice*, c_uint, c_uint, XDevice*, Window) XUngrabDeviceKey;
+extern(C) c_int function(Display*, XDevice*, c_uint, c_uint, XDevice*, Window, Bool, c_uint, XEventClass*, c_int, c_int) XGrabDeviceKey;
+extern(C) c_int function(Display*, XDevice*, Time) XUngrabDevice;
+extern(C) c_int function(Display*, XDevice*, Window, Bool, c_int, XEventClass*, c_int, c_int, Time) XGrabDevice;
+extern(C) c_int function(Display*, XDevice*, c_int, c_int) XChangePointerDevice;
+extern(C) c_int function(Display*, XDevice*) XChangeKeyboardDevice;"
 ));
 
 Symbol[] symbols;
@@ -556,44 +565,45 @@ static this () {
 }
 
 } else { // version(DYNLINK)
-extern (C) void XFreeDeviceControl(XDeviceControl *);
-extern (C) void XFreeDeviceMotionEvents(XDeviceTimeCoord *);
-extern (C) XDeviceTimeCoord * XGetDeviceMotionEvents(void *, XDevice *, uint, uint, int *, int *, int *);
-extern (C) int XSendExtensionEvent(void *, XDevice *, uint, int, int, uint *, _XEvent *);
-extern (C) uint * XGetDeviceDontPropagateList(void *, uint, int *);
-extern (C) int XChangeDeviceDontPropagateList(void *, uint, int, uint *, int);
-extern (C) int XGetSelectedExtensionEvents(void *, uint, int *, uint * *, int *, uint * *);
-extern (C) int XSelectExtensionEvent(void *, uint, uint *, int);
-extern (C) int XChangeDeviceControl(void *, XDevice *, int, XDeviceControl *);
-extern (C) XDeviceControl * XGetDeviceControl(void *, XDevice *, int);
-extern (C) int XSetDeviceValuators(void *, XDevice *, int *, int, int);
-extern (C) int XSetDeviceMode(void *, XDevice *, int);
-extern (C) int XCloseDevice(void *, XDevice *);
-extern (C) XDevice * XOpenDevice(void *, uint);
-extern (C) void XFreeDeviceList(_XDeviceInfo *);
-extern (C) _XDeviceInfo * XListInputDevices(void *, int *);
-extern (C) XExtensionVersion * XGetExtensionVersion(void *, char *);
-extern (C) void XFreeDeviceState(XDeviceState *);
-extern (C) XDeviceState * XQueryDeviceState(void *, XDevice *);
-extern (C) int XGetDeviceButtonMapping(void *, XDevice *, char *, uint);
-extern (C) int XSetDeviceButtonMapping(void *, XDevice *, char *, int);
-extern (C) int XSetDeviceModifierMapping(void *, XDevice *, XModifierKeymap *);
-extern (C) XModifierKeymap * XGetDeviceModifierMapping(void *, XDevice *);
-extern (C) int XChangeDeviceKeyMapping(void *, XDevice *, int, int, uint *, int);
-extern (C) uint * XGetDeviceKeyMapping(void *, XDevice *, char, int, int *);
-extern (C) int XDeviceBell(void *, XDevice *, uint, uint, int);
-extern (C) int XChangeFeedbackControl(void *, XDevice *, uint, XFeedbackControl *);
-extern (C) void XFreeFeedbackList(XFeedbackState *);
-extern (C) XFeedbackState * XGetFeedbackControl(void *, XDevice *, int *);
-extern (C) int XSetDeviceFocus(void *, XDevice *, uint, int, uint);
-extern (C) int XGetDeviceFocus(void *, XDevice *, uint *, int *, uint *);
-extern (C) int XAllowDeviceEvents(void *, XDevice *, int, uint);
-extern (C) int XUngrabDeviceButton(void *, XDevice *, uint, uint, XDevice *, uint);
-extern (C) int XGrabDeviceButton(void *, XDevice *, uint, uint, XDevice *, uint, int, uint, uint *, int, int);
-extern (C) int XUngrabDeviceKey(void *, XDevice *, uint, uint, XDevice *, uint);
-extern (C) int XGrabDeviceKey(void *, XDevice *, uint, uint, XDevice *, uint, int, uint, uint *, int, int);
-extern (C) int XUngrabDevice(void *, XDevice *, uint);
-extern (C) int XGrabDevice(void *, XDevice *, uint, int, int, uint *, int, int, uint);
-extern (C) int XChangePointerDevice(void *, XDevice *, int, int);
-extern (C) int XChangeKeyboardDevice(void *, XDevice *);
+extern(C) void XFreeDeviceControl(XDeviceControl*);
+extern(C) void XFreeDeviceMotionEvents(XDeviceTimeCoord*);
+extern(C) XDeviceTimeCoord *XGetDeviceMotionEvents(Display*, XDevice*, Time, Time, c_int*, c_int*, c_int*);
+extern(C) Status XSendExtensionEvent(Display*, XDevice*, Window, Bool, c_int, XEventClass*, XEvent*);
+extern(C) XEventClass *XGetDeviceDontPropagateList(Display*, Window, c_int*);
+extern(C) c_int XChangeDeviceDontPropagateList(Display*, Window, c_int, XEventClass*, c_int);
+extern(C) c_int XGetSelectedExtensionEvents(Display*, Window, c_int*, XEventClass**, c_int*, XEventClass**);
+extern(C) c_int XSelectExtensionEvent(Display*, Window, XEventClass*, c_int);
+extern(C) c_int XChangeDeviceControl(Display*, XDevice*, c_int, XDeviceControl*);
+extern(C) XDeviceControl *XGetDeviceControl(Display*, XDevice*, c_int);
+extern(C) c_int XSetDeviceValuators(Display*, XDevice*, c_int*, c_int, c_int);
+extern(C) c_int XSetDeviceMode(Display*, XDevice*, c_int);
+extern(C) c_int XCloseDevice(Display*, XDevice*);
+extern(C) XDevice *XOpenDevice(Display*, XID);
+extern(C) void XFreeDeviceList(XDeviceInfo*);
+extern(C) XDeviceInfo *XListInputDevices(Display*, c_int*);
+extern(C) XExtensionVersion *XGetExtensionVersion(Display*, const char*);
+extern(C) void XFreeDeviceState(XDeviceState*);
+extern(C) XDeviceState *XQueryDeviceState(Display*, XDevice*);
+extern(C) c_int XGetDeviceButtonMapping(Display*, XDevice*, char*, c_uint);
+extern(C) c_int XSetDeviceButtonMapping(Display*, XDevice*, char*, c_int);
+extern(C) c_int XSetDeviceModifierMapping(Display*, XDevice*, XModifierKeymap*);
+extern(C) XModifierKeymap *XGetDeviceModifierMapping(Display*, XDevice*);
+extern(C) c_int XChangeDeviceKeyMapping(Display*, XDevice*, c_int, c_int, KeySym*, c_int);
+extern(C) KeySym *XGetDeviceKeyMapping(Display*, XDevice*, KeyCode, c_int, c_int*);
+extern(C) c_int XDeviceBell(Display*, XDevice*, XID, XID, c_int);
+extern(C) c_int XChangeFeedbackControl(Display*, XDevice*, c_ulong, XFeedbackControl*);
+extern(C) void XFreeFeedbackList(XFeedbackState*);
+extern(C) XFeedbackState *XGetFeedbackControl(Display*, XDevice*, c_int*);
+extern(C) c_int XSetDeviceFocus(Display*, XDevice*, Window, c_int, Time);
+extern(C) c_int XGetDeviceFocus(Display*, XDevice*, Window*, c_int*, Time*);
+extern(C) c_int XAllowDeviceEvents(Display*, XDevice*, c_int, Time);
+extern(C) c_int XUngrabDeviceButton(Display*, XDevice*, c_uint, c_uint, XDevice*, Window);
+extern(C) c_int XGrabDeviceButton(Display*, XDevice*, c_uint, c_uint, XDevice*, Window, Bool, c_uint, XEventClass*, c_int, c_int);
+extern(C) c_int XUngrabDeviceKey(Display*, XDevice*, c_uint, c_uint, XDevice*, Window);
+extern(C) c_int XGrabDeviceKey(Display*, XDevice*, c_uint, c_uint, XDevice*, Window, Bool, c_uint, XEventClass*, c_int, c_int);
+extern(C) c_int XUngrabDevice(Display*, XDevice*, Time);
+extern(C) c_int XGrabDevice(Display*, XDevice*, Window, Bool, c_int, XEventClass*, c_int, c_int, Time);
+extern(C) c_int XChangePointerDevice(Display*, XDevice*, c_int, c_int);
+extern(C) c_int XChangeKeyboardDevice(Display*, XDevice*);
 } // version(DYNLINK)
+

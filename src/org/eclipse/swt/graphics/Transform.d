@@ -353,7 +353,7 @@ public void transform(float[] pointArray) {
     if (isDisposed()) SWT.error(SWT.ERROR_GRAPHIC_DISPOSED);
     if (pointArray is null) SWT.error(SWT.ERROR_NULL_ARGUMENT);
     double dx = 0, dy = 0;
-    int length = pointArray.length / 2;
+    auto length = pointArray.length / 2;
     for (int i = 0, j = 0; i < length; i++, j += 2) {
         dx = pointArray[j];
         dy = pointArray[j + 1];

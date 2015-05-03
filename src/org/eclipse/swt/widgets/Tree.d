@@ -298,7 +298,7 @@ override void cellDataProc (
                 * the correct height.
                 */
                 if (imageList !is null && imageList.pixbufs.length > 0) {
-                    if (isPixbuf) OS.g_object_set1 (cell, OS.pixbuf.ptr, cast(int)imageList.pixbufs [0]);
+                    if (isPixbuf) OS.g_object_set1 (cell, OS.pixbuf.ptr, cast(ptrdiff_t)imageList.pixbufs [0]);
                 }
                 return;
             }
@@ -313,12 +313,12 @@ override void cellDataProc (
         if (isPixbuf) {
             ptr = null;
             OS.gtk_tree_model_get1 (tree_model, iter, modelIndex + CELL_PIXBUF, &ptr);
-            OS.g_object_set1 (cell, OS.pixbuf.ptr, cast(int)ptr);
+            OS.g_object_set1 (cell, OS.pixbuf.ptr, cast(ptrdiff_t)ptr);
         } else {
             ptr = null;
             OS.gtk_tree_model_get1 (tree_model, iter, modelIndex + CELL_TEXT, &ptr);
             if (ptr !is null) {
-                OS.g_object_set1 (cell, OS.text.ptr, cast(int)ptr);
+                OS.g_object_set1 (cell, OS.text.ptr, cast(ptrdiff_t)ptr);
                 OS.g_free (ptr);
             }
         }
@@ -333,7 +333,7 @@ override void cellDataProc (
                 ptr = null;
                 OS.gtk_tree_model_get1 (tree_model, iter, modelIndex + CELL_BACKGROUND, &ptr);
                 if (ptr !is null) {
-                    OS.g_object_set1 (cell, OS.cell_background_gdk.ptr, cast(int)ptr);
+                    OS.g_object_set1 (cell, OS.cell_background_gdk.ptr, cast(ptrdiff_t)ptr);
                 }
             }
         }
@@ -341,12 +341,12 @@ override void cellDataProc (
             ptr = null;
             OS.gtk_tree_model_get1 (tree_model, iter, modelIndex + CELL_FOREGROUND, &ptr);
             if (ptr !is null) {
-                OS.g_object_set1 (cell, OS.foreground_gdk.ptr, cast(int)ptr);
+                OS.g_object_set1 (cell, OS.foreground_gdk.ptr, cast(ptrdiff_t)ptr);
             }
             ptr = null;
             OS.gtk_tree_model_get1 (tree_model, iter, modelIndex + CELL_FONT, &ptr);
             if (ptr !is null) {
-                OS.g_object_set1 (cell, OS.font_desc.ptr, cast(int)ptr);
+                OS.g_object_set1 (cell, OS.font_desc.ptr, cast(ptrdiff_t)ptr);
             }
         }
     }
@@ -595,7 +595,7 @@ public override Point computeSize (int wHint, int hHint, bool changed) {
     return size;
 }
 
-void copyModel (void* oldModel, int oldStart, void* newModel, int newStart, uint [] types, void* oldParent, void* newParent, int modelLength) {
+void copyModel (void* oldModel, int oldStart, void* newModel, int newStart, size_t [] types, void* oldParent, void* newParent, int modelLength) {
     GtkTreeIter iter;
     if (OS.gtk_tree_model_iter_children (oldModel, &iter, oldParent))  {
         GtkTreeIter*[] oldItems = new GtkTreeIter*[]( OS.gtk_tree_model_iter_n_children (oldModel, oldParent));
@@ -670,8 +670,8 @@ void createColumn (TreeColumn column, int index) {
         }
         if (modelIndex is modelLength) {
             auto oldModel = modelHandle;
-            uint[] types = getColumnTypes (columnCount + 4); // grow by 4 rows at a time
-            auto newModel = OS.gtk_tree_store_newv (types.length, types.ptr);
+            size_t[] types = getColumnTypes (columnCount + 4); // grow by 4 rows at a time
+            auto newModel = OS.gtk_tree_store_newv (cast(int)/*64bit*/types.length, types.ptr);
             if (newModel is null) error (SWT.ERROR_NO_HANDLES);
             copyModel (oldModel, FIRST_COLUMN, newModel, FIRST_COLUMN, types, null, null, modelLength);
             OS.gtk_tree_view_set_model (handle, newModel);
@@ -736,8 +736,8 @@ override void createHandle (int index) {
     OS.gtk_fixed_set_has_window (fixedHandle, true);
     scrolledHandle = cast(GtkWidget*)OS.gtk_scrolled_window_new (null, null);
     if (scrolledHandle is null) error (SWT.ERROR_NO_HANDLES);
-    uint[] types = getColumnTypes (1);
-    modelHandle = cast(GtkTreeStore*)OS.gtk_tree_store_newv (types.length, types.ptr);
+    size_t[] types = getColumnTypes (1);
+    modelHandle = cast(GtkTreeStore*)OS.gtk_tree_store_newv (cast(int)/*64bit*/types.length, types.ptr);
     if (modelHandle is null) error (SWT.ERROR_NO_HANDLES);
     handle = cast(GtkWidget*)OS.gtk_tree_view_new_with_model (modelHandle);
     if (handle is null) error (SWT.ERROR_NO_HANDLES);
@@ -1043,8 +1043,8 @@ void destroyItem (TreeColumn column) {
     OS.gtk_tree_view_remove_column (handle, columnHandle);
     if (columnCount is 0) {
         auto oldModel = modelHandle;
-        uint[] types = getColumnTypes (1);
-        auto newModel = OS.gtk_tree_store_newv (types.length, types.ptr);
+        size_t[] types = getColumnTypes (1);
+        auto newModel = OS.gtk_tree_store_newv (cast(int)/*64bit*/types.length, types.ptr);
         if (newModel is null) error (SWT.ERROR_NO_HANDLES);
         copyModel(oldModel, column.modelIndex, newModel, FIRST_COLUMN, types, null, null, FIRST_COLUMN + CELL_TYPES);
         OS.gtk_tree_view_set_model (handle, newModel);
@@ -1310,8 +1310,8 @@ public int [] getColumnOrder () {
     return order;
 }
 
-uint[] getColumnTypes (int columnCount) {
-    uint[] types = new uint [FIRST_COLUMN + (columnCount * CELL_TYPES)];
+size_t[] getColumnTypes (int columnCount) {
+    size_t[] types = new size_t [FIRST_COLUMN + (columnCount * CELL_TYPES)];
     // per row data
     types [ID_COLUMN] = OS.G_TYPE_INT ();
     types [CHECKED_COLUMN] = OS.G_TYPE_BOOLEAN ();
@@ -1436,7 +1436,7 @@ public int getHeaderHeight () {
     OS.gdk_window_get_origin (binWindow, null, &binY);
     int fixedY;
     OS.gdk_window_get_origin (fixedWindow, null, &fixedY);
-    return binY  - fixedY ;
+    return binY  - fixedY;
 }
 
 /**
@@ -1885,7 +1885,7 @@ override int gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent
     int button = gdkEvent.button;
     if (button is 3 && gdkEvent.type is OS.GDK_BUTTON_PRESS) {
         void* path;
-        if (OS.gtk_tree_view_get_path_at_pos (handle, cast(int)gdkEvent.x, cast(int)gdkEvent.y, &path, null, null, null)) {
+        if (OS.gtk_tree_view_get_path_at_pos (handle, cast(int)/*64bit*/gdkEvent.x, cast(int)/*64bit*/gdkEvent.y, &path, null, null, null)) {
             if (path !is null) {
                 auto selection = OS.gtk_tree_view_get_selection (handle);
                 if (OS.gtk_tree_selection_path_is_selected (selection, path )) result = 1;
@@ -1903,7 +1903,7 @@ override int gtk_button_press_event (GtkWidget* widget, GdkEventButton* gdkEvent
     */
     if ((style & SWT.SINGLE) !is 0 && getSelectionCount () is 0) {
         void* path;
-        if (OS.gtk_tree_view_get_path_at_pos (handle, cast(int)gdkEvent.x, cast(int)gdkEvent.y, &path, null, null, null)) {
+        if (OS.gtk_tree_view_get_path_at_pos (handle, cast(int)/*64bit*/gdkEvent.x, cast(int)/*64bit*/gdkEvent.y, &path, null, null, null)) {
             if (path  !is null) {
                 auto selection = OS.gtk_tree_view_get_selection (handle);
                 OS.g_signal_handlers_block_matched (selection, OS.G_SIGNAL_MATCH_DATA, 0, 0, null, null, udCHANGED);
@@ -1941,7 +1941,7 @@ override int gtk_changed (GtkWidget* widget) {
     return 0;
 }
 
-override int gtk_expand_collapse_cursor_row (GtkWidget* widget, int /*long*/ logical, int /*long*/ expand, int /*long*/ open_all) {
+override int gtk_expand_collapse_cursor_row (GtkWidget* widget, ptrdiff_t logical, ptrdiff_t expand, ptrdiff_t open_all) {
     // FIXME - this flag is never cleared.  It should be cleared when the expand all operation completes.
     if (expand !is 0 && open_all !is 0) expandAll = true;
     return 0;
@@ -2094,7 +2094,7 @@ override int gtk_test_expand_row (
     return 0;
 }
 
-override int gtk_toggled (int /*long*/ renderer, char* pathStr) {
+override int gtk_toggled (int renderer, char* pathStr) {
     auto path = OS.gtk_tree_path_new_from_string (pathStr);
     if (path is null) return 0;
     TreeItem item = null;
@@ -2540,7 +2540,7 @@ override void rendererRenderProc (
     }
     if (item !is null) {
         if (OS.GTK_IS_CELL_RENDERER_TOGGLE (cell) || (OS.GTK_IS_CELL_RENDERER_PIXBUF (cell) && (columnIndex !is 0 || (style & SWT.CHECK) is 0))) {
-            drawFlags = cast(int)/*64*/flags;
+            drawFlags = flags;
             drawState = SWT.FOREGROUND;
             void* ptr;
             OS.gtk_tree_model_get1 (modelHandle, item.handle, Tree.BACKGROUND_COLUMN, &ptr);
@@ -2607,7 +2607,7 @@ override void rendererRenderProc (
             }
         }
     }
-    int /*long*/ result = 0;
+    int result = 0;
     if ((drawState & SWT.BACKGROUND) !is 0 && (drawState & SWT.SELECTED) is 0) {
         GC gc = new GC (this);
         gc.setBackground (item.getBackground (columnIndex));
@@ -2618,7 +2618,7 @@ override void rendererRenderProc (
         auto g_class = OS.g_type_class_peek_parent (OS.G_OBJECT_GET_CLASS (cell));
         GtkCellRendererClass* klass = cast(GtkCellRendererClass*)g_class;
         if (drawForeground !is null && OS.GTK_IS_CELL_RENDERER_TEXT (cell)) {
-            OS.g_object_set1 (cell, OS.foreground_gdk.ptr, cast(int)drawForeground);
+            OS.g_object_set1 (cell, OS.foreground_gdk.ptr, cast(ptrdiff_t)drawForeground);
         }
         klass.render( cell, window, handle, background_area, cell_area, expose_area, drawFlags);
     }
@@ -3033,7 +3033,7 @@ public void setSelection (TreeItem [] items) {
     // SWT extension: allow null for zero length string
     //if (items is null) error (SWT.ERROR_NULL_ARGUMENT);
     deselectAll ();
-    int length = items.length;
+    ptrdiff_t length = items.length;
     if (length is 0 || ((style & SWT.SINGLE) !is 0 && length > 1)) return;
     bool fixColumn = showFirstColumn ();
     auto selection = OS.gtk_tree_view_get_selection (handle);

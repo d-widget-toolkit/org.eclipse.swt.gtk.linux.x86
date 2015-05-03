@@ -58,7 +58,7 @@ public class Library {
 static int parseVersion(String aVersion) {
     if (aVersion == null) return 0;
     int major = 0, minor = 0, micro = 0;
-    int length = aVersion.length, index = 0, start = 0;
+    int length = cast(int)/*64bit*/aVersion.length, index = 0, start = 0;
     bool isDigit( char c ){
         return c >= '0' && c <= '9';
     }
@@ -182,12 +182,12 @@ public static void loadLibrary (String name, boolean mapName) {
     if (prop is null) prop = System.getProperty ("com.ibm.vm.bitmode"); //$NON-NLS-1$
     if (prop !is null) {
         if ("32".equals (prop)) { //$NON-NLS-1$
-             if (0x1FFFFFFFFL is (int /*long*/)0x1FFFFFFFFL) {
+             if (0x1FFFFFFFFL is cast(ptrdiff_t)0x1FFFFFFFFL) {
                 throw new UnsatisfiedLinkError ("Cannot load 64-bit SWT libraries on 32-bit JVM"); //$NON-NLS-1$
              }
         }
         if ("64".equals (prop)) { //$NON-NLS-1$
-            if (0x1FFFFFFFFL !is (int /*long*/)0x1FFFFFFFFL) {
+            if (0x1FFFFFFFFL !is cast(ptrdiff_t)0x1FFFFFFFFL) {
                 throw new UnsatisfiedLinkError ("Cannot load 32-bit SWT libraries on 64-bit JVM"); //$NON-NLS-1$
             }       
         }

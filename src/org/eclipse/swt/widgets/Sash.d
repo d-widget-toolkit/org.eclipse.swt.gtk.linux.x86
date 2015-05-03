@@ -349,8 +349,8 @@ override int gtk_motion_notify_event (GtkWidget* widget, GdkEventMotion* gdkEven
     } else {
         int origin_x, origin_y;
         OS.gdk_window_get_origin (gdkEvent.window, &origin_x, &origin_y);
-        eventX = cast(int) (gdkEvent.x_root - origin_x );
-        eventY = cast(int) (gdkEvent.y_root - origin_y );
+        eventX = cast(int)(gdkEvent.x_root - origin_x);
+        eventY = cast(int)(gdkEvent.y_root - origin_y);
         eventState = gdkEvent.state;
     }
     if ((eventState & OS.GDK_BUTTON1_MASK) is 0) return 0;

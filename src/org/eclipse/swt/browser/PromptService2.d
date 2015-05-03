@@ -99,7 +99,7 @@ extern(D)
 Browser getBrowser (nsIDOMWindow aDOMWindow) {
     if (aDOMWindow is null) return null;
 
-    //int /*long*/[] result = new int /*long*/[1];
+    //ptrdiff_t[] result = new ptrdiff_t[1];
     nsIServiceManager serviceManager;
     auto rc = XPCOM.NS_GetServiceManager (&serviceManager);
     if (rc !is XPCOM.NS_OK) Mozilla.error (rc);
@@ -319,7 +319,7 @@ nsresult Prompt (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText
     //XPCOM.memmove (dest, aText, length * 2);
     textLabel = String_valueOf (aText[0 .. span]);
     
-    //int /*long*/[] valueAddr = new int /*long*/[1];
+    //ptrdiff_t[] valueAddr = new ptrdiff_t[1];
     //XPCOM.memmove (valueAddr, aValue, C.PTR_SIZEOF);
     auto valueAddr = aValue;
     if (valueAddr[0] !is null) {
@@ -366,7 +366,7 @@ nsresult Prompt (nsIDOMWindow aParent, PRUnichar* aDialogTitle, PRUnichar* aText
             }
             (cast(wchar*)ptr)[0 .. buffer.length] = buffer[0 .. $];
             //XPCOM.memmove (ptr, buffer, size);
-            //XPCOM.memmove (aValue, new int /*long*/[] {ptr}, C.PTR_SIZEOF);
+            //XPCOM.memmove (aValue, new ptrdiff_t[] {ptr}, C.PTR_SIZEOF);
             *aValue = cast(PRUnichar*)ptr;
 
             if (valueAddr[0] !is null) {
@@ -421,7 +421,7 @@ nsresult PromptAuth(nsIDOMWindow aParent, nsIChannel aChannel, PRUint32 level, n
     int rc = authInfo.GetUsername (cast(nsAString*)ptr1);
     if (rc !is XPCOM.NS_OK) SWT.error (rc);
     //int length = XPCOM.nsEmbedString_Length (ptr);
-    //int /*long*/ buffer = XPCOM.nsEmbedString_get (ptr);
+    //ptrdiff_t buffer = XPCOM.nsEmbedString_get (ptr);
     //char[] chars = new char[length];
     //XPCOM.memmove (chars, buffer, length * 2);
     userLabel = ptr1.toString;
@@ -521,7 +521,7 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
     //XPCOM.memmove (dest, aText, length * 2);
     textLabel = String_valueOf (fromString16z(aText));
     
-    //int /*long*/[] userAddr = new int /*long*/[1];
+    //ptrdiff_t[] userAddr = new ptrdiff_t[1];
     //XPCOM.memmove (userAddr, aUsername, C.PTR_SIZEOF);
     auto userAddr = *aUsername;
     if (*aUsername !is null) {
@@ -531,7 +531,7 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
             userLabel = String_valueOf(fromString16z(*aUsername));       
     }
     
-    //int /*long*/[] passAddr = new int /*long*/[1];
+    //ptrdiff_t[] passAddr = new ptrdiff_t[1];
     //XPCOM.memmove (passAddr, aPassword, C.PTR_SIZEOF);
     auto passAddr = *aPassword;
     if (*aPassword !is null) {
@@ -565,7 +565,7 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
         int cnt, size;
         void* ptr;
         wchar[] buffer;
-        int /*long*/[] result2 = new int /*long*/[1];
+        ptrdiff_t[] result2 = new ptrdiff_t[1];
         if (userLabel !is null) {
             //cnt = userLabel[0].length ();
             //buffer = new char[cnt + 1];
@@ -576,7 +576,7 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
             //(cast(wchar*)ptr)[0 .. buffer.length] = buffer[0 .. $];
             //XPCOM.memmove (ptr, buffer, size);
             *aUsername = toString16z(toWCharArray(userLabel));
-            //XPCOM.memmove (aUsername, new int /*long*/[] {ptr}, C.PTR_SIZEOF);
+            //XPCOM.memmove (aUsername, new ptrdiff_t[] {ptr}, C.PTR_SIZEOF);
             nsIServiceManager serviceManager;
             
             if (userAddr !is null) {
@@ -609,7 +609,7 @@ nsresult PromptUsernameAndPassword (nsIDOMWindow aParent, PRUnichar* aDialogTitl
             //(cast(wchar*)ptr)[0 .. buffer.length] = buffer[0 .. $];
             //XPCOM.memmove (ptr, buffer, size);
             *aPassword = toString16z(toWCharArray(passLabel));
-            //XPCOM.memmove (aPassword, new int /*long*/[] {ptr}, C.PTR_SIZEOF);
+            //XPCOM.memmove (aPassword, new ptrdiff_t[] {ptr}, C.PTR_SIZEOF);
             
             nsIServiceManager serviceManager;
             if (passAddr !is null) {

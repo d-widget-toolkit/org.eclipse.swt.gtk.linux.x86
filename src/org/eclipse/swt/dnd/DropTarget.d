@@ -118,10 +118,10 @@ public class DropTarget : Widget {
     Runnable dragOverHeartbeat;
     DNDEvent dragOverEvent;
 
-    int drag_motion_handler;
-    int drag_leave_handler;
-    int drag_data_received_handler;
-    int drag_drop_handler;
+    ptrdiff_t drag_motion_handler;
+    ptrdiff_t drag_leave_handler;
+    ptrdiff_t drag_data_received_handler;
+    ptrdiff_t drag_drop_handler;
 
     static const String DEFAULT_DROP_TARGET_EFFECT = "DEFAULT_DROP_TARGET_EFFECT"; //$NON-NLS-1$
     static const int DRAGOVER_HYSTERESIS = 50;
@@ -282,7 +282,7 @@ private static extern(C) void Drag_Data_Received (
 {
     DropTarget target = FindDropTarget(widget);
     if (target is null) return;
-    target.drag_data_received (widget, context, cast(int)/*64*/x, cast(int)/*64*/y, data, cast(int)/*64*/info, cast(int)/*64*/time);
+    target.drag_data_received (widget, context, x, y, data, info, time);
 }
 
 private static extern(C) int Drag_Drop(
@@ -295,7 +295,7 @@ private static extern(C) int Drag_Drop(
 {
     DropTarget target = FindDropTarget(widget);
     if (target is null) return 0;
-    return target.drag_drop (widget, context, cast(int)/*64*/x, cast(int)/*64*/y, cast(int)/*64*/time) ? 1 : 0;
+    return target.drag_drop (widget, context, x, y, time) ? 1 : 0;
 }
 
 private static extern(C) void Drag_Leave (
@@ -306,7 +306,7 @@ private static extern(C) void Drag_Leave (
 {
     DropTarget target = FindDropTarget(widget);
     if (target is null) return;
-    target.drag_leave (widget, context, cast(int)/*64*/time);
+    target.drag_leave (widget, context, time);
 }
 
 private static extern(C) int Drag_Motion (
@@ -319,7 +319,7 @@ private static extern(C) int Drag_Motion (
 {
     DropTarget target = FindDropTarget(widget);
     if (target is null) return 0;
-    return target.drag_motion (widget, context, cast(int)/*64*/x, cast(int)/*64*/y, cast(int)/*64*/time) ? 1 : 0;
+    return target.drag_motion (widget, context, x, y, time) ? 1 : 0;
 }
 
 static DropTarget FindDropTarget(GtkWidget* handle) {
@@ -607,10 +607,10 @@ public Control getControl () {
  */
 public DropTargetListener[] getDropListeners() {
     Listener[] listeners = getListeners(DND.DragEnter);
-    int length = listeners.length;
+    auto length = listeners.length;
     DropTargetListener[] dropListeners = new DropTargetListener[length];
     int count = 0;
-    for (int i = 0; i < length; i++) {
+    for (typeof(length) i = 0; i < length; i++) {
         Listener listener = listeners[i];
         if ( auto l = cast(DNDListener)listener ) {
             dropListeners[count] = cast(DropTargetListener) (l.getEventListener());
@@ -751,12 +751,14 @@ public void setTransfer(Transfer[] transferAgents){
             String[] typeNames = transfer.getTypeNames();
             for (int j = 0; j < typeIds.length; j++) {
                 GtkTargetEntry* entry = new GtkTargetEntry();
-                entry.target = cast(char*)OS.g_malloc(typeNames[j].length +1);
+                entry.target = cast(char*)
+                    OS.g_malloc(typeNames[j].length +1);
                 entry.target[ 0 .. typeNames[j].length ] = typeNames[j];
                 entry.target[ typeNames[j].length ] = '\0';
                 entry.info = typeIds[j];
                 GtkTargetEntry*[] newTargets = new GtkTargetEntry*[targets.length + 1];
-                SimpleType!(GtkTargetEntry*).arraycopy(targets, 0, newTargets, 0, targets.length);
+                SimpleType!(GtkTargetEntry*).arraycopy(targets, 0, newTargets,
+                                             0, targets.length);
                 newTargets[targets.length] = entry;
                 targets = newTargets;
             }
@@ -777,7 +779,8 @@ public void setTransfer(Transfer[] transferAgents){
             }
         }
     }
-    OS.gtk_drag_dest_set(control.handle, 0, pTargets, targets.length, actions);
+    OS.gtk_drag_dest_set(control.handle, 0, pTargets,
+                         cast(int)/*64bit*/targets.length, actions);
 
     for (int i = 0; i < targets.length; i++) {
         OS.g_free(targets[i].target);

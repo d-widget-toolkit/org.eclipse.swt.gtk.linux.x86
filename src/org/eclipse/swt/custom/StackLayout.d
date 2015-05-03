@@ -131,7 +131,7 @@ protected override void layout(Composite composite, bool flushCache) {
 
 String getName () {
     String string = this.classinfo.name;
-    int index = string.lastIndexOf ('.');
+    auto index = string.lastIndexOf ('.');
     if (index is -1 ) return string;
     return string[ index + 1 .. $ ];
 }

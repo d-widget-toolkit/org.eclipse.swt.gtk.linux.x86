@@ -7,18 +7,25 @@ module org.eclipse.swt.internal.c.Xrender;
 import java.lang.all;
 
 public import org.eclipse.swt.internal.c.Xlib;
+private import org.eclipse.swt.internal.c.X;
+
+version(Tango){
+    import tango.stdc.stdint;
+} else { // Phobos
+    import std.stdint;
+}
 
 extern(C):
 
-const int PictStandardARGB32 = 0;
-const int PictStandardRGB24 = 1;
-const int PictStandardA8 = 2;
-const int PictStandardA4 = 3;
-const int PictStandardA1 = 4;
-const int PictStandardNUM = 5;
+const c_int PictStandardARGB32 = 0;
+const c_int PictStandardRGB24 = 1;
+const c_int PictStandardA8 = 2;
+const c_int PictStandardA4 = 3;
+const c_int PictStandardA1 = 4;
+const c_int PictStandardNUM = 5;
 alias _XConicalGradient XConicalGradient;
 alias _XPointFixed XPointFixed;
-alias int XFixed;
+alias c_int XFixed;
 alias _XRadialGradient XRadialGradient;
 alias _XCircle XCircle;
 alias _XLinearGradient XLinearGradient;
@@ -38,15 +45,15 @@ alias _XGlyphElt16 XGlyphElt16;
 alias _XGlyphElt8 XGlyphElt8;
 alias _XGlyphInfo XGlyphInfo;
 alias _XRenderPictureAttributes XRenderPictureAttributes;
-alias void function(void *, char *, int, int, char * *) _BCD_func__1287;
-alias int function(void *) _BCD_func__1329;
-alias int function(void *, XErrorEvent *) _BCD_func__1330;
+alias void function(void *, char *, c_int, c_int, char * *) _BCD_func__1287;
+alias c_int function(void *) _BCD_func__1329;
+alias c_int function(void *, XErrorEvent *) _BCD_func__1330;
 alias void function(void *, char *, char *) _BCD_func__1403;
-alias int function(void *, char *, char *) _BCD_func__1404;
+alias c_int function(void *, char *, char *) _BCD_func__1404;
 alias void function(void *, char *, char *) _BCD_func__1405;
 struct _XConicalGradient {
 _XPointFixed center;
-int angle;
+XFixed angle;
 }
 struct _XRadialGradient {
 _XCircle inner;
@@ -61,40 +68,40 @@ _XSpanFix top;
 _XSpanFix bottom;
 }
 struct _XSpanFix {
-int left;
-int right;
-int y;
+XFixed left;
+XFixed right;
+XFixed y;
 }
 struct _XAnimCursor {
-uint cursor;
-uint delay;
+Cursor cursor;
+c_uint delay;
 }
 struct _XIndexValue {
-uint pixel;
+c_uint pixel;
 ushort red;
 ushort green;
 ushort blue;
 ushort alpha;
 }
 struct _XFilters {
-int nfilter;
+c_int nfilter;
 char * * filter;
-int nalias;
+c_int nalias;
 short * alias_;
 }
 struct _XTransform {
-int [3] [3] matrix;
+XFixed [3] [3] matrix;
 }
 struct _XTrapezoid {
-int top;
-int bottom;
+XFixed top;
+XFixed bottom;
 _XLineFixed left;
 _XLineFixed right;
 }
 struct _XCircle {
-int x;
-int y;
-int radius;
+XFixed x;
+XFixed y;
+XFixed radius;
 }
 struct _XTriangle {
 _XPointFixed p1;
@@ -106,33 +113,33 @@ _XPointFixed p1;
 _XPointFixed p2;
 }
 struct _XPointFixed {
-int x;
-int y;
+XFixed x;
+XFixed y;
 }
 struct _XPointDouble {
 double x;
 double y;
 }
 struct _XGlyphElt32 {
-uint glyphset;
-uint * chars;
-int nchars;
-int xOff;
-int yOff;
+GlyphSet glyphset;
+c_uint * chars;
+c_int nchars;
+c_int xOff;
+c_int yOff;
 }
 struct _XGlyphElt16 {
-uint glyphset;
+GlyphSet glyphset;
 ushort * chars;
-int nchars;
-int xOff;
-int yOff;
+c_int nchars;
+c_int xOff;
+c_int yOff;
 }
 struct _XGlyphElt8 {
-uint glyphset;
+GlyphSet glyphset;
 char * chars;
-int nchars;
-int xOff;
-int yOff;
+c_int nchars;
+c_int xOff;
+c_int yOff;
 }
 struct _XGlyphInfo {
 ushort width;
@@ -149,26 +156,26 @@ ushort blue;
 ushort alpha;
 }
 struct _XRenderPictureAttributes {
-int repeat;
-uint alpha_map;
-int alpha_x_origin;
-int alpha_y_origin;
-int clip_x_origin;
-int clip_y_origin;
-uint clip_mask;
-int graphics_exposures;
-int subwindow_mode;
-int poly_edge;
-int poly_mode;
-uint dither;
-int component_alpha;
+c_int repeat;
+Picture alpha_map;
+c_int alpha_x_origin;
+c_int alpha_y_origin;
+c_int clip_x_origin;
+c_int clip_y_origin;
+Pixmap clip_mask;
+Bool graphics_exposures;
+c_int subwindow_mode;
+c_int poly_edge;
+c_int poly_mode;
+Atom dither;
+Bool component_alpha;
 }
 struct XRenderPictFormat {
-uint id;
-int type;
-int depth;
+PictFormat id;
+c_int type;
+c_int depth;
 XRenderDirectFormat direct;
-uint colormap;
+Colormap colormap;
 }
 struct XRenderDirectFormat {
 short red;
@@ -182,50 +189,50 @@ short alphaMask;
 }
 version(DYNLINK){
 mixin(gshared!(
-"extern (C) uint function(void *, _XConicalGradient *, int *, XRenderColor *, int)XRenderCreateConicalGradient;
-extern (C) uint function(void *, _XRadialGradient *, int *, XRenderColor *, int)XRenderCreateRadialGradient;
-extern (C) uint function(void *, _XLinearGradient *, int *, XRenderColor *, int)XRenderCreateLinearGradient;
-extern (C) uint function(void *, XRenderColor *)XRenderCreateSolidFill;
-extern (C) void function(void *, uint, int, int, _XTrap *, int)XRenderAddTraps;
-extern (C) uint function(void *, int, _XAnimCursor *)XRenderCreateAnimCursor;
-extern (C) void function(void *, uint, char *, int *, int)XRenderSetPictureFilter;
-extern (C) _XFilters * function(void *, uint)XRenderQueryFilters;
-extern (C) uint function(void *, uint, uint, uint)XRenderCreateCursor;
-extern (C) int function(void *, char *, XRenderColor *)XRenderParseColor;
-extern (C) void function(void *, int, uint, uint, XRenderPictFormat *, int, int, int, int, _XPointDouble *, int, int)XRenderCompositeDoublePoly;
-extern (C) void function(void *, int, uint, uint, XRenderPictFormat *, int, int, _XPointFixed *, int)XRenderCompositeTriFan;
-extern (C) void function(void *, int, uint, uint, XRenderPictFormat *, int, int, _XPointFixed *, int)XRenderCompositeTriStrip;
-extern (C) void function(void *, int, uint, uint, XRenderPictFormat *, int, int, _XTriangle *, int)XRenderCompositeTriangles;
-extern (C) void function(void *, int, uint, uint, XRenderPictFormat *, int, int, _XTrapezoid *, int)XRenderCompositeTrapezoids;
-extern (C) void function(void *, int, uint, XRenderColor *, XRectangle *, int)XRenderFillRectangles;
-extern (C) void function(void *, int, uint, XRenderColor *, int, int, uint, uint)XRenderFillRectangle;
-extern (C) void function(void *, int, uint, uint, XRenderPictFormat *, int, int, int, int, _XGlyphElt32 *, int)XRenderCompositeText32;
-extern (C) void function(void *, int, uint, uint, XRenderPictFormat *, int, int, int, int, _XGlyphElt16 *, int)XRenderCompositeText16;
-extern (C) void function(void *, int, uint, uint, XRenderPictFormat *, int, int, int, int, _XGlyphElt8 *, int)XRenderCompositeText8;
-extern (C) void function(void *, int, uint, uint, XRenderPictFormat *, uint, int, int, int, int, uint *, int)XRenderCompositeString32;
-extern (C) void function(void *, int, uint, uint, XRenderPictFormat *, uint, int, int, int, int, ushort *, int)XRenderCompositeString16;
-extern (C) void function(void *, int, uint, uint, XRenderPictFormat *, uint, int, int, int, int, char *, int)XRenderCompositeString8;
-extern (C) void function(void *, uint, uint *, int)XRenderFreeGlyphs;
-extern (C) void function(void *, uint, uint *, _XGlyphInfo *, int, char *, int)XRenderAddGlyphs;
-extern (C) void function(void *, uint)XRenderFreeGlyphSet;
-extern (C) uint function(void *, uint)XRenderReferenceGlyphSet;
-extern (C) uint function(void *, XRenderPictFormat *)XRenderCreateGlyphSet;
-extern (C) void function(void *, int, uint, uint, uint, int, int, int, int, int, int, uint, uint)XRenderComposite;
-extern (C) void function(void *, uint)XRenderFreePicture;
-extern (C) void function(void *, uint, _XTransform *)XRenderSetPictureTransform;
-extern (C) void function(void *, uint, void *)XRenderSetPictureClipRegion;
-extern (C) void function(void *, uint, int, int, XRectangle *, int)XRenderSetPictureClipRectangles;
-extern (C) void function(void *, uint, uint, _XRenderPictureAttributes *)XRenderChangePicture;
-extern (C) uint function(void *, uint, XRenderPictFormat *, uint, _XRenderPictureAttributes *)XRenderCreatePicture;
-extern (C) _XIndexValue * function(void *, XRenderPictFormat *, int *)XRenderQueryPictIndexValues;
-extern (C) XRenderPictFormat * function(void *, int)XRenderFindStandardFormat;
-extern (C) XRenderPictFormat * function(void *, uint, XRenderPictFormat *, int)XRenderFindFormat;
-extern (C) XRenderPictFormat * function(void *, Visual *)XRenderFindVisualFormat;
-extern (C) int function(void *, int, int)XRenderSetSubpixelOrder;
-extern (C) int function(void *, int)XRenderQuerySubpixelOrder;
-extern (C) int function(void *)XRenderQueryFormats;
-extern (C) int function(void *, int *, int *)XRenderQueryVersion;
-extern (C) int function(void *, int *, int *)XRenderQueryExtension;"
+"extern(C) Picture function(Display*, const XConicalGradient*, const XFixed*, const XRenderColor*, c_int) XRenderCreateConicalGradient;
+extern(C) Picture function(Display*, const XRadialGradient*, const XFixed*, const XRenderColor*, c_int) XRenderCreateRadialGradient;
+extern(C) Picture function(Display*, const XLinearGradient*, const XFixed*, const XRenderColor*, c_int) XRenderCreateLinearGradient;
+extern(C) Picture function(Display*, const XRenderColor*) XRenderCreateSolidFill;
+extern(C) void function(Display*, Picture, c_int, c_int, const XTrap*, c_int) XRenderAddTraps;
+extern(C) Cursor function(Display*, c_int, XAnimCursor*) XRenderCreateAnimCursor;
+extern(C) void function(Display*, Picture, char*, const char*, XFixed*, c_int) XRenderSetPictureFilter;
+extern(C) XFilters* function(Display*, Drawable) XRenderQueryFilters;
+extern(C) Cursor function(Display*, Picture, c_uint, c_uint) XRenderCreateCursor;
+extern(C) c_int function(Display*, char*, XRenderColor*) XRenderParseColor;
+extern(C) void function(Display*, c_int, Picture, Picture, const XRenderPictFormat*, c_int, c_int, c_int, c_int, const XPointDouble*, c_int, c_int) XRenderCompositeDoublePoly;
+extern(C) void function(Display*, c_int, Picture, Picture, const XRenderPictFormat*, c_int, c_int, const XPointFixed*, c_int) XRenderCompositeTriFan;
+extern(C) void function(Display*, c_int, Picture, Picture, const XRenderPictFormat*, c_int, c_int, const XPointFixed*, c_int) XRenderCompositeTriStrip;
+extern(C) void function(Display*, c_int, Picture, Picture, const XRenderPictFormat*, c_int, c_int, const XTriangle*, c_int) XRenderCompositeTriangles;
+extern(C) void function(Display*, c_int, Picture, Picture, const XRenderPictFormat*, c_int, c_int, const XTrapezoid*, c_int) XRenderCompositeTrapezoids;
+extern(C) void function(Display*, c_int, Picture, const XRenderColor*, const XRectangle*, c_int n_rects) XRenderFillRectangles;
+extern(C) void function(Display*, c_int, Picture, const XRenderColor*, c_int, c_int, c_uint, c_uint) XRenderFillRectangle;
+extern(C) void function(Display*, c_int, Picture, Picture, const XRenderPictFormat*, c_int, c_int, c_int, c_int, const XGlyphElt32*, c_int) XRenderCompositeText32;
+extern(C) void function(Display*, c_int, Picture, Picture, const XRenderPictFormat*, c_int, c_int, c_int, c_int, const XGlyphElt16*, c_int) XRenderCompositeText16;
+extern(C) void function(Display*, c_int, Picture, Picture, const XRenderPictFormat*, c_int, c_int, c_int, c_int, const XGlyphElt8*, c_int) XRenderCompositeText8;
+extern(C) void function(Display*, c_int, Picture, Picture, const XRenderPictFormat*, GlyphSet, c_int, c_int, c_int, c_int, const c_uint*, c_int) XRenderCompositeString32;
+extern(C) void function(Display*, c_int, Picture, Picture, const XRenderPictFormat*, GlyphSet, c_int, c_int, c_int, c_int, const ushort*, c_int) XRenderCompositeString16;
+extern(C) void function(Display*, c_int, Picture, Picture, const XRenderPictFormat*, GlyphSet, c_int, c_int, c_int, c_int, const char*, c_int) XRenderCompositeString8;
+extern(C) void function(Display*, GlyphSet, const Glyph*, c_int) XRenderFreeGlyphs;
+extern(C) void function(Display*, GlyphSet, const Glyph*, const XGlyphInfo*, c_int, const char*, c_int) XRenderAddGlyphs;
+extern(C) void function(Display*, GlyphSet) XRenderFreeGlyphSet;
+extern(C) GlyphSet function(Display*, GlyphSet) XRenderReferenceGlyphSet;
+extern(C) GlyphSet function(Display*, const XRenderPictFormat*) XRenderCreateGlyphSet;
+extern(C) void function(Display*, c_int, Picture, Picture, Picture, c_int, c_int, c_int, c_int, c_int, c_int, c_uint, c_uint) XRenderComposite;
+extern(C) void function(Display*, Picture) XRenderFreePicture;
+extern(C) void function(Display*, Picture, XTransform*) XRenderSetPictureTransform;
+extern(C) void function(Display*, Picture, Region) XRenderSetPictureClipRegion;
+extern(C) void function(Display*, Picture, c_int, c_int, const XRectangle*, c_int) XRenderSetPictureClipRectangles;
+extern(C) void function(Display*, Picture, c_ulong, const XRenderPictureAttributes*) XRenderChangePicture;
+extern(C) Picture function(Display*, Drawable, const XRenderPictFormat*, c_ulong, const XRenderPictureAttributes*) XRenderCreatePicture;
+extern(C) XIndexValue* function(Display*, const XRenderPictFormat*, c_int*) XRenderQueryPictIndexValues;
+extern(C) XRenderPictFormat* function(Display*, c_int) XRenderFindStandardFormat;
+extern(C) XRenderPictFormat* function(Display*, c_ulong, const XRenderPictFormat*, c_int) XRenderFindFormat;
+extern(C) XRenderPictFormat* function(Display*, const Visual*) XRenderFindVisualFormat;
+extern(C) Bool function(Display*, c_int, c_int) XRenderSetSubpixelOrder;
+extern(C) c_int function(Display*, c_int) XRenderQuerySubpixelOrder;
+extern(C) Status function(Display* dpy) XRenderQueryFormats;
+extern(C) Status function(Display*, c_int*, c_int*) XRenderQueryVersion;
+extern(C) Bool function(Display*, c_int*, c_int*) XRenderQueryExtension;"
 ));
 
 Symbol[] symbols;
@@ -279,48 +286,49 @@ static this () {
 }
 
 } else { // version(DYNLINK)
-extern (C) uint XRenderCreateConicalGradient(void *, _XConicalGradient *, int *, XRenderColor *, int);
-extern (C) uint XRenderCreateRadialGradient(void *, _XRadialGradient *, int *, XRenderColor *, int);
-extern (C) uint XRenderCreateLinearGradient(void *, _XLinearGradient *, int *, XRenderColor *, int);
-extern (C) uint XRenderCreateSolidFill(void *, XRenderColor *);
-extern (C) void XRenderAddTraps(void *, uint, int, int, _XTrap *, int);
-extern (C) uint XRenderCreateAnimCursor(void *, int, _XAnimCursor *);
-extern (C) void XRenderSetPictureFilter(void *, uint, char *, int *, int);
-extern (C) _XFilters * XRenderQueryFilters(void *, uint);
-extern (C) uint XRenderCreateCursor(void *, uint, uint, uint);
-extern (C) int XRenderParseColor(void *, char *, XRenderColor *);
-extern (C) void XRenderCompositeDoublePoly(void *, int, uint, uint, XRenderPictFormat *, int, int, int, int, _XPointDouble *, int, int);
-extern (C) void XRenderCompositeTriFan(void *, int, uint, uint, XRenderPictFormat *, int, int, _XPointFixed *, int);
-extern (C) void XRenderCompositeTriStrip(void *, int, uint, uint, XRenderPictFormat *, int, int, _XPointFixed *, int);
-extern (C) void XRenderCompositeTriangles(void *, int, uint, uint, XRenderPictFormat *, int, int, _XTriangle *, int);
-extern (C) void XRenderCompositeTrapezoids(void *, int, uint, uint, XRenderPictFormat *, int, int, _XTrapezoid *, int);
-extern (C) void XRenderFillRectangles(void *, int, uint, XRenderColor *, XRectangle *, int);
-extern (C) void XRenderFillRectangle(void *, int, uint, XRenderColor *, int, int, uint, uint);
-extern (C) void XRenderCompositeText32(void *, int, uint, uint, XRenderPictFormat *, int, int, int, int, _XGlyphElt32 *, int);
-extern (C) void XRenderCompositeText16(void *, int, uint, uint, XRenderPictFormat *, int, int, int, int, _XGlyphElt16 *, int);
-extern (C) void XRenderCompositeText8(void *, int, uint, uint, XRenderPictFormat *, int, int, int, int, _XGlyphElt8 *, int);
-extern (C) void XRenderCompositeString32(void *, int, uint, uint, XRenderPictFormat *, uint, int, int, int, int, uint *, int);
-extern (C) void XRenderCompositeString16(void *, int, uint, uint, XRenderPictFormat *, uint, int, int, int, int, ushort *, int);
-extern (C) void XRenderCompositeString8(void *, int, uint, uint, XRenderPictFormat *, uint, int, int, int, int, char *, int);
-extern (C) void XRenderFreeGlyphs(void *, uint, uint *, int);
-extern (C) void XRenderAddGlyphs(void *, uint, uint *, _XGlyphInfo *, int, char *, int);
-extern (C) void XRenderFreeGlyphSet(void *, uint);
-extern (C) uint XRenderReferenceGlyphSet(void *, uint);
-extern (C) uint XRenderCreateGlyphSet(void *, XRenderPictFormat *);
-extern (C) void XRenderComposite(void *, int, uint, uint, uint, int, int, int, int, int, int, uint, uint);
-extern (C) void XRenderFreePicture(void *, uint);
-extern (C) void XRenderSetPictureTransform(void *, uint, _XTransform *);
-extern (C) void XRenderSetPictureClipRegion(void *, uint, void *);
-extern (C) void XRenderSetPictureClipRectangles(void *, uint, int, int, XRectangle *, int);
-extern (C) void XRenderChangePicture(void *, uint, uint, _XRenderPictureAttributes *);
-extern (C) uint XRenderCreatePicture(void *, uint, XRenderPictFormat *, uint, _XRenderPictureAttributes *);
-extern (C) _XIndexValue * XRenderQueryPictIndexValues(void *, XRenderPictFormat *, int *);
-extern (C) XRenderPictFormat * XRenderFindStandardFormat(void *, int);
-extern (C) XRenderPictFormat * XRenderFindFormat(void *, uint, XRenderPictFormat *, int);
-extern (C) XRenderPictFormat * XRenderFindVisualFormat(void *, Visual *);
-extern (C) int XRenderSetSubpixelOrder(void *, int, int);
-extern (C) int XRenderQuerySubpixelOrder(void *, int);
-extern (C) int XRenderQueryFormats(void *);
-extern (C) int XRenderQueryVersion(void *, int *, int *);
-extern (C) int XRenderQueryExtension(void *, int *, int *);
+extern(C) Picture XRenderCreateConicalGradient(Display*, const XConicalGradient*, const XFixed*, const XRenderColor*, c_int);
+extern(C) Picture XRenderCreateRadialGradient(Display*, const XRadialGradient*, const XFixed*, const XRenderColor*, c_int);
+extern(C) Picture XRenderCreateLinearGradient(Display*, const XLinearGradient*, const XFixed*, const XRenderColor*, c_int);
+extern(C) Picture XRenderCreateSolidFill(Display*, const XRenderColor*);
+extern(C) void XRenderAddTraps(Display*, Picture, c_int, c_int, const XTrap*, c_int);
+extern(C) Cursor XRenderCreateAnimCursor(Display*, c_int, XAnimCursor*);
+extern(C) void XRenderSetPictureFilter(Display*, Picture, char*, const char*, XFixed*, c_int);
+extern(C) XFilters* XRenderQueryFilters(Display*, Drawable);
+extern(C) Cursor XRenderCreateCursor(Display*, Picture, c_uint, c_uint);
+extern(C) c_int XRenderParseColor(Display*, char*, XRenderColor*);
+extern(C) void XRenderCompositeDoublePoly(Display*, c_int, Picture, Picture, const XRenderPictFormat*, c_int, c_int, c_int, c_int, const XPointDouble*, c_int, c_int);
+extern(C) void XRenderCompositeTriFan(Display*, c_int, Picture, Picture, const XRenderPictFormat*, c_int, c_int, const XPointFixed*, c_int);
+extern(C) void XRenderCompositeTriStrip(Display*, c_int, Picture, Picture, const XRenderPictFormat*, c_int, c_int, const XPointFixed*, c_int);
+extern(C) void XRenderCompositeTriangles(Display*, c_int, Picture, Picture, const XRenderPictFormat*, c_int, c_int, const XTriangle*, c_int);
+extern(C) void XRenderCompositeTrapezoids(Display*, c_int, Picture, Picture, const XRenderPictFormat*, c_int, c_int, const XTrapezoid*, c_int);
+extern(C) void XRenderFillRectangles(Display*, c_int, Picture, const XRenderColor*, const XRectangle*, c_int n_rects);
+extern(C) void XRenderFillRectangle(Display*, c_int, Picture, const XRenderColor*, c_int, c_int, c_uint, c_uint);
+extern(C) void XRenderCompositeText32(Display*, c_int, Picture, Picture, const XRenderPictFormat*, c_int, c_int, c_int, c_int, const XGlyphElt32*, c_int);
+extern(C) void XRenderCompositeText16(Display*, c_int, Picture, Picture, const XRenderPictFormat*, c_int, c_int, c_int, c_int, const XGlyphElt16*, c_int);
+extern(C) void XRenderCompositeText8(Display*, c_int, Picture, Picture, const XRenderPictFormat*, c_int, c_int, c_int, c_int, const XGlyphElt8*, c_int);
+extern(C) void XRenderCompositeString32(Display*, c_int, Picture, Picture, const XRenderPictFormat*, GlyphSet, c_int, c_int, c_int, c_int, const c_uint*, c_int);
+extern(C) void XRenderCompositeString16(Display*, c_int, Picture, Picture, const XRenderPictFormat*, GlyphSet, c_int, c_int, c_int, c_int, const ushort*, c_int);
+extern(C) void XRenderCompositeString8(Display*, c_int, Picture, Picture, const XRenderPictFormat*, GlyphSet, c_int, c_int, c_int, c_int, const char*, c_int);
+extern(C) void XRenderFreeGlyphs(Display*, GlyphSet, const Glyph*, c_int);
+extern(C) void XRenderAddGlyphs(Display*, GlyphSet, const Glyph*, const XGlyphInfo*, c_int, const char*, c_int);
+extern(C) void XRenderFreeGlyphSet(Display*, GlyphSet);
+extern(C) GlyphSet XRenderReferenceGlyphSet(Display*, GlyphSet);
+extern(C) GlyphSet XRenderCreateGlyphSet(Display*, const XRenderPictFormat*);
+extern(C) void XRenderComposite(Display*, c_int, Picture, Picture, Picture, c_int, c_int, c_int, c_int, c_int, c_int, c_uint, c_uint);
+extern(C) void XRenderFreePicture(Display*, Picture);
+extern(C) void XRenderSetPictureTransform(Display*, Picture, XTransform*);
+extern(C) void XRenderSetPictureClipRegion(Display*, Picture, Region);
+extern(C) void XRenderSetPictureClipRectangles(Display*, Picture, c_int, c_int, const XRectangle*, c_int);
+extern(C) void XRenderChangePicture(Display*, Picture, c_ulong, const XRenderPictureAttributes*);
+extern(C) Picture XRenderCreatePicture(Display*, Drawable, const XRenderPictFormat*, c_ulong, const XRenderPictureAttributes*);
+extern(C) XIndexValue* XRenderQueryPictIndexValues(Display*, const XRenderPictFormat*, c_int*);
+extern(C) XRenderPictFormat* XRenderFindStandardFormat(Display*, c_int);
+extern(C) XRenderPictFormat* XRenderFindFormat(Display*, c_ulong, const XRenderPictFormat*, c_int);
+extern(C) XRenderPictFormat* XRenderFindVisualFormat(Display*, const Visual*);
+extern(C) Bool XRenderSetSubpixelOrder(Display*, c_int, c_int);
+extern(C) c_int XRenderQuerySubpixelOrder(Display*, c_int);
+extern(C) Status XRenderQueryFormats(Display* dpy);
+extern(C) Status XRenderQueryVersion(Display*, c_int*, c_int*);
+extern(C) Bool XRenderQueryExtension(Display*, c_int*, c_int*);
 } // version(DYNLINK)
+

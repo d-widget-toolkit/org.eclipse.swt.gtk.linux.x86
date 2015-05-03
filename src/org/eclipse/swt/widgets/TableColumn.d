@@ -379,11 +379,11 @@ override int gtk_clicked (GtkWidget* widget) {
     return 0;
 }
 
-override int gtk_mnemonic_activate (GtkWidget* widget, int /*long*/ arg1) {
+override int gtk_mnemonic_activate (GtkWidget* widget, ptrdiff_t arg1) {
     return parent.gtk_mnemonic_activate (widget, arg1);
 }
 
-override int gtk_size_allocate (GtkWidget* widget, int /*long*/ allocation) {
+override int gtk_size_allocate (GtkWidget* widget, ptrdiff_t allocation) {
     useFixedWidth = false;
     int x = OS.GTK_WIDGET_X (widget);
     int width = OS.GTK_WIDGET_WIDTH (widget);

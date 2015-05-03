@@ -216,7 +216,7 @@ public override String toString() {
             buffer.append("normal");
     }
     String str = super.toString();
-    int index = str.indexOf( '{');
+    auto index = str.indexOf( '{');
     str = str.substring( index + 1 );
     if (str.length > 1) buffer.append(", ");
     buffer.append(str);

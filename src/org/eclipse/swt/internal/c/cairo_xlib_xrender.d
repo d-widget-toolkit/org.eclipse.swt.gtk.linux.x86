@@ -8,21 +8,19 @@ import java.lang.all;
 public import org.eclipse.swt.internal.c.cairo_xlib_xrender;
 public import org.eclipse.swt.internal.c.cairo;
 public import org.eclipse.swt.internal.c.Xrender;
+private import org.eclipse.swt.internal.c.X;
+
+version(Tango){
+    import tango.stdc.stdint;
+} else { // Phobos
+    import std.stdint;
+}
 
 extern(C):
 
-alias void function(void *, char *, int, int, char * *) _BCD_func__1573;
-alias int function(void *) _BCD_func__1614;
-alias int function(void *, XErrorEvent *) _BCD_func__1615;
-alias void function(void *, char *, char *) _BCD_func__1688;
-alias int function(void *, char *, char *) _BCD_func__1689;
-alias void function(void *, char *, char *) _BCD_func__1690;
-alias int function(void *, char *, uint) _BCD_func__2562;
-alias int function(void *, char *, uint) _BCD_func__2563;
-alias void function(void *) _BCD_func__2567;
 version(DYNLINK){
 mixin(gshared!(
-"extern (C) void * function(void *, uint, Screen *, XRenderPictFormat *, int, int)cairo_xlib_surface_create_with_xrender_format;"
+"extern (C) cairo_surface_t * function(Display *, Drawable, Screen *, XRenderPictFormat *, c_int, c_int)cairo_xlib_surface_create_with_xrender_format;"
 ));
 
 Symbol[] symbols;
@@ -33,5 +31,6 @@ static this () {
 }
 
 } else { // version(DYNLINK)
-extern (C) void * cairo_xlib_surface_create_with_xrender_format(void *, uint, Screen *, XRenderPictFormat *, int, int);
+extern (C) cairo_surface_t * cairo_xlib_surface_create_with_xrender_format(Display *, Drawable, Screen *, XRenderPictFormat *, c_int, c_int);
 } // version(DYNLINK)
+

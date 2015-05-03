@@ -91,7 +91,7 @@ public bool isDisposed () {
 }
 
 public void put (int index, Image image) {
-    int count = images.length;
+    ptrdiff_t count = images.length;
     if (!(0 <= index && index < count)) return;
     if (image !is null) {
         set (index, image);

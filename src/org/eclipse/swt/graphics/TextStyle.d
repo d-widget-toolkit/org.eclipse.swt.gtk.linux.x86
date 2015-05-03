@@ -307,7 +307,7 @@ bool isAdherentStrikeout(TextStyle style) {
  */
 override public String toString () {
     String buffer = "TextStyle {";
-    int startLength = buffer.length;
+    auto startLength = buffer.length;
     if (font !is null) {
         if (buffer.length > startLength) buffer ~= ", ";
         buffer ~= "font=";

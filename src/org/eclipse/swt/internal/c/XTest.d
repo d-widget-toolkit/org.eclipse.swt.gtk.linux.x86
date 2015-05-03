@@ -8,41 +8,48 @@ import java.lang.all;
 
 public import org.eclipse.swt.internal.c.Xlib;
 public import org.eclipse.swt.internal.c.XInput;
+private import org.eclipse.swt.internal.c.X;
+
+version(Tango){
+    import tango.stdc.stdint;
+} else { // Phobos
+    import std.stdint;
+}
 
 extern(C):
 
-const int X_XTestGetVersion = 0;
-const int X_XTestCompareCursor = 1;
-const int X_XTestFakeInput = 2;
-const int X_XTestGrabControl = 3;
-const int XTestNumberEvents = 0;
-const int XTestNumberErrors = 0;
-const int XTestMajorVersion = 2;
-const int XTestMinorVersion = 2;
+const c_int X_XTestGetVersion = 0;
+const c_int X_XTestCompareCursor = 1;
+const c_int X_XTestFakeInput = 2;
+const c_int X_XTestGrabControl = 3;
+const c_int XTestNumberEvents = 0;
+const c_int XTestNumberErrors = 0;
+const c_int XTestMajorVersion = 2;
+const c_int XTestMinorVersion = 2;
 const String XTestExtensionName = "XTEST";
-alias void function(void *, char *, int, int, char * *) _BCD_func__1414;
-alias int function(void *) _BCD_func__1456;
-alias int function(void *, XErrorEvent *) _BCD_func__1457;
+alias void function(void *, char *, c_int, c_int, char * *) _BCD_func__1414;
+alias c_int function(void *) _BCD_func__1456;
+alias c_int function(void *, XErrorEvent *) _BCD_func__1457;
 alias void function(void *, char *, char *) _BCD_func__1530;
-alias int function(void *, char *, char *) _BCD_func__1531;
+alias c_int function(void *, char *, char *) _BCD_func__1531;
 alias void function(void *, char *, char *) _BCD_func__1532;
 version(DYNLINK){
 mixin(gshared!(
-"extern (C) int function(void *)XTestDiscard;
-extern (C) void function(Visual *, uint)XTestSetVisualIDOfVisual;
-extern (C) void function(void *, uint)XTestSetGContextOfGC;
-extern (C) int function(void *, int)XTestGrabControl;
-extern (C) int function(void *, XDevice *, int, int, int *, int, uint)XTestFakeDeviceMotionEvent;
-extern (C) int function(void *, XDevice *, int, int *, int, uint)XTestFakeProximityEvent;
-extern (C) int function(void *, XDevice *, uint, int, int *, int, uint)XTestFakeDeviceButtonEvent;
-extern (C) int function(void *, XDevice *, uint, int, int *, int, uint)XTestFakeDeviceKeyEvent;
-extern (C) int function(void *, int, int, uint)XTestFakeRelativeMotionEvent;
-extern (C) int function(void *, int, int, int, uint)XTestFakeMotionEvent;
-extern (C) int function(void *, uint, int, uint)XTestFakeButtonEvent;
-extern (C) int function(void *, uint, int, uint)XTestFakeKeyEvent;
-extern (C) int function(void *, uint)XTestCompareCurrentCursorWithWindow;
-extern (C) int function(void *, uint, uint)XTestCompareCursorWithWindow;
-extern (C) int function(void *, int *, int *, int *, int *)XTestQueryExtension;"
+"extern (C) Status function(Display *)XTestDiscard;
+extern (C) void function(Visual *, VisualID)XTestSetVisualIDOfVisual;
+extern (C) void function(GC, GContext)XTestSetGContextOfGC;
+extern (C) c_int function(Display *, Bool)XTestGrabControl;
+extern (C) c_int function(Display *, XDevice *, Bool, c_int, c_int *, c_int, c_uint)XTestFakeDeviceMotionEvent;
+extern (C) c_int function(Display *, XDevice *, Bool, c_int *, c_int, c_uint)XTestFakeProximityEvent;
+extern (C) c_int function(Display *, XDevice *, c_uint, Bool, c_int *, c_int, c_uint)XTestFakeDeviceButtonEvent;
+extern (C) c_int function(Display *, XDevice *, c_uint, Bool, c_int *, c_int, c_uint)XTestFakeDeviceKeyEvent;
+extern (C) c_int function(Display *, c_int, c_int, c_uint)XTestFakeRelativeMotionEvent;
+extern (C) c_int function(Display *, c_int, c_int, c_int, c_uint)XTestFakeMotionEvent;
+extern (C) c_int function(Display *, c_uint, Bool , c_uint)XTestFakeButtonEvent;
+extern (C) c_int function(Display *, c_uint, Bool, c_uint)XTestFakeKeyEvent;
+extern (C) Bool function(Display *, Window)XTestCompareCurrentCursorWithWindow;
+extern (C) Bool function(Display *, Window, Cursor)XTestCompareCursorWithWindow;
+extern (C) Bool function(Display *, c_int *, c_int *, c_int *, c_int *)XTestQueryExtension;"
 ));
 
 Symbol[] symbols;
@@ -67,19 +74,20 @@ static this () {
 }
 
 } else { // version(DYNLINK)
-extern (C) int XTestDiscard(void *);
-extern (C) void XTestSetVisualIDOfVisual(Visual *, uint);
-extern (C) void XTestSetGContextOfGC(void *, uint);
-extern (C) int XTestGrabControl(void *, int);
-extern (C) int XTestFakeDeviceMotionEvent(void *, XDevice *, int, int, int *, int, uint);
-extern (C) int XTestFakeProximityEvent(void *, XDevice *, int, int *, int, uint);
-extern (C) int XTestFakeDeviceButtonEvent(void *, XDevice *, uint, int, int *, int, uint);
-extern (C) int XTestFakeDeviceKeyEvent(void *, XDevice *, uint, int, int *, int, uint);
-extern (C) int XTestFakeRelativeMotionEvent(void *, int, int, uint);
-extern (C) int XTestFakeMotionEvent(void *, int, int, int, uint);
-extern (C) int XTestFakeButtonEvent(void *, uint, int, uint);
-extern (C) int XTestFakeKeyEvent(void *, uint, int, uint);
-extern (C) int XTestCompareCurrentCursorWithWindow(void *, uint);
-extern (C) int XTestCompareCursorWithWindow(void *, uint, uint);
-extern (C) int XTestQueryExtension(void *, int *, int *, int *, int *);
+extern (C) Status XTestDiscard(Display *);
+extern (C) void XTestSetVisualIDOfVisual(Visual *, VisualID);
+extern (C) void XTestSetGContextOfGC(GC, GContext);
+extern (C) c_int XTestGrabControl(Display *, Bool);
+extern (C) c_int XTestFakeDeviceMotionEvent(Display *, XDevice *, Bool, c_int, c_int *, c_int, c_uint);
+extern (C) c_int XTestFakeProximityEvent(Display *, XDevice *, Bool, c_int *, c_int, c_uint);
+extern (C) c_int XTestFakeDeviceButtonEvent(Display *, XDevice *, c_uint, Bool, c_int *, c_int, c_uint);
+extern (C) c_int XTestFakeDeviceKeyEvent(Display *, XDevice *, c_uint, Bool, c_int *, c_int, c_uint);
+extern (C) c_int XTestFakeRelativeMotionEvent(Display *, c_int, c_int, c_uint);
+extern (C) c_int XTestFakeMotionEvent(Display *, c_int, c_int, c_int, c_uint);
+extern (C) c_int XTestFakeButtonEvent(Display *, c_uint, Bool , c_uint);
+extern (C) c_int XTestFakeKeyEvent(Display *, c_uint, Bool, c_uint);
+extern (C) Bool XTestCompareCurrentCursorWithWindow(Display *, Window);
+extern (C) Bool XTestCompareCursorWithWindow(Display *, Window, Cursor);
+extern (C) Bool XTestQueryExtension(Display *, c_int *, c_int *, c_int *, c_int *);
 } // version(DYNLINK)
+

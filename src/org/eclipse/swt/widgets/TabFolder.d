@@ -446,11 +446,11 @@ public int getSelectionIndex () {
     return OS.gtk_notebook_get_current_page (handle);
 }
 
-override int gtk_focus (GtkWidget* widget, int /*long*/ directionType) {
+override int gtk_focus (GtkWidget* widget, ptrdiff_t directionType) {
     return 0;
 }
 
-override int gtk_switch_page (GtkWidget* widget, int /*long*/ page, int /*long*/ page_num) {
+override int gtk_switch_page (GtkWidget* widget, ptrdiff_t page, ptrdiff_t page_num) {
     int index = OS.gtk_notebook_get_current_page (handle);
     if (index !is -1) {
         Control control = items [index].getControl ();
@@ -458,7 +458,7 @@ override int gtk_switch_page (GtkWidget* widget, int /*long*/ page, int /*long*/
             control.setVisible (false);
         }
     }
-    TabItem item = items [cast(int)/*64*/page_num];
+    TabItem item = items [page_num];
     Control control = item.getControl ();
     if (control !is null && !control.isDisposed ()) {
         control.setBounds(getClientArea());
@@ -730,7 +730,7 @@ public void setSelection (TabItem [] items) {
     if (items.length is 0) {
         setSelection (-1, false);
     } else {
-        for (int i=items.length-1; i>=0; --i) {
+        for (auto i=items.length-1; i>=0; --i) {
             int index = indexOf (items [i]);
             if (index !is -1) setSelection (index, false);
         }

@@ -195,8 +195,8 @@ public FontData[] getFontData() {
     auto family = OS.pango_font_description_get_family(handle);
     String name = fromStringz( family )._idup();
     float height = cast(float)OS.pango_font_description_get_size(handle) / OS.PANGO_SCALE;
-    int pangoStyle = OS.pango_font_description_get_style(handle);
-    int pangoWeight = OS.pango_font_description_get_weight(handle);
+    ptrdiff_t pangoStyle = OS.pango_font_description_get_style(handle);
+    ptrdiff_t pangoWeight = OS.pango_font_description_get_weight(handle);
     int style = SWT.NORMAL;
     if (pangoStyle is OS.PANGO_STYLE_ITALIC) style |= SWT.ITALIC;
     if (pangoStyle is OS.PANGO_STYLE_OBLIQUE) style |= SWT.ROMAN;
@@ -241,7 +241,7 @@ public static Font gtk_new(Device device, PangoFontDescription* handle) {
  * @see #equals
  */
 public override hash_t toHash() {
-    return cast(hash_t)/*64*/handle;
+    return cast(hash_t)handle;
 }
 
 void init_( String name, float height, int style, String fontString) {

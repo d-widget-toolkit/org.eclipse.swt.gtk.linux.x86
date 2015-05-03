@@ -116,7 +116,8 @@ public void add (int[] pointArray) {
     * with enough points for a polygon.
     */
     if (pointArray.length < 6) return;
-    auto polyRgn = OS.gdk_region_polygon(cast(GdkPoint*)pointArray.ptr, pointArray.length / 2, OS.GDK_EVEN_ODD_RULE);
+    auto polyRgn = OS.gdk_region_polygon(cast(GdkPoint*)pointArray.ptr,
+                      cast(int)/*64bit*/pointArray.length / 2, OS.GDK_EVEN_ODD_RULE);
     OS.gdk_region_union(handle, polyRgn);
     OS.gdk_region_destroy(polyRgn);
 }
@@ -471,7 +472,8 @@ public void subtract (int[] pointArray) {
     * with enough points for a polygon.
     */
     if (pointArray.length < 6) return;
-    auto polyRgn = OS.gdk_region_polygon( cast(GdkPoint*)pointArray.ptr, pointArray.length / 2, OS.GDK_EVEN_ODD_RULE);
+    auto polyRgn = OS.gdk_region_polygon( cast(GdkPoint*)pointArray.ptr,
+                      cast(int)/*64bit*/pointArray.length / 2, OS.GDK_EVEN_ODD_RULE);
     OS.gdk_region_subtract(handle, polyRgn);
     OS.gdk_region_destroy(polyRgn);
 }

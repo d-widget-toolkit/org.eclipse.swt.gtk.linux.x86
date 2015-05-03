@@ -36,7 +36,7 @@ version(Tango){
 
 class AccessibleObject {
     AtkObject* handle;
-    int /*long*/ parentType;
+    int parentType;
     int index = -1, id = ACC.CHILDID_SELF;
     Accessible accessible;
     AccessibleObject parent;
@@ -52,11 +52,11 @@ class AccessibleObject {
     static String keybindingPtr;
     static String namePtr;
     static AccessibleObject[AtkObject*] AccessibleObjects;
-    static /*const*/ uint ATK_ACTION_TYPE;
-    static /*const*/ uint ATK_COMPONENT_TYPE;
-    static /*const*/ uint ATK_HYPERTEXT_TYPE;
-    static /*const*/ uint ATK_SELECTION_TYPE;
-    static /*const*/ uint ATK_TEXT_TYPE;
+    static /*const*/ ptrdiff_t ATK_ACTION_TYPE;
+    static /*const*/ ptrdiff_t ATK_COMPONENT_TYPE;
+    static /*const*/ ptrdiff_t ATK_HYPERTEXT_TYPE;
+    static /*const*/ ptrdiff_t ATK_SELECTION_TYPE;
+    static /*const*/ ptrdiff_t ATK_TEXT_TYPE;
     static /*const*/ bool DEBUG;
     static bool static_this_completed = false;
 
@@ -71,7 +71,7 @@ class AccessibleObject {
         static_this_completed = true;
     }
 
-    this (int /*long*/ type, GtkWidget* widget, Accessible accessible, int /*long*/ parentType, bool isLightweight) {
+    this (int type, GtkWidget* widget, Accessible accessible, int parentType, bool isLightweight) {
         children = new Hashtable(9);
         handle = cast(AtkObject*)ATK.g_object_new (type, null);
         this.parentType = parentType;
@@ -410,7 +410,7 @@ class AccessibleObject {
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkObject_get_n_children: {}", atkObject);
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return 0;
-        int /*long*/ parentResult = 0;
+        int parentResult = 0;
         auto objectClass = cast(AtkObjectClass*)ATK.g_type_class_peek (object.parentType);
         if (objectClass.get_n_children !is null) {
             parentResult = objectClass.get_n_children( object.handle);
@@ -420,7 +420,7 @@ class AccessibleObject {
 
         AccessibleControlEvent event = new AccessibleControlEvent (object);
         event.childID = object.id;
-        event.detail = cast(int)/*64*/parentResult;
+        event.detail = parentResult;
         for (int i = 0; i < listeners.length; i++) {
             listeners [i].getChildCount (event);
         }
@@ -500,12 +500,12 @@ class AccessibleObject {
         return objectClass.get_role( object.handle);
     }
 
-    package static extern(C) AtkObject* atkObject_ref_child (AtkObject* atkObject, int /*long*/ index) {
+    package static extern(C) AtkObject* atkObject_ref_child (AtkObject* atkObject, int index) {
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkObject_ref_child: {} of: {}", index, atkObject);
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return null;
         object.updateChildren ();
-        AccessibleObject accObject = object.getChildByIndex (cast(int)/*64*/index);
+        AccessibleObject accObject = object.getChildByIndex (index);
         if (accObject !is null) {
             OS.g_object_ref (accObject.handle);
             return accObject.handle;
@@ -561,7 +561,7 @@ class AccessibleObject {
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkSelection_is_child_selected");
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return 0;
-        int /*long*/ parentResult = 0;
+        int parentResult = 0;
         if (ATK.g_type_is_a (object.parentType, ATK_SELECTION_TYPE)) {
             auto selectionIface = cast(AtkSelectionIface*)ATK.g_type_interface_peek_parent (ATK.ATK_SELECTION_GET_IFACE (object.handle));
             if (selectionIface.is_child_selected !is null) {
@@ -617,7 +617,7 @@ class AccessibleObject {
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkText_get_caret_offset");
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return 0;
-        int /*long*/ parentResult = 0;
+        int parentResult = 0;
         if (ATK.g_type_is_a (object.parentType, ATK_TEXT_TYPE)) {
             auto textIface = cast(AtkTextIface*)ATK.g_type_interface_peek_parent (ATK.ATK_TEXT_GET_IFACE (object.handle));
             if (textIface.get_caret_offset !is null) {
@@ -629,7 +629,7 @@ class AccessibleObject {
 
         AccessibleTextEvent event = new AccessibleTextEvent (object);
         event.childID = object.id;
-        event.offset = cast(int)/*64*/parentResult;
+        event.offset = parentResult;
         for (int i = 0; i < listeners.length; i++) {
             listeners [i].getCaretOffset (event);
         }
@@ -642,7 +642,7 @@ class AccessibleObject {
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return 0;
         String text = object.getText ();
-        if (text !is null) return text[cast(int)/*64*/offset ]; // TODO
+        if (text !is null) return text[ offset ]; // TODO
         if (ATK.g_type_is_a (object.parentType, ATK_TEXT_TYPE)) {
             auto textIface = cast(AtkTextIface*)ATK.g_type_class_peek (object.parentType);
             if (textIface.get_character_at_offset !is null) {
@@ -658,7 +658,7 @@ class AccessibleObject {
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return 0;
         String text = object.getText ();
-        if (text !is null) return text.length;
+        if (text !is null) return cast(int)/*64bit*/text.length;
         if (ATK.g_type_is_a (object.parentType, ATK_TEXT_TYPE)) {
             auto textIface = cast(AtkTextIface*)ATK.g_type_class_peek (object.parentType);
             if (textIface.get_character_count !is null) {
@@ -673,7 +673,7 @@ class AccessibleObject {
         if (DEBUG) getDwtLogger().info( __FILE__, __LINE__, "-->atkText_get_n_selections");
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return 0;
-        int /*long*/ parentResult = 0;
+        int parentResult = 0;
         if (ATK.g_type_is_a (object.parentType, ATK_TEXT_TYPE)) {
             auto textIface = cast(AtkTextIface*)ATK.g_type_interface_peek_parent (ATK.ATK_TEXT_GET_IFACE (object.handle));
             if (textIface.get_n_selections !is null) {
@@ -714,7 +714,7 @@ class AccessibleObject {
         parentStart= *start_offset;
         parentEnd= *end_offset;
         event.offset = parentStart;
-        event.length = parentEnd - parentStart;
+        event.length = (parentEnd - parentStart);
         for (int i = 0; i < listeners.length; i++) {
             listeners [i].getSelectionRange (event);
         }
@@ -731,9 +731,9 @@ class AccessibleObject {
         String text = object.getText ();
         if (text.length > 0) {
             if (end_offset is -1) {
-                end_offset = text.length ;
+                end_offset = cast(int)/*64bit*/text.length;
             } else {
-                end_offset = Math.min (end_offset, text.length );
+                end_offset = cast(int)/*64bit*/Math.min (end_offset, text.length );
             }
             start_offset = Math.min (start_offset, end_offset);
             text = text[ start_offset .. end_offset ];
@@ -750,20 +750,20 @@ class AccessibleObject {
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkText_get_text_after_offset");
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return null;
-        int offset = cast(int)/*64*/offset_value;
+        auto offset = offset_value;
         String text = object.getText ();
         if (text.length > 0) {
-            int length = text.length ;
+            int length = cast(int)/*64bit*/text.length ;
             offset = Math.min (offset, length - 1);
             int startBounds = offset;
             int endBounds = offset;
-            switch (cast(int)/*64*/boundary_type) {
+            switch (boundary_type) {
                 case ATK.ATK_TEXT_BOUNDARY_CHAR: {
                     if (length > offset) endBounds++;
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_WORD_START: {
-                    int wordStart1 = nextIndexOfChar (text, " !?.\n", offset - 1);
+                    auto wordStart1 = nextIndexOfChar (text, " !?.\n", offset - 1);
                     if (wordStart1 is -1) {
                         startBounds = endBounds = length;
                         break;
@@ -774,7 +774,7 @@ class AccessibleObject {
                         break;
                     }
                     startBounds = wordStart1;
-                    int wordStart2 = nextIndexOfChar (text, " !?.\n", wordStart1);
+                    auto wordStart2 = nextIndexOfChar (text, " !?.\n", wordStart1);
                     if (wordStart2 is -1) {
                         endBounds = length;
                         break;
@@ -783,7 +783,7 @@ class AccessibleObject {
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_WORD_END: {
-                    int previousWordEnd = previousIndexOfNotChar (text, " \n", offset);
+                    auto previousWordEnd = previousIndexOfNotChar (text, " \n", offset);
                     if (previousWordEnd is -1 || previousWordEnd !is offset - 1) {
                         offset = nextIndexOfNotChar (text, " \n", offset);
                     }
@@ -791,7 +791,7 @@ class AccessibleObject {
                         startBounds = endBounds = length;
                         break;
                     }
-                    int wordEnd1 = nextIndexOfChar (text, " !?.\n", cast(int)/*64*/offset);
+                    auto wordEnd1 = nextIndexOfChar (text, " !?.\n", offset);
                     if (wordEnd1 is -1) {
                         startBounds = endBounds = length;
                         break;
@@ -802,7 +802,7 @@ class AccessibleObject {
                         break;
                     }
                     startBounds = wordEnd1;
-                    int wordEnd2 = nextIndexOfNotChar (text, " \n", wordEnd1);
+                    auto wordEnd2 = nextIndexOfNotChar (text, " \n", wordEnd1);
                     if (wordEnd2 is length) {
                         startBounds = endBounds = length;
                         break;
@@ -816,9 +816,9 @@ class AccessibleObject {
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_SENTENCE_START: {
-                    int previousSentenceEnd = previousIndexOfChar (text, "!?.", offset);
-                    int previousText = previousIndexOfNotChar (text, " !?.\n", offset);
-                    int sentenceStart1 = 0;
+                    auto previousSentenceEnd = previousIndexOfChar (text, "!?.", offset);
+                    auto previousText = previousIndexOfNotChar (text, " !?.\n", offset);
+                    auto sentenceStart1 = 0;
                     if (previousSentenceEnd >= previousText) {
                         sentenceStart1 = nextIndexOfNotChar (text, " !?.\n", offset);
                     } else {
@@ -834,7 +834,7 @@ class AccessibleObject {
                         break;
                     }
                     startBounds = sentenceStart1;
-                    int sentenceStart2 = nextIndexOfChar (text, "!?.", sentenceStart1);
+                    auto sentenceStart2 = nextIndexOfChar (text, "!?.", sentenceStart1);
                     if (sentenceStart2 is -1) {
                         endBounds = length;
                         break;
@@ -843,7 +843,7 @@ class AccessibleObject {
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_SENTENCE_END: {
-                    int sentenceEnd1 = nextIndexOfChar (text, "!?.", offset);
+                    auto sentenceEnd1 = nextIndexOfChar (text, "!?.", offset);
                     if (sentenceEnd1 is -1) {
                         startBounds = endBounds = length;
                         break;
@@ -854,7 +854,7 @@ class AccessibleObject {
                         break;
                     }
                     startBounds = sentenceEnd1;
-                    int sentenceEnd2 = nextIndexOfNotChar (text, " \n", sentenceEnd1);
+                    auto sentenceEnd2 = nextIndexOfNotChar (text, " \n", sentenceEnd1);
                     if (sentenceEnd2 is length) {
                         startBounds = endBounds = length;
                         break;
@@ -868,7 +868,7 @@ class AccessibleObject {
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_LINE_START: {
-                    int lineStart1 = text.indexOf( '\n' );
+                    auto lineStart1 = text.indexOf( '\n' );
                     if (lineStart1 is -1) {
                         startBounds = endBounds = length;
                         break;
@@ -879,7 +879,7 @@ class AccessibleObject {
                         break;
                     }
                     startBounds = lineStart1;
-                    int lineStart2 = text.indexOf( '\n' );
+                    auto lineStart2 = text.indexOf( '\n' );
                     if (lineStart2 is -1) {
                         endBounds = length;
                         break;
@@ -889,7 +889,7 @@ class AccessibleObject {
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_LINE_END: {
-                    int lineEnd1 = nextIndexOfChar (text, "\n", offset);
+                    auto lineEnd1 = nextIndexOfChar (text, "\n", offset);
                     if (lineEnd1 is -1) {
                         startBounds = endBounds = length;
                         break;
@@ -899,7 +899,7 @@ class AccessibleObject {
                         endBounds = length;
                         break;
                     }
-                    int lineEnd2 = nextIndexOfChar (text, "\n", lineEnd1 + 1);
+                    auto lineEnd2 = nextIndexOfChar (text, "\n", lineEnd1 + 1);
                     if (lineEnd2 is -1) {
                         endBounds = length;
                         break;
@@ -925,20 +925,20 @@ class AccessibleObject {
         if (DEBUG) getDwtLogger().info (__FILE__, __LINE__, "-->atkText_get_text_at_offset: {} start: {} end: {}", offset_value, start_offset, end_offset);
         AccessibleObject object = getAccessibleObject (atkObject);
         if (object is null) return null;
-        int offset = offset_value;
+        auto offset = offset_value;
         String text = object.getText ();
         if (text.length > 0) {
-            int length = text.length;
-            offset = Math.min (offset, length - 1);
-            int startBounds = offset;
-            int endBounds = offset;
+            auto length = text.length;
+            offset = cast(int)/*64bit*/Math.min (offset, length - 1);
+            auto startBounds = offset;
+            auto endBounds = offset;
             switch (boundary_type) {
                 case ATK.ATK_TEXT_BOUNDARY_CHAR: {
                     if (length > offset) endBounds++;
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_WORD_START: {
-                    int wordStart1 = previousIndexOfNotChar (text, " !?.\n", offset);
+                    auto wordStart1 = previousIndexOfNotChar (text, " !?.\n", offset);
                     if (wordStart1 is -1) {
                         startBounds = endBounds = 0;
                         break;
@@ -949,12 +949,12 @@ class AccessibleObject {
                         break;
                     }
                     startBounds = wordStart1;
-                    int wordStart2 = nextIndexOfChar (text, " !?.\n", wordStart1);
+                    auto wordStart2 = nextIndexOfChar (text, " !?.\n", wordStart1);
                     endBounds = nextIndexOfNotChar (text, " !?.\n", wordStart2);
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_WORD_END: {
-                    int wordEnd1 = previousIndexOfNotChar (text, "!?.", offset + 1);
+                    auto wordEnd1 = previousIndexOfNotChar (text, "!?.", offset + 1);
                     wordEnd1 = previousIndexOfChar (text, " !?.\n", wordEnd1);
                     wordEnd1 = previousIndexOfNotChar (text, " \n", wordEnd1 + 1);
                     if (wordEnd1 is -1) {
@@ -962,7 +962,7 @@ class AccessibleObject {
                         break;
                     }
                     startBounds = wordEnd1 + 1;
-                    int wordEnd2 = nextIndexOfNotChar (text, " \n", startBounds);
+                    auto wordEnd2 = nextIndexOfNotChar (text, " \n", startBounds);
                     if (wordEnd2 is length) {
                         endBounds = startBounds;
                         break;
@@ -976,19 +976,19 @@ class AccessibleObject {
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_SENTENCE_START: {
-                    int sentenceStart1 = previousIndexOfNotChar (text, " !?.\n", offset + 1);
+                    auto sentenceStart1 = previousIndexOfNotChar (text, " !?.\n", offset + 1);
                     if (sentenceStart1 is -1) {
                         startBounds = endBounds = 0;
                         break;
                     }
                     sentenceStart1 = previousIndexOfChar (text, "!?.", sentenceStart1) + 1;
                     startBounds = nextIndexOfNotChar (text, " \n", sentenceStart1);
-                    int sentenceStart2 = nextIndexOfChar (text, "!?.", startBounds);
+                    auto sentenceStart2 = nextIndexOfChar (text, "!?.", startBounds);
                     endBounds = nextIndexOfNotChar (text, " !?.\n", sentenceStart2);
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_SENTENCE_END: {
-                    int sentenceEnd1 = previousIndexOfNotChar (text, "!?.", offset + 1);
+                    auto sentenceEnd1 = previousIndexOfNotChar (text, "!?.", offset + 1);
                     sentenceEnd1 = previousIndexOfChar (text, "!?.", sentenceEnd1);
                     sentenceEnd1 = previousIndexOfNotChar (text, " \n", sentenceEnd1 + 1);
                     if (sentenceEnd1 is -1) {
@@ -996,7 +996,7 @@ class AccessibleObject {
                         break;
                     }
                     startBounds = sentenceEnd1 + 1;
-                    int sentenceEnd2 = nextIndexOfNotChar (text, " \n", startBounds);
+                    auto sentenceEnd2 = nextIndexOfNotChar (text, " \n", startBounds);
                     if (sentenceEnd2 is length) {
                         endBounds = startBounds;
                         break;
@@ -1011,13 +1011,13 @@ class AccessibleObject {
                 }
                 case ATK.ATK_TEXT_BOUNDARY_LINE_START: {
                     startBounds = previousIndexOfChar (text, "\n", offset) + 1;
-                    int lineEnd2 = nextIndexOfChar (text, "\n", startBounds);
+                    auto lineEnd2 = nextIndexOfChar (text, "\n", startBounds);
                     if (lineEnd2 < length) lineEnd2++;
                     endBounds = lineEnd2;
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_LINE_END: {
-                    int lineEnd1 = previousIndexOfChar (text, "\n", offset);
+                    auto lineEnd1 = previousIndexOfChar (text, "\n", offset);
                     if (lineEnd1 is -1) {
                         startBounds = endBounds = 0;
                         break;
@@ -1046,22 +1046,22 @@ class AccessibleObject {
         int offset = offset_value;
         String text = object.getText ();
         if (text.length > 0) {
-            int length = text.length;
-            offset = Math.min (offset, length - 1);
-            int startBounds = offset;
-            int endBounds = offset;
+            auto length = text.length;
+            offset = cast(int)/*64bit*/Math.min (offset, length - 1);
+            auto startBounds = offset;
+            auto endBounds = offset;
             switch (boundary_type) {
                 case ATK.ATK_TEXT_BOUNDARY_CHAR: {
                     if (length >= offset && offset > 0) startBounds--;
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_WORD_START: {
-                    int wordStart1 = previousIndexOfChar (text, " !?.\n", offset - 1);
+                    auto wordStart1 = previousIndexOfChar (text, " !?.\n", offset - 1);
                     if (wordStart1 is -1) {
                         startBounds = endBounds = 0;
                         break;
                     }
-                    int wordStart2 = previousIndexOfNotChar (text, " !?.\n", wordStart1);
+                    auto wordStart2 = previousIndexOfNotChar (text, " !?.\n", wordStart1);
                     if (wordStart2 is -1) {
                         startBounds = endBounds = 0;
                         break;
@@ -1071,7 +1071,7 @@ class AccessibleObject {
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_WORD_END: {
-                    int wordEnd1 =previousIndexOfChar (text, " !?.\n", offset);
+                    auto wordEnd1 =previousIndexOfChar (text, " !?.\n", offset);
                     if (wordEnd1 is -1) {
                         startBounds = endBounds = 0;
                         break;
@@ -1082,7 +1082,7 @@ class AccessibleObject {
                         break;
                     }
                     endBounds = wordEnd1 + 1;
-                    int wordEnd2 = previousIndexOfNotChar (text, " !?.\n", endBounds);
+                    auto wordEnd2 = previousIndexOfNotChar (text, " !?.\n", endBounds);
                     wordEnd2 = previousIndexOfChar (text, " !?.\n", wordEnd2);
                     if (wordEnd2 is -1) {
                         startBounds = 0;
@@ -1092,12 +1092,12 @@ class AccessibleObject {
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_SENTENCE_START: {
-                    int sentenceStart1 = previousIndexOfChar (text, "!?.", offset);
+                    auto sentenceStart1 = previousIndexOfChar (text, "!?.", offset);
                     if (sentenceStart1 is -1) {
                         startBounds = endBounds = 0;
                         break;
                     }
-                    int sentenceStart2 = previousIndexOfNotChar (text, "!?.", sentenceStart1);
+                    auto sentenceStart2 = previousIndexOfNotChar (text, "!?.", sentenceStart1);
                     if (sentenceStart2 is -1) {
                         startBounds = endBounds = 0;
                         break;
@@ -1107,7 +1107,7 @@ class AccessibleObject {
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_SENTENCE_END: {
-                    int sentenceEnd1 = previousIndexOfChar (text, "!?.", offset);
+                    auto sentenceEnd1 = previousIndexOfChar (text, "!?.", offset);
                     if (sentenceEnd1 is -1) {
                         startBounds = endBounds = 0;
                         break;
@@ -1118,7 +1118,7 @@ class AccessibleObject {
                         break;
                     }
                     endBounds = sentenceEnd1 + 1;
-                    int sentenceEnd2 = previousIndexOfNotChar (text, "!?.", endBounds);
+                    auto sentenceEnd2 = previousIndexOfNotChar (text, "!?.", endBounds);
                     sentenceEnd2 = previousIndexOfChar (text, "!?.", sentenceEnd2);
                     if (sentenceEnd2 is -1) {
                         startBounds = 0;
@@ -1128,7 +1128,7 @@ class AccessibleObject {
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_LINE_START: {
-                    int lineStart1 = previousIndexOfChar (text, "\n", offset);
+                    auto lineStart1 = previousIndexOfChar (text, "\n", offset);
                     if (lineStart1 is -1) {
                         startBounds = endBounds = 0;
                         break;
@@ -1138,7 +1138,7 @@ class AccessibleObject {
                     break;
                 }
                 case ATK.ATK_TEXT_BOUNDARY_LINE_END: {
-                    int lineEnd1 = previousIndexOfChar (text, "\n", offset);
+                    auto lineEnd1 = previousIndexOfChar (text, "\n", offset);
                     if (lineEnd1 is -1) {
                         startBounds = endBounds = 0;
                         break;
@@ -1205,7 +1205,7 @@ class AccessibleObject {
         String parentText = ""; //$NON-NLS-1$
         if (ATK.g_type_is_a (parentType, ATK_TEXT_TYPE)) {
             auto textIface = cast(AtkTextIface*)ATK.g_type_interface_peek_parent (ATK.ATK_TEXT_GET_IFACE (handle));
-            int /*long*/ characterCount = 0;
+            int characterCount = 0;
             if (textIface.get_character_count !is null) {
                 characterCount = textIface.get_character_count( handle);
             }
@@ -1244,44 +1244,44 @@ class AccessibleObject {
         }
     }
 
-    static int nextIndexOfChar (String string, String searchChars, int startIndex) {
-        int result = string.length;
+    static int nextIndexOfChar (String str, String searchChars, int startIndex) {
+        auto result = cast(int)/*64bit*/str.length;
         for (int i = 0; i < searchChars.length; i++) {
             char current = searchChars[i];
-            int index = string.indexOf( current, startIndex );
+            auto index = str.indexOf( current, startIndex );
             if (index !is -1 ) result = Math.min (result, index);
         }
         return result;
     }
 
-    static int nextIndexOfNotChar (String string, String searchChars, int startIndex) {
-        int length = string.length;
-        int index = startIndex;
+    static int nextIndexOfNotChar (String str, String searchChars, int startIndex) {
+        size_t length = str.length;
+        auto index = startIndex;
         while (index < length) {
-            char current = string[index];
+            char current = str[index];
             if ( searchChars.indexOf( current) is -1) break;
             index++;
         }
         return index;
     }
 
-    static int previousIndexOfChar (String string, String searchChars, int startIndex) {
+    static int previousIndexOfChar (String str, String searchChars, int startIndex) {
         int result = -1;
         if (startIndex < 0) return result;
-        string = string[0 .. startIndex];
+        str = str[0 .. startIndex];
         for (int i = 0; i < searchChars.length ; i++) {
             char current = searchChars[i];
-            int index = string.lastIndexOf( current);
+            auto index = str.lastIndexOf( current);
             if (index !is -1 ) result = Math.max (result, index);
         }
         return result;
     }
 
-    static int previousIndexOfNotChar (String string, String searchChars, int startIndex) {
+    static int previousIndexOfNotChar (String str, String searchChars, int startIndex) {
         if (startIndex < 0) return -1;
         int index = startIndex - 1;
         while (index >= 0) {
-            char current = string[index];
+            char current = str[index];
             if ( searchChars.indexOf( current) is -1 ) break;
             index--;
         }
@@ -1349,11 +1349,11 @@ class AccessibleObject {
             Vector idsToKeep = new Vector (children.size ());
             if ( null !is cast(Integer)event.children [0]) {
                 /*  an array of child id's (Integers) was answered */
-                int /*long*/ parentType = AccessibleFactory.getDefaultParentType ();
+                int parentType = AccessibleFactory.getDefaultParentType ();
                 for (int i = 0; i < event.children.length; i++) {
                     AccessibleObject object = getChildByIndex (i);
                     if (object is null) {
-                        int /*long*/ childType = AccessibleFactory.getChildType (accessible, i);
+                        int childType = AccessibleFactory.getChildType (accessible, i);
                         object = new AccessibleObject (childType, null, accessible, parentType, true);
                         AccessibleObjects[object.handle] = object;
                         addChild (object);

@@ -122,8 +122,8 @@ public override Point computeSize (int wHint, int hHint, bool changed) {
 public override Rectangle computeTrim (int x, int y, int width, int height) {
     checkWidget();
     forceResize ();
-    int clientX = OS.GTK_WIDGET_X (clientHandle_);
-    int clientY = OS.GTK_WIDGET_Y (clientHandle_);
+    ptrdiff_t clientX = OS.GTK_WIDGET_X (clientHandle_);
+    ptrdiff_t clientY = OS.GTK_WIDGET_Y (clientHandle_);
     x -= clientX;
     y -= clientY;
     width += clientX + clientX;

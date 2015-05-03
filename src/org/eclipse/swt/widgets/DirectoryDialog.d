@@ -197,7 +197,7 @@ String openChooserDialog () {
         display.setModalDialog (this);
     }
     int signalId = 0;
-    int /*long*/ hookId = 0;
+    ptrdiff_t hookId = 0;
     CallbackData emissionData;
     emissionData.display = display;
     emissionData.data = handle;
@@ -215,7 +215,7 @@ String openChooserDialog () {
     if (response is OS.GTK_RESPONSE_OK) {
         auto path = OS.gtk_file_chooser_get_filename (handle);
         if (path !is null) {
-            uint items_written;
+            size_t items_written;
             auto utf8Ptr = OS.g_filename_to_utf8 (path, -1, null, &items_written, null);
             OS.g_free (path);
             if (utf8Ptr !is null) {
@@ -273,7 +273,7 @@ String openClassicDialog () {
         display.setModalDialog (this);
     }
     int signalId = 0;
-    int /*long*/ hookId = 0;
+    ptrdiff_t hookId = 0;
     CallbackData emissionData;
     emissionData.display = display;
     emissionData.data = handle;
@@ -290,7 +290,7 @@ String openClassicDialog () {
     }
     if (response is OS.GTK_RESPONSE_OK) {
         char* fileNamePtr = OS.gtk_file_selection_get_filename (handle);
-        uint items_written;
+        size_t items_written;
         char* utf8Ptr = OS.g_filename_to_utf8 (fileNamePtr, -1, null, &items_written, null);
         if (utf8Ptr !is null) {
             String osAnswer = utf8Ptr[ 0 .. items_written ]._idup();

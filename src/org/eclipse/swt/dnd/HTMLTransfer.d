@@ -77,11 +77,11 @@ public override void javaToNative (Object object, TransferData transferData){
     if (!checkHTML(object) || !isSupportedType(transferData)) {
         DND.error(DND.ERROR_INVALID_DATA);
     }
-    String string = stringcast(object);
-    char* pValue = cast(char*)OS.g_malloc(string.length);
+    String str = stringcast(object);
+    char* pValue = cast(char*)OS.g_malloc(str.length);
     if (pValue is null) return;
-    pValue[0 .. string.length ] = string;
-    transferData.length = string.length;
+    pValue[0 .. str.length ] = str;
+    transferData.length = cast(int)/*64bit*/str.length;
     transferData.format = 8;
     transferData.pValue = pValue;
     transferData.result = 1;
@@ -100,10 +100,10 @@ public override void javaToNative (Object object, TransferData transferData){
 public override Object nativeToJava(TransferData transferData){
     if ( !isSupportedType(transferData) ||  transferData.pValue is null ) return null;
     /* Ensure byteCount is a multiple of 2 bytes */
-    int size = (transferData.format * transferData.length / 8) / 2 * 2;
+    auto size = (transferData.format * transferData.length / 8) / 2 * 2;
     if (size <= 0) return null;
     String chars = transferData.pValue[ 0 .. size ]._idup();
-    int end = chars.indexOf('\0');
+    auto end = chars.indexOf('\0');
     return new ArrayWrapperString( (end is -1 )? chars : chars[ 0 .. end ] );
 }
 protected override int[] getTypeIds() {

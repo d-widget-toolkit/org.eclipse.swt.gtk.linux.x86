@@ -239,7 +239,7 @@ public int getSelection () {
 }
 
 override
-int /*long*/ gtk_value_changed (int /*long*/ adjustment) {
+int gtk_value_changed (int adjustment) {
     postEvent (SWT.Selection);
     return 0;
 }

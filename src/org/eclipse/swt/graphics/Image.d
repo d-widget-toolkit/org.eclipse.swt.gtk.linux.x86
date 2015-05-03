@@ -550,7 +550,7 @@ public this(Device device, String filename) {
     super(device);
     if (filename is null) SWT.error(SWT.ERROR_NULL_ARGUMENT);
     try {
-        int length = filename.length;
+        auto length = filename.length;
         auto pixbuf = OS.gdk_pixbuf_new_from_file(toStringz(filename), null);
         if (pixbuf !is null) {
             bool hasAlpha = cast(bool)OS.gdk_pixbuf_get_has_alpha(pixbuf);
@@ -607,7 +607,8 @@ void createAlphaMask (int width, int height) {
             GdkImage* gdkImage = new GdkImage();
             *gdkImage = *imagePtr;
             if (gdkImage.bpl is width) {
-                OS.memmove(gdkImage.mem, alphaData.ptr, alphaData.length);
+                OS.memmove(gdkImage.mem, alphaData.ptr,
+                           alphaData.length);
             } else {
                 byte[] line = new byte[gdkImage.bpl];
                 for (int y = 0; y < height; y++) {
@@ -837,7 +838,7 @@ public Rectangle getBounds() {
     if (width !is -1 && height !is -1) {
         return new Rectangle(0, 0, width, height);
     }
-    int w; int h;
+    int w, h;
     OS.gdk_drawable_get_size(pixmap, &w, &h);
     return new Rectangle(0, 0, width = w, height = h);
 }
@@ -888,7 +889,7 @@ public ImageData getImageData() {
         OS.g_object_unref(gdkImagePtr);
         int maskPad;
         for (maskPad = 1; maskPad < 128; maskPad++) {
-            int bpl = (((width + 7) / 8) + (maskPad - 1)) / maskPad * maskPad;
+            int bpl = ((((width + 7) / 8) + (maskPad - 1)) / maskPad * maskPad);
             if (gdkImage.bpl is bpl) break;
         }
         /* Make mask scanline pad equals to 2 */
@@ -950,7 +951,7 @@ public static Image gtk_new(Device device, int type, GdkDrawable* pixmap, GdkDra
  * @see #equals
  */
 public override hash_t toHash () {
-    return cast(hash_t)/*64*/pixmap;
+    return cast(hash_t)pixmap;
 }
 
 void init_(int width, int height) {
@@ -999,11 +1000,11 @@ void init_(ImageData image) {
                 false, false);
         } else {
             RGB[] rgbs = palette.getRGBs();
-            int length = rgbs.length;
+            auto length = rgbs.length;
             byte[] srcReds = new byte[length];
             byte[] srcGreens = new byte[length];
             byte[] srcBlues = new byte[length];
-            for (int i = 0; i < rgbs.length; i++) {
+            for (ptrdiff_t i = 0; i < rgbs.length; i++) {
                 RGB rgb = rgbs[i];
                 if (rgb is null) continue;
                 srcReds[i] = cast(byte)rgb.red;
