@@ -27,7 +27,7 @@ import org.eclipse.swt.internal.gtk.OS;
 version(Tango){
     import tango.stdc.string;
 } else {
-    import std.c.string;
+    import core.stdc.string;
 }
 
 /**

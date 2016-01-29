@@ -28,8 +28,8 @@ version(Tango){
 } else { // Phobos
     import std.traits;
     import core.sys.posix.stdlib : realpath;
-    import std.c.locale;
-    static import std.c.string;
+    import core.stdc.locale;
+    static import core.stdc.string;
 }
 
 import  org.eclipse.swt.internal.c.gtk,
@@ -3008,7 +3008,7 @@ public static const int PictOpOver = 3;
         version(Tango){
             return tango.stdc.string.strlen( ptr );
         } else { // Phobos
-            return cast(int)/*64bit*/std.c.string.strlen( ptr );
+            return cast(int)/*64bit*/core.stdc.string.strlen( ptr );
         }
     }
     //localeconv_decimal_point() localeconv()->decimal_point
@@ -3016,7 +3016,7 @@ public static const int PictOpOver = 3;
         version(Tango){
             return tango.stdc.string.memmove( trg, src, len );
         } else { // Phobos
-            return std.c.string.memmove( trg, src, len );
+            return core.stdc.string.memmove( trg, src, len );
         }
     }
 }

@@ -36,7 +36,7 @@ version(Tango){
     import tango.stdc.string : memmove;
     import tango.text.convert.Utf;
 } else { // Phobos
-    import std.c.string : memmove;
+    import core.stdc.string : memmove;
 }
 
 /**
