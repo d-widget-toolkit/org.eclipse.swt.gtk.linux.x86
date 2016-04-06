@@ -25,6 +25,7 @@ import java.lang.all;
 version(Tango){
     static import tango.io.model.IFile;
 } else { // Phobos
+    static import std.path;
 }
 
 /**
