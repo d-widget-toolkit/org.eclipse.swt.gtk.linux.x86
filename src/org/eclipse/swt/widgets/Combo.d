@@ -2196,8 +2196,10 @@ override bool translateTraversal (GdkEventKey* keyEvent) {
                     if (length !is 0) return false;
                 }
             }
+            break;
         }
         default:
+            break;
     }
     return super.translateTraversal (keyEvent);
 }

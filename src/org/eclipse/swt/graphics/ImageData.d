@@ -1889,6 +1889,7 @@ static void blit(int op,
                 break;
             default:
                 alphaMode = (alphaMode << 16) / 255; // prescale
+                goto case ALPHA_CHANNEL_SOURCE;
             case ALPHA_CHANNEL_SOURCE:
                 apr = 0;
                 break;
@@ -2315,6 +2316,7 @@ static void blit(int op,
                 break;
             default:
                 alphaMode = (alphaMode << 16) / 255; // prescale
+                goto case ALPHA_CHANNEL_SOURCE;
             case ALPHA_CHANNEL_SOURCE:
                 apr = 0;
                 break;
@@ -2352,6 +2354,7 @@ static void blit(int op,
                 }
                 break;
             }
+            goto case ALPHA_MASK_UNPACKED;
         case ALPHA_MASK_UNPACKED:
         case ALPHA_MASK_PACKED:
         case ALPHA_MASK_INDEX:
@@ -2859,6 +2862,7 @@ static void blit(int op,
                 break;
             default:
                 alphaMode = (alphaMode << 16) / 255; // prescale
+                goto case ALPHA_CHANNEL_SOURCE;
             case ALPHA_CHANNEL_SOURCE:
                 apr = 0;
                 break;
@@ -3206,6 +3210,7 @@ static void blit(int op,
                 break;
             default:
                 alphaMode = (alphaMode << 16) / 255; // prescale
+                goto case ALPHA_CHANNEL_SOURCE;
             case ALPHA_CHANNEL_SOURCE:
                 apr = 0;
                 break;

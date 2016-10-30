@@ -225,9 +225,10 @@ override int gtk_value_changed (int adjustment) {
 }
 
 override int gtk_event_after (GtkWidget* widget, GdkEvent* gdkEvent) {
+    GdkEventButton* gdkEventButton = null;
     switch (gdkEvent.type) {
         case OS.GDK_BUTTON_RELEASE: {
-            GdkEventButton* gdkEventButton = cast(GdkEventButton*)gdkEvent;
+            gdkEventButton = cast(GdkEventButton*)gdkEvent;
             if (gdkEventButton.button is 1 && detail is SWT.DRAG) {
                 if (!dragSent) {
                     Event event = new Event ();

@@ -876,6 +876,7 @@ static bool launch (Display display, String fileName) {
     switch (getDesktop (display)) {
         case DESKTOP_GNOME_24:
             if (gnome_24_launch (fileName)) return true;
+            goto default;
         default:
             int index = fileName.lastIndexOf ('.');
             if (index !is -1) {

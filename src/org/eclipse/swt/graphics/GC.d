@@ -308,7 +308,9 @@ void checkGC (int mask) {
                 case SWT.LINE_DASHDOT:
                 case SWT.LINE_DASHDOTDOT:
                     state |= LINE_STYLE;
+                    break;
                 default:
+                    break;
             }
         }
         if ((state & LINE_STYLE) !is 0) {

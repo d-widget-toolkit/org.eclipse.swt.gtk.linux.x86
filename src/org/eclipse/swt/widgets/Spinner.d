@@ -1100,10 +1100,11 @@ public void setValues (int selection, int minimum, int maximum, int digits, int 
 
 override bool translateTraversal (GdkEventKey* keyEvent) {
     int key = keyEvent.keyval;
+    GtkIMContext* imContext = null;
     switch (key) {
         case OS.GDK_KP_Enter:
         case OS.GDK_Return: {
-            auto imContext =  imContext ();
+            imContext =  this.imContext ();
             if (imContext !is null) {
                 char* preeditString;
                 OS.gtk_im_context_get_preedit_string (imContext, &preeditString, null, null);

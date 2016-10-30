@@ -149,7 +149,7 @@ public class CTabFolder : Composite {
     int minChars = 20;
 
     /* item management */
-    CTabItem items[];
+    CTabItem[] items;
     int firstIndex = -1; // index of the left most visible tab.
     int selectedIndex = -1;
     int[] priority;
@@ -1916,7 +1916,9 @@ void onKeyDown (Event event) {
             if (index < 0 || index >= count) return;
             setSelection (index, true);
             forceFocus();
+            break;
         default:
+            break;
     }
 }
 void onDispose(Event event) {
@@ -2003,6 +2005,7 @@ void onMouseDoubleClick(Event event) {
 }
 void onMouse(Event event) {
     int x = event.x, y = event.y;
+    CTabItem item = null;
     switch (event.type) {
         case SWT.MouseEnter: {
             setToolTipText(null);
@@ -2022,7 +2025,7 @@ void onMouse(Event event) {
                 redraw(chevronRect.x, chevronRect.y, chevronRect.width, chevronRect.height, false);
             }
             for (int i=0; i<items.length; i++) {
-                CTabItem item = items[i];
+                item = items[i];
                 if (i !is selectedIndex && item.closeImageState !is NONE) {
                     item.closeImageState = NONE;
                     redraw(item.closeRect.x, item.closeRect.y, item.closeRect.width, item.closeRect.height, false);
@@ -2060,7 +2063,7 @@ void onMouse(Event event) {
                 update();
                 return;
             }
-            CTabItem item = null;
+            item = null;
             if (single) {
                 if (selectedIndex !is -1) {
                     Rectangle bounds = items[selectedIndex].getBounds();
@@ -2129,7 +2132,7 @@ void onMouse(Event event) {
                 redraw(chevronRect.x, chevronRect.y, chevronRect.width, chevronRect.height, false);
             }
             for (int i=0; i<items.length; i++) {
-                CTabItem item = items[i];
+                item = items[i];
                 close = false;
                 if (item.getBounds().contains(x, y)) {
                     close = true;
@@ -2211,7 +2214,7 @@ void onMouse(Event event) {
                 }
                 return;
             }
-            CTabItem item = null;
+            item = null;
             if (single) {
                 if (selectedIndex !is -1) {
                     Rectangle bounds = items[selectedIndex].getBounds();
@@ -2740,6 +2743,7 @@ void setButtonBounds() {
     oldHeight = topRightRect.height;
     topRightRect.x = topRightRect.y = topRightRect.width = topRightRect.height = 0;
     if (topRight !is null) {
+        CTabItem item = null;
         switch (topRightAlignment) {
             case SWT.FILL: {
                 int rightEdge = size.x - borderRight - 3 - maxRect.width - minRect.width;
@@ -2750,7 +2754,7 @@ void setButtonBounds() {
                         topRightRect.width = rightEdge - topRightRect.x;
                     } else {
                         // fill size is 0 if item compressed
-                        CTabItem item = items[selectedIndex];
+                        item = items[selectedIndex];
                         if (item.x + item.width + 7 + 3*BUTTON_SIZE/2 >= rightEdge) break;
                         topRightRect.x = item.x + item.width + 7 + 3*BUTTON_SIZE/2;
                         topRightRect.width = rightEdge - topRightRect.x;
@@ -2761,7 +2765,7 @@ void setButtonBounds() {
                     if (items.length is 0) {
                         topRightRect.x = borderLeft + 3;
                     } else {
-                        CTabItem item = items[items.length - 1];
+                        item = items[items.length - 1];
                         topRightRect.x = item.x + item.width;
                         if (!simple && items.length - 1 is selectedIndex) topRightRect.x += curveWidth - curveIndent;
                     }
@@ -2779,8 +2783,10 @@ void setButtonBounds() {
                 topRightRect.width = topRightSize.x;
                 topRightRect.y = onBottom ? size.y - borderBottom - tabHeight: borderTop + 1;
                 topRightRect.height = tabHeight - 1;
+                break;
             }
             default:
+                break;
         }
         topRight.setBounds(topRightRect);
     }

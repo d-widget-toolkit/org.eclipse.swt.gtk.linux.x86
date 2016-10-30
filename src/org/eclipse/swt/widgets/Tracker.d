@@ -397,7 +397,7 @@ override int gtk_key_press_event (GtkWidget* widget, GdkEventKey* keyEvent) {
     switch (keyEvent.keyval) {
         case OS.GDK_Escape:
             cancelled = true;
-            // fallthrough
+            goto case OS.GDK_Return;
         case OS.GDK_Return:
             tracking = false;
             break;
