@@ -2669,6 +2669,9 @@ override int gtk_enter_notify_event (GtkWidget*  widget, GdkEventCrossing* gdkEv
 }
 
 override int gtk_event_after (GtkWidget*  widget, GdkEvent* gdkEvent) {
+    GdkEventButton* gdkEventButton = null;
+    GdkEventFocus* gdkEventFocus = null;
+    Display display = null;
     switch (cast(int)gdkEvent.type) {
         case OS.GDK_BUTTON_PRESS: {
             if (widget !is eventHandle ()) break;
@@ -2678,7 +2681,7 @@ override int gtk_event_after (GtkWidget*  widget, GdkEvent* gdkEvent) {
             * such as GtkTreeView to select items before a menu is shown.
             */
             if ((state & MENU) is 0) {
-                GdkEventButton* gdkEventButton = cast(GdkEventButton*)gdkEvent;
+                gdkEventButton = cast(GdkEventButton*)gdkEvent;
                 if (gdkEventButton.button is 3) {
                     showMenu (cast(int) gdkEventButton.x_root, cast(int) gdkEventButton.y_root);
                 }
@@ -2687,7 +2690,7 @@ override int gtk_event_after (GtkWidget*  widget, GdkEvent* gdkEvent) {
         }
         case OS.GDK_FOCUS_CHANGE: {
             if (!isFocusHandle (widget)) break;
-            GdkEventFocus* gdkEventFocus = cast(GdkEventFocus*)gdkEvent;
+            gdkEventFocus = cast(GdkEventFocus*)gdkEvent;
 
             /*
              * Feature in GTK. The GTK combo box popup under some window managers
@@ -2696,7 +2699,7 @@ override int gtk_event_after (GtkWidget*  widget, GdkEvent* gdkEvent) {
              * fix is to check the current grab handle and see if it is a GTK_MENU
              * and ignore the focus event when the menu is both shown and hidden.
              */
-            Display display = this.display;
+            display = this.display;
             if (gdkEventFocus.in_ !is 0) {
                 if (display.ignoreFocus) {
                     display.ignoreFocus = false;

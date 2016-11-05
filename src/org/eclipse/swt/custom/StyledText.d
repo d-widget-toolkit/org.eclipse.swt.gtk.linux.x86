@@ -1033,7 +1033,7 @@ mixin(sharedStaticThis!(`{
      * @param lineBackground line background color to use for formatting.
      *  May be null.
      */
-    void writeStyledLine(String line, int lineOffset, int ranges[], StyleRange[] styles, Color lineBackground, int indent, int alignment, bool justify) {
+    void writeStyledLine(String line, int lineOffset, int[] ranges, StyleRange[] styles, Color lineBackground, int indent, int alignment, bool justify) {
         auto lineLength = line.length;
         int startOffset = getStart();
         int writeOffset = startOffset - lineOffset;

@@ -811,6 +811,8 @@ int checkIfEventProcMeth (void* display, XEvent* xEvent) {
         }
     }
     *exposeEvent = *cast(XExposeEvent*)xEvent;
+    Widget widget = null;
+    GtkWidget* handle = null;
     switch (type) {
         case OS.Expose:
         case OS.GraphicsExpose: {
@@ -825,9 +827,8 @@ int checkIfEventProcMeth (void* display, XEvent* xEvent) {
         }
         case OS.VisibilityNotify: {
             OS.memmove (visibilityEvent, xEvent, XVisibilityEvent.sizeof);
-            GtkWidget* handle;
             OS.gdk_window_get_user_data (window, cast(void**) & handle);
-            Widget widget = handle !is null ? getWidget (handle) : null;
+            widget = handle !is null ? getWidget (handle) : null;
             if (auto control = cast(Control)widget ) {
                 if (window is control.paintWindow ()) {
                     if (visibilityEvent.state is OS.VisibilityFullyObscured) {
@@ -1227,7 +1228,9 @@ void eventProcMeth (GdkEvent* event) {
         case OS.GDK_BUTTON_PRESS:
         case OS.GDK_KEY_PRESS:
             lastUserEventTime = time;
+            break;
         default:
+            break;
     }
     bool dispatch = true;
     if (dispatchEvents !is null) {

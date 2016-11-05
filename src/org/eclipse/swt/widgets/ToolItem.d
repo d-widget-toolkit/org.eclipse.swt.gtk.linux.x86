@@ -569,9 +569,10 @@ override int gtk_enter_notify_event (GtkWidget* widget, GdkEventCrossing* event)
 }
 
 override int gtk_event_after (GtkWidget* widget, GdkEvent* gdkEvent) {
+    GdkEventButton* gdkEventButton = null;
     switch (gdkEvent.type) {
         case OS.GDK_BUTTON_PRESS: {
-            GdkEventButton* gdkEventButton = cast(GdkEventButton*)gdkEvent;
+            gdkEventButton = cast(GdkEventButton*)gdkEvent;
             if (gdkEventButton.button is 3) {
                 parent.showMenu (cast(int) gdkEventButton.x_root, cast(int) gdkEventButton.y_root);
             }

@@ -1024,8 +1024,10 @@ class AccessibleObject {
                     }
                     startBounds = lineEnd1;
                     endBounds = nextIndexOfChar (text, "\n", lineEnd1 + 1);
+                    break;
                 }
                 default:
+                    break;
             }
             *start_offset=startBounds;
             *end_offset=endBounds;

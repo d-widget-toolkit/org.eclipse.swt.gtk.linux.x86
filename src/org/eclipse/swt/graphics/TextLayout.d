@@ -762,7 +762,7 @@ void drawBorder(GC gc, int x, int y, GdkColor* selectionColor) {
                             } else {
                                 OS.gdk_draw_rectangle(data.drawable, gdkGC, 1, rect.x, underlineY + underlineThickness * 2, rect.width, underlineThickness);
                             }
-                            //FALLTHROUGH
+                            goto case SWT.UNDERLINE_SINGLE;
                         case SWT.UNDERLINE_SINGLE:
                             if (cairo !is null && OS.GTK_VERSION >= OS.buildVERSION(2, 8, 0)) {
                                 Cairo.cairo_rectangle(cairo, rect.x, underlineY, rect.width, underlineThickness);

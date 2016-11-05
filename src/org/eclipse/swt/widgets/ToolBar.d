@@ -342,7 +342,7 @@ override int gtk_key_press_event (GtkWidget* widget, GdkEventKey* gdkEvent) {
                     return result;
                 }
             }
-            //FALL THROUGH
+            goto case OS.GDK_Right;
         }
         case OS.GDK_Right: next = true; break;
         default: return result;

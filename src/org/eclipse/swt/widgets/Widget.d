@@ -972,7 +972,7 @@ char [] fixMnemonic (String str, bool replace) {
                 break;
             case '_':
                 if (replace) result [j++] = '_';
-                //FALL THROUGH
+                goto default;
             default:
                 result [j++] = text [i++];
         }
