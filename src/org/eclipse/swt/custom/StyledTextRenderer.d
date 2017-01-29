@@ -1339,7 +1339,7 @@ void textChanging(TextChangingEvent event) {
                 }
             }
             if (delta > 0) {
-                for (auto i = layouts.length - 1; i >= layoutEndLine; i--) {
+                for (ptrdiff_t i = cast(ptrdiff_t) (layouts.length) - 1; i >= layoutEndLine; i--) {
                     if (0 <= i && i < layouts.length) {
                         endIndex = cast(int)/*64bit*/(i + delta);
                         if (0 <= endIndex && endIndex < layouts.length) {

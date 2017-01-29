@@ -324,7 +324,7 @@ void insert(int position, String text) {
     // make room for the new lines
     expandLinesBy(numNewLines);
     // shift down the lines after the replace line
-    for (auto i = lineCount_ - 1; i > startLine; i--) {
+    for (ptrdiff_t i = cast(ptrdiff_t) (lineCount_) - 1; i > startLine; i--) {
         lines[i + numNewLines]=lines[i];
     }
     // insert the new lines

@@ -346,7 +346,7 @@ public TabItem getItem (int index) {
  *    <li>ERROR_WIDGET_DISPOSED - if the receiver has been disposed</li>
  *    <li>ERROR_THREAD_INVALID_ACCESS - if not called from the thread that created the receiver</li>
  * </ul>
- * 
+ *
  * @since 3.4
  */
 public TabItem getItem(Point point) {
@@ -730,7 +730,7 @@ public void setSelection (TabItem [] items) {
     if (items.length is 0) {
         setSelection (-1, false);
     } else {
-        for (auto i=items.length-1; i>=0; --i) {
+        for (ptrdiff_t i=cast(ptrdiff_t) (items.length)-1; i>=0; --i) {
             int index = indexOf (items [i]);
             if (index !is -1) setSelection (index, false);
         }

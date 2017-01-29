@@ -1178,7 +1178,7 @@ override void printWidget (GC gc, GdkDrawable* drawable, int depth, int x, int y
     newClip.intersect (clientRect);
     gc.setClipping (newClip);
     Control [] children = _getChildren ();
-    for (auto i=children.length-1; i>=0; --i) {
+    for (ptrdiff_t i=cast(ptrdiff_t) (children.length)-1; i>=0; --i) {
         Control child = children [i];
         if (child.getVisible ()) {
             Point location = child.getLocation ();

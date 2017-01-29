@@ -733,7 +733,7 @@ void drawBackground(GC gc, int[] shape, int x, int y, int width, int height, Col
                     }
                     Color lastColor = colors[colors.length-1];
                     if (lastColor is null) lastColor = defaultBackground;
-                    for (auto i = percents.length-1; i >= 0; i--) {
+                    for (ptrdiff_t i = cast(ptrdiff_t) (percents.length)-1; i >= 0; i--) {
                         gc.setForeground(lastColor);
                         lastColor = colors[i];
                         if (lastColor is null) lastColor = defaultBackground;

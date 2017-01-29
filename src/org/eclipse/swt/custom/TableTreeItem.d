@@ -571,7 +571,7 @@ int visibleChildrenCount () {
 
 public override void dispose () {
     if (isDisposed()) return;
-    for (auto i = items.length - 1; i >= 0; i--) {
+    for (ptrdiff_t i = cast(ptrdiff_t) (items.length) - 1; i >= 0; i--) {
         items[i].dispose();
     }
     super.dispose();
