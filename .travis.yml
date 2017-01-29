@@ -19,6 +19,10 @@ addons:
       - libxtst-dev
 
 d:
+  - dmd
+  - dmd-2.073.0
+  - dmd-2.072.2
+  - dmd-2.071.2
   - dmd-2.070.0
   - dmd-2.069.2
   - dmd-2.068.2
