@@ -136,7 +136,7 @@ nsresult Show (PRInt16* _retval) {
     title = defaultFilename = null;
     masks = null;
     int result = filename is null ? nsIFilePicker.returnCancel : nsIFilePicker.returnOK; 
-    *_retval = cast(int)cast(short)result;; /* PRInt16 */
+    *_retval = cast(int)cast(short)result; /* PRInt16 */
     return XPCOM.NS_OK;
 }
 
