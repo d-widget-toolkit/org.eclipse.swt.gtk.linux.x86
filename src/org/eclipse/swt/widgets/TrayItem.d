@@ -187,7 +187,7 @@ override void createHandle (int index) {
     auto trayWindow = OS.XGetSelectionOwner (xDisplay, xTrayAtom);
     auto messageAtom = OS.gdk_atom_intern (toStringz("_NET_SYSTEM_TRAY_OPCODE"), true);
     auto xMessageAtom = OS.gdk_x11_atom_to_xatom (messageAtom);
-    XClientMessageEvent* event = cast(XClientMessageEvent*)OS.g_malloc (XClientMessageEvent.sizeof);;
+    XClientMessageEvent* event = cast(XClientMessageEvent*)OS.g_malloc (XClientMessageEvent.sizeof);
     event.type = OS.ClientMessage;
     event.window = trayWindow;
     event.message_type = xMessageAtom;

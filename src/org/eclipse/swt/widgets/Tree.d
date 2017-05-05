@@ -778,7 +778,7 @@ override void createHandle (int index) {
             OS.gtk_tree_view_set_search_column (handle, -1);
         } else {
             OS.gtk_tree_view_set_enable_search (handle, false);
-        };
+        }
     }
 }
 
